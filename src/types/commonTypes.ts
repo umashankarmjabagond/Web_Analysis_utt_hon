@@ -26,3 +26,15 @@ export interface DialogProps {
   onClose: () => void;
   width?: number | string;
 }
+
+export interface AccordionProps {
+  title: string;
+  count?: number;
+  children: ReactNode;
+  defaultOpen?: boolean;
+}
+
+export interface TemplateCardProps {
+  title: string;
+  type?: string;
+}
