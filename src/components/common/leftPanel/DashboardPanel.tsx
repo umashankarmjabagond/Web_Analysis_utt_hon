@@ -3,7 +3,20 @@ import { useNavigate } from "react-router-dom";
 export default function DashboardPanel() {
   const navigate = useNavigate();
 
-  const items = ["Feed Water", "Power Boiler", "Steam"];
+  const items = [
+    {
+      name: "Feed Water",
+      route: "feed-water",
+    },
+    {
+      name: "Power Boiler",
+      route: "power-boiler",
+    },
+    {
+      name: "Steam",
+      route: "steam",
+    },
+  ];
 
   return (
     <div className="flex h-full flex-col">
@@ -17,13 +30,11 @@ export default function DashboardPanel() {
       <div className="flex-1 overflow-auto text-white">
         {items.map((item) => (
           <button
-            key={item}
-            onClick={() =>
-              navigate(`/dashboard/${item.toLowerCase().replace(/\s+/g, "-")}`)
-            }
+            key={item.route}
+            onClick={() => navigate(`/dashboard/${item.route}`)}
             className="w-full px-4 py-3 text-left hover:bg-neutral-700"
           >
-            {item}
+            {item.name}
           </button>
         ))}
       </div>

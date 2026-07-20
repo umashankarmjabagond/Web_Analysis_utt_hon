@@ -1,6 +1,7 @@
 export const ROUTES = {
-  DASHBOARD: "/dashboard",
   WORKFLOW: "/workflow",
-  EXECUTION: "/execution",
-  SETTINGS: "/settings",
+
+  DASHBOARD: "/dashboard",
+
+  DASHBOARD_SECTION: "/dashboard/:section",
 } as const;
