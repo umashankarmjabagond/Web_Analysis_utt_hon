@@ -1,18 +1,16 @@
-import { Outlet } from "react-router-dom";
 import Header from "../../../components/common/header/Header";
 import Sidebar from "../../../components/common/sidebar/Sidebar";
-import LeftPanel from "../../../components/common/leftPanel/LeftPanel";
+import Workspace from "../Workspace/Workspace";
 
 export default function MainLayout() {
   return (
     <div className="flex h-screen flex-col bg-[#1f1f1f]">
       <Header />
-      <div className="flex flex-1 overflow-hidden">
+
+      <div className="flex flex-1 gap-2 overflow-hidden p-2">
         <Sidebar />
-        <LeftPanel />
-        <main className="flex-1 overflow-hidden">
-          <Outlet />
-        </main>
+
+        <Workspace />
       </div>
     </div>
   );

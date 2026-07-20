@@ -29,11 +29,6 @@ export default function WorkflowPanel() {
 
   return (
     <div className="flex h-full flex-col">
-      {/* Header */}
-      <div className="border-b border-neutral-700 p-4">
-        <h2 className="text-lg font-semibold text-white">Workflow Nodes</h2>
-      </div>
-
       {/* Search */}
       <div className="p-4">
         <input

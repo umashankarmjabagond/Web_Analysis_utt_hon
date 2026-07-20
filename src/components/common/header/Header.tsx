@@ -2,7 +2,7 @@ import { Bell, Menu, Settings, UserCircle2 } from "lucide-react";
 
 export default function Header() {
   return (
-    <header className="h-14 bg-[#262626] border-b border-neutral-700 flex items-center justify-between px-5">
+    <header className="h-14 bg-[#262626] flex items-center justify-between px-5">
       <div className="flex items-center gap-3">
         <button className="text-gray-300 hover:text-white">
           <Menu size={20} />

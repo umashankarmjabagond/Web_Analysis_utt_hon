@@ -13,7 +13,7 @@ export default function LeftPanel() {
   }
 
   return (
-    <aside className="w-[300px] border-r border-neutral-700 bg-[#2b2b2b]">
+    <aside className="w-[300px] overflow-hidden rounded-md bg-[#2b2b2b]">
       {panel.component}
     </aside>
   );

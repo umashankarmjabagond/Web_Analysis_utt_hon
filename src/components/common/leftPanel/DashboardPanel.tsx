@@ -1,10 +1,12 @@
-export default function DashboardPanel() {
-  return (
-    <div className="h-full flex flex-col">
-      <div className="border-b border-neutral-700 p-4">
-        <h2 className="font-semibold text-white">Assets</h2>
-      </div>
+import { useNavigate } from "react-router-dom";
 
+export default function DashboardPanel() {
+  const navigate = useNavigate();
+
+  const items = ["Feed Water", "Power Boiler", "Steam"];
+
+  return (
+    <div className="flex h-full flex-col">
       <div className="p-4">
         <input
           placeholder="Search..."
@@ -12,18 +14,18 @@ export default function DashboardPanel() {
         />
       </div>
 
-      <div className="text-white flex-1 overflow-auto">
-        <button className="w-full px-4 py-3 text-left hover:bg-neutral-700">
-          Feed Water
-        </button>
-
-        <button className="w-full px-4 py-3 text-left hover:bg-neutral-700">
-          Power Boiler
-        </button>
-
-        <button className="w-full px-4 py-3 text-left hover:bg-neutral-700">
-          Steam
-        </button>
+      <div className="flex-1 overflow-auto text-white">
+        {items.map((item) => (
+          <button
+            key={item}
+            onClick={() =>
+              navigate(`/dashboard/${item.toLowerCase().replace(/\s+/g, "-")}`)
+            }
+            className="w-full px-4 py-3 text-left hover:bg-neutral-700"
+          >
+            {item}
+          </button>
+        ))}
       </div>
     </div>
   );

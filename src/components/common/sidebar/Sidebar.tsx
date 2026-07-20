@@ -16,7 +16,7 @@ const menus = [
 
 export default function Sidebar() {
   return (
-    <aside className="w-16 border-r border-neutral-700 bg-[#252525]">
+    <aside className="w-16 rounded-md bg-[#252525]">
       {menus.map((menu) => (
         <NavLink
           key={menu.path}
