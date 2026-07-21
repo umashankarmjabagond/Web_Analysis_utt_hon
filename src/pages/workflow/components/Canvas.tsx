@@ -3,6 +3,7 @@ import { useCallback, useEffect } from "react";
 import {
   Background,
   BackgroundVariant,
+  MarkerType,
   ReactFlow,
   useReactFlow,
 } from "@xyflow/react";
@@ -125,12 +126,20 @@ export default function Canvas() {
         onNodeClick={handleNodeClick}
         onPaneClick={handlePaneClick}
         fitView
+        defaultEdgeOptions={{
+          type: "workflowEdge",
+          markerEnd: {
+            type: MarkerType.Arrow,
+            color: "#BDBDBD",
+            width: 10,
+            height: 10,
+          },
+        }}
         /* ===== Toolbar Control ===== */
-
         nodesDraggable={activeTool === "pointer"}
         elementsSelectable={activeTool === "pointer"}
         panOnDrag={activeTool === "pointer"}
-        nodesConnectable={true}
+        nodesConnectable
         connectOnClick={activeTool === "connect"}
         onNodeDragStart={handleNodeDragStart}
       >
