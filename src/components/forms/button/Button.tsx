@@ -1,8 +1,14 @@
-import React, { ButtonHTMLAttributes } from "react";
+import React, { type ButtonHTMLAttributes } from "react";
+import "./Button.css";
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  variant?: "primary" | "secondary" | "danger" | "success";
+  size?: "small" | "medium" | "large";
   loading?: boolean;
   fullWidth?: boolean;
+  icon?: React.ReactNode;
+  iconPosition?: "left" | "right";
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -10,35 +16,47 @@ const Button: React.FC<ButtonProps> = ({
   loading = false,
   disabled = false,
   fullWidth = false,
+  variant = "secondary",
+  size = "medium",
+  icon,
+  iconPosition = "left",
   className = "",
   type = "button",
+  onClick,
   ...props
 }) => {
   return (
     <button
       type={type}
       disabled={disabled || loading}
+      onClick={onClick}
       className={`
-        flex items-center justify-center
-        rounded-lg
-        bg-blue-600
-        px-4
-        py-2
-        text-white
-        font-medium
-        transition
-        hover:bg-blue-700
-        focus:outline-none
-        focus:ring-2
-        focus:ring-blue-400
-        disabled:cursor-not-allowed
-        disabled:opacity-50
-        ${fullWidth ? "w-full" : ""}
+        common-btn
+        btn-${variant}
+        btn-${size}
+        ${fullWidth ? "btn-full" : ""}
         ${className}
       `}
       {...props}
     >
-      {loading ? "Loading..." : children}
+      {loading ? (
+        <>
+          <span className="btn-spinner"></span>
+          <span>Loading...</span>
+        </>
+      ) : (
+        <>
+          {icon && iconPosition === "left" && (
+            <span className="btn-icon">{icon}</span>
+          )}
+
+          <span>{children}</span>
+
+          {icon && iconPosition === "right" && (
+            <span className="btn-icon">{icon}</span>
+          )}
+        </>
+      )}
     </button>
   );
 };

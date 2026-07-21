@@ -1,57 +1,76 @@
-import React, { InputHTMLAttributes, useState } from "react";
+import React, { type InputHTMLAttributes, useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
+import "./Input.css";
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   error?: string;
-  className?: string;
+  helperText?: string;
+  fullWidth?: boolean;
+  showPasswordToggle?: boolean;
 }
 
 const Input: React.FC<InputProps> = ({
   label,
   type = "text",
   error,
+  helperText,
+  fullWidth = true,
+  showPasswordToggle = false,
   className = "",
   ...props
 }) => {
   const [showPassword, setShowPassword] = useState(false);
 
-  const inputType = type === "password" && showPassword ? "text" : type;
+  const inputType =
+    type === "password" && showPassword ? "text" : type;
 
   return (
-    <div className="w-full">
+    <div className={`input-wrapper dark ${fullWidth ? "input-full" : ""}`}>
       {label && (
-        <label className="mb-2 block text-sm font-medium text-gray-700">
+        <label className="input-label">
           {label}
         </label>
       )}
 
-      <div className="relative">
+      <div className="input-container">
         <input
           type={inputType}
-          className={`w-full rounded-lg border px-4 py-2 text-sm outline-none transition
+          className={`
+            common-input
+            ${error ? "input-error" : ""}
             ${
-              error
-                ? "border-red-500 focus:ring-2 focus:ring-red-300"
-                : "border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-300"
+              type === "password" && showPasswordToggle
+                ? "input-password"
+                : ""
             }
-            ${type === "password" ? "pr-10" : ""}
-            ${className}`}
+            ${className}
+          `}
           {...props}
         />
 
-        {type === "password" && (
+        {type === "password" && showPasswordToggle && (
           <button
             type="button"
-            onClick={() => setShowPassword((prev) => !prev)}
-            className="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-gray-700"
+            className="password-toggle"
+            onClick={() => setShowPassword(!showPassword)}
           >
             {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
           </button>
         )}
       </div>
 
-      {error && <p className="mt-1 text-sm text-red-500">{error}</p>}
+      {helperText && !error && (
+        <div className="input-helper">
+          {helperText}
+        </div>
+      )}
+
+      {error && (
+        <div className="input-error-text">
+          {error}
+        </div>
+      )}
     </div>
   );
 };

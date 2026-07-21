@@ -1,18 +1,23 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Dialog from "../../components/common/dialogue/Dialog";
-import { useState } from "react";
+import Button from "../../components/forms/button/Button";
 
 const Dashboard = () => {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
   return (
     <div className="flex justify-end p-2">
-      <button
+      {/* <button
         className="bg-blue-500 hover:bg-blue-600 cursor-pointer text-white font-semibold py-2 px-4 rounded-md shadow-md hover:shadow-lg transition-shadow duration-300 ease-in-out"
         onClick={() => setIsOpen(true)}
       >
         This is the engine click here to go to workflow builder
-      </button>
+      </button> */}
+      
+      <Button variant="primary" size="large" onClick={() => setIsOpen(true)}>
+        This is the engine click here to go to workflow builder
+      </Button>
       <br />
       <Dialog
         isOpen={isOpen}
