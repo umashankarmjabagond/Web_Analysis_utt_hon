@@ -39,3 +39,34 @@ export interface TemplateCardProps {
   draggable?: boolean;
   onClick?: () => void;
 }
+
+export interface TabItem {
+  id: string;
+  label: string;
+}
+
+export interface TabsProps {
+  items: TabItem[];
+  activeTab: string | null;
+  onTabChange: (id: string) => void;
+}
+
+export interface TreeNodeData {
+  id: string;
+  label: string;
+  children?: TreeNodeData[];
+}
+
+export interface TreeProps {
+  nodes: TreeNodeData[];
+  selectedId: string | null;
+  onSelect: (id: string) => void;
+}
+
+export interface TreeNodeProps {
+  node: TreeNodeData;
+  expandedIds: Set<string>;
+  selectedId: string | null;
+  onToggle: (nodeId: string) => void;
+  onSelect: (nodeId: string) => void;
+}
