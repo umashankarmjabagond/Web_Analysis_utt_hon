@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { ComponentType, ReactNode } from "react";
 
 export const NOTIFICATION_TYPE = {
   SUCCESS: "success",
@@ -39,18 +39,6 @@ export interface TemplateCardProps {
   draggable?: boolean;
   onClick?: () => void;
 }
-
-export interface TabItem {
-  id: string;
-  label: string;
-}
-
-export interface TabsProps {
-  items: TabItem[];
-  activeTab: string | null;
-  onTabChange: (id: string) => void;
-}
-
 export interface TreeNodeData {
   id: string;
   label: string;
@@ -69,4 +57,19 @@ export interface TreeNodeProps {
   selectedId: string | null;
   onToggle: (nodeId: string) => void;
   onSelect: (nodeId: string) => void;
+}
+
+export interface TabItem {
+  id: string;
+  label: string;
+  component?: ComponentType;
+  path?: string;
+  disabled?: boolean;
+}
+
+export interface TabsProps {
+  items: TabItem[];
+  activeTab?: string | null;
+  onTabChange?: (id: string) => void;
+  variant?: "primary" | "secondary";
 }

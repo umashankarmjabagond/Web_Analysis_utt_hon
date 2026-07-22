@@ -35,6 +35,11 @@
   --radius-sm: 4px;
   --radius-md: 8px;
   --radius-lg: 12px;
+
+  /* Tabs */
+  --color-tab-active-border: #64c3ff;
+  --color-tab-active-text: #ffffff;
+  --color-tab-inactive-text: #d0d0d0;
 }
 
 /* =========================================================
@@ -72,6 +77,11 @@
   --radius-sm: 4px;
   --radius-md: 8px;
   --radius-lg: 12px;
+
+  /* Tabs */
+  --color-tab-active-border: #64c3ff;
+  --color-tab-active-text: #ffffff;
+  --color-tab-inactive-text: #d0d0d0;
 }
 
 /* =========================================================
@@ -98,6 +108,10 @@
   --color-warning: var(--color-warning);
   --color-danger: var(--color-danger);
   --color-info: var(--color-info);
+
+  --color-tab-active-border: var(--color-tab-active-border);
+  --color-tab-active-text: var(--color-tab-active-text);
+  --color-tab-inactive-text: var(--color-tab-inactive-text);
 
   /* ---------- Typography ---------- */
 

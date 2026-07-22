@@ -1,54 +1,43 @@
-import { NavLink } from "react-router-dom";
+import { Tabs } from "../../../components/common/tabs/Tabs";
 
 const tabs = [
   {
+    id: "import-config",
     label: "Import Configuration File",
     path: "/#",
   },
   {
+    id: "regulatory",
     label: "Regulatory Configuration",
     path: "/#",
   },
   {
+    id: "mpc",
     label: "MPC Configuration",
     path: "/#",
   },
   {
+    id: "pwo",
     label: "PWO Configuration",
     path: "/#",
   },
   {
+    id: "analysis-schedule",
     label: "Analysis Schedule",
     path: "/#",
   },
   {
+    id: "custom-kpi",
     label: "Custom KPI Configuration",
-    path: "/#",
+    path: "/dashboard",
   },
   {
+    id: "analysis-engine",
     label: "Analysis Engine",
     path: "/workflow",
   },
 ];
 
 export default function TopTabs() {
-  return (
-    <nav className="flex h-full items-center overflow-x-auto">
-      {tabs.map((tab) => (
-        <NavLink
-          key={tab.path}
-          to={tab.path}
-          className={({ isActive }) =>
-            `flex h-full items-center whitespace-nowrap border-b-2 px-6 text-sm font-medium transition-colors ${
-              isActive
-                ? "border-sky-500 text-white"
-                : "border-transparent text-neutral-400 hover:text-white"
-            }`
-          }
-        >
-          {tab.label}
-        </NavLink>
-      ))}
-    </nav>
-  );
+  return <Tabs items={tabs} />;
 }
