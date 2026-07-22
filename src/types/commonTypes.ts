@@ -36,5 +36,6 @@ export interface AccordionProps {
 
 export interface TemplateCardProps {
   title: string;
-  type?: string;
+  draggable?: boolean;
+  onClick?: () => void;
 }

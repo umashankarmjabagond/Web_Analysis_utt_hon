@@ -1,22 +1,31 @@
-import { Boxes } from "lucide-react";
-import type { TemplateCardProps } from "../../../types/commonTypes";
+interface TemplateCardProps {
+  title: string;
+  draggable?: boolean;
+  onClick?: () => void;
+}
 
-export default function TemplateCard({ title }: TemplateCardProps) {
+export default function TemplateCard({
+  title,
+  draggable = true,
+  onClick,
+}: TemplateCardProps) {
   const onDragStart = (event: React.DragEvent<HTMLDivElement>) => {
-    event.dataTransfer.setData("application/reactflow", title);
+    if (!draggable) return;
 
+    event.dataTransfer.setData("application/reactflow", title);
     event.dataTransfer.effectAllowed = "move";
   };
 
   return (
     <div
-      draggable
-      onDragStart={onDragStart}
-      className="flex h-28 cursor-grab flex-col items-center justify-center rounded-md border border-neutral-500 bg-[#4A4A4A] text-center transition hover:border-blue-500 active:cursor-grabbing"
+      draggable={draggable}
+      onDragStart={draggable ? onDragStart : undefined}
+      onClick={!draggable ? onClick : undefined}
+      className={`flex h-28 flex-col items-center justify-center rounded-md border border-neutral-500 bg-[#4A4A4A] text-center transition hover:border-blue-500 ${
+        draggable ? "cursor-grab active:cursor-grabbing" : "cursor-pointer"
+      }`}
     >
-      <Boxes size={18} className="mb-3 text-gray-300" />
-
-      <span className="text-sm text-gray-200">{title}</span>
+      ...
     </div>
   );
 }

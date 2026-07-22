@@ -3,7 +3,7 @@ import { useCallback, useEffect } from "react";
 import {
   Background,
   BackgroundVariant,
-  MarkerType,
+  // MarkerType,
   ReactFlow,
   useReactFlow,
 } from "@xyflow/react";
@@ -12,8 +12,7 @@ import type { Node } from "@xyflow/react";
 
 import Toolbar from "./toolbar/Toolbar";
 import { useWorkflowStore } from "../../../store/workflowStore";
-import { nodeTypes } from "../../../types/nodeTypes";
-import { edgeTypes } from "../../../types/edgeTypes";
+import { edgeTypes, nodeTypes } from "../../../types/workFlowTypes";
 
 export default function Canvas() {
   const {
@@ -126,15 +125,6 @@ export default function Canvas() {
         onNodeClick={handleNodeClick}
         onPaneClick={handlePaneClick}
         fitView
-        defaultEdgeOptions={{
-          type: "workflowEdge",
-          markerEnd: {
-            type: MarkerType.Arrow,
-            color: "#BDBDBD",
-            width: 10,
-            height: 10,
-          },
-        }}
         /* ===== Toolbar Control ===== */
         nodesDraggable={activeTool === "pointer"}
         elementsSelectable={activeTool === "pointer"}
