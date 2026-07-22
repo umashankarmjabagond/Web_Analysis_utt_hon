@@ -155,3 +155,33 @@ body {
     background 0.25s ease,
     color 0.25s ease;
 }
+
+/* WebKit (Chrome, Edge, Safari) */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #272727;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #606060;
+  border-radius: 9999px;
+  border: 2px solid #272727;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #909090;
+}
+
+::-webkit-scrollbar-corner {
+  background: #272727;
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #606060 #272727;
+}

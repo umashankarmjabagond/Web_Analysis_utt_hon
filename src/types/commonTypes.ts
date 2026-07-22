@@ -43,6 +43,7 @@ export interface TemplateCardProps {
 export interface TreeNodeData {
   id: string;
   label: string;
+  image?: string | ReactNode;
   children?: TreeNodeData[];
 }
 
@@ -54,6 +55,7 @@ export interface TreeProps {
 
 export interface TreeNodeProps {
   node: TreeNodeData;
+  level: number;
   expandedIds: Set<string>;
   selectedId: string | null;
   onToggle: (nodeId: string) => void;
