@@ -1,4 +1,5 @@
 import type { ComponentType, ReactNode } from "react";
+import type { DonutChartItem } from "./dashboardTypes";
 
 export const NOTIFICATION_TYPE = {
   SUCCESS: "success",
@@ -72,4 +73,10 @@ export interface TabsProps {
   activeTab?: string | null;
   onTabChange?: (id: string) => void;
   variant?: "primary" | "secondary";
+}
+
+export interface DonutChartProps {
+  data: DonutChartItem[];
+  size?: number | undefined;
+  colors: Record<string, string>;
 }
