@@ -53,6 +53,15 @@
   --color-table-row-even: #f8fafc;
   --color-table-row-hover: #eef2f7;
   --color-table-border: #d1d5db;
+
+  /* Button */
+  --color-button-primary: #64c3ff;
+  --color-button-primary-hover: #5abef7;
+  --color-button-secondary: #f5f5f5;
+  --color-button-secondary-hover: #e8e8e8;
+  --color-button-text-primary: #303030;
+  --color-button-text-secondary: #1976d2;
+  --color-button-focus: #62bbf3;
 }
 
 /* =========================================================
@@ -102,6 +111,15 @@
   --color-table-row-even: #383838;
   --color-table-row-hover: #404040;
   --color-table-border: #454545;
+
+  /* Button */
+  --color-button-primary: #64c3ff;
+  --color-button-primary-hover: #5abef7;
+  --color-button-secondary: #404040;
+  --color-button-secondary-hover: #4a4a4a;
+  --color-button-text-primary: #303030;
+  --color-button-text-secondary: #64c3ff;
+  --color-button-focus: #62bbf3;
 }
 
 /* =========================================================
