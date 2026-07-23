@@ -64,20 +64,20 @@ const Table = <T extends object>({
 
   return (
     <div
-      className={`
+      className={`dark
         w-full
         overflow-auto
         rounded-[var(--radius-sm)]
         border
-        border-[var(--color-border)]
-        bg-[var(--color-surface)]
+        border-[var(--color-table-border)]
+        bg-[var(--color-background)]
         ${className}
       `}
     >
-      {/* Toolbar */}
+      {/* ---------------- Toolbar ---------------- */}
 
       {filterable && (
-        <div className="flex items-center justify-end bg-[var(--color-surface)] px-3 py-2.5">
+        <div className="flex items-center justify-end bg-[var(--color-table-header)] px-3 py-2.5">
           <input
             type="text"
             value={globalFilter}
@@ -87,8 +87,8 @@ const Table = <T extends object>({
               w-[250px]
               rounded-[var(--radius-sm)]
               border
-              border-[var(--color-border)]
-              bg-[var(--color-background)]
+              border-[var(--color-table-border)]
+              bg-[var(--color-table-row-odd)]
               px-3
               py-2
               text-[var(--text-sm)]
@@ -96,25 +96,24 @@ const Table = <T extends object>({
               outline-none
               transition-colors
               placeholder:text-[var(--color-text-secondary)]
-              hover:border-[var(--color-text-secondary)]
+              hover:border-[var(--color-primary)]
               focus:border-[var(--color-primary)]
             "
           />
         </div>
       )}
 
-      {/* Table */}
+      {/* ---------------- Table ---------------- */}
 
       <table
         className={`
           w-full
-          border-collapse
           table-fixed
-          bg-[var(--color-surface)]
+          border-collapse
           ${tableClassName}
         `}
       >
-        <thead className="bg-[var(--color-card)]">
+        <thead className="bg-[var(--color-table-header)]">
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
@@ -122,16 +121,16 @@ const Table = <T extends object>({
                   key={header.id}
                   className={`
                     border
-                    border-[var(--color-border)]
+                    border-[var(--color-table-border)]
                     px-3
                     py-2.5
                     text-left
+                    whitespace-nowrap
                     font-[var(--font-semibold)]
                     text-[var(--color-text-primary)]
-                    whitespace-nowrap
                     ${
                       stickyHeader
-                        ? "sticky top-0 z-10 bg-[var(--color-card)]"
+                        ? "sticky top-0 z-10 bg-[var(--color-table-header)]"
                         : ""
                     }
                   `}
@@ -179,8 +178,8 @@ const Table = <T extends object>({
                               w-full
                               rounded-[var(--radius-sm)]
                               border
-                              border-[var(--color-border)]
-                              bg-[var(--color-background)]
+                              border-[var(--color-table-border)]
+                              bg-[var(--color-table-row-odd)]
                               px-2
                               py-1.5
                               text-[var(--text-xs)]
@@ -188,7 +187,7 @@ const Table = <T extends object>({
                               outline-none
                               transition-colors
                               placeholder:text-[var(--color-text-secondary)]
-                              hover:border-[var(--color-text-secondary)]
+                              hover:border-[var(--color-primary)]
                               focus:border-[var(--color-primary)]
                             "
                         />
@@ -208,7 +207,8 @@ const Table = <T extends object>({
                 colSpan={columns.length}
                 className="
                   border
-                  border-[var(--color-border)]
+                  border-[var(--color-table-border)]
+                  bg-[var(--color-table-row-odd)]
                   px-4
                   py-6
                   text-center
@@ -224,7 +224,8 @@ const Table = <T extends object>({
                 colSpan={columns.length}
                 className="
                   border
-                  border-[var(--color-border)]
+                  border-[var(--color-table-border)]
+                  bg-[var(--color-table-row-odd)]
                   px-4
                   py-6
                   text-center
@@ -240,14 +241,14 @@ const Table = <T extends object>({
                 key={row.id}
                 className={`
                   transition-colors
-                  hover:bg-[var(--color-card)]
                   ${
                     zebraStripes
                       ? rowIndex % 2 === 0
-                        ? "bg-[var(--color-surface)]"
-                        : "bg-[var(--color-card)]"
-                      : ""
+                        ? "bg-[var(--color-table-row-odd)]"
+                        : "bg-[var(--color-table-row-even)]"
+                      : "bg-[var(--color-table-row-odd)]"
                   }
+                  hover:bg-[var(--color-table-row-hover)]
                 `}
               >
                 {row.getVisibleCells().map((cell) => (
@@ -256,7 +257,7 @@ const Table = <T extends object>({
                     className="
                       whitespace-nowrap
                       border
-                      border-[var(--color-border)]
+                      border-[var(--color-table-border)]
                       px-3
                       py-2.5
                       text-[var(--color-text-primary)]
@@ -270,15 +271,17 @@ const Table = <T extends object>({
           )}
         </tbody>
       </table>
-      {/* ---------------- Pagination ---------------- */}
 
+      {/* ---------------- Pagination ---------------- */}
       {pagination && (
         <div
           className="
             flex items-center justify-between
-            border-t border-[var(--color-border)]
-            bg-[var(--color-surface)]
-            px-3 py-3
+            border-t
+            border-[var(--color-table-border)]
+            bg-[var(--color-table-header)]
+            px-3
+            py-3
           "
         >
           {/* Left */}
@@ -291,14 +294,14 @@ const Table = <T extends object>({
                 h-8
                 rounded-[var(--radius-sm)]
                 border
-                border-[var(--color-border)]
-                bg-[var(--color-background)]
+                border-[var(--color-table-border)]
+                bg-[var(--color-table-row-odd)]
                 px-3
                 text-[var(--text-sm)]
-                text-[var(--color-text-primary)]
+                !text-[var(--color-text-primary)]
                 outline-none
                 transition-colors
-                hover:border-[var(--color-text-secondary)]
+                hover:border-[var(--color-primary)]
                 focus:border-[var(--color-primary)]
               "
             >
@@ -317,10 +320,15 @@ const Table = <T extends object>({
               onClick={() => table.setPageIndex(0)}
               disabled={!table.getCanPreviousPage()}
               className="
-                flex h-8 w-8 items-center justify-center
+                flex
+                h-8
+                w-8
+                items-center
+                justify-center
                 rounded-[var(--radius-sm)]
-                border border-[var(--color-border)]
-                bg-[var(--color-background)]
+                border
+                border-[var(--color-table-border)]
+                bg-[var(--color-table-row-odd)]
                 text-[var(--color-text-primary)]
                 transition-colors
                 hover:bg-[var(--color-primary)]
@@ -336,10 +344,15 @@ const Table = <T extends object>({
               onClick={() => table.previousPage()}
               disabled={!table.getCanPreviousPage()}
               className="
-                flex h-8 w-8 items-center justify-center
+                flex
+                h-8
+                w-8
+                items-center
+                justify-center
                 rounded-[var(--radius-sm)]
-                border border-[var(--color-border)]
-                bg-[var(--color-background)]
+                border
+                border-[var(--color-table-border)]
+                bg-[var(--color-table-row-odd)]
                 text-[var(--color-text-primary)]
                 transition-colors
                 hover:bg-[var(--color-primary)]
@@ -351,7 +364,7 @@ const Table = <T extends object>({
               {"<"}
             </button>
 
-            <span className="px-2 text-[var(--text-sm)] text-[var(--color-text-primary)]">
+            <span className="px-2 text-[var(--text-sm)] !text-[var(--color-text-primary)]">
               Page {table.getState().pagination.pageIndex + 1} of{" "}
               {table.getPageCount()}
             </span>
@@ -360,10 +373,15 @@ const Table = <T extends object>({
               onClick={() => table.nextPage()}
               disabled={!table.getCanNextPage()}
               className="
-                flex h-8 w-8 items-center justify-center
+                flex
+                h-8
+                w-8
+                items-center
+                justify-center
                 rounded-[var(--radius-sm)]
-                border border-[var(--color-border)]
-                bg-[var(--color-background)]
+                border
+                border-[var(--color-table-border)]
+                bg-[var(--color-table-row-odd)]
                 text-[var(--color-text-primary)]
                 transition-colors
                 hover:bg-[var(--color-primary)]
@@ -379,10 +397,15 @@ const Table = <T extends object>({
               onClick={() => table.setPageIndex(table.getPageCount() - 1)}
               disabled={!table.getCanNextPage()}
               className="
-                flex h-8 w-8 items-center justify-center
+                flex
+                h-8
+                w-8
+                items-center
+                justify-center
                 rounded-[var(--radius-sm)]
-                border border-[var(--color-border)]
-                bg-[var(--color-background)]
+                border
+                border-[var(--color-table-border)]
+                bg-[var(--color-table-row-odd)]
                 text-[var(--color-text-primary)]
                 transition-colors
                 hover:bg-[var(--color-primary)]
