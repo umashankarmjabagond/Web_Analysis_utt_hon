@@ -9,10 +9,7 @@ export interface BreadcrumbItem {
 
 export interface BreadcrumbProps {
   items?: BreadcrumbItem[];
-  onItemClick?: (
-    item: BreadcrumbItem,
-    index: number,
-  ) => void;
+  onItemClick?: (item: BreadcrumbItem, index: number) => void;
 }
 
 export const NOTIFICATION_TYPE = {

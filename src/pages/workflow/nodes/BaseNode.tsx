@@ -1,16 +1,18 @@
 import { memo } from "react";
 import { Handle, Position } from "@xyflow/react";
 
+import type { WorkflowNodeData } from "../../../types/workFlowTypes";
+
 interface BaseNodeProps {
-  data: {
-    label: string;
-  };
+  data: WorkflowNodeData;
 }
 
 function BaseNode({ data }: BaseNodeProps) {
+  const { label, element } = data;
+
   return (
-    <div className="relative w-24 rounded-md border border-[#555] bg-[#2B2B2B] shadow-md transition-all duration-200 hover:border-[#7aa2ff]">
-      {/* Left Handle (Invisible but Connectable) */}
+    <div className="relative min-w-[120px] rounded-md border border-[#555] bg-[#2B2B2B] shadow-md transition-all duration-200 hover:border-[#7aa2ff]">
+      {/* Target Handle */}
       <Handle
         type="target"
         position={Position.Left}
@@ -24,15 +26,19 @@ function BaseNode({ data }: BaseNodeProps) {
         }}
       />
 
-      <div className="flex flex-col items-center justify-center py-2">
+      <div className="flex flex-col items-center px-3 py-2">
         <div className="text-sm">📄</div>
 
-        <div className="px-2 text-center text-sm tracking-wide text-white">
-          {data.label}
+        <div className="mt-1 text-center text-sm font-medium text-white">
+          {label}
+        </div>
+
+        <div className="mt-1 text-[10px] uppercase tracking-wider text-gray-400">
+          {element.elementType}
         </div>
       </div>
 
-      {/* Right Handle (Always Visible like Honeywell) */}
+      {/* Source Handle */}
       <Handle
         type="source"
         position={Position.Right}
