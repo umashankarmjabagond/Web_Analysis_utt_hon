@@ -4,7 +4,7 @@ import type { DonutChartItem } from "./dashboardTypes";
 export interface BreadcrumbItem {
   id: string;
   label: string;
-  icon?: string;
+  image?: string;
 }
 
 export interface BreadcrumbProps {
@@ -57,7 +57,7 @@ export interface TemplateCardProps {
 export interface TreeNodeData {
   id: string;
   label: string;
-  image?: string | ReactNode;
+  image?: string;
   children?: TreeNodeData[];
 }
 

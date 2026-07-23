@@ -15,9 +15,9 @@ export default function Breadcrumb({
     <div className="flex items-center gap-2 text-sm text-white">
       {items.map((item, index) => {
         const Icon =
-          item.icon
+          item.image
             ? iconMap[
-                item.icon as keyof typeof iconMap
+                item.image as keyof typeof iconMap
               ]
             : null;
 
