@@ -1,6 +1,20 @@
 import type { ComponentType, ReactNode } from "react";
 import type { DonutChartItem } from "./dashboardTypes";
 
+export interface BreadcrumbItem {
+  id: string;
+  label: string;
+  icon?: string;
+}
+
+export interface BreadcrumbProps {
+  items?: BreadcrumbItem[];
+  onItemClick?: (
+    item: BreadcrumbItem,
+    index: number,
+  ) => void;
+}
+
 export const NOTIFICATION_TYPE = {
   SUCCESS: "success",
   ERROR: "error",

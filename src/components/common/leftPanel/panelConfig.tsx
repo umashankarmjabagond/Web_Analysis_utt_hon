@@ -1,6 +1,7 @@
 import WorkflowPanel from "./WorkflowPanel";
 import DashboardPanel from "./DashboardPanel";
 import { ROUTES } from "../../../constants/routes/routesConstant";
+import LoopConfigurationPanel from "./LoopConfigurationPanel";
 
 export const panelConfig = [
   {
@@ -13,4 +14,8 @@ export const panelConfig = [
     header: "Plant Hierarchy",
     component: <DashboardPanel />,
   },
+  {
+    path: ROUTES.LOOP_CONFIGURATION,
+    component: <LoopConfigurationPanel />,
+  }
 ];
