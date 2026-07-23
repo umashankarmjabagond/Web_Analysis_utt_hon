@@ -1,6 +1,20 @@
 import type { ComponentType, ReactNode } from "react";
 import type { DonutChartItem } from "./dashboardTypes";
 
+export interface BreadcrumbItem {
+  id: string;
+  label: string;
+  image?: string;
+}
+
+export interface BreadcrumbProps {
+  items?: BreadcrumbItem[];
+  onItemClick?: (
+    item: BreadcrumbItem,
+    index: number,
+  ) => void;
+}
+
 export const NOTIFICATION_TYPE = {
   SUCCESS: "success",
   ERROR: "error",
@@ -44,7 +58,7 @@ export interface TemplateCardProps {
 export interface TreeNodeData {
   id: string;
   label: string;
-  image?: string | ReactNode;
+  image?: string;
   children?: TreeNodeData[];
 }
 
