@@ -3,6 +3,7 @@ import type { TreeNodeData } from "../../../types/commonTypes";
 import Tree from "../tree/Tree";
 import { useState } from "react";
 import { Image } from "lucide-react";
+import { ROUTES } from "../../../constants/routes/routesConstant";
 
 export default function DashboardPanel() {
   const navigate = useNavigate();
@@ -75,7 +76,6 @@ export default function DashboardPanel() {
             {
               id: "56-FFC618",
               label: "56-FFC618",
-              image: <Image size={16} />,
             },
             {
               id: "56-FFC619",
@@ -118,10 +118,39 @@ export default function DashboardPanel() {
 
   const handleSelect = (nodeId: string) => {
     setSelectedId(nodeId);
-    navigate(`/dashboard/${nodeId}`);
+
+    const routeSegments = findPath(TREE_DATA, nodeId);
+    if (!routeSegments) return;
+
+    const route = `${ROUTES.DASHBOARD}/${routeSegments.join("/")}`;
+    navigate(route);
   };
 
   return (
     <Tree nodes={TREE_DATA} selectedId={selectedId} onSelect={handleSelect} />
   );
 }
+
+const findPath = (
+  nodes: TreeNodeData[],
+  targetId: string,
+  currentPath: string[] = [],
+): string[] | null => {
+  for (const node of nodes) {
+    const accumulatedPath = [...currentPath, node.id];
+
+    if (node.id === targetId) {
+      return accumulatedPath;
+    }
+
+    if (node.children?.length) {
+      const result = findPath(node.children, targetId, accumulatedPath);
+
+      if (result) {
+        return result;
+      }
+    }
+  }
+
+  return null;
+};

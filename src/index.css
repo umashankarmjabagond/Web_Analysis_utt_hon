@@ -4,6 +4,24 @@
    LIGHT THEME
 ========================================================= */
 :root {
+  /* Application Color */
+  --app-primary: #202020;
+
+  /* Surfaces  */
+  --app-surface: #272727;
+  --app-surface-elevated: #404040;
+
+  /* Text */
+  --app-text-primary: #f0f0f0;
+  --app-text-secondary: #d0d0d0;
+
+  /* Divider */
+  --app-divider: #707070;
+
+  /* Action */
+  --app-action-primary: #64c3ff;
+  --app-action-secondary: #c8c8c8;
+
   /* Brand */
   --color-primary: #2563eb;
   --color-primary-hover: #1d4ed8;
@@ -126,6 +144,24 @@
    TAILWIND DESIGN TOKENS
 ========================================================= */
 @theme {
+  /* Application */
+  --color-app-primary: var(--app-primary);
+
+  /* Surfaces */
+  --color-app-surface: var(--app-surface);
+  --color-app-surface-elevated: var(--app-surface-elevated);
+
+  /* Text */
+  --color-app-text-primary: var(--app-text-primary);
+  --color-app-text-secondary: var(--app-text-secondary);
+
+  /* Divider */
+  --color-app-divider: var(--app-divider);
+
+  /* Actions */
+  --color-app-action-primary: var(--app-action-primary);
+  --color-app-action-secondary: var(--app-action-secondary);
+
   /* ---------- Colors ---------- */
   --color-primary: var(--color-primary);
   --color-primary-hover: var(--color-primary-hover);
