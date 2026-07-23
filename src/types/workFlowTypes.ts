@@ -36,3 +36,14 @@ export interface WorkflowSection {
   title: string;
   items: WorkflowListItem[];
 }
+
+
+export interface KpiItem {
+  name: string;
+  value: string | number;
+}
+
+export interface CaluclatedKpisAndErrorsProps {
+  kpis?: KpiItem[];
+  errors?: string[];
+}
