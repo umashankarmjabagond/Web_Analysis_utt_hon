@@ -1,27 +1,46 @@
-import React, { InputHTMLAttributes, useState } from "react";
+import React, { type InputHTMLAttributes, useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   error?: string;
-  className?: string;
+  helperText?: string;
+  fullWidth?: boolean;
+  showPasswordToggle?: boolean;
 }
+
+const variants = {
+  default: `
+    border-[var(--color-border)]
+    hover:border-[var(--color-text-secondary)]
+    focus:border-[var(--color-primary)]
+  `,
+  error: `
+    border-[var(--color-danger)]
+    hover:border-[var(--color-danger)]
+    focus:border-[var(--color-danger)]
+  `,
+};
 
 const Input: React.FC<InputProps> = ({
   label,
   type = "text",
   error,
+  helperText,
+  fullWidth = true,
+  showPasswordToggle = false,
   className = "",
   ...props
 }) => {
   const [showPassword, setShowPassword] = useState(false);
 
-  const inputType = type === "password" && showPassword ? "text" : type;
+  const inputType =
+    type === "password" && showPassword ? "text" : type;
 
   return (
-    <div className="w-full">
+    <div className={`flex flex-col gap-1.5 ${fullWidth ? "w-full" : ""}`}>
       {label && (
-        <label className="mb-2 block text-sm font-medium text-gray-700">
+        <label className="text-[var(--text-sm)] font-[var(--font-medium)] text-[var(--color-text-primary)]">
           {label}
         </label>
       )}
@@ -29,29 +48,48 @@ const Input: React.FC<InputProps> = ({
       <div className="relative">
         <input
           type={inputType}
-          className={`w-full rounded-lg border px-4 py-2 text-sm outline-none transition
-            ${
-              error
-                ? "border-red-500 focus:ring-2 focus:ring-red-300"
-                : "border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-300"
-            }
-            ${type === "password" ? "pr-10" : ""}
-            ${className}`}
+          className={`
+            w-full
+            h-8
+            rounded-[var(--radius-sm)]
+            border
+            bg-[var(--color-surface)]
+            px-2.5
+            pr-${type === "password" && showPasswordToggle ? "9" : "2.5"}
+            text-[var(--text-sm)]
+            font-normal
+            text-[var(--color-text-primary)]
+            placeholder:text-[var(--color-text-disabled)]
+            outline-none
+            transition-colors
+            ${error ? variants.error : variants.default}
+            ${className}
+          `}
           {...props}
         />
 
-        {type === "password" && (
+        {type === "password" && showPasswordToggle && (
           <button
             type="button"
             onClick={() => setShowPassword((prev) => !prev)}
-            className="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-gray-700"
+            className="absolute right-2.5 top-1/2 flex -translate-y-1/2 items-center justify-center text-[var(--color-text-secondary)] transition-colors hover:text-[var(--color-text-primary)]"
           >
             {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
           </button>
         )}
       </div>
 
-      {error && <p className="mt-1 text-sm text-red-500">{error}</p>}
+      {!error && helperText && (
+        <p className="text-[var(--text-xs)] text-[var(--color-text-secondary)]">
+          {helperText}
+        </p>
+      )}
+
+      {error && (
+        <p className="text-[var(--text-xs)] text-[var(--color-danger)]">
+          {error}
+        </p>
+      )}
     </div>
   );
 };
