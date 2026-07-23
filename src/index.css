@@ -18,9 +18,15 @@
   --color-text-primary: #111827;
   --color-text-secondary: #6b7280;
   --color-text-disabled: #9ca3af;
+  --color-text-accent: #d0d0d0;
 
   /* Border */
   --color-border: #e5e7eb;
+  --color-border-1: #707070;
+
+  /* Fixed panel background — intentionally NOT redefined in .dark below,
+     so it always stays this value regardless of light/dark theme */
+  --color-panel-bg: #272727;
 
   /* Status */
   --color-success: #16a34a;
@@ -42,7 +48,6 @@
   --color-tab-inactive-text: #d0d0d0;
 
   /* Table */
-
   --color-table-header: #f3f4f6;
   --color-table-row-odd: #ffffff;
   --color-table-row-even: #f8fafc;
@@ -91,8 +96,7 @@
   --color-tab-active-text: #ffffff;
   --color-tab-inactive-text: #d0d0d0;
 
-   /* Table */
-
+  /* Table */
   --color-table-header: #2b2b2b;
   --color-table-row-odd: #303030;
   --color-table-row-even: #383838;
@@ -105,7 +109,6 @@
 ========================================================= */
 @theme {
   /* ---------- Colors ---------- */
-
   --color-primary: var(--color-primary);
   --color-primary-hover: var(--color-primary-hover);
   --color-secondary: var(--color-secondary);
@@ -117,8 +120,11 @@
   --color-text-primary: var(--color-text-primary);
   --color-text-secondary: var(--color-text-secondary);
   --color-text-disabled: var(--color-text-disabled);
+  --color-text-accent: var(--color-text-accent);
 
   --color-border: var(--color-border);
+  --color-border-1: var(--color-border-1);
+  --color-panel-bg: var(--color-panel-bg);
 
   --color-success: var(--color-success);
   --color-warning: var(--color-warning);
@@ -130,19 +136,17 @@
   --color-tab-inactive-text: var(--color-tab-inactive-text);
 
   /* ---------- Typography ---------- */
-
-  --text-xs: 0.75rem; /* 12px */
-  --text-sm: 0.875rem; /* 14px */
-  --text-base: 1rem; /* 16px */
-  --text-lg: 1.125rem; /* 18px */
-  --text-xl: 1.25rem; /* 20px */
-  --text-2xl: 1.5rem; /* 24px */
-  --text-3xl: 1.875rem; /* 30px */
-  --text-4xl: 2.25rem; /* 36px */
-  --text-5xl: 3rem; /* 48px */
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 1.875rem;
+  --text-4xl: 2.25rem;
+  --text-5xl: 3rem;
 
   /* ---------- Font Weight ---------- */
-
   --font-light: 300;
   --font-normal: 400;
   --font-medium: 500;
@@ -150,17 +154,14 @@
   --font-bold: 700;
 
   /* ---------- Radius ---------- */
-
   --radius-sm: var(--radius-sm);
   --radius-md: var(--radius-md);
   --radius-lg: var(--radius-lg);
 
   /* ---------- Shadow ---------- */
-
   --shadow-card: var(--shadow-card);
 
   /* ---------- Table ---------- */
-
   --color-table-header: var(--color-table-header);
   --color-table-row-odd: var(--color-table-row-odd);
   --color-table-row-even: var(--color-table-row-even);

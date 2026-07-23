@@ -112,3 +112,13 @@ export interface WorkflowNodeData extends Record<string, unknown> {
 }
 
 export type WorkflowNode = Node<WorkflowNodeData>;
+
+export interface KpiItem {
+  name: string;
+  value: string | number;
+}
+
+export interface CaluclatedKpisAndErrorsProps {
+  kpis?: KpiItem[];
+  errors?: string[];
+}
