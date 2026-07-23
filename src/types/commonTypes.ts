@@ -1,4 +1,5 @@
 import type { ComponentType, ReactNode } from "react";
+import type { DonutChartItem } from "./dashboardTypes";
 
 export const NOTIFICATION_TYPE = {
   SUCCESS: "success",
@@ -42,6 +43,7 @@ export interface TemplateCardProps {
 export interface TreeNodeData {
   id: string;
   label: string;
+  image?: string | ReactNode;
   children?: TreeNodeData[];
 }
 
@@ -53,6 +55,7 @@ export interface TreeProps {
 
 export interface TreeNodeProps {
   node: TreeNodeData;
+  level: number;
   expandedIds: Set<string>;
   selectedId: string | null;
   onToggle: (nodeId: string) => void;
@@ -72,4 +75,10 @@ export interface TabsProps {
   activeTab?: string | null;
   onTabChange?: (id: string) => void;
   variant?: "primary" | "secondary";
+}
+
+export interface DonutChartProps {
+  data: DonutChartItem[];
+  size?: number | undefined;
+  colors: Record<string, string>;
 }

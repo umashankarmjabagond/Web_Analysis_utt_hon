@@ -1,43 +1,127 @@
 import { useNavigate } from "react-router-dom";
+import type { TreeNodeData } from "../../../types/commonTypes";
+import Tree from "../tree/Tree";
+import { useState } from "react";
+import { Image } from "lucide-react";
 
 export default function DashboardPanel() {
   const navigate = useNavigate();
 
-  const items = [
+  const TREE_DATA: TreeNodeData[] = [
     {
-      name: "Feed Water",
-      route: "feed-water",
+      id: "feed-water",
+      label: "Feed Water",
+      children: [
+        {
+          id: "fresh-water",
+          label: "Fresh Water",
+          image: <Image size={16} />,
+          children: [
+            {
+              id: "pump-101",
+              label: "Pump 101",
+            },
+            {
+              id: "pump-102",
+              label: "Pump 102",
+            },
+            {
+              id: "compressor-101",
+              label: "Compressor 101",
+            },
+          ],
+        },
+        {
+          id: "raw-water",
+          label: "Raw Water",
+          image: <Image size={16} />,
+          children: [
+            {
+              id: "tank-201",
+              label: "Tank 201",
+            },
+            {
+              id: "valve-202",
+              label: "Valve 202",
+            },
+          ],
+        },
+      ],
     },
     {
-      name: "Power Boiler",
-      route: "power-boiler",
-    },
-    {
-      name: "Steam",
-      route: "steam",
+      id: "power-boiler",
+      label: "Power Boiler",
+      children: [
+        {
+          id: "pgb1",
+          label: "PBG1",
+          image: <Image size={16} />,
+          children: [
+            {
+              id: "pump-301",
+              label: "Pump 301",
+            },
+            {
+              id: "motor-302",
+              label: "Motor 302",
+            },
+          ],
+        },
+        {
+          id: "pgb2",
+          label: "PBG2",
+          image: <Image size={16} />,
+          children: [
+            {
+              id: "56-FFC618",
+              label: "56-FFC618",
+              image: <Image size={16} />,
+            },
+            {
+              id: "56-FFC619",
+              label: "56-FFC619",
+            },
+
+            {
+              id: "56-FFC620",
+              label: "56-FFC620",
+            },
+            {
+              id: "56-FFC621",
+              label: "56-FFC621",
+            },
+
+            {
+              id: "56-FFC622",
+              label: "56-FFC622",
+            },
+            {
+              id: "56-FFC623",
+              label: "56-FFC623",
+            },
+
+            {
+              id: "56-FFC624",
+              label: "56-FFC624",
+            },
+            {
+              id: "56-FFC625",
+              label: "56-FFC625",
+            },
+          ],
+        },
+      ],
     },
   ];
 
-  return (
-    <div className="flex h-full flex-col">
-      <div className="p-4">
-        <input
-          placeholder="Search..."
-          className="w-full rounded bg-neutral-700 px-3 py-2 text-white"
-        />
-      </div>
+  const [selectedId, setSelectedId] = useState<string | null>(null);
 
-      <div className="flex-1 overflow-auto text-white">
-        {items.map((item) => (
-          <button
-            key={item.route}
-            onClick={() => navigate(`/dashboard/${item.route}`)}
-            className="w-full px-4 py-3 text-left hover:bg-neutral-700"
-          >
-            {item.name}
-          </button>
-        ))}
-      </div>
-    </div>
+  const handleSelect = (nodeId: string) => {
+    setSelectedId(nodeId);
+    navigate(`/dashboard/${nodeId}`);
+  };
+
+  return (
+    <Tree nodes={TREE_DATA} selectedId={selectedId} onSelect={handleSelect} />
   );
 }

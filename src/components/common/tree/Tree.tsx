@@ -25,6 +25,7 @@ export default function Tree({ nodes, selectedId, onSelect }: TreeProps) {
         <TreeNode
           key={node.id}
           node={node}
+          level={0}
           expandedIds={expandedIds}
           selectedId={selectedId}
           onToggle={handleToggle}
