@@ -39,6 +39,7 @@ export interface TemplateCardProps {
   title: string;
   draggable?: boolean;
   onClick?: () => void;
+  onDragStart?: (event: React.DragEvent<HTMLDivElement>) => void;
 }
 export interface TreeNodeData {
   id: string;

@@ -1,6 +1,9 @@
-import type { Edge, Node, Viewport } from "@xyflow/react";
+import type {
+  WorkflowCanvasData,
+  WorkflowSection,
+} from "../../types/workFlowTypes";
 
-export const catalogSections = [
+export const catalogSections: WorkflowSection[] = [
   {
     title: "Regulatory Templates",
     items: [
@@ -23,7 +26,7 @@ export const catalogSections = [
   },
 ];
 
-export const attributeSections = [
+export const attributeSections: WorkflowSection[] = [
   {
     title: "Saved Workflows",
     items: [
@@ -43,14 +46,7 @@ export const attributeSections = [
   },
 ];
 
-export const dummyWorkflows: Record<
-  string,
-  {
-    nodes: Node[];
-    edges: Edge[];
-    viewport?: Viewport;
-  }
-> = {
+export const dummyWorkflows: Record<string, WorkflowCanvasData> = {
   flow1: {
     nodes: [
       {

@@ -9,7 +9,8 @@ import {
   catalogSections,
   dummyWorkflows,
 } from "../../../pages/workflow/workflowPanelData ";
-import { fromWorkflowTemplate } from "../../../services/workflowService/workflowMapper";
+import type { WorkflowListItem } from "../../../types/workFlowTypes";
+import { prepareWorkflowForCanvas } from "../../../utils/utils";
 
 type CatalogTab = "templates" | "attributes";
 
@@ -23,20 +24,29 @@ export default function WorkflowPanel() {
     return activeTab === "templates" ? catalogSections : attributeSections;
   }, [activeTab]);
 
-  const handleCardClick = (item: any) => {
-    if (activeTab !== "attributes") return;
+  const handleDragStart = (
+    event: React.DragEvent<HTMLDivElement>,
+    title: string,
+  ) => {
+    event.dataTransfer.setData("application/reactflow", title);
 
+    event.dataTransfer.effectAllowed = "move";
+  };
+
+  const handleCardClick = (item: WorkflowListItem) => {
     const workflow = dummyWorkflows[item.id];
 
     if (!workflow) return;
 
-    setNodes(workflow.nodes);
-    setEdges(workflow.edges);
+    const canvasWorkflow = prepareWorkflowForCanvas(workflow);
+
+    setNodes(canvasWorkflow.nodes);
+
+    setEdges(canvasWorkflow.edges);
   };
 
   return (
     <div className="flex h-full flex-col">
-      {/* Header */}
       <div className="p-4">
         <h3 className="mb-4 text-lg font-semibold uppercase tracking-[3px] text-white">
           Catalog
@@ -45,10 +55,10 @@ export default function WorkflowPanel() {
         <div className="flex rounded-md bg-[#5A5A5A] p-1">
           <button
             onClick={() => setActiveTab("templates")}
-            className={`flex-1 rounded-md px-4 py-2 text-sm font-medium transition-all ${
+            className={`flex-1 rounded-md px-4 py-2 text-sm font-medium transition ${
               activeTab === "templates"
-                ? "bg-[#3B3B3B] text-white shadow"
-                : "text-gray-300 hover:text-white"
+                ? "bg-[#3B3B3B] text-white"
+                : "text-gray-300"
             }`}
           >
             Templates
@@ -56,10 +66,10 @@ export default function WorkflowPanel() {
 
           <button
             onClick={() => setActiveTab("attributes")}
-            className={`flex-1 rounded-md px-4 py-2 text-sm font-medium transition-all ${
+            className={`flex-1 rounded-md px-4 py-2 text-sm font-medium transition ${
               activeTab === "attributes"
-                ? "bg-[#3B3B3B] text-white shadow"
-                : "text-gray-300 hover:text-white"
+                ? "bg-[#3B3B3B] text-white"
+                : "text-gray-300"
             }`}
           >
             Attributes
@@ -67,7 +77,6 @@ export default function WorkflowPanel() {
         </div>
       </div>
 
-      {/* Search */}
       <div className="px-4">
         <input
           placeholder="Search..."
@@ -75,7 +84,6 @@ export default function WorkflowPanel() {
         />
       </div>
 
-      {/* List */}
       <div className="mt-4 flex-1 space-y-4 overflow-auto px-4 pb-4">
         {panelData.map((section) => (
           <Accordion
@@ -88,7 +96,16 @@ export default function WorkflowPanel() {
                 key={item.id}
                 title={item.title}
                 draggable={activeTab === "templates"}
-                onClick={() => handleCardClick(item)}
+                onDragStart={
+                  activeTab === "templates"
+                    ? (event) => handleDragStart(event, item.title)
+                    : undefined
+                }
+                onClick={
+                  activeTab === "attributes"
+                    ? () => handleCardClick(item)
+                    : undefined
+                }
               />
             ))}
           </Accordion>
