@@ -29,12 +29,12 @@ const tabs = [
   {
     id: "custom-kpi",
     label: "Custom KPI Configuration",
-    path: "/dashboard",
+    path: "/#",
   },
   {
     id: "analysis-engine",
     label: "Analysis Engine",
-    path: "/workflow",
+    path: "/dashboard",
   },
 ];
 
