@@ -40,6 +40,62 @@ const allColumnsData: TreeNodeData[] = [
       },
     ],
   },
+  {
+    id: "ds2",
+    label: "01-LC0524 DS2",
+    children: [
+      {
+        id: "sample2",
+        label: "TimeSeriesSample2",
+        children: [
+          {
+            id: "pv2",
+            label: "01-LC0524.PV2",
+          },
+          {
+            id: "mode2",
+            label: "03-PC0251.MODE2",
+          },
+          {
+            id: "op2",
+            label: "03-PC0251.OP2",
+          },
+          {
+            id: "sp2",
+            label: "03-PC0251.SP2",
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: "ds3",
+    label: "01-LC0524 DS3",
+    children: [
+      {
+        id: "sample3",
+        label: "TimeSeriesSample3",
+        children: [
+          {
+            id: "pv3",
+            label: "01-LC0524.PV3",
+          },
+          {
+            id: "mode3",
+            label: "03-PC0251.MODE3",
+          },
+          {
+            id: "op3",
+            label: "03-PC0251.OP3",
+          },
+          {
+            id: "sp3",
+            label: "03-PC0251.SP3",
+          },
+        ],
+      },
+    ],
+  },
 ];
 
 export default function Connections() {
@@ -109,8 +165,8 @@ export default function Connections() {
   };
 
   return (
-    <div className="flex h-full flex-col bg-[#252525] text-white">
-      <div className="flex items-center justify-between px-6 py-4">
+    <div className="flex h-[590px] w-full flex-col gap-6 bg-[#272727] p-6 text-white border-l border-r border-b border-[#707070]">
+      <div className="flex items-center justify-between h-[32px]">
         <h5 className="h-8 w-[146px] text-[24px] font-bold leading-8 text-white">
           Connections
         </h5>
@@ -149,18 +205,22 @@ export default function Connections() {
         </div>
       </div>
 
-      <div className="flex flex-1 gap-6 p-4">
-        <div className="flex-1 h-[526px] rounded-[8px] bg-[#404040] p-4">
-          <h3 className="h-6 w-[93px] max-w-[362px] text-[16px] font-bold leading-6 text-[#F0F0F0]">
-            All Columns
-          </h3>
+      <div className="flex flex-1 gap-6 min-h-0">
+        <div className="flex-1 h-[495px] rounded-[8px] bg-[#404040] overflow-hidden">
+  <div className="p-4">
+    <h3 className="h-6 text-[16px] font-bold leading-6 text-[#F0F0F0]">
+      All Columns
+    </h3>
+  </div>
 
-          <Tree
-            nodes={allColumns}
-            selectedId={selectedNodeId}
-            onSelect={setSelectedNodeId}
-          />
-        </div>
+  <div className="h-[calc(100%-56px)] overflow-y-auto px-4 pb-4">
+    <Tree
+      nodes={allColumns}
+      selectedId={selectedNodeId}
+      onSelect={setSelectedNodeId}
+    />
+  </div>
+</div>
 
         <div className="flex h-[526px] w-[32px] flex-col items-center justify-center gap-6">
   <Button
@@ -180,17 +240,21 @@ export default function Connections() {
   </Button>
 </div>
 
-        <div className="flex-1 h-[526px] rounded-[8px] bg-[#404040] p-4">
-          <h3 className="h-6 w-[147px] max-w-[362px] text-[16px] font-bold leading-6 text-[#F0F0F0]">
-            Selected Columns
-          </h3>
+        <div className="flex-1 h-[495px] rounded-[8px] bg-[#404040] overflow-hidden">
+  <div className="p-4">
+    <h3 className="h-6 text-[16px] font-bold leading-6 text-[#F0F0F0]">
+      Selected Columns
+    </h3>
+  </div>
 
-          <Tree
-            nodes={selectedColumns}
-            selectedId={selectedNodeId}
-            onSelect={setSelectedNodeId}
-          />
-        </div>
+  <div className="h-[calc(100%-56px)] overflow-y-auto px-4 pb-4">
+    <Tree
+      nodes={selectedColumns}
+      selectedId={selectedNodeId}
+      onSelect={setSelectedNodeId}
+    />
+  </div>
+</div>
       </div>
     </div>
   );
