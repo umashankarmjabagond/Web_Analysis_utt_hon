@@ -14,7 +14,7 @@ export default function TemplateExecution({
   return (
     <div className="relative h-full">
       <ExecutionToolbar />
-      <WorkflowCanvas />
+      <WorkflowCanvas templateId={template} itemId={itemId} />
     </div>
   );
 }

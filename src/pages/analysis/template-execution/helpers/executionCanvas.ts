@@ -27,7 +27,7 @@ export const createExecutionHeaderNode = ({
   },
 });
 
-export const buildCanvasData = (
+export const buildExecutionCanvas = (
   itemId: string,
   flowData: FlowData,
 ): FlowData => {
