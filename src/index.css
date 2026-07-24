@@ -18,6 +18,9 @@
   /* Divider */
   --app-divider: #707070;
 
+  /* Border */
+  --app-default-border: #b0b0b0;
+
   /* Action */
   --app-action-primary: #64c3ff;
   --app-action-secondary: #c8c8c8;
@@ -161,6 +164,9 @@
   /* Actions */
   --color-app-action-primary: var(--app-action-primary);
   --color-app-action-secondary: var(--app-action-secondary);
+
+  /* Border */
+  --color-app-default-border: var(--app-default-border);
 
   /* ---------- Colors ---------- */
   --color-primary: var(--color-primary);
