@@ -12,7 +12,7 @@ export default function TreeNode({
   const hasChildren = !!node?.children?.length;
   const isExpanded = expandedIds.has(node.id);
   const isSelected = selectedId === node.id;
-  const isLeaf = !hasChildren;
+  // const isLeaf = !hasChildren;
 
   return (
     <div className="my-2 text-white">
@@ -23,7 +23,8 @@ export default function TreeNode({
             ? "border-l-4 border-l-[#64C3FF] bg-[#0B4872] text-white"
             : "border-l-4 border-l-transparent hover:bg-[#353535]"
         }`}
-        onClick={isLeaf ? () => onSelect(node.id) : undefined}
+        // onClick={isLeaf ? () => onSelect(node.id) : undefined}
+        onClick={() => onSelect(node.id)}
       >
         <div
           className="flex h-full w-full items-center gap-2 px-2"

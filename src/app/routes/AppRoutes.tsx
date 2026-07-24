@@ -14,7 +14,15 @@ export default function AppRoutes() {
         <Route index element={<Navigate to={ROUTES.WORKFLOW} replace />} />
         <Route path={ROUTES.WORKFLOW} element={<WorkflowBuilder />} />
         <Route path={ROUTES.DASHBOARD} element={<Dashboard />} />
-        <Route path="/dashboard/:section" element={<DashboardContent />} />
+        <Route path="/dashboard/:plant" element={<DashboardContent />} />
+        <Route
+          path="/dashboard/:plant/:template"
+          element={<DashboardContent />}
+        />
+        <Route
+          path="/dashboard/:plant/:template/:itemId"
+          element={<DashboardContent />}
+        />
         <Route path={ROUTES.LOOP_CONFIGURATION} element={<KpiLoop />} />
       </Route>
     </Routes>

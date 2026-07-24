@@ -1,0 +1,107 @@
+{
+  "nodes": [
+    {
+      "id": "723dd055-125b-481a-b6a8-70624c0e2908",
+      "type": "dataSource",
+      "position": {
+        "x": 180,
+        "y": 178
+      },
+      "data": {
+        "label": "Data Source"
+      },
+      "measured": {
+        "width": 120,
+        "height": 72
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "19db9e28-a376-4929-8fa3-aefa8a287e9d",
+      "type": "dataSink",
+      "position": {
+        "x": 396,
+        "y": 177
+      },
+      "data": {
+        "label": "Data Sink"
+      },
+      "measured": {
+        "width": 120,
+        "height": 72
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "ecb5e316-144d-430d-8282-75ab01bd9b6f",
+      "type": "dataPreprocessing",
+      "position": {
+        "x": 614,
+        "y": 177
+      },
+      "data": {
+        "label": "Data Preprocessing"
+      },
+      "measured": {
+        "width": 158,
+        "height": 72
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "7ae6090c-a53e-46bc-80d2-b558cc9f65b4",
+      "type": "math",
+      "position": {
+        "x": 860,
+        "y": 178
+      },
+      "data": {
+        "label": "Math"
+      },
+      "measured": {
+        "width": 120,
+        "height": 72
+      },
+      "selected": true,
+      "dragging": false
+    }
+  ],
+  "edges": [
+    {
+      "source": "723dd055-125b-481a-b6a8-70624c0e2908",
+      "target": "19db9e28-a376-4929-8fa3-aefa8a287e9d",
+      "markerEnd": {
+        "type": "arrowclosed"
+      },
+      "style": {
+        "strokeWidth": 2
+      },
+      "id": "xy-edge__723dd055-125b-481a-b6a8-70624c0e2908-19db9e28-a376-4929-8fa3-aefa8a287e9d"
+    },
+    {
+      "source": "19db9e28-a376-4929-8fa3-aefa8a287e9d",
+      "target": "ecb5e316-144d-430d-8282-75ab01bd9b6f",
+      "markerEnd": {
+        "type": "arrowclosed"
+      },
+      "style": {
+        "strokeWidth": 2
+      },
+      "id": "xy-edge__19db9e28-a376-4929-8fa3-aefa8a287e9d-ecb5e316-144d-430d-8282-75ab01bd9b6f"
+    },
+    {
+      "source": "ecb5e316-144d-430d-8282-75ab01bd9b6f",
+      "target": "7ae6090c-a53e-46bc-80d2-b558cc9f65b4",
+      "markerEnd": {
+        "type": "arrowclosed"
+      },
+      "style": {
+        "strokeWidth": 2
+      },
+      "id": "xy-edge__ecb5e316-144d-430d-8282-75ab01bd9b6f-7ae6090c-a53e-46bc-80d2-b558cc9f65b4"
+    }
+  ]
+}

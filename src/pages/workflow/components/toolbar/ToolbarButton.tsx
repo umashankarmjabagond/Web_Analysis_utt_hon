@@ -1,8 +1,7 @@
 interface ToolbarButtonProps {
-  icon: React.ReactNode;
+  icon: React.ElementType;
+  label: string;
   active?: boolean;
-  title: string;
-  onClick?: () => void;
 }
 
 export default function ToolbarButton({
