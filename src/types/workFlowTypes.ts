@@ -118,7 +118,7 @@ export interface KpiItem {
   value: string | number;
 }
 
-export interface CaluclatedKpisAndErrorsProps {
+export interface CalculatedKpisAndErrorsProps {
   kpis?: KpiItem[];
   errors?: string[];
 }

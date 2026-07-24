@@ -66,7 +66,7 @@ export function Tabs({
       </div>
 
       {!isNavigationTabs && ActiveComponent && (
-        <div className="mt-4">
+        <div className="mt-4 h-full">
           <ActiveComponent />
         </div>
       )}

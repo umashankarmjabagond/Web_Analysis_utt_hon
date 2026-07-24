@@ -5,8 +5,7 @@ import { ROUTES } from "../../constants/routes/routesConstant";
 import WorkflowBuilder from "../../pages/workflow/WorkflowBuilder";
 import Dashboard from "../../pages/dashboard/Dashboard";
 import DashboardContent from "../../pages/dashboard/DashboardContent";
-import LoopConfigurationPage from "../../pages/loop-configuration/LoopConfigurationPage";
-import CalculatedKpisAndErrors from "../../pages/KPI/CalculatedKpisAndErrors";
+import KpiLoop from "../../pages/KPI/KpiLoop";
 
 export default function AppRoutes() {
   return (
@@ -16,7 +15,7 @@ export default function AppRoutes() {
         <Route path={ROUTES.WORKFLOW} element={<WorkflowBuilder />} />
         <Route path={ROUTES.DASHBOARD} element={<Dashboard />} />
         <Route path="/dashboard/:section" element={<DashboardContent />} />
-        <Route path={ROUTES.LOOP_CONFIGURATION} element={<CalculatedKpisAndErrors/>} />
+        <Route path={ROUTES.LOOP_CONFIGURATION} element={<KpiLoop />} />
       </Route>
     </Routes>
   );
