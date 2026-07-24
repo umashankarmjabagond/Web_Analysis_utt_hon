@@ -4,6 +4,7 @@ import CalculatedKpisAndErrors from "./CalculatedKpisAndErrors";
 import KpiTable from "./KpiTable";
 import Drawer from "../../components/drawer/Drawer";
 import { Tabs } from "../../components/common/tabs/Tabs";
+import Connections from "../connections/Connections";
 
 const workflow = [
   {
@@ -63,6 +64,11 @@ const KpiLoop = () => {
         id: "errors",
         label: "Calculated KPIs and Errors",
         component: CalculatedKpisAndErrors,
+      },
+      {
+        id: "connections",
+        label: "Connections",
+        component: Connections,
       },
     ],
     [],
