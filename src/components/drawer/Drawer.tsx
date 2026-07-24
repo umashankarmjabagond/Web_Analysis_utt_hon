@@ -75,7 +75,7 @@ const Drawer = ({
 
   const drawerStyle = isSideDrawer
     ? { width: drawerSizes[size] }
-    : { height: drawerSizes[size] };
+    : { height: drawerSizes[size], maxHeight: "calc(100% - 16px)" };
 
   const { panel, open, close } = positionClasses[position];
 
