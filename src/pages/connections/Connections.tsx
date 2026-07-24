@@ -40,62 +40,6 @@ const allColumnsData: TreeNodeData[] = [
       },
     ],
   },
-  {
-    id: "ds2",
-    label: "01-LC0524 DS2",
-    children: [
-      {
-        id: "sample2",
-        label: "TimeSeriesSample2",
-        children: [
-          {
-            id: "pv2",
-            label: "01-LC0524.PV2",
-          },
-          {
-            id: "mode2",
-            label: "03-PC0251.MODE2",
-          },
-          {
-            id: "op2",
-            label: "03-PC0251.OP2",
-          },
-          {
-            id: "sp2",
-            label: "03-PC0251.SP2",
-          },
-        ],
-      },
-    ],
-  },
-  {
-    id: "ds3",
-    label: "01-LC0524 DS3",
-    children: [
-      {
-        id: "sample3",
-        label: "TimeSeriesSample3",
-        children: [
-          {
-            id: "pv3",
-            label: "01-LC0524.PV3",
-          },
-          {
-            id: "mode3",
-            label: "03-PC0251.MODE3",
-          },
-          {
-            id: "op3",
-            label: "03-PC0251.OP3",
-          },
-          {
-            id: "sp3",
-            label: "03-PC0251.SP3",
-          },
-        ],
-      },
-    ],
-  },
 ];
 
 export default function Connections() {
