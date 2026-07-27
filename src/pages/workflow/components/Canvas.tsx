@@ -154,6 +154,23 @@ export default function Canvas() {
       >
         <Background variant={BackgroundVariant.Dots} gap={20} size={1} />
       </ReactFlow>
+
+      {/* Empty State */}
+      {nodes.length === 0 && (
+        <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+          <div className="max-w-md text-center">
+            <h2 className="text-4xl font-medium text-gray-300">
+              Create New Template
+            </h2>
+
+            <p className="mt-4 text-sm leading-6 text-gray-500">
+              Create a template from scratch using attributes or predefined
+              templates as base from the left pane, customize it to your
+              requirements, and save it as a custom template.
+            </p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

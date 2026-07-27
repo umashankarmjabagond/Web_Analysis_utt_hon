@@ -12,11 +12,6 @@ const menus = [
     path: ROUTES.WORKFLOW,
     icon: "🛠",
   },
-  {
-  name: "Loop Configuration",
-  path: ROUTES.LOOP_CONFIGURATION,
-  icon: "⚙️",
-}
 ];
 
 export default function Sidebar() {
