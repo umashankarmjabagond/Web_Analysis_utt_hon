@@ -9,6 +9,7 @@ import CalculatedKpisAndErrors from "../../../KPI/CalculatedKpisAndErrors";
 import Connections from "../../../connections/Connections";
 import Drawer from "../../../../components/drawer/Drawer";
 import { Tabs } from "../../../../components/common/tabs/Tabs";
+import { edgeTypes } from "./edges/edgeTypes";
 
 interface WorkflowCanvasProps {
   templateId: string;
@@ -61,7 +62,8 @@ export default function WorkflowCanvas({
           nodes={nodes}
           edges={edges}
           nodeTypes={nodeTypes}
-          fitView
+          edgeTypes={edgeTypes}
+          // fitView
           onNodeClick={handleNodeClick}
           proOptions={{ hideAttribution: true }}
         >

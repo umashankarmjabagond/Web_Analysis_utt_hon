@@ -5,6 +5,7 @@ import {
   getExecutionWorkflow,
   getTemplateExecutionWorkflows,
 } from "../services/executionWorkflow.service";
+import { buildTemplateCanvas } from "../helpers/templateCanvas";
 
 export const useLoadExecutionWorkflow = (
   templateId: string,
@@ -27,7 +28,9 @@ export const useLoadExecutionWorkflow = (
         // TODO: Load all execution workflows for template
         const workflows = await getTemplateExecutionWorkflows(templateId);
 
-        console.log(workflows);
+        const canvas = buildTemplateCanvas(workflows);
+
+        loadWorkFlow(canvas.nodes, canvas.edges);
       }
     };
 
