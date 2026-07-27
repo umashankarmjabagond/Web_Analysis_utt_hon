@@ -5,11 +5,7 @@ import Button from "../../components/forms/button/Button";
 
 import type { TreeNodeData } from "../../types/commonTypes";
 
-import {
-  CircleHelp,
-  ChevronRight,
-  ChevronLeft,
-} from "lucide-react";
+import { CircleHelp, ChevronRight, ChevronLeft } from "lucide-react";
 
 const allColumnsData: TreeNodeData[] = [
   {
@@ -43,57 +39,40 @@ const allColumnsData: TreeNodeData[] = [
 ];
 
 export default function Connections() {
-  const [selectedNodeId, setSelectedNodeId] =
-    useState<string | null>(null);
+  const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
 
-  const [allColumns] =
-    useState<TreeNodeData[]>(allColumnsData);
+  const [allColumns] = useState<TreeNodeData[]>(allColumnsData);
 
-  const [selectedColumns, setSelectedColumns] =
-    useState<TreeNodeData[]>([]);
+  const [selectedColumns, setSelectedColumns] = useState<TreeNodeData[]>([]);
 
   const moveToSelected = () => {
     if (!selectedNodeId) {
       return;
     }
 
-    const node = findNode(
-      allColumns,
-      selectedNodeId,
-    );
+    const node = findNode(allColumns, selectedNodeId);
 
-    function nodeExists(
-  nodes: TreeNodeData[],
-  targetId: string,
-): boolean {
-  for (const node of nodes) {
-    if (node.id === targetId) {
-      return true;
+    function nodeExists(nodes: TreeNodeData[], targetId: string): boolean {
+      for (const node of nodes) {
+        if (node.id === targetId) {
+          return true;
+        }
+
+        if (node.children && nodeExists(node.children, targetId)) {
+          return true;
+        }
+      }
+
+      return false;
     }
-
-    if (
-      node.children &&
-      nodeExists(
-        node.children,
-        targetId,
-      )
-    ) {
-      return true;
-    }
-  }
-
-  return false;
-}
 
     if (!node) {
       return;
     }
 
-    if (
-      nodeExists(selectedColumns, selectedNodeId
-
-      )) 
-      {return}
+    if (nodeExists(selectedColumns, selectedNodeId)) {
+      return;
+    }
 
     setSelectedColumns((prev) => [...prev, node]);
   };
@@ -103,13 +82,11 @@ export default function Connections() {
       return;
     }
 
-    setSelectedColumns((prev) =>
-      removeNode(prev, selectedNodeId),
-    );
+    setSelectedColumns((prev) => removeNode(prev, selectedNodeId));
   };
 
   return (
-    <div className="flex h-[590px] w-full flex-col gap-6 bg-[#272727] p-6 text-white border-l border-r border-b border-[#707070]">
+    <div className="flex h-[590px] w-full flex-col gap-6 --color-background p-6 text-white border-l border-r border-b border-border-1">
       <div className="flex items-center justify-between h-[32px]">
         <h5 className="h-8 w-[146px] text-[24px] font-bold leading-8 text-white">
           Connections
@@ -123,7 +100,7 @@ export default function Connections() {
               <CircleHelp
                 size={16}
                 strokeWidth={1.5}
-                className="text-[#64C3FF]"
+                className="text-button-primary"
               />
             }
             className="!h-8 !w-[96px]"
@@ -131,74 +108,66 @@ export default function Connections() {
             Help
           </Button>
 
-          <Button
-            variant="secondary"
-            size="medium"
-            className="!h-8 !w-[124px]"
-          >
+          <Button variant="secondary" size="medium" className="!h-8 !w-[124px]">
             Apply to All
           </Button>
 
-          <Button
-            variant="primary"
-            size="medium"
-            className="!h-8 !w-[81px]"
-          >
+          <Button variant="primary" size="medium" className="!h-8 !w-[81px]">
             Save
           </Button>
         </div>
       </div>
 
       <div className="flex flex-1 gap-6 min-h-0">
-        <div className="flex-1 h-[495px] rounded-[8px] bg-[#404040] overflow-hidden">
-  <div className="p-4">
-    <h3 className="h-6 text-[16px] font-bold leading-6 text-[#F0F0F0]">
-      All Columns
-    </h3>
-  </div>
+        <div className="flex-1 h-[495px] rounded-[8px] bg-[var(--color-button-secondary)] overflow-hidden">
+          <div className="p-4">
+            <h3 className="h-6 text-[16px] font-bold leading-6 text-[#F0F0F0]">
+              All Columns
+            </h3>
+          </div>
 
-  <div className="h-[calc(100%-56px)] overflow-y-auto px-4 pb-4">
-    <Tree
-      nodes={allColumns}
-      selectedId={selectedNodeId}
-      onSelect={setSelectedNodeId}
-    />
-  </div>
-</div>
+          <div className="h-[calc(100%-56px)] overflow-y-auto px-4 pb-4">
+            <Tree
+              nodes={allColumns}
+              selectedId={selectedNodeId}
+              onSelect={setSelectedNodeId}
+            />
+          </div>
+        </div>
 
         <div className="flex h-[526px] w-[32px] flex-col items-center justify-center gap-6">
-  <Button
-    variant="secondary"
-    onClick={moveToSelected}
-    className="!h-[32px] !w-[32px] !min-w-[32px] !p-2"
-  >
-    <ChevronRight size={16} />
-  </Button>
+          <Button
+            variant="secondary"
+            onClick={moveToSelected}
+            className="!h-[32px] !w-[32px] !min-w-[32px] !p-2"
+          >
+            <ChevronRight size={16} />
+          </Button>
 
-  <Button
-    variant="secondary"
-    onClick={removeFromSelected}
-    className="!h-[32px] !w-[32px] !min-w-[32px] !p-2"
-  >
-    <ChevronLeft size={16} />
-  </Button>
-</div>
+          <Button
+            variant="secondary"
+            onClick={removeFromSelected}
+            className="!h-[32px] !w-[32px] !min-w-[32px] !p-2"
+          >
+            <ChevronLeft size={16} />
+          </Button>
+        </div>
 
         <div className="flex-1 h-[495px] rounded-[8px] bg-[#404040] overflow-hidden">
-  <div className="p-4">
-    <h3 className="h-6 text-[16px] font-bold leading-6 text-[#F0F0F0]">
-      Selected Columns
-    </h3>
-  </div>
+          <div className="p-4">
+            <h3 className="h-6 text-[16px] font-bold leading-6 text-[#F0F0F0]">
+              Selected Columns
+            </h3>
+          </div>
 
-  <div className="h-[calc(100%-56px)] overflow-y-auto px-4 pb-4">
-    <Tree
-      nodes={selectedColumns}
-      selectedId={selectedNodeId}
-      onSelect={setSelectedNodeId}
-    />
-  </div>
-</div>
+          <div className="h-[calc(100%-56px)] overflow-y-auto px-4 pb-4">
+            <Tree
+              nodes={selectedColumns}
+              selectedId={selectedNodeId}
+              onSelect={setSelectedNodeId}
+            />
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -214,10 +183,7 @@ function findNode(
     }
 
     if (node.children) {
-      const result = findNode(
-        node.children,
-        targetId,
-      );
+      const result = findNode(node.children, targetId);
 
       if (result) {
         return result;
@@ -228,19 +194,11 @@ function findNode(
   return null;
 }
 
-function removeNode(
-  nodes: TreeNodeData[],
-  targetId: string,
-): TreeNodeData[] {
+function removeNode(nodes: TreeNodeData[], targetId: string): TreeNodeData[] {
   return nodes
     .filter((node) => node.id !== targetId)
     .map((node) => ({
       ...node,
-      children: node.children
-        ? removeNode(
-            node.children,
-            targetId,
-          )
-        : undefined,
+      children: node.children ? removeNode(node.children, targetId) : undefined,
     }));
 }
