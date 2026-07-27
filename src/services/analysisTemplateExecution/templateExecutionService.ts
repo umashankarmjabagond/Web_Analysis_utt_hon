@@ -1,7 +1,7 @@
 import workflowMockData from "../../pages/analysis/template-execution/mock/workflow.mock.json";
 import templateWorkflowData from "../../pages/analysis/template-execution/mock/templateExecution.mock.json";
 import type {
-  TemplateExecutionWorkflow,
+  TemplateExecutionResponse,
   WorkflowData,
 } from "../../types/templateExecution";
 
@@ -16,7 +16,7 @@ export const getExecutionWorkflow = async (
 // template workflow
 export const getTemplateExecutionWorkflows = async (
   templateId: string,
-): Promise<TemplateExecutionWorkflow[]> => {
+): Promise<TemplateExecutionResponse> => {
   // TODO: API Call
-  return templateWorkflowData.workflows as TemplateExecutionWorkflow[];
+  return templateWorkflowData as TemplateExecutionResponse;
 };

@@ -20,6 +20,7 @@
 
   /* Border */
   --app-default-border: #b0b0b0;
+  --app-default-border-strong: #909090;
 
   /* Workflow Node */
   --app-default-node: #353535;
@@ -54,7 +55,7 @@
   --color-background: #ffffff;
   --color-surface: #f8fafc;
   --color-card: #ffffff;
-  --background-primary-container:#404040;
+  --background-primary-container: #404040;
 
   /* Text */
   --color-text-primary: #111827;
@@ -65,7 +66,7 @@
   /* Border */
   --color-border: #e5e7eb;
   --color-border-1: #707070;
-  --component-card-border:#303030;
+  --component-card-border: #303030;
 
   /* Fixed panel background */
   --color-panel-bg: #272727;
@@ -81,8 +82,7 @@
   --color-warning: #f59e0b;
   --color-danger: #dc2626;
   --color-info: #0284c7;
-  --semantic-bad: #FF644C;
-
+  --semantic-bad: #ff644c;
 
   /* Shadows */
   --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -127,8 +127,7 @@
   --color-background: #272727;
   --color-surface: #1e293b;
   --color-card: #2c2c2c;
-  --background-primary-container:#404040;
-
+  --background-primary-container: #404040;
 
   /* Text */
   --color-text-primary: #f8fafc;
@@ -199,6 +198,7 @@
 
   /* Border */
   --color-app-default-border: var(--app-default-border);
+  --color-app-default-border-strong: var(--app-default-border-strong);
 
   /* Workflow Node */
   --color-app-default-node: var(--app-default-node);
@@ -284,7 +284,6 @@
   --color-table-row-even: var(--color-table-row-even);
   --color-table-row-hover: var(--color-table-row-hover);
   --color-table-border: var(--color-table-border);
-
 }
 
 /* =========================================================
@@ -306,13 +305,13 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #272727;
+  background: var(--app-surface);
 }
 
 ::-webkit-scrollbar-thumb {
   background: #606060;
   border-radius: 9999px;
-  border: 2px solid #272727;
+  border: 2px solid var(--app-surface);
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -320,13 +319,13 @@ body {
 }
 
 ::-webkit-scrollbar-corner {
-  background: #272727;
+  background: var(--app-surface);
 }
 
 /* Firefox */
 * {
   scrollbar-width: thin;
-  scrollbar-color: #606060 #272727;
+  scrollbar-color: #606060 var(--app-surface);
 }
 
 .bg-dot-grid {

@@ -1,4 +1,8 @@
-import React, { type InputHTMLAttributes, useState } from "react";
+import React, {
+  type InputHTMLAttributes,
+  type ReactNode,
+  useState,
+} from "react";
 import { Eye, EyeOff } from "lucide-react";
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -7,6 +11,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   helperText?: string;
   fullWidth?: boolean;
   showPasswordToggle?: boolean;
+  startAdornment: ReactNode;
 }
 
 const variants = {
@@ -30,12 +35,12 @@ const Input: React.FC<InputProps> = ({
   fullWidth = true,
   showPasswordToggle = false,
   className = "",
+  startAdornment,
   ...props
 }) => {
   const [showPassword, setShowPassword] = useState(false);
 
-  const inputType =
-    type === "password" && showPassword ? "text" : type;
+  const inputType = type === "password" && showPassword ? "text" : type;
 
   return (
     <div className={`flex flex-col gap-1.5 ${fullWidth ? "w-full" : ""}`}>
@@ -45,7 +50,12 @@ const Input: React.FC<InputProps> = ({
         </label>
       )}
 
-      <div className="relative">
+      <div className="relative flex items-center">
+        {startAdornment && (
+          <span className="absolute left-2 text-text-secondary">
+            {startAdornment}
+          </span>
+        )}
         <input
           type={inputType}
           className={`

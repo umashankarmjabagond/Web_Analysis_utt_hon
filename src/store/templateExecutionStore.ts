@@ -8,14 +8,22 @@ export type ExecutionStatus =
   | "in-progress"
   | "completed";
 
+interface TemplateInfo {
+  id: string;
+  name: string;
+  type: string;
+}
+
 interface TemplateExecutionState {
   nodes: Node[];
   edges: Edge[];
+  templateInfo: TemplateInfo | null;
   selectedNodeIds: string[];
   selectedExecutionIds: string[];
   executionStatus: ExecutionStatus;
   setNodes: (nodes: Node[]) => void;
   setEdges: (edges: Edge[]) => void;
+  setTemplateInfo: (template: TemplateInfo) => void;
   updateNode: (nodeId: string, changes: Partial<Node>) => void;
   toggleSelectedNode: (nodeId: string) => void;
   toggleExecution: (itemId: string) => void;
@@ -26,12 +34,19 @@ export const useTemplateExecutionStore = create<TemplateExecutionState>()(
   immer((set) => ({
     nodes: [],
     edges: [],
+    templateInfo: null,
     selectedNodeIds: [],
     selectedExecutionIds: [],
     executionStatus: "not-started",
 
     setNodes: (nodes) => set({ nodes }),
     setEdges: (edges) => set({ edges }),
+
+    setTemplateInfo: (template) => {
+      set((state) => {
+        state.templateInfo = template;
+      });
+    },
 
     updateNode: (nodeId, changes) => {
       set((state) => {

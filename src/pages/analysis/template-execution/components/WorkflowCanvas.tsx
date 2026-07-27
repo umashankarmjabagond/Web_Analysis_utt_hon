@@ -2,7 +2,6 @@ import { useMemo, useState } from "react";
 import { Background, BackgroundVariant, ReactFlow } from "@xyflow/react";
 
 import { nodeTypes } from "./nodes/nodeTypes";
-import { useLoadExecutionWorkflow } from "../../../../hooks/useLoadExecutionWorkflow";
 import { useTemplateExecutionStore } from "../../../../store/templateExecutionStore";
 import KpiTable from "../../../KPI/KpiTable";
 import CalculatedKpisAndErrors from "../../../KPI/CalculatedKpisAndErrors";
@@ -12,18 +11,11 @@ import { Tabs } from "../../../../components/common/tabs/Tabs";
 import { edgeTypes } from "./edges/edgeTypes";
 import Properties from "../../../KPI/Properties";
 
-import type { WorkflowCanvasProps } from "../../../../types/templateExecution";
-
-export default function WorkflowCanvas({
-  templateId,
-  itemId,
-}: WorkflowCanvasProps) {
-  useLoadExecutionWorkflow(templateId, itemId);
-
+export default function WorkflowCanvas() {
   const nodes = useTemplateExecutionStore((state) => state.nodes);
   const edges = useTemplateExecutionStore((state) => state.edges);
 
-  const [opened, setOpened] = useState(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("table");
   // const [selectedNode, setSelectedNode] = useState<Node | null>(null);
 
@@ -55,7 +47,7 @@ export default function WorkflowCanvas({
 
   const handleNodeClick = () => {
     // setSelectedNode(node);
-    setOpened(true);
+    setIsDrawerOpen(true);
   };
 
   return (
@@ -79,9 +71,10 @@ export default function WorkflowCanvas({
         </ReactFlow>
       </div>
 
+      {}
       <Drawer
-        opened={opened}
-        onClose={() => setOpened(false)}
+        opened={isDrawerOpen}
+        onClose={() => setIsDrawerOpen(false)}
         position="bottom"
         size="xl"
       >
