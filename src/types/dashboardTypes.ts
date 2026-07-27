@@ -9,5 +9,5 @@ export interface StatCardData {
 }
 
 export interface StatCardProps {
-  data: StatCardData;
+  data: StatCardData; 
 }

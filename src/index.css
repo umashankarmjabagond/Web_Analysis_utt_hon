@@ -13,6 +13,7 @@
   --color-background: #ffffff;
   --color-surface: #f8fafc;
   --color-card: #ffffff;
+  --background-primary-container:#404040;
 
   /* Text */
   --color-text-primary: #111827;
@@ -23,6 +24,7 @@
   /* Border */
   --color-border: #e5e7eb;
   --color-border-1: #707070;
+  --component-card-border:#303030;
 
   /* Fixed panel background — intentionally NOT redefined in .dark below,
      so it always stays this value regardless of light/dark theme */
@@ -33,6 +35,8 @@
   --color-warning: #f59e0b;
   --color-danger: #dc2626;
   --color-info: #0284c7;
+  --semantic-bad: #FF644C;
+
 
   /* Shadows */
   --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -76,7 +80,9 @@
   /* Backgrounds */
   --color-background: #272727;
   --color-surface: #1e293b;
-  --color-card: #273549;
+  --color-card: #2c2c2c;
+  --background-primary-container:#404040;
+
 
   /* Text */
   --color-text-primary: #f8fafc;
@@ -106,10 +112,10 @@
   --color-tab-inactive-text: #d0d0d0;
 
   /* Table */
-  --color-table-header: #2b2b2b;
-  --color-table-row-odd: #303030;
-  --color-table-row-even: #383838;
-  --color-table-row-hover: #404040;
+  --color-table-header: #252525;
+  --color-table-row-odd: #2c2c2c;
+  --color-table-row-even: #303030;
+  --color-table-row-hover: #383838;
   --color-table-border: #454545;
 
   /* Button */
@@ -126,6 +132,8 @@
    TAILWIND DESIGN TOKENS
 ========================================================= */
 @theme {
+  --font-sans: "Honeywell Sans Web", sans-serif;
+
   /* ---------- Colors ---------- */
   --color-primary: var(--color-primary);
   --color-primary-hover: var(--color-primary-hover);
@@ -185,6 +193,7 @@
   --color-table-row-even: var(--color-table-row-even);
   --color-table-row-hover: var(--color-table-row-hover);
   --color-table-border: var(--color-table-border);
+
 }
 
 /* =========================================================
