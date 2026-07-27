@@ -10,6 +10,8 @@ import Connections from "../../../connections/Connections";
 import Drawer from "../../../../components/drawer/Drawer";
 import { Tabs } from "../../../../components/common/tabs/Tabs";
 import { edgeTypes } from "./edges/edgeTypes";
+import Properties from "../../../KPI/Properties";
+
 import type { WorkflowCanvasProps } from "../../../../types/templateExecution";
 
 export default function WorkflowCanvas({
@@ -36,6 +38,11 @@ export default function WorkflowCanvas({
         id: "errors",
         label: "Calculated KPIs and Errors",
         component: CalculatedKpisAndErrors,
+      },
+      {
+        id: "properties",
+        label: "Properties",
+        component: Properties,
       },
       {
         id: "connections",

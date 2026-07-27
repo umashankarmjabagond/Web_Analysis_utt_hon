@@ -11,7 +11,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 
 const variants = {
   default: `
-    border-[var(--color-border)]
+    border-[var(--color-border-1)]
     hover:border-[var(--color-text-secondary)]
     focus:border-[var(--color-primary)]
   `,
@@ -53,7 +53,6 @@ const Input: React.FC<InputProps> = ({
             h-8
             rounded-[var(--radius-sm)]
             border
-            bg-[var(--color-surface)]
             px-2.5
             pr-${type === "password" && showPasswordToggle ? "9" : "2.5"}
             text-[var(--text-sm)]
