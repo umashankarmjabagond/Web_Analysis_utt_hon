@@ -1,0 +1,318 @@
+{
+  "LoopName": "BK-3BFC0126",
+  "TemplateName": "Standalone",
+  "AnalysisName": "Unit3_Maintenance",
+  "Location": "Unit 3 / Reactor Section",
+  "Description": "Temperature controller BK-3BFC0126 — standalone PID loop",
+  "HistorianFile": "C:\\Users\\H665642\\analysis-engine\\Files\\Loops\\BK-3BFC0126.txt",
+  "settings": {
+    "interval": 5,
+    "samples": 17280,
+    "settlingTime": 420,
+    "weight": 1.0,
+    "badPvThresholdPercent": 95.0,
+    "freezeDurationAllowed": 15.0,
+    "maxmeasurementchange": 10.0,
+    "minmeasurementchange": 0.1,
+    "loopType": "Temperature"
+  },
+  "thresholds": {
+    "opMax": 99.0,
+    "opMin": 1.0,
+    "pvMax": 400.0,
+    "pvMin": 0.0,
+    "rpiLow": 0.4,
+    "rpiHigh": 2.5,
+    "oiHigh": 0.4,
+    "compressionThreshold": 3.0,
+    "compressionTolerance": 0.001
+  },
+  "Elements": [
+    {
+      "elementType": "DataSource",
+      "Name": "DataSource1",
+      "ParentNames": null,
+      "tagMap": {
+        "PV": "BK-3BFC0126.PV",
+        "SP": "BK-3BFC0126.SP",
+        "OP": "BK-3BFC0126.OP",
+        "MODE": "BK-3BFC0126.MODE"
+      },
+      "properties": {
+        "samples": 17280,
+        "interval": 5
+      }
+    },
+    {
+      "elementType": "DataPreProcessor",
+      "Name": "DataPreprocessor1",
+      "ParentNames": ["DataSource1"],
+      "ConnectedAttributes": {
+        "RawData": {
+          "Attributes": {
+            "PV": "DataSource1",
+            "SP": "DataSource1",
+            "OP": "DataSource1",
+            "MODE": "DataSource1",
+            "Timestamp": "DataSource1"
+          }
+        }
+      },
+      "properties": {
+        "interpolationMethod": "linear",
+        "flatLineDetection": true
+      }
+    },
+    {
+      "elementType": "Math",
+      "Name": "Math1",
+      "ParentNames": ["DataSource1"],
+      "ConnectedAttributes": {
+        "ProcessTags_Inputs_DataSource1": {
+          "Attributes": {
+            "PV": "DataSource1",
+            "SP": "DataSource1",
+            "OP": "DataSource1",
+            "MODE": "DataSource1"
+          }
+        }
+      },
+      "ExpressionMap": {
+        "OP_DISP": {
+          "Inputs": ["PV", "SP", "OP", "MODE"],
+          "IsScalar": false,
+          "ExpressionText": "-1"
+        },
+        "OP_SEL": {
+          "Inputs": ["PV", "SP", "OP", "MODE", "OP_DISP"],
+          "IsScalar": false,
+          "ExpressionText": "-1"
+        },
+        "OP_NSAT": {
+          "Inputs": ["PV", "SP", "OP", "MODE", "OP_DISP", "OP_SEL"],
+          "IsScalar": false,
+          "ExpressionText": "-1"
+        },
+        "OP_SAT": {
+          "Inputs": ["PV", "SP", "OP", "MODE", "OP_DISP", "OP_SEL", "OP_NSAT"],
+          "IsScalar": false,
+          "ExpressionText": "-1"
+        },
+        "REQUIRED": {
+          "Inputs": ["MODE"],
+          "IsScalar": false,
+          "ExpressionText": "-1"
+        },
+        "SFREQUIRED": {
+          "Inputs": ["MODE"],
+          "IsScalar": false,
+          "ExpressionText": "-1"
+        },
+        "MODE": {
+          "Inputs": ["MODE", "OP_DISP"],
+          "IsScalar": false,
+          "ExpressionText": "abs([MODE])"
+        },
+        "NET_OP_DISP": {
+          "Inputs": ["OP_DISP", "OP_SEL", "OP_NSAT"],
+          "IsScalar": false,
+          "ExpressionText": "where (([OP_DISP] == -1) OR ([OP_SEL] == -1)) -1 otherwise where (([OP_DISP]==1) AND ([OP_SEL]==1) AND ([OP_NSAT]==0)) 1 otherwise 0"
+        },
+        "NET_OP_SAT": {
+          "Inputs": ["OP_SAT", "OP_NSAT"],
+          "IsScalar": false,
+          "ExpressionText": "where ([OP_SAT] == -1) -1 otherwise where ([OP_NSAT]==1 OR [OP_SAT]==1) 1 otherwise 0"
+        },
+        "DModeAttrTag": {
+          "Inputs": ["MODE"],
+          "IsScalar": false,
+          "ExpressionText": "1"
+        }
+      }
+    },
+    {
+      "elementType": "Controller",
+      "Name": "Controller1",
+      "ParentNames": ["Math1", "DataSource1"],
+      "ConnectedAttributes": {
+        "RawPV": {
+          "Attributes": {
+            "PV": "DataSource1"
+          }
+        },
+        "SP": {
+          "Attributes": {
+            "SP": "DataSource1"
+          }
+        },
+        "OP": {
+          "Attributes": {
+            "OP": "DataSource1"
+          }
+        },
+        "MODE": {
+          "Attributes": {
+            "MODE": "Math1"
+          }
+        },
+        "Time": {
+          "Attributes": {
+            "Timestamp": "DataSource1"
+          }
+        },
+        "REQUIRED": {
+          "Attributes": {
+            "REQUIRED": "Math1"
+          }
+        },
+        "SFREQUIRED": {
+          "Attributes": {
+            "SFREQUIRED": "Math1"
+          }
+        },
+        "OutputDisposabilityStatus": {
+          "Attributes": {
+            "NET_OP_DISP": "Math1"
+          }
+        },
+        "OutputSaturationStatus": {
+          "Attributes": {
+            "NET_OP_SAT": "Math1"
+          }
+        },
+        "DModeAttrTag": {
+          "Attributes": {
+            "DModeAttrTag": "Math1"
+          }
+        }
+      },
+      "properties": {
+        "LoopType": "Flow",
+        "OperationalMinimum": -2.0,
+        "OperationalMaximum": 102.0,
+        "SFThreshold": 60.0
+      }
+    },
+    {
+      "elementType": "Coherency",
+      "Name": "Coherency1",
+      "ParentNames": ["Controller1"],
+      "ConnectedAttributes": {
+        "PV": {
+          "Attributes": {
+            "PV": "Controller1"
+          }
+        },
+        "SP": {
+          "Attributes": {
+            "SP": "Controller1"
+          }
+        },
+        "Err": {
+          "Attributes": {
+            "Err": "Controller1"
+          }
+        }
+      }
+    },
+    {
+      "elementType": "PA",
+      "Name": "PA1",
+      "ParentNames": ["Controller1", "DataSource1"],
+      "ConnectedAttributes": {
+        "RawPV": {
+          "Attributes": {
+            "PV": "Controller1"
+          }
+        },
+        "RawSP": {
+          "Attributes": {
+            "SP": "Controller1"
+          }
+        },
+        "RawOP": {
+          "Attributes": {
+            "OP": "Controller1"
+          }
+        },
+        "Time": {
+          "Attributes": {
+            "Timestamp": "DataSource1"
+          }
+        }
+      },
+      "paProperties": {
+        "benchmarkSettlingTime": 120.0,
+        "benchmarkResponseLevel": 0.05
+      }
+    },
+    {
+      "elementType": "OscillationIndex",
+      "Name": "OscillationIndex1",
+      "ParentNames": ["Controller1"],
+      "ConnectedAttributes": {
+        "Err": {
+          "Attributes": {
+            "Err": "Controller1"
+          }
+        }
+      }
+    },
+    {
+      "elementType": "ValveStiction",
+      "Name": "ValveStiction1",
+      "ParentNames": ["Controller1"],
+      "ConnectedAttributes": {
+        "PV": {
+          "Attributes": {
+            "PV": "Controller1"
+          }
+        },
+        "OP": {
+          "Attributes": {
+            "OP": "Controller1"
+          }
+        }
+      }
+    },
+    {
+      "elementType": "Diagnosis",
+      "Name": "Diagnosis",
+      "ParentNames": [
+        "Controller1",
+        "PA1",
+        "OscillationIndex1",
+        "ValveStiction1",
+        "Coherency1"
+      ],
+      "ConnectedAttributes": {
+        "ControllerKPIs": {
+          "Attributes": {
+            "ServiceFactor": "Controller1",
+            "PercentSaturated": "Controller1"
+          }
+        },
+        "PAKPIs": {
+          "Attributes": {
+            "RPI": "PA1"
+          }
+        },
+        "OscKPIs": {
+          "Attributes": {
+            "OscillationIndex": "OscillationIndex1"
+          }
+        },
+        "ValveKPIs": {
+          "Attributes": {
+            "Stiction": "ValveStiction1"
+          }
+        },
+        "CoherencyKPIs": {
+          "Attributes": {
+            "mcoh": "Coherency1"
+          }
+        }
+      }
+    }
+  ]
+}

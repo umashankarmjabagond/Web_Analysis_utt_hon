@@ -35,7 +35,7 @@ const SpreadsheetTable = ({ data }: SpreadsheetProps) => {
     <div
       className="dark
         w-full
-        max-h-[700px]
+        h-full
         overflow-auto
         rounded-[var(--radius-sm)]
         border

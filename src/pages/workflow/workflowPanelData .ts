@@ -1,30 +1,104 @@
+import standaloneWorkflow from "./Standalone_BK3BFC0126.json";
+
 import type {
-  WorkflowCanvasData,
+  BackendElement,
+  BackendWorkflow,
   WorkflowSection,
 } from "../../types/workFlowTypes";
+
+/* -------------------------------------------------------------------------- */
+/*                               Helper Method                                */
+/* -------------------------------------------------------------------------- */
+
+const createElement = (name: string, elementType: string): BackendElement => ({
+  Name: name,
+
+  elementType,
+
+  ParentNames: null,
+
+  tagMap: {},
+
+  ConnectedAttributes: {},
+
+  ExpressionMap: {},
+
+  properties: {},
+
+  paProperties: {},
+});
+
+/* -------------------------------------------------------------------------- */
+/*                           Workflow Template List                           */
+/* -------------------------------------------------------------------------- */
 
 export const catalogSections: WorkflowSection[] = [
   {
     title: "Regulatory Templates",
     items: [
-      { id: "1", title: "Standalone" },
-      { id: "2", title: "Standalone (Tu..)" },
-      { id: "3", title: "Positioner" },
-      { id: "4", title: "Selector" },
-      { id: "5", title: "Instrument" },
-      { id: "6", title: "Analyzer" },
+      {
+        id: "1",
+        title: "Standalone",
+        element: createElement("Standalone", "Standalone"),
+      },
+      {
+        id: "2",
+        title: "Standalone (Tu..)",
+        element: createElement("StandaloneTurbo", "Standalone"),
+      },
+      {
+        id: "3",
+        title: "Positioner",
+        element: createElement("Positioner", "Positioner"),
+      },
+      {
+        id: "4",
+        title: "Selector",
+        element: createElement("Selector", "Selector"),
+      },
+      {
+        id: "5",
+        title: "Instrument",
+        element: createElement("Instrument", "Instrument"),
+      },
+      {
+        id: "6",
+        title: "Analyzer",
+        element: createElement("Analyzer", "Analyzer"),
+      },
     ],
   },
+
   {
     title: "MPC Templates",
     items: [
-      { id: "7", title: "RMPCT" },
-      { id: "8", title: "DMC" },
-      { id: "9", title: "Generic APC" },
-      { id: "10", title: "Estimator" },
+      {
+        id: "7",
+        title: "RMPCT",
+        element: createElement("RMPCT", "RMPCT"),
+      },
+      {
+        id: "8",
+        title: "DMC",
+        element: createElement("DMC", "DMC"),
+      },
+      {
+        id: "9",
+        title: "Generic APC",
+        element: createElement("GenericAPC", "GenericAPC"),
+      },
+      {
+        id: "10",
+        title: "Estimator",
+        element: createElement("Estimator", "Estimator"),
+      },
     ],
   },
 ];
+
+/* -------------------------------------------------------------------------- */
+/*                             Saved Workflows                                */
+/* -------------------------------------------------------------------------- */
 
 export const attributeSections: WorkflowSection[] = [
   {
@@ -32,92 +106,44 @@ export const attributeSections: WorkflowSection[] = [
     items: [
       {
         id: "flow1",
-        title: "Flow 1",
+        title: standaloneWorkflow.LoopName,
+        element: createElement(
+          standaloneWorkflow.TemplateName,
+          standaloneWorkflow.TemplateName,
+        ),
       },
       {
         id: "flow2",
         title: "Flow 2",
+        element: createElement("Flow2", "Standalone"),
       },
       {
         id: "flow3",
         title: "Flow 3",
+        element: createElement("Flow3", "Standalone"),
       },
     ],
   },
 ];
 
-export const dummyWorkflows: Record<string, WorkflowCanvasData> = {
-  flow1: {
-    nodes: [
-      {
-        id: "1",
-        type: "baseNode",
-        position: { x: 100, y: 100 },
-        data: { label: "Standalone" },
-      },
-      {
-        id: "2",
-        type: "baseNode",
-        position: { x: 350, y: 100 },
-        data: { label: "Instrument" },
-      },
-      {
-        id: "3",
-        type: "baseNode",
-        position: { x: 220, y: 280 },
-        data: { label: "Analyzer" },
-      },
-    ],
-    edges: [
-      {
-        id: "e1",
-        source: "1",
-        target: "2",
-        type: "workflow",
-      },
-      {
-        id: "e2",
-        source: "2",
-        target: "3",
-        type: "workflow",
-      },
-    ],
-  },
+/* -------------------------------------------------------------------------- */
+/*                            Dummy Backend Workflows                         */
+/* -------------------------------------------------------------------------- */
+
+const workflow = standaloneWorkflow as BackendWorkflow;
+
+export const dummyWorkflows: Record<string, BackendWorkflow> = {
+  flow1: workflow,
 
   flow2: {
-    nodes: [
-      {
-        id: "1",
-        type: "baseNode",
-        position: { x: 100, y: 100 },
-        data: { label: "Standalone" },
-      },
-      {
-        id: "2",
-        type: "baseNode",
-        position: { x: 400, y: 250 },
-        data: { label: "Standalone (Tu..)" },
-      },
-    ],
-    edges: [
-      {
-        id: "e1",
-        source: "1",
-        target: "2",
-        type: "workflow",
-      },
-    ],
+    ...structuredClone(workflow),
+    LoopName: "FLOW_2",
+    AnalysisName: "Flow2",
   },
 
   flow3: {
-    nodes: [
-      {
-        id: "1",
-        type: "baseNode",
-        position: { x: 150, y: 150 },
-        data: { label: "Generic APC" },
-      },
-    ],
-    edges: [],
+    ...structuredClone(workflow),
+    LoopName: "FLOW_3",
+    AnalysisName: "Flow3",
   },
 };

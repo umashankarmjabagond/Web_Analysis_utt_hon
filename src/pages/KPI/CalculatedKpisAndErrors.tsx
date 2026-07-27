@@ -1,21 +1,23 @@
-import React from 'react';
-import type { CaluclatedKpisAndErrorsProps, KpiItem } from '../../types/workFlowTypes';
-
+import React from "react";
+import type {
+  CalculatedKpisAndErrorsProps,
+  KpiItem,
+} from "../../types/workFlowTypes";
 
 const MOCK_KPIS: KpiItem[] = [
-  { name: 'KPI 1', value: '124.5' },
-  { name: 'KPI 2', value: '87.2' },
-  { name: 'KPI 3', value: '56.9' },
-  { name: 'KPI 4', value: '210.0' },
-  { name: 'KPI 5', value: '3.14' },
-  { name: 'KPI 6', value: '98.6' },
-  { name: 'KPI 7', value: '42.0' },
-  { name: 'KPI 8', value: '77.7' },
+  { name: "KPI 1", value: "124.5" },
+  { name: "KPI 2", value: "87.2" },
+  { name: "KPI 3", value: "56.9" },
+  { name: "KPI 4", value: "210.0" },
+  { name: "KPI 5", value: "3.14" },
+  { name: "KPI 6", value: "98.6" },
+  { name: "KPI 7", value: "42.0" },
+  { name: "KPI 8", value: "77.7" },
 ];
 
-const MOCK_ERRORS: string[] = []; 
+const MOCK_ERRORS: string[] = [];
 
-const CaluclatedKpisAndErrors: React.FC<CaluclatedKpisAndErrorsProps> = ({
+const CalculatedKpisAndErrors: React.FC<CalculatedKpisAndErrorsProps> = ({
   kpis = MOCK_KPIS,
   errors = MOCK_ERRORS,
 }) => {
@@ -42,7 +44,9 @@ const CaluclatedKpisAndErrors: React.FC<CaluclatedKpisAndErrorsProps> = ({
                 className="flex flex-row justify-between items-center w-full h-6 gap-1"
               >
                 <span className="text-[12px] text-text-accent">{kpi.name}</span>
-                <span className="text-[12px] text-text-accent">{kpi.value}</span>
+                <span className="text-[12px] text-text-accent">
+                  {kpi.value}
+                </span>
               </div>
             ))}
           </div>
@@ -50,7 +54,9 @@ const CaluclatedKpisAndErrors: React.FC<CaluclatedKpisAndErrorsProps> = ({
 
         <div className="flex flex-col w-1/2 px-6 py-4 gap-3">
           {errors.length === 0 ? (
-            <p className="text-[12px] italic text-text-disabled m-0">No errors found</p>
+            <p className="text-[12px] italic text-text-disabled m-0">
+              No errors found
+            </p>
           ) : (
             <div className="flex flex-col gap-2">
               {errors.map((err, idx) => (
@@ -66,4 +72,4 @@ const CaluclatedKpisAndErrors: React.FC<CaluclatedKpisAndErrorsProps> = ({
   );
 };
 
-export default CaluclatedKpisAndErrors;
+export default CalculatedKpisAndErrors;

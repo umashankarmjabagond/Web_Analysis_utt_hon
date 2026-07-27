@@ -4,13 +4,14 @@ import Accordion from "../../forms/accordion/Accordion";
 import TemplateCard from "../../../pages/workflow/components/TemplateCard";
 
 import { useWorkflowStore } from "../../../store/workflowStore";
+
+import type { WorkflowListItem } from "../../../types/workFlowTypes";
 import {
   attributeSections,
   catalogSections,
   dummyWorkflows,
 } from "../../../pages/workflow/workflowPanelData ";
-import type { WorkflowListItem } from "../../../types/workFlowTypes";
-import { prepareWorkflowForCanvas } from "../../../utils/utils";
+import { backendToFlow } from "../../../utils/utils";
 
 type CatalogTab = "templates" | "attributes";
 
@@ -26,22 +27,21 @@ export default function WorkflowPanel() {
 
   const handleDragStart = (
     event: React.DragEvent<HTMLDivElement>,
-    title: string,
+    item: WorkflowListItem,
   ) => {
-    event.dataTransfer.setData("application/reactflow", title);
+    event.dataTransfer.setData("application/reactflow", JSON.stringify(item));
 
     event.dataTransfer.effectAllowed = "move";
   };
 
   const handleCardClick = (item: WorkflowListItem) => {
-    const workflow = dummyWorkflows[item.id];
+    const backendWorkflow = dummyWorkflows[item.id];
 
-    if (!workflow) return;
+    if (!backendWorkflow) return;
 
-    const canvasWorkflow = prepareWorkflowForCanvas(workflow);
+    const canvasWorkflow = backendToFlow(backendWorkflow);
 
     setNodes(canvasWorkflow.nodes);
-
     setEdges(canvasWorkflow.edges);
   };
 
@@ -98,7 +98,7 @@ export default function WorkflowPanel() {
                 draggable={activeTab === "templates"}
                 onDragStart={
                   activeTab === "templates"
-                    ? (event) => handleDragStart(event, item.title)
+                    ? (event) => handleDragStart(event, item)
                     : undefined
                 }
                 onClick={

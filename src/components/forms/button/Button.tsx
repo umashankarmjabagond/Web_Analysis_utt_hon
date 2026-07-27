@@ -11,10 +11,10 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variants = {
   primary:
-    "border border-[#64C3FF] bg-[#64C3FF] !text-[#303030] hover:bg-[#5ABEF7] hover:border-[#5ABEF7]",
+    "border border-[var(--color-button-primary)] bg-[var(--color-button-primary)] !text-[var(--color-button-text-primary)] hover:border-[var(--color-button-primary-hover)] hover:bg-[var(--color-button-primary-hover)]",
 
   secondary:
-    "border border-[#62BBF3] bg-[#404040] !text-[#64C3FF] hover:bg-[#4A4A4A] hover:text-[#62BBF3]",
+    "border border-[var(--color-button-focus)] bg-[var(--color-button-secondary)] !text-[var(--color-button-text-secondary)] hover:bg-[var(--color-button-secondary-hover)] hover:border-[var(--color-button-focus)]",
 
   danger:
     "border border-[var(--color-danger)] bg-[var(--color-danger)] text-white hover:brightness-90",
@@ -48,7 +48,7 @@ const Button: React.FC<ButtonProps> = ({
       type={type}
       disabled={disabled || loading}
       onClick={onClick}
-      className={`
+      className={`dark
         inline-flex items-center justify-center gap-1.5
         cursor-pointer
         box-border
@@ -60,7 +60,7 @@ const Button: React.FC<ButtonProps> = ({
         disabled:opacity-50
         focus-visible:outline-2
         focus-visible:outline-offset-2
-        focus-visible:outline-[#62BBF3]
+        focus-visible:outline-[var(--color-button-focus)]
 
         ${variants[variant]}
         ${sizes[size]}
