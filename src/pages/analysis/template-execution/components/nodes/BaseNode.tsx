@@ -14,7 +14,7 @@ export default function BaseNode({ data, type }: BaseNodeDataProps) {
   const Icon = nodeMeta?.icon;
 
   return (
-    <div className="rounded-lg border border-slate-300 bg-white shadow-sm min-w-30 overflow-hidden">
+    <div className="cursor-pointer rounded-lg border border-slate-300 bg-white shadow-sm min-w-30 overflow-hidden">
       <Handle
         type="target"
         position={Position.Left}
