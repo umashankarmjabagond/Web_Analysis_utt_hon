@@ -1,13 +1,6 @@
 import { createColumnHelper } from "@tanstack/react-table";
 import Table from "./Table";
-
-interface StatusSummaryRow {
-  unitName: string;
-  totalControllers: number;
-  good: number;
-  warning: number;
-  error: number;
-}
+import type { StatusSummaryRow } from "../../types/dashboardTypes";
 
 const data: StatusSummaryRow[] = [
   {

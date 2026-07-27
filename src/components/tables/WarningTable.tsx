@@ -1,13 +1,6 @@
 import { createColumnHelper } from "@tanstack/react-table";
 import Table from "./Table";
-
-interface WarningRow {
-  unitName: string;
-  type: string;
-  controllerName: string;
-  attributeName: string;
-  errorMessage: string;
-}
+import type { WarningRow } from "../../types/dashboardTypes";
 
 const data: WarningRow[] = [
   {
