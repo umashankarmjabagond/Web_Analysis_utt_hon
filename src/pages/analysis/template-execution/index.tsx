@@ -1,11 +1,7 @@
+import type { TemplateExecutionProps } from "../../../types/templateExecution";
 import ExecutionToolbar from "./components/ExecutionToolbar";
 import WorkflowCanvas from "./components/WorkflowCanvas";
 
-interface TemplateExecutionProps {
-  plant: string;
-  template: string;
-  itemId?: string;
-}
 export default function TemplateExecution({
   plant,
   template,
@@ -14,7 +10,7 @@ export default function TemplateExecution({
   return (
     <div className="relative h-full">
       <ExecutionToolbar />
-      <WorkflowCanvas />
+      <WorkflowCanvas templateId={template} itemId={itemId} />
     </div>
   );
 }

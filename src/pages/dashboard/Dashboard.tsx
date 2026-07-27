@@ -1,6 +1,7 @@
 import type { StatCardData } from "../../types/dashboardTypes";
 import StatCard from "./components/StatCard";
-
+import StatusSummaryTable from "../../components/tables/StatusSummaryTable";
+import WarningTable from "../../components/tables/WarningTable";
 const statCards: StatCardData[] = [
   {
     title: "TOTAL UNITS",
@@ -72,32 +73,21 @@ const statCards: StatCardData[] = [
   },
 ];
 
-export function StatusSummaryTable() {
-  return (
-    <>
-      <div className="h-[392px] rounded-md border border-zinc-700 bg-[#2c2c2c] p-4">
-        <h2 className="text-xs uppercase tracking-widest">
-          Unit Wise Status Summary
-        </h2>
-      </div>
-    </>
-  );
-}
-
-export function WarningTable() {
-  return (
-    <div className="h-[420px] rounded-md border border-zinc-700 bg-[#2c2c2c] p-4">
-      <h2 className="text-xs uppercase tracking-widest">
-        Warning & Error Summary
-      </h2>
-    </div>
-  );
-}
-
 export default function Dashboard() {
   return (
-    <div className="min-h-screen bg-[#202020] text-white p-4">
-      <div className="flex items-center gap-3">
+    <div
+      className="
+    mx-auto
+    w-full
+    min-h-[938px]
+    rounded-[2px]
+    bg-[#272727]
+    p-4
+    md:p-6
+    text-white
+  "
+    >
+      <div className="flex items-center gap-3 w-full">
         <h1 className="text-lg font-semibold tracking-wide">Power Boiler</h1>
 
         <span className="rounded-full border border-sky-500 px-2 py-0.5 text-xs font-medium text-sky-400">
@@ -105,16 +95,16 @@ export default function Dashboard() {
         </span>
       </div>
 
-      <div className="mt-4 grid grid-cols-1 gap-4 xl:grid-cols-[46%_54%]">
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <div className="mt-4 flex flex-col gap-4 xl:flex-row">
+        <div className="grid flex-[656] grid-cols-1 gap-4 sm:grid-cols-2">
           {statCards.map((card) => (
-            <div key={card.title} className="w-full max-w-[320px]">
-              <StatCard data={card} />
-            </div>
+            <StatCard key={card.title} data={card} />
           ))}
         </div>
 
-        <StatusSummaryTable />
+        <div className="flex-[804]">
+          <StatusSummaryTable />
+        </div>
       </div>
 
       <div className="mt-4">

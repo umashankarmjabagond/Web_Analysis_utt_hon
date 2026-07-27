@@ -1,4 +1,6 @@
-import type { ComponentType, ReactNode } from "react";
+import type { ComponentType, ReactNode, SelectHTMLAttributes, TextareaHTMLAttributes,
+  ButtonHTMLAttributes
+ } from "react";
 import type { DonutChartItem } from "./dashboardTypes";
 
 export interface BreadcrumbItem {
@@ -93,4 +95,33 @@ export interface DonutChartProps {
   data: DonutChartItem[];
   size?: number | undefined;
   colors: Record<string, string>;
+}
+
+export interface SelectOption {
+  label: string;
+  value: string | number;
+}
+
+export interface SelectProps
+  extends SelectHTMLAttributes<HTMLSelectElement> {
+  label?: string;
+  error?: string;
+  helperText?: string;
+  fullWidth?: boolean;
+  options: SelectOption[];
+  placeHolder?: string;
+}
+
+export interface  TextAreaProps 
+  extends TextareaHTMLAttributes<HTMLTextAreaElement> {
+    label?: string;
+    error?: string;
+    helperText?: string;
+    fullWidth?: boolean;
+}
+
+export interface IconButtonProps
+  extends ButtonHTMLAttributes<HTMLButtonElement> {
+  icon: ReactNode;
+  size?: "sm" | "md" | "lg";
 }
