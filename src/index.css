@@ -67,9 +67,14 @@
   --color-border-1: #707070;
   --component-card-border:#303030;
 
-  /* Fixed panel background — intentionally NOT redefined in .dark below,
-     so it always stays this value regardless of light/dark theme */
+  /* Fixed panel background */
   --color-panel-bg: #272727;
+
+  /* Fixed Toast/Notification colors  */
+  --color-toast-bg: #404040;
+  --color-toast-title: #f0f0f0;
+  --color-badge-icon: #303030;
+  --color-badge-success-bg: #68d560;
 
   /* Status */
   --color-success: #16a34a;
@@ -233,6 +238,10 @@
   --color-border: var(--color-border);
   --color-border-1: var(--color-border-1);
   --color-panel-bg: var(--color-panel-bg);
+  --color-toast-bg: var(--color-toast-bg);
+  --color-toast-title: var(--color-toast-title);
+  --color-badge-icon: var(--color-badge-icon);
+  --color-badge-success-bg: var(--color-badge-success-bg);
 
   --color-success: var(--color-success);
   --color-warning: var(--color-warning);
