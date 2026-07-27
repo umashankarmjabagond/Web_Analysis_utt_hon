@@ -11,13 +11,13 @@ export type ExecutionStatus =
 interface TemplateExecutionState {
   nodes: Node[];
   edges: Edge[];
-  selectedNodeId: string | null;
+  selectedNodeIds: string[];
   selectedExecutionIds: string[];
   executionStatus: ExecutionStatus;
   setNodes: (nodes: Node[]) => void;
   setEdges: (edges: Edge[]) => void;
   updateNode: (nodeId: string, changes: Partial<Node>) => void;
-  setSelectedNode: (nodeId: string) => void;
+  toggleSelectedNode: (nodeId: string) => void;
   toggleExecution: (itemId: string) => void;
   loadWorkFlow: (nodes: Node[], edges: Edge[]) => void;
 }
@@ -26,7 +26,7 @@ export const useTemplateExecutionStore = create<TemplateExecutionState>()(
   immer((set) => ({
     nodes: [],
     edges: [],
-    selectedNodeId: null,
+    selectedNodeIds: [],
     selectedExecutionIds: [],
     executionStatus: "not-started",
 
@@ -42,8 +42,16 @@ export const useTemplateExecutionStore = create<TemplateExecutionState>()(
       });
     },
 
-    setSelectedNode: (nodeId) => {
-      set({ selectedNodeId: nodeId });
+    toggleSelectedNode: (nodeId) => {
+      set((state) => {
+        const index = state.selectedNodeIds.indexOf(nodeId);
+
+        if (index >= 0) {
+          state.selectedNodeIds.splice(index, 1);
+        } else {
+          state.selectedNodeIds.push(nodeId);
+        }
+      });
     },
 
     toggleExecution: (itemId) => {

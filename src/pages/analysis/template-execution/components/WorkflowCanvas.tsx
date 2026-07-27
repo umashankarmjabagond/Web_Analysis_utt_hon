@@ -2,16 +2,25 @@ import { useMemo, useState } from "react";
 import { Background, BackgroundVariant, ReactFlow } from "@xyflow/react";
 
 import { nodeTypes } from "./nodes/nodeTypes";
-import { useLoadWorkflow } from "../hooks/useLoadWorkflow";
+import { useLoadExecutionWorkflow } from "../hooks/useLoadExecutionWorkflow";
 import { useTemplateExecutionStore } from "../../../../store/templateExecutionStore";
 import KpiTable from "../../../KPI/KpiTable";
 import CalculatedKpisAndErrors from "../../../KPI/CalculatedKpisAndErrors";
 import Connections from "../../../connections/Connections";
 import Drawer from "../../../../components/drawer/Drawer";
 import { Tabs } from "../../../../components/common/tabs/Tabs";
+import { edgeTypes } from "./edges/edgeTypes";
 
-export default function WorkflowCanvas() {
-  useLoadWorkflow("56-FFC618");
+interface WorkflowCanvasProps {
+  templateId: string;
+  itemId: string;
+}
+
+export default function WorkflowCanvas({
+  templateId,
+  itemId,
+}: WorkflowCanvasProps) {
+  useLoadExecutionWorkflow(templateId, itemId);
 
   const nodes = useTemplateExecutionStore((state) => state.nodes);
   const edges = useTemplateExecutionStore((state) => state.edges);
@@ -53,7 +62,8 @@ export default function WorkflowCanvas() {
           nodes={nodes}
           edges={edges}
           nodeTypes={nodeTypes}
-          fitView
+          edgeTypes={edgeTypes}
+          // fitView
           onNodeClick={handleNodeClick}
           proOptions={{ hideAttribution: true }}
         >

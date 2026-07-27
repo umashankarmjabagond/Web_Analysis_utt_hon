@@ -10,6 +10,9 @@ interface FlowData {
   edges: Edge[];
 }
 
+const LEFT_PADDING = 24;
+const EXECUTION_HEADER_WIDTH = 100;
+
 export const createExecutionHeaderNode = ({
   itemId,
   y = 178,
@@ -17,7 +20,7 @@ export const createExecutionHeaderNode = ({
   id: `execution-header-${itemId}`,
   type: "executionHeader",
   position: {
-    x: 0,
+    x: LEFT_PADDING,
     y,
   },
   draggable: false,
@@ -27,17 +30,24 @@ export const createExecutionHeaderNode = ({
   },
 });
 
-export const buildCanvasData = (
+export const buildExecutionCanvas = (
   itemId: string,
   flowData: FlowData,
 ): FlowData => {
   const firstNode = flowData.nodes[0];
 
-  const headerHeight = 20;
   const nodeHeight = firstNode.measured?.height ?? 72;
 
   // calculate checkbox center position
-  const centeredY = firstNode.position.y + (nodeHeight - headerHeight) / 2;
+  const centeredY = firstNode.position.y + nodeHeight / 2;
+
+  const shiftedNodes = flowData.nodes.map((node) => ({
+    ...node,
+    position: {
+      ...node.position,
+      x: node.position.x + LEFT_PADDING + EXECUTION_HEADER_WIDTH,
+    },
+  }));
 
   return {
     nodes: [
@@ -45,7 +55,7 @@ export const buildCanvasData = (
         itemId,
         y: centeredY,
       }),
-      ...flowData.nodes,
+      ...shiftedNodes,
     ],
     edges: flowData.edges,
   };

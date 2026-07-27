@@ -21,6 +21,26 @@
   /* Border */
   --app-default-border: #b0b0b0;
 
+  /* Workflow Node */
+  --app-default-node: #353535;
+  /* Workflow Node Success */
+  --app-node-success-background: #000000;
+  --app-node-success-tint: #68d5601a;
+  --app-node-success-border: #68d56080;
+
+  /* Workflow Node Warning */
+  --app-node-warning-background: #000000;
+  --app-node-warning-tint: #ffdb4266;
+  --app-node-warning-border: #ffdb42;
+
+  /* Workflow Node Error */
+  --app-node-error-background: #000000;
+  --app-node-error-tint: #ff644c4d;
+  --app-node-error-border: #ff644c;
+
+  /* Workflow Edge */
+  --app-default-edge: #909090;
+
   /* Action */
   --app-action-primary: #64c3ff;
   --app-action-secondary: #c8c8c8;
@@ -175,6 +195,27 @@
   /* Border */
   --color-app-default-border: var(--app-default-border);
 
+  /* Workflow Node */
+  --color-app-default-node: var(--app-default-node);
+
+  /* Workflow Node Success */
+  --color-app-node-success-background: var(--app-node-success-background);
+  --color-app-node-success-tint: var(--app-node-success-tint);
+  --color-app-node-success-border: var(--app-node-success-border);
+
+  /* Workflow Node Warning */
+  --color-app-node-warning-background: var(--app-node-warning-background);
+  --color-app-node-warning-tint: var(--app-node-warning-tint);
+  --color-app-node-warning-border: var(--app-node-warning-border);
+
+  /* Workflow Node Error */
+  --color-app-node-error-background: var(--app-node-error-background);
+  --color-app-node-error-tint: var(--app-node-error-tint);
+  --color-app-node-error-border: var(--app-node-error-border);
+
+  /* Workflow Edge */
+  --color-app-default-edge: var(--app-default-edge);
+
   /* ---------- Colors ---------- */
   --color-primary: var(--color-primary);
   --color-primary-hover: var(--color-primary-hover);
@@ -277,4 +318,12 @@ body {
 * {
   scrollbar-width: thin;
   scrollbar-color: #606060 #272727;
+}
+
+.bg-dot-grid {
+  background-image: radial-gradient(
+    var(--app-surface-elevated) 1.5px,
+    transparent 1.5px
+  );
+  background-size: 25px 25px;
 }
