@@ -1,19 +1,13 @@
-import type { Edge, Node } from "@xyflow/react";
-
-interface CreateExecutionHeaderNodeProps {
-  itemId: string;
-  y?: number;
-}
-
-interface FlowData {
-  nodes: Node[];
-  edges: Edge[];
-}
+import type { Node } from "@xyflow/react";
+import type {
+  CreateExecutionHeaderNodeProps,
+  WorkflowData,
+} from "../../../../types/templateExecution";
 
 const LEFT_PADDING = 24;
 const EXECUTION_HEADER_WIDTH = 100;
 
-export const createExecutionHeaderNode = ({
+export const createTemplateItemHeaderNode = ({
   itemId,
   y = 178,
 }: CreateExecutionHeaderNodeProps): Node => ({
@@ -30,10 +24,10 @@ export const createExecutionHeaderNode = ({
   },
 });
 
-export const buildExecutionCanvas = (
+export const buildTemplateItemFlow = (
   itemId: string,
-  flowData: FlowData,
-): FlowData => {
+  flowData: WorkflowData,
+): WorkflowData => {
   const firstNode = flowData.nodes[0];
 
   const nodeHeight = firstNode.measured?.height ?? 72;
@@ -51,7 +45,7 @@ export const buildExecutionCanvas = (
 
   return {
     nodes: [
-      createExecutionHeaderNode({
+      createTemplateItemHeaderNode({
         itemId,
         y: centeredY,
       }),

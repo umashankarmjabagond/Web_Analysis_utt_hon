@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { Background, BackgroundVariant, ReactFlow } from "@xyflow/react";
 
 import { nodeTypes } from "./nodes/nodeTypes";
-import { useLoadExecutionWorkflow } from "../hooks/useLoadExecutionWorkflow";
+import { useLoadExecutionWorkflow } from "../../../../hooks/useLoadExecutionWorkflow";
 import { useTemplateExecutionStore } from "../../../../store/templateExecutionStore";
 import KpiTable from "../../../KPI/KpiTable";
 import CalculatedKpisAndErrors from "../../../KPI/CalculatedKpisAndErrors";
@@ -10,11 +10,9 @@ import Connections from "../../../connections/Connections";
 import Drawer from "../../../../components/drawer/Drawer";
 import { Tabs } from "../../../../components/common/tabs/Tabs";
 import { edgeTypes } from "./edges/edgeTypes";
+import Properties from "../../../KPI/Properties";
 
-interface WorkflowCanvasProps {
-  templateId: string;
-  itemId: string;
-}
+import type { WorkflowCanvasProps } from "../../../../types/templateExecution";
 
 export default function WorkflowCanvas({
   templateId,
@@ -40,6 +38,11 @@ export default function WorkflowCanvas({
         id: "errors",
         label: "Calculated KPIs and Errors",
         component: CalculatedKpisAndErrors,
+      },
+      {
+        id: "properties",
+        label: "Properties",
+        component: Properties,
       },
       {
         id: "connections",

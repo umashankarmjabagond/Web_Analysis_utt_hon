@@ -11,7 +11,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 
 const variants = {
   default: `
-    border-[var(--color-border)]
+    border-[var(--color-border-1)]
     hover:border-[var(--color-text-secondary)]
     focus:border-[var(--color-primary)]
   `,

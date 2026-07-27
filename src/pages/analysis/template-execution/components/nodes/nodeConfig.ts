@@ -6,8 +6,6 @@ import {
   Funnel,
 } from "lucide-react";
 
-export type NodeType = keyof typeof NODE_TYPES;
-
 export const NODE_TYPES = {
   dataSource: {
     label: "Data Source",

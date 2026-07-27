@@ -1,16 +1,11 @@
-import { Handle, Position, type Node, type NodeProps } from "@xyflow/react";
-import { NODE_TYPES, type NodeType } from "./nodeConfig";
+import { Handle, Position, type NodeProps } from "@xyflow/react";
+import { NODE_TYPES } from "./nodeConfig";
 import { useTemplateExecutionStore } from "../../../../../store/templateExecutionStore";
 import { Check } from "lucide-react";
-
-type NodeStatus = "default" | "success" | "warning" | "error";
-
-export type BaseNodeData = {
-  label: string;
-  status: NodeStatus;
-};
-
-type BaseFlowNode = Node<BaseNodeData>;
+import type {
+  BaseFlowNode,
+  NodeType,
+} from "../../../../../types/templateExecution";
 
 export default function BaseNode({ id, data, type }: NodeProps<BaseFlowNode>) {
   const checked = useTemplateExecutionStore((state) =>

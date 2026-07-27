@@ -1,11 +1,11 @@
 import { useEffect } from "react";
-import { useTemplateExecutionStore } from "../../../../store/templateExecutionStore";
-import { buildExecutionCanvas } from "../helpers/executionCanvas";
+import { useTemplateExecutionStore } from "../store/templateExecutionStore";
+import { buildTemplateItemFlow } from "../pages/analysis/template-execution/flowBuilders/templateItemFlowBuilder.ts";
 import {
   getExecutionWorkflow,
   getTemplateExecutionWorkflows,
-} from "../services/executionWorkflow.service";
-import { buildTemplateCanvas } from "../helpers/templateCanvas";
+} from "../services/analysisTemplateExecution/templateExecutionService.ts";
+import { buildTemplateCanvas } from "../pages/analysis/template-execution/flowBuilders/templateFlowBuilder.ts";
 
 export const useLoadExecutionWorkflow = (
   templateId: string,
@@ -21,7 +21,7 @@ export const useLoadExecutionWorkflow = (
         // Load single execution
         const workflow = await getExecutionWorkflow(itemId);
 
-        const canvas = buildExecutionCanvas(itemId, workflow);
+        const canvas = buildTemplateItemFlow(itemId, workflow);
 
         loadWorkFlow(canvas.nodes, canvas.edges);
       } else {
