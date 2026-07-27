@@ -29,7 +29,7 @@ const Select: React.FC<SelectProps> = ({
   return (
     <div className={`flex flex-col gap-1.5 ${fullWidth ? "w-full" : ""}`}>
       {label && (
-        <label className="text-[var(--text-sm)] font-[var(--font-medium)] text-[var          (--color-text-primary)]">
+        <label className="text-[var(--text-sm)] font-[var(--font-medium)] text-[var(--color-text-primary)]">
           {label}
         </label>
       )}
@@ -45,6 +45,7 @@ const Select: React.FC<SelectProps> = ({
                         pr-8
                         text-[var(--text-sm)]
                         font-normal
+                        bg-[var(--color-panel-bg)]
                         text-[var(--color-text-primary)]
                         outline-none
                         transition-colors
