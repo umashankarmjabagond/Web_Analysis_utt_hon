@@ -1,9 +1,4 @@
-interface ToolbarButtonProps {
-  icon: React.ElementType;
-  label: string;
-  active?: boolean;
-  onClick?: () => void;
-}
+import type { ToolbarButtonProps } from "../../../../types/templateExecution";
 
 export default function ToolbarExecutionButton({
   icon: Icon,

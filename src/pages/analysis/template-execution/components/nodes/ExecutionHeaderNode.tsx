@@ -1,12 +1,7 @@
-import type { Node, NodeProps } from "@xyflow/react";
+import type { NodeProps } from "@xyflow/react";
 import { useTemplateExecutionStore } from "../../../../../store/templateExecutionStore";
 import { Check } from "lucide-react";
-
-type ExecutionHeaderData = {
-  itemId: string;
-};
-
-type ExecutionHeaderFlowNode = Node<ExecutionHeaderData>;
+import type { ExecutionHeaderFlowNode } from "../../../../../types/templateExecution";
 
 export default function ExecutionHeaderNode({
   data,
