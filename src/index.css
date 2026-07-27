@@ -28,6 +28,12 @@
      so it always stays this value regardless of light/dark theme */
   --color-panel-bg: #272727;
 
+  /* Fixed Toast/Notification colors — same reasoning: this overlay always
+     renders dark, so these are NOT redefined in .dark below */
+  --color-toast-bg: #404040;
+  --color-toast-title: #f0f0f0;
+  --color-badge-icon: #303030;
+
   /* Status */
   --color-success: #16a34a;
   --color-warning: #f59e0b;
@@ -125,6 +131,9 @@
   --color-border: var(--color-border);
   --color-border-1: var(--color-border-1);
   --color-panel-bg: var(--color-panel-bg);
+  --color-toast-bg: var(--color-toast-bg);
+  --color-toast-title: var(--color-toast-title);
+  --color-badge-icon: var(--color-badge-icon);
 
   --color-success: var(--color-success);
   --color-warning: var(--color-warning);
