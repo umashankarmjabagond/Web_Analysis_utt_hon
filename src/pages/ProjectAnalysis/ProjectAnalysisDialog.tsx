@@ -4,6 +4,7 @@ import { CircleHelp, File, RefreshCcw, Trash2 } from "lucide-react";
 import Dialog from "../../components/common/dialogue/Dialog";
 import Button from "../../components/forms/button/Button";
 import Input from "../../components/forms/input/Input";
+import TextArea from "../../components/forms/textarea/TextArea";
 
 interface ProjectAnalysisDialogProps {
   isOpen: boolean;
@@ -153,14 +154,10 @@ const ProjectAnalysisDialog = ({
 
               {/* Description */}
               <div>
-                <label className="mb-1 block text-sm font-medium">
-                  Description
-                </label>
-
-                <textarea
-                  rows={4}
-                  placeholder="Multiple lines of text go here..."
-                  className="w-full resize-none rounded-[var(--radius-sm)] border border-[var(--color-border)] bg-transparent p-3 outline-none transition focus:border-[var(--color-primary)]"
+                <TextArea
+                  label="Description"
+                  placeholder="Multiple lines of text go here."
+                  rows={5}
                 />
               </div>
 
