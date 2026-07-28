@@ -26,8 +26,9 @@ export default function Sidebar() {
               isActive ? "bg-blue-600" : "hover:bg-neutral-700"
             }`
           }
+          title={menu.name}
         >
-          {menu.icon}
+          <span className="text-2xl text-white">{menu.icon}</span>
         </NavLink>
       ))}
     </aside>
