@@ -17,21 +17,39 @@ export const nodeTypes = {
 
 export interface WorkflowTemplate {
   id?: string;
+
   name: string;
+
   description?: string;
+
   version?: number;
 
   nodes: WorkflowNode[];
+
   edges: WorkflowEdge[];
 }
 
 export interface WorkflowCanvasData {
   nodes: WorkflowNode[];
+
   edges: WorkflowEdge[];
+
   viewport?: Viewport;
 }
 
 export type WorkflowEdge = Edge;
+
+/* -------------------------------------------------------------------------- */
+/*                               Drag & Drop Types                            */
+/* -------------------------------------------------------------------------- */
+
+export type DragItemType = "template" | "attribute";
+
+export interface WorkflowDragItem {
+  type: DragItemType;
+
+  item: WorkflowListItem;
+}
 
 /* -------------------------------------------------------------------------- */
 /*                            Backend Workflow Types                          */
@@ -39,10 +57,15 @@ export type WorkflowEdge = Edge;
 
 export interface BackendWorkflow {
   LoopName: string;
+
   TemplateName: string;
+
   AnalysisName: string;
+
   Location: string;
+
   Description: string;
+
   HistorianFile: string;
 
   settings: Record<string, unknown>;
@@ -80,18 +103,21 @@ export interface WorkflowListItem {
   title: string;
 
   /**
-   * Dummy backend element.
-   *
-   * Once the Template API is ready,
-   * this object will come directly
-   * from the backend.
+   * Optional description shown in dialogs/search.
+   */
+  description?: string;
+
+  /**
+   * Backend element represented by this catalog item.
+   * For templates this is only metadata.
+   * For attributes this is the node to create.
    */
   element: BackendElement;
 }
 
 export interface WorkflowSection {
+  id?: string;
   title: string;
-
   items: WorkflowListItem[];
 }
 
@@ -115,10 +141,12 @@ export type WorkflowNode = Node<WorkflowNodeData>;
 
 export interface KpiItem {
   name: string;
+
   value: string | number;
 }
 
 export interface CalculatedKpisAndErrorsProps {
   kpis?: KpiItem[];
+
   errors?: string[];
 }

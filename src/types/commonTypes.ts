@@ -139,3 +139,24 @@ export interface BadgeProps {
   className?: string;
   children: React.ReactNode;
 }
+
+export interface GroupedSelectorItem {
+  id: string;
+  label: string;
+  icon?: ReactNode;
+  value?: unknown;
+}
+
+export interface GroupedSelectorSection {
+  id: string;
+  title: string;
+  items: GroupedSelectorItem[];
+}
+
+export interface GroupedSelectorProps {
+  placeholder?: string;
+  sections: GroupedSelectorSection[];
+  onSelect: (item: GroupedSelectorItem) => void;
+  disabled?: boolean;
+  className?: string;
+}
