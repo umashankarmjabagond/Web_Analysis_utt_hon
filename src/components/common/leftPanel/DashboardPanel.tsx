@@ -6,7 +6,7 @@ import { Image, Search } from "lucide-react";
 import { ROUTES } from "../../../constants/routes/routesConstant";
 import Input from "../../forms/input/Input";
 import { useDebounce } from "../../../hooks/useDebounce";
-import { filterTree } from "../../../utils/filterTree";
+import { filterTree } from "../../../utils/utils";
 
 const TREE_DATA: TreeNodeData[] = [
   {

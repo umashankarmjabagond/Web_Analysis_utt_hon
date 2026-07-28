@@ -17,13 +17,28 @@ type CatalogTab = "templates" | "attributes";
 
 export default function WorkflowPanel() {
   const [activeTab, setActiveTab] = useState<CatalogTab>("templates");
-
+  const [search, setSearch] = useState("");
   const setNodes = useWorkflowStore((state) => state.setNodes);
   const setEdges = useWorkflowStore((state) => state.setEdges);
 
   const panelData = useMemo(() => {
     return activeTab === "templates" ? catalogSections : attributeSections;
   }, [activeTab]);
+
+  const filteredPanelData = useMemo(() => {
+    if (!search.trim()) return panelData;
+
+    const query = search.toLowerCase();
+
+    return panelData
+      .map((section) => ({
+        ...section,
+        items: section.items.filter((item) =>
+          item.title.toLowerCase().includes(query),
+        ),
+      }))
+      .filter((section) => section.items.length > 0);
+  }, [panelData, search]);
 
   const handleDragStart = (
     event: React.DragEvent<HTMLDivElement>,
@@ -79,13 +94,15 @@ export default function WorkflowPanel() {
 
       <div className="px-4">
         <input
+          value={search}
+          onChange={(e) => {setSearch(e.target.value)}}
           placeholder="Search..."
           className="w-full rounded-md border border-neutral-600 bg-[#3B3B3B] px-3 py-2 text-sm text-white outline-none"
         />
       </div>
 
       <div className="mt-4 flex-1 space-y-4 overflow-auto px-4 pb-4">
-        {panelData.map((section) => (
+        {filteredPanelData.map((section) => (
           <Accordion
             key={section.title}
             title={section.title}
