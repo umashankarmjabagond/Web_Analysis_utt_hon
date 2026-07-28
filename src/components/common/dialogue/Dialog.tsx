@@ -14,7 +14,7 @@ const Dialog = ({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
       <div
-        className="relative rounded-xl bg-[#3C3C3C] shadow-2xl"
+        className="relative rounded-xl bg-[#272727] shadow-2xl"
         style={{ width }}
       >
         {/* Header */}

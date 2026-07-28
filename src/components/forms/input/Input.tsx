@@ -53,6 +53,7 @@ const Input: React.FC<InputProps> = ({
             h-8
             rounded-[var(--radius-sm)]
             border
+            bg-[var(--color-background)]
             px-2.5
             pr-${type === "password" && showPasswordToggle ? "9" : "2.5"}
             text-[var(--text-sm)]
