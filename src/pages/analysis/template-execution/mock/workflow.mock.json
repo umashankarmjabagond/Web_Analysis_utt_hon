@@ -5,7 +5,7 @@
       "type": "dataSource",
       "position": {
         "x": 104,
-        "y": 139
+        "y": 140
       },
       "data": {
         "label": "Data Source",
@@ -21,7 +21,7 @@
       "type": "dataSink",
       "position": {
         "x": 428,
-        "y": 138
+        "y": 140
       },
       "data": {
         "label": "Data Sink",
@@ -39,7 +39,7 @@
       "type": "dataSink",
       "position": {
         "x": 709,
-        "y": 135
+        "y": 140
       },
       "data": {
         "label": "Data Sink",
@@ -56,8 +56,8 @@
       "id": "d18a1842-284c-46c0-b70c-0d8b7ea5d0ab",
       "type": "dataPreprocessing",
       "position": {
-        "x": 970.875,
-        "y": 147
+        "x": 970,
+        "y": 140
       },
       "data": {
         "label": "Data Preprocessing",
@@ -74,8 +74,8 @@
       "id": "1bbfed94-59bb-4896-9d54-a6f9f9698b5a",
       "type": "math",
       "position": {
-        "x": 1310.875,
-        "y": 145
+        "x": 1310,
+        "y": 140
       },
       "data": {
         "label": "Math",
@@ -92,8 +92,8 @@
       "id": "e7902836-2e6c-444b-8bf1-a959213118db",
       "type": "sorter",
       "position": {
-        "x": 1676.875,
-        "y": 163
+        "x": 1676,
+        "y": 140
       },
       "data": {
         "label": "Sorter",

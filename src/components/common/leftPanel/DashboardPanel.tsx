@@ -2,8 +2,9 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import type { TreeNodeData } from "../../../types/commonTypes";
 import Tree from "../tree/Tree";
 import { useCallback, useEffect } from "react";
-import { Image } from "lucide-react";
+import { Image, Search } from "lucide-react";
 import { ROUTES } from "../../../constants/routes/routesConstant";
+import Input from "../../forms/input/Input";
 
 const TREE_DATA: TreeNodeData[] = [
   {
@@ -140,7 +141,14 @@ export default function DashboardPanel() {
   }, [selectedId, location.pathname, handleSelect]);
 
   return (
-    <Tree nodes={TREE_DATA} selectedId={selectedId} onSelect={handleSelect} />
+    <>
+      <Input
+        className="w-[288px] h-8 rounded-[4px] px-8 bg-app-surface border border-app-default-border-strong text-[14px] text-text-secondary"
+        placeholder="Search..."
+        startAdornment={<Search size={16} strokeWidth={2.5} color="#D0D0D0" />}
+      />
+      <Tree nodes={TREE_DATA} selectedId={selectedId} onSelect={handleSelect} />
+    </>
   );
 }
 

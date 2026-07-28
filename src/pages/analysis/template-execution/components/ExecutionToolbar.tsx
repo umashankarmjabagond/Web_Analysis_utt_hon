@@ -2,20 +2,22 @@ import { CirclePause, CirclePlay, Trash } from "lucide-react";
 import ToolbarExecutionButton from "./ToolbarExecutionButton";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../../../constants/routes/routesConstant";
+import { useTemplateExecutionStore } from "../../../../store/templateExecutionStore";
 
 export default function ExecutionToolbar() {
   const navigate = useNavigate();
+  const templateInfo = useTemplateExecutionStore((state) => state.templateInfo);
   return (
     <div className="absolute left-4 right-4 top-4 z-10 flex h-12 items-center justify-between rounded-[6px] border border-app-divider bg-app-primary px-4 py-2">
       <div className="flex h-7  items-center gap-4">
         <span className="text-[20px] font-extrabold text-app-text-secondary">
-          PGB2
+          {templateInfo?.name}
         </span>
 
         {/* <Badge label="UNIT" variant="unit" /> */}
         {/* TODO - Reusable */}
         <span className="text-app-text-secondary border px-2 rounded-full">
-          Badge - Unit
+          Badge - {templateInfo?.type}
         </span>
       </div>
 

@@ -12,6 +12,9 @@ export const useLoadExecutionWorkflow = (
   itemId?: string,
 ) => {
   const loadWorkFlow = useTemplateExecutionStore((state) => state.loadWorkFlow);
+  const setTemplateInfo = useTemplateExecutionStore(
+    (state) => state.setTemplateInfo,
+  );
 
   useEffect(() => {
     if (!templateId && !itemId) return;
@@ -26,14 +29,15 @@ export const useLoadExecutionWorkflow = (
         loadWorkFlow(canvas.nodes, canvas.edges);
       } else {
         // TODO: Load all execution workflows for template
-        const workflows = await getTemplateExecutionWorkflows(templateId);
+        const response = await getTemplateExecutionWorkflows(templateId);
 
-        const canvas = buildTemplateCanvas(workflows);
+        const canvas = buildTemplateCanvas(response.workflows);
 
+        setTemplateInfo(response.template);
         loadWorkFlow(canvas.nodes, canvas.edges);
       }
     };
 
     loadExecutionData();
-  }, [templateId, itemId, loadWorkFlow]);
+  }, [templateId, itemId, loadWorkFlow, setTemplateInfo]);
 };

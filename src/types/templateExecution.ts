@@ -12,6 +12,15 @@ export interface TemplateExecutionWorkflow {
   workflow: WorkflowData;
 }
 
+export interface TemplateExecutionResponse {
+  template: {
+    id: string;
+    name: string;
+    type: string;
+  };
+  workflows: TemplateExecutionWorkflow[];
+}
+
 // analysis/flowBuilders/templateItemFlowBuilder - custom execustion header node creation
 export interface CreateExecutionHeaderNodeProps {
   itemId: string;
