@@ -46,6 +46,32 @@
   --app-action-primary: #64c3ff;
   --app-action-secondary: #c8c8c8;
 
+  /* Badges */
+  /* Neutral */
+  --app-badge-neutral-bg: #404040;
+  --app-badge-neutral-outline: #d0d0d0;
+  --app-badge-neutral-text: #d0d0d0;
+
+  /* Success */
+  --app-badge-success-bg: #68d560;
+  --app-badge-success-outline: #68d560;
+  --app-badge-success-text: #ffffff;
+
+  /* Warning */
+  --app-badge-warning-bg: #ffdb42;
+  --app-badge-warning-outline: #ffdb42;
+  --app-badge-warning-text: #303030;
+
+  /* Error */
+  --app-badge-error-bg: #ff644c;
+  --app-badge-error-outline: #ff644c;
+  --app-badge-error-text: #ffffff;
+
+  /* Info */
+  --app-badge-info-bg: #64c3ff;
+  --app-badge-info-outline: #64c3ff;
+  --app-badge-info-text: #ffffff;
+
   /* Brand */
   --color-primary: #2563eb;
   --color-primary-hover: #1d4ed8;
@@ -220,6 +246,32 @@
 
   /* Workflow Edge */
   --color-app-default-edge: var(--app-default-edge);
+
+  /* Badges */
+  /* Neutral */
+  --color-app-badge-neutral-background: var(--app-badge-neutral-bg);
+  --color-app-badge-neutral-outline: var(--app-badge-neutral-outline);
+  --color-app-badge-neutral-text: var(--app-badge-neutral-text);
+
+  /* Success */
+  --color-app-badge-success-background: var(--app-badge-success-bg);
+  --color-app-badge-success-outline: var(--app-badge-success-outline);
+  --color-app-badge-success-text: var(--app-badge-success-text);
+
+  /* Warning */
+  --color-app-badge-warning-background: var(--app-badge-warning-bg);
+  --color-app-badge-warning-outline: var(--app-badge-warning-outline);
+  --color-app-badge-warning-text: var(--app-badge-warning-text);
+
+  /* Error */
+  --color-app-badge-error-background: var(--app-badge-error-bg);
+  --color-app-badge-error-outline: var(--app-badge-error-outline);
+  --color-app-badge-error-text: var(--app-badge-error-text);
+
+  /* Info */
+  --color-app-badge-info-background: var(--app-badge-info-bg);
+  --color-app-badge-info-outline: var(--app-badge-info-outline);
+  --color-app-badge-info-text: var(--app-badge-info-text);
 
   /* ---------- Colors ---------- */
   --color-primary: var(--color-primary);
