@@ -22,6 +22,8 @@ import Dialog from "../../../../components/common/dialogue/Dialog";
 import Input from "../../../../components/forms/input/Input";
 import Button from "../../../../components/forms/button/Button";
 import Notification from "../../../../components/common/notification/Notification";
+import { useNavigate } from "react-router-dom";
+import { ROUTES } from "../../../../constants/routes/routesConstant";
 
 export default function Toolbar() {
   const {
@@ -34,6 +36,8 @@ export default function Toolbar() {
     redo,
     clearWorkflow,
   } = useWorkflowStore();
+
+  const navigate = useNavigate();
 
   const [isSaveDialogOpen, setIsSaveDialogOpen] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
@@ -99,10 +103,14 @@ export default function Toolbar() {
       {/* LEFT */}
 
       <div className="flex items-center gap-2">
-        <button className="flex items-center gap-2 border-r border-[#444] pr-4 text-sm text-white">
-          <ArrowLeft size={16} />
+        <div className="flex items-center gap-2 border-r border-[#444] pr-4 text-sm text-white">
+          <ArrowLeft
+            className="cursor-pointer"
+            onClick={() => navigate(ROUTES.DASHBOARD)}
+            size={16}
+          />
           <span>New Template</span>
-        </button>
+        </div>
 
         <ToolbarButton
           title="Pointer"
