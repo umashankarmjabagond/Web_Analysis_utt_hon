@@ -6,58 +6,58 @@ export default function StatCard({ data }: StatCardProps) {
   const total = data.chartData.reduce((sum, item) => sum + item.value, 0);
 
   return (
-    <div className="w-full min-w-0 h-[164px] rounded-md border border-[#303030] bg-[#404040] py-4 px-6">
+    <div className="w-full min-w-0 h-[164px] overflow-hidden rounded-md border border-[var(--component-card-border)] bg-[var(--background-primary-container)] py-4 px-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <h2
-          className="text-[12px]
-            leading-4
-            font-extrabold
-            uppercase
-            tracking-[2px]
-            text-[#D0D0D0]"
-        >
+      <div className="flex items-center justify-between gap-2 min-w-0">
+        <h2 className="text-[12px] leading-4 font-extrabold uppercase tracking-[2px] text-text-accent truncate min-w-0">
           {data.title}
         </h2>
-
-        <span className="text-[20px] leading-7 font-extrabold text-white">
+        <span className="shrink-0 text-[20px] leading-7 font-extrabold text-white">
           {total}
         </span>
       </div>
 
-      {/* Body */}
-      <div className="mt-4 flex items-center justify-between w-full min-w-0 gap-4">
-        {/* Chart */}
-        <DonutChart data={data.chartData} size={88} colors={STATUS_COLORS} />
+      {/* Body: 3 fixed zones — chart (left) | labels (center) | values (right) */}
+      <div className="mt-4 grid grid-cols-[minmax(64px,88px)_1fr_minmax(0,auto)] items-center gap-2 sm:gap-4 w-full h-[88px] min-w-0">
+        {/* Left: donut — scales down slightly instead of staying rigid at 88px */}
+        <div className="shrink-0 aspect-square w-full max-w-[88px] flex items-center justify-center">
+          <DonutChart data={data.chartData} size={88} colors={STATUS_COLORS} />
+        </div>
 
-        {/* Legend */}
-        <div className="w-[120px] shrink-0 space-y-3">
+        {/* Middle: labels, centered within the remaining space */}
+        <div className="flex flex-col justify-between h-[88px] mx-auto min-w-0">
           {data.chartData.map((item) => (
-            <div key={item.name} className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <span
-                  className="h-5 w-[3px] rounded"
-                  style={{
-                    backgroundColor:
-                      STATUS_COLORS[item.name as keyof typeof STATUS_COLORS],
-                  }}
-                />
-
-                <span
-                  className="text-[14px]
-                    leading-5 text-gray-200"
-                >
-                  {item.name}
-                </span>
-              </div>
-
-              <span
-                className="text-[14px]
-                    leading-5 text-gray-200"
+            <div key={item.name} className="h-6 flex items-center gap-2 min-w-0">
+              <svg
+                width="3"
+                height="20"
+                viewBox="0 0 3 20"
+                className="shrink-0"
+                aria-hidden="true"
               >
-                {item.value}
+                <rect
+                  width="3"
+                  height="20"
+                  rx="1.5"
+                  fill={STATUS_COLORS[item.name as keyof typeof STATUS_COLORS]}
+                />
+              </svg>
+              <span className="text-[14px] leading-5 text-text-accent truncate">
+                {item.name}
               </span>
             </div>
+          ))}
+        </div>
+
+        {/* Right: values, pinned right but clamped so it never forces overflow */}
+        <div className="flex flex-col justify-between h-[88px] items-end min-w-0">
+          {data.chartData.map((item) => (
+            <span
+              key={item.name}
+              className="h-6 flex items-center text-[14px] leading-5 text-text-accent truncate"
+            >
+              {item.value}
+            </span>
           ))}
         </div>
       </div>

@@ -8,7 +8,7 @@ interface NotificationProps {
   message: string;
   title?: string;
   onClose?: () => void;
-  width?: number | string; // dynamic width, defaults to 400px like the Figma design
+  width?: number | string; 
 }
 
 const SuccessIcon: React.FC<{ className?: string; size?: number }> = ({

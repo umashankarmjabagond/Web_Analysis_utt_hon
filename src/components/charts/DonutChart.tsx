@@ -1,41 +1,37 @@
-import { PieChart, Pie, Sector, ResponsiveContainer } from "recharts";
+import { PieChart, Pie } from "recharts";
 import type { DonutChartProps } from "../../types/commonTypes";
 
 export default function DonutChart({
   data,
-  size = 80,
+  size = 88,
   colors,
+  className = "",
 }: DonutChartProps) {
+  // Attach the fill color directly to each slice's data instead of using <Cell>
+  const chartData = data.map((item) => ({
+    ...item,
+    fill: colors[item.name as keyof typeof colors],
+  }));
+
   return (
     <div
-      style={{
-        width: size,
-        height: size,
-      }}
+      className={`shrink-0 grow-0 flex items-center justify-center ${className}`}
+      style={{ width: size, height: size }}
     >
-      <ResponsiveContainer width="100%" height="100%">
-        <PieChart>
-          <Pie
-            data={data}
-            dataKey="value"
-            nameKey="name"
-            cx="50%"
-            cy="50%"
-            innerRadius={size * 0.32}
-            outerRadius={size * 0.48}
-            paddingAngle={0}
-            stroke="none"
-            isAnimationActive={false}
-            shape={(props) => (
-              <Sector
-                {...props}
-                fill={colors[props.payload.name as keyof typeof colors]}
-                stroke="none"
-              />
-            )}
-          />
-        </PieChart>
-      </ResponsiveContainer>
+      <PieChart width={size} height={size} margin={{ top: 0, right: 0, bottom: 0, left: 0 }}>
+        <Pie
+          data={chartData}
+          dataKey="value"
+          nameKey="name"
+          cx="50%"
+          cy="50%"
+          innerRadius={size * 0.32}
+          outerRadius={size * 0.48}
+          paddingAngle={0}
+          stroke="none"
+          isAnimationActive={false}
+        />
+      </PieChart>
     </div>
   );
 }
