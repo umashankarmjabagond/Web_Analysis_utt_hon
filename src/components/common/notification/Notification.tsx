@@ -94,9 +94,9 @@ const Notification: React.FC<NotificationProps> = ({
       className="flex flex-col h-auto rounded-[10px] p-6 gap-6 bg-toast-bg"
     >
       <div className="flex flex-col w-full gap-4">
-        {/* Badge & Close */}
+        
         <div className="flex flex-row w-full items-center justify-between h-8">
-          {/* Badge/Categorical */}
+          
           <div
             className={`flex flex-row items-center gap-1 h-6 rounded-2xl px-2 py-1 ${badgeBgClass}`}
           >
@@ -116,7 +116,7 @@ const Notification: React.FC<NotificationProps> = ({
           />
         </div>
 
-        {/* Body content */}
+        
         <div className="flex flex-col w-full gap-3">
           <p className="text-[16px] leading-6 font-bold m-0 text-toast-title">
             {title ?? label}

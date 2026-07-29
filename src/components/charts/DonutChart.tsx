@@ -7,7 +7,7 @@ export default function DonutChart({
   colors,
   className = "",
 }: DonutChartProps) {
-  // Attach the fill color directly to each slice's data instead of using <Cell>
+  
   const chartData = data.map((item) => ({
     ...item,
     fill: colors[item.name as keyof typeof colors],

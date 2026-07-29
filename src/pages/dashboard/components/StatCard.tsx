@@ -7,7 +7,7 @@ export default function StatCard({ data }: StatCardProps) {
 
   return (
     <div className="w-full min-w-0 h-[164px] overflow-hidden rounded-md border border-[var(--component-card-border)] bg-[var(--background-primary-container)] py-4 px-6">
-      {/* Header */}
+      
       <div className="flex items-center justify-between gap-2 min-w-0">
         <h2 className="text-[12px] leading-4 font-extrabold uppercase tracking-[2px] text-text-accent truncate min-w-0">
           {data.title}
@@ -17,14 +17,14 @@ export default function StatCard({ data }: StatCardProps) {
         </span>
       </div>
 
-      {/* Body: 3 fixed zones — chart (left) | labels (center) | values (right) */}
+      
       <div className="mt-4 grid grid-cols-[minmax(64px,88px)_1fr_minmax(0,auto)] items-center gap-2 sm:gap-4 w-full h-[88px] min-w-0">
-        {/* Left: donut — scales down slightly instead of staying rigid at 88px */}
+        
         <div className="shrink-0 aspect-square w-full max-w-[88px] flex items-center justify-center">
           <DonutChart data={data.chartData} size={88} colors={STATUS_COLORS} />
         </div>
 
-        {/* Middle: labels, centered within the remaining space */}
+        
         <div className="flex flex-col justify-between h-[88px] mx-auto min-w-0">
           {data.chartData.map((item) => (
             <div key={item.name} className="h-6 flex items-center gap-2 min-w-0">
@@ -49,7 +49,7 @@ export default function StatCard({ data }: StatCardProps) {
           ))}
         </div>
 
-        {/* Right: values, pinned right but clamped so it never forces overflow */}
+        
         <div className="flex flex-col justify-between h-[88px] items-end min-w-0">
           {data.chartData.map((item) => (
             <span
