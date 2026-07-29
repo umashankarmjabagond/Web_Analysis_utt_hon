@@ -1,6 +1,7 @@
 import { NavLink } from "react-router-dom";
-import { ROUTES } from "../../../constants/routes/routesConstant";
 import { Home, LayoutGrid } from "lucide-react";
+
+import { ROUTES } from "../../../constants/routes/routesConstant";
 
 const menus = [
   {
