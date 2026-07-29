@@ -4,8 +4,11 @@ import type {
   WorkflowData,
 } from "../../../../types/templateExecution";
 
-const LEFT_PADDING = 24;
-const EXECUTION_HEADER_WIDTH = 100;
+const LAYOUT = {
+  leftPadding: 24,
+  headerWidth: 160,
+  topPadding: 140,
+};
 
 export const createTemplateItemHeaderNode = ({
   itemId,
@@ -14,7 +17,7 @@ export const createTemplateItemHeaderNode = ({
   id: `execution-header-${itemId}`,
   type: "executionHeader",
   position: {
-    x: LEFT_PADDING,
+    x: LAYOUT.leftPadding,
     y,
   },
   draggable: false,
@@ -27,21 +30,53 @@ export const createTemplateItemHeaderNode = ({
 export const buildTemplateItemFlow = (
   itemId: string,
   flowData: WorkflowData,
+  prependHeader = false,
+): WorkflowData => {
+  const workFlowOrigin = {
+    x: prependHeader
+      ? LAYOUT.leftPadding + LAYOUT.headerWidth
+      : LAYOUT.leftPadding,
+    y: LAYOUT.topPadding,
+  };
+
+  const positionedFlow = positionWorkflow(flowData, workFlowOrigin);
+
+  if (!prependHeader) {
+    return positionedFlow;
+  }
+
+  return prependExecutionHeader(itemId, positionedFlow);
+};
+
+const positionWorkflow = (
+  flowData: WorkflowData,
+  workFlowOrigin: { x: number; y: number },
 ): WorkflowData => {
   const firstNode = flowData.nodes[0];
 
+  const deltaX = workFlowOrigin.x - firstNode.position.x;
+  const deltaY = workFlowOrigin.y - firstNode.position.y;
+
+  return {
+    nodes: flowData.nodes.map((node) => ({
+      ...node,
+      position: {
+        x: node.position.x + deltaX,
+        y: node.position.y + deltaY,
+      },
+    })),
+    edges: flowData.edges,
+  };
+};
+
+const prependExecutionHeader = (
+  itemId: string,
+  flowData: WorkflowData,
+): WorkflowData => {
+  const firstNode = flowData.nodes[0];
   const nodeHeight = firstNode.measured?.height ?? 72;
 
-  // calculate checkbox center position
   const centeredY = firstNode.position.y + nodeHeight / 2;
-
-  const shiftedNodes = flowData.nodes.map((node) => ({
-    ...node,
-    position: {
-      ...node.position,
-      x: node.position.x + LEFT_PADDING + EXECUTION_HEADER_WIDTH,
-    },
-  }));
 
   return {
     nodes: [
@@ -49,7 +84,7 @@ export const buildTemplateItemFlow = (
         itemId,
         y: centeredY,
       }),
-      ...shiftedNodes,
+      ...flowData.nodes,
     ],
     edges: flowData.edges,
   };

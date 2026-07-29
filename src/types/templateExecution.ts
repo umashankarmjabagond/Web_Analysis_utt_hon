@@ -7,6 +7,15 @@ export interface WorkflowData {
   edges: Edge[];
 }
 
+export interface ExexutionWorkflowResponse {
+  asset: {
+    id: string;
+    name: string;
+    type: string;
+  };
+  workflow: WorkflowData;
+}
+
 export interface TemplateExecutionWorkflow {
   itemId: string;
   workflow: WorkflowData;

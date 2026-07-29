@@ -12,9 +12,14 @@ export const buildTemplateCanvas = (
 ): WorkflowData => {
   const nodes: Node[] = [];
   const edges: Edge[] = [];
+  const PREPEND_HEADER = true;
 
   workflows.forEach((workflow, index) => {
-    const canvas = buildTemplateItemFlow(workflow.itemId, workflow.workflow);
+    const canvas = buildTemplateItemFlow(
+      workflow.itemId,
+      workflow.workflow,
+      PREPEND_HEADER,
+    );
 
     const shiftedNodes = shiftNodes(canvas.nodes, index * ROW_HEIGHT);
 

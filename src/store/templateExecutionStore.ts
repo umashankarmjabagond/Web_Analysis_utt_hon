@@ -2,28 +2,40 @@ import type { Edge, Node } from "@xyflow/react";
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 
+export const EXECUTION_STATUS = {
+  IDLE: "idle",
+  EXECUTE: "execute",
+  PAUSE: "pause",
+  DELETE: "delete",
+} as const;
+
+export type ExecutionItemType = "unit" | "asset";
 export type ExecutionStatus =
+  (typeof EXECUTION_STATUS)[keyof typeof EXECUTION_STATUS];
+
+export type NodeExecutionStatus =
   | "not-started"
   | "pending"
   | "in-progress"
   | "completed";
 
-interface TemplateInfo {
+interface SelectedExecutionItem {
   id: string;
   name: string;
-  type: string;
+  type: ExecutionItemType;
 }
 
 interface TemplateExecutionState {
   nodes: Node[];
   edges: Edge[];
-  templateInfo: TemplateInfo | null;
+  selectedExecutionItem: SelectedExecutionItem | null;
   selectedNodeIds: string[];
   selectedExecutionIds: string[];
   executionStatus: ExecutionStatus;
   setNodes: (nodes: Node[]) => void;
   setEdges: (edges: Edge[]) => void;
-  setTemplateInfo: (template: TemplateInfo) => void;
+  setSelectedExecutionItem: (item: SelectedExecutionItem) => void;
+  setExecutionStatus: (sttaus: ExecutionStatus) => void;
   updateNode: (nodeId: string, changes: Partial<Node>) => void;
   toggleSelectedNode: (nodeId: string) => void;
   toggleExecution: (itemId: string) => void;
@@ -34,18 +46,22 @@ export const useTemplateExecutionStore = create<TemplateExecutionState>()(
   immer((set) => ({
     nodes: [],
     edges: [],
-    templateInfo: null,
+    selectedExecutionItem: null,
     selectedNodeIds: [],
     selectedExecutionIds: [],
-    executionStatus: "not-started",
+    executionStatus: "idle",
 
     setNodes: (nodes) => set({ nodes }),
     setEdges: (edges) => set({ edges }),
 
-    setTemplateInfo: (template) => {
+    setSelectedExecutionItem: (item) => {
       set((state) => {
-        state.templateInfo = template;
+        state.selectedExecutionItem = item;
       });
+    },
+
+    setExecutionStatus: (status) => {
+      set({ executionStatus: status });
     },
 
     updateNode: (nodeId, changes) => {
