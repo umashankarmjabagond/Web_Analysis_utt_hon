@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { BaseEdge } from "@xyflow/react";
-import type { EdgeProps } from "@xyflow/react";
+import { BaseEdge, type EdgeProps } from "@xyflow/react";
 import { Plus } from "lucide-react";
 
 interface WorkflowEdgeProps extends EdgeProps {

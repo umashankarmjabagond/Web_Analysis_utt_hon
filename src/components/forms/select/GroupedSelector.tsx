@@ -1,12 +1,10 @@
 import { useEffect, useRef, useState, type FC } from "react";
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { ChevronDown, ChevronUp, FileText } from "lucide-react";
 import clsx from "clsx";
 import type {
   GroupedSelectorItem,
   GroupedSelectorProps,
 } from "../../../types/commonTypes";
-
-import { FileText } from "lucide-react";
 
 const GroupedSelector: FC<GroupedSelectorProps> = ({
   placeholder = "Select an option",

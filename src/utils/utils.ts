@@ -1,6 +1,4 @@
-import { MarkerType } from "@xyflow/react";
-
-import type { Edge } from "@xyflow/react";
+import { MarkerType, type Edge } from "@xyflow/react";
 import type {
   BackendElement,
   BackendWorkflow,
@@ -126,7 +124,6 @@ export const flowToBackend = (
     Elements: elements,
   };
 };
-
 
 /* -------------------------------------------------------------------------- */
 /*                           filterTree                                       */

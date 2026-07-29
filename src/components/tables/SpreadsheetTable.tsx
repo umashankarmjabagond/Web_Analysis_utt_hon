@@ -1,5 +1,5 @@
 interface SpreadsheetProps {
-  data: any[];
+  data: Array<Record<string, unknown>> | unknown[][];
 }
 
 const getExcelColumn = (index: number): string => {
@@ -25,8 +25,8 @@ const SpreadsheetTable = ({ data }: SpreadsheetProps) => {
   }
 
   // Convert object rows into array rows
-  const rows: any[][] = Array.isArray(data[0])
-    ? data
+  const rows: unknown[][] = Array.isArray(data[0])
+    ? (data as unknown[][])
     : data.map((item) => Object.values(item));
 
   const totalColumns = Math.max(...rows.map((r) => r.length));

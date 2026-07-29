@@ -1,6 +1,5 @@
 import React from "react";
 import { XCircle, AlertTriangle, Info, X } from "lucide-react";
-import Button from "../../forms/button/Button";
 
 export type NotificationType = "success" | "failure" | "warning" | "info";
 
