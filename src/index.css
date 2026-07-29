@@ -39,6 +39,12 @@
   --app-node-error-tint: #ff644c4d;
   --app-node-error-border: #ff644c;
 
+  /* Workflow Node Selection */
+  --app-node-selection-success-tint: #68d5604d;
+  --app-node-selection-success-border: #68d560;
+  --app-node-selection-tint: #afddf533;
+  --app-node-selection-border: #64c3ff;
+
   /* Workflow Edge */
   --app-default-edge: #909090;
 
@@ -243,6 +249,16 @@
   --color-app-node-error-background: var(--app-node-error-background);
   --color-app-node-error-tint: var(--app-node-error-tint);
   --color-app-node-error-border: var(--app-node-error-border);
+
+  /* Workflow Node Selection */
+  --color-app-node-selection-success-tint: var(
+    --app-node-selection-success-tint
+  );
+  --color-app-node-selection-success-border: var(
+    --app-node-selection-success-border
+  );
+  --app-node-selection-tint: var(--app-node-selection-tint);
+  --color-app-node-selection-border: var(--app-node-selection-border);
 
   /* Workflow Edge */
   --color-app-default-edge: var(--app-default-edge);

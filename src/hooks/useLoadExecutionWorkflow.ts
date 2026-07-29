@@ -11,7 +11,7 @@ export const useLoadExecutionWorkflow = (
   templateId: string,
   itemId?: string,
 ) => {
-  const loadWorkFlow = useTemplateExecutionStore((state) => state.loadWorkFlow);
+  const loadWorkflow = useTemplateExecutionStore((state) => state.loadWorkflow);
   const setSelectedExecutionItem = useTemplateExecutionStore(
     (state) => state.setSelectedExecutionItem,
   );
@@ -27,7 +27,7 @@ export const useLoadExecutionWorkflow = (
         const canvas = buildTemplateItemFlow(itemId, response.workflow);
 
         setSelectedExecutionItem(response.asset);
-        loadWorkFlow(canvas.nodes, canvas.edges);
+        loadWorkflow(canvas.nodes, canvas.edges);
       } else {
         // TODO: Load all execution workflows for template
         const response = await getTemplateExecutionWorkflows(templateId);
@@ -35,10 +35,10 @@ export const useLoadExecutionWorkflow = (
         const canvas = buildTemplateCanvas(response.workflows);
 
         setSelectedExecutionItem(response.template);
-        loadWorkFlow(canvas.nodes, canvas.edges);
+        loadWorkflow(canvas.nodes, canvas.edges);
       }
     };
 
     loadExecutionData();
-  }, [templateId, itemId, loadWorkFlow, setSelectedExecutionItem]);
+  }, [templateId, itemId, loadWorkflow, setSelectedExecutionItem]);
 };

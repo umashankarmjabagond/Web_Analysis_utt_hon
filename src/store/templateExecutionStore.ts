@@ -1,45 +1,41 @@
 import type { Edge, Node } from "@xyflow/react";
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
-
-export const EXECUTION_STATUS = {
-  IDLE: "idle",
-  EXECUTE: "execute",
-  PAUSE: "pause",
-  DELETE: "delete",
-} as const;
-
-export type ExecutionItemType = "unit" | "asset";
-export type ExecutionStatus =
-  (typeof EXECUTION_STATUS)[keyof typeof EXECUTION_STATUS];
-
-export type NodeExecutionStatus =
-  | "not-started"
-  | "pending"
-  | "in-progress"
-  | "completed";
-
-interface SelectedExecutionItem {
-  id: string;
-  name: string;
-  type: ExecutionItemType;
-}
+import {
+  EXECUTION_ACTION,
+  type ExecutionAction,
+  type ExecutionItem,
+} from "../types/templateExecution";
 
 interface TemplateExecutionState {
+  // Workflow
   nodes: Node[];
-  edges: Edge[];
-  selectedExecutionItem: SelectedExecutionItem | null;
-  selectedNodeIds: string[];
-  selectedExecutionIds: string[];
-  executionStatus: ExecutionStatus;
   setNodes: (nodes: Node[]) => void;
+
+  edges: Edge[];
   setEdges: (edges: Edge[]) => void;
-  setSelectedExecutionItem: (item: SelectedExecutionItem) => void;
-  setExecutionStatus: (sttaus: ExecutionStatus) => void;
+
+  // Context
+  selectedExecutionItem: ExecutionItem | null; // Unit or Asset
+  setSelectedExecutionItem: (item: ExecutionItem) => void;
+
+  // Selection
+  selectedNodeIds: string[];
+  handleNodeSelection: (nodeId: string) => void;
+
+  selectedRowIds: string[];
+  toggleSelectedRow: (rowId: string) => void;
+
+  isNodeDrawerOpen: boolean;
+  setNodeDrawerOpen: (isOpen: boolean) => void;
+
+  // Toolbar
+  executionAction: ExecutionAction;
+  setExecutionAction: (sttaus: ExecutionAction) => void;
+
+  // Workflow Operations
   updateNode: (nodeId: string, changes: Partial<Node>) => void;
-  toggleSelectedNode: (nodeId: string) => void;
-  toggleExecution: (itemId: string) => void;
-  loadWorkFlow: (nodes: Node[], edges: Edge[]) => void;
+  loadWorkflow: (nodes: Node[], edges: Edge[]) => void;
 }
 
 export const useTemplateExecutionStore = create<TemplateExecutionState>()(
@@ -48,8 +44,9 @@ export const useTemplateExecutionStore = create<TemplateExecutionState>()(
     edges: [],
     selectedExecutionItem: null,
     selectedNodeIds: [],
-    selectedExecutionIds: [],
-    executionStatus: "idle",
+    selectedRowIds: [],
+    executionAction: EXECUTION_ACTION.IDLE,
+    isNodeDrawerOpen: false,
 
     setNodes: (nodes) => set({ nodes }),
     setEdges: (edges) => set({ edges }),
@@ -60,8 +57,14 @@ export const useTemplateExecutionStore = create<TemplateExecutionState>()(
       });
     },
 
-    setExecutionStatus: (status) => {
-      set({ executionStatus: status });
+    setExecutionAction: (status) => {
+      set({ executionAction: status });
+    },
+
+    setNodeDrawerOpen: (isOpen) => {
+      set((state) => {
+        state.isNodeDrawerOpen = isOpen;
+      });
     },
 
     updateNode: (nodeId, changes) => {
@@ -73,7 +76,7 @@ export const useTemplateExecutionStore = create<TemplateExecutionState>()(
       });
     },
 
-    toggleSelectedNode: (nodeId) => {
+    handleNodeSelection: (nodeId) => {
       set((state) => {
         const index = state.selectedNodeIds.indexOf(nodeId);
 
@@ -81,24 +84,33 @@ export const useTemplateExecutionStore = create<TemplateExecutionState>()(
           state.selectedNodeIds.splice(index, 1);
         } else {
           state.selectedNodeIds.push(nodeId);
+          state.isNodeDrawerOpen = true;
         }
       });
     },
 
-    toggleExecution: (itemId) => {
+    toggleSelectedRow: (rowId) => {
       set((state) => {
-        const index = state.selectedExecutionIds.indexOf(itemId);
+        const index = state.selectedRowIds.indexOf(rowId);
 
         if (index >= 0) {
-          state.selectedExecutionIds.splice(index, 1);
+          state.selectedRowIds.splice(index, 1);
         } else {
-          state.selectedExecutionIds.push(itemId);
+          state.selectedRowIds.push(rowId);
         }
       });
     },
 
-    loadWorkFlow: (nodes, edges) => {
-      set({ nodes, edges });
+    loadWorkflow: (nodes, edges) => {
+      set((state) => {
+        state.nodes = nodes;
+        state.edges = edges;
+
+        // Reset transient UI state
+        state.selectedNodeIds = [];
+        state.selectedRowIds = [];
+        state.isNodeDrawerOpen = false;
+      });
     },
   })),
 );

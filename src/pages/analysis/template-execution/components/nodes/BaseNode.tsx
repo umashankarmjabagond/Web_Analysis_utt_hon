@@ -11,8 +11,8 @@ export default function BaseNode({ id, data, type }: NodeProps<BaseFlowNode>) {
   const checked = useTemplateExecutionStore((state) =>
     state.selectedNodeIds.includes(id),
   );
-  const toggleSelectedNode = useTemplateExecutionStore(
-    (state) => state.toggleSelectedNode,
+  const handleNodeSelection = useTemplateExecutionStore(
+    (state) => state.handleNodeSelection,
   );
 
   const nodeMeta = NODE_TYPES[type as NodeType];
@@ -20,7 +20,7 @@ export default function BaseNode({ id, data, type }: NodeProps<BaseFlowNode>) {
 
   const Icon = nodeMeta.icon;
 
-  const statusStyles = {
+  const nodeStatusStyles = {
     default: {
       background: "bg-app-default-node",
       border: "border-app-divider",
@@ -41,22 +41,43 @@ export default function BaseNode({ id, data, type }: NodeProps<BaseFlowNode>) {
       border: "border-app-node-error-border",
       tint: "bg-app-node-error-tint",
     },
-  };
+  } as const;
 
-  const styles = statusStyles[data.status];
+  const nodeSelectionStyles = {
+    default: {
+      border: "border-app-node-selection-border",
+      tint: "bg-app-node-selection-tint",
+    },
+    success: {
+      border: "border-app-node-selection-success-border",
+      tint: "bg-app-node-selection-success-tint",
+    },
+    warning: {
+      border: "border-app-node-selection-border",
+      tint: "bg-app-node-selection-tint",
+    },
+    error: {
+      border: "border-app-node-selection-border",
+      tint: "bg-app-node-selection-tint",
+    },
+  } as const;
 
-  const handleNodeSelection = (nodeId: string) => {
-    toggleSelectedNode(nodeId);
+  const statusStyle = nodeStatusStyles[data.status];
+  const selectionStyle = nodeSelectionStyles[data.status];
+
+  const nodeStyle = {
+    background: statusStyle.background,
+    border: checked ? selectionStyle.border : statusStyle.border,
+    tint: checked ? selectionStyle.tint : statusStyle.tint,
   };
 
   return (
     <div
-      className={`group nodrag nopan relative w-20 min-w-20 min-h-22 rounded-[4px] px-2 py-3 overflow-hidden border cursor-pointer ${styles.background} ${styles.border}`}
-      onClick={() => handleNodeSelection(id)}
+      className={`group nodrag nopan relative w-20 min-w-20 min-h-22 rounded-[4px] px-2 py-3 overflow-hidden border cursor-pointer ${nodeStyle.background} ${nodeStyle.border}`}
     >
-      {styles.tint && (
+      {nodeStyle.tint && (
         <div
-          className={`absolute inset-0 pointer-events-none ${styles.tint}`}
+          className={`absolute inset-0 pointer-events-none ${nodeStyle.tint}`}
         />
       )}
 

@@ -1,5 +1,10 @@
 import { useMemo, useState } from "react";
-import { Background, BackgroundVariant, ReactFlow } from "@xyflow/react";
+import {
+  Background,
+  BackgroundVariant,
+  ReactFlow,
+  type NodeMouseHandler,
+} from "@xyflow/react";
 
 import { nodeTypes } from "./nodes/nodeTypes";
 import { useTemplateExecutionStore } from "../../../../store/templateExecutionStore";
@@ -15,9 +20,19 @@ export default function WorkflowCanvas() {
   const nodes = useTemplateExecutionStore((state) => state.nodes);
   const edges = useTemplateExecutionStore((state) => state.edges);
 
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const handleNodeSelection = useTemplateExecutionStore(
+    (state) => state.handleNodeSelection,
+  );
+
+  const isNodeDrawerOpen = useTemplateExecutionStore(
+    (state) => state.isNodeDrawerOpen,
+  );
+
+  const setNodeDrawerOpen = useTemplateExecutionStore(
+    (state) => state.setNodeDrawerOpen,
+  );
+
   const [activeTab, setActiveTab] = useState("table");
-  // const [selectedNode, setSelectedNode] = useState<Node | null>(null);
 
   const tabs = useMemo(
     () => [
@@ -47,9 +62,13 @@ export default function WorkflowCanvas() {
   const activeTabItem = tabs.find((tab) => tab.id === activeTab);
   const ActiveTabComponent = activeTabItem?.component;
 
-  const handleNodeClick = () => {
-    // setSelectedNode(node);
-    setIsDrawerOpen(true);
+  const handleNodeClick: NodeMouseHandler = (_, node) => {
+    if (node.type === "executionHeader") {
+      return;
+    }
+
+    // Open Drawer
+    handleNodeSelection(node.id);
   };
 
   return (
@@ -73,10 +92,10 @@ export default function WorkflowCanvas() {
         </ReactFlow>
       </div>
 
-      {isDrawerOpen && (
+      {isNodeDrawerOpen && (
         <Drawer
-          opened={isDrawerOpen}
-          onClose={() => setIsDrawerOpen(false)}
+          opened={isNodeDrawerOpen}
+          onClose={() => setNodeDrawerOpen(false)}
           position="bottom"
           size="xl"
           title={

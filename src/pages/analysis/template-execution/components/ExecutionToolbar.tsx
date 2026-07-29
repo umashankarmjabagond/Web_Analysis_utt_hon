@@ -2,22 +2,20 @@ import { CirclePause, CirclePlay, Trash } from "lucide-react";
 import ToolbarExecutionButton from "./ToolbarExecutionButton";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../../../constants/routes/routesConstant";
-import {
-  EXECUTION_STATUS,
-  useTemplateExecutionStore,
-} from "../../../../store/templateExecutionStore";
+import { useTemplateExecutionStore } from "../../../../store/templateExecutionStore";
 import Badge from "../../../../components/common/badge/Badge";
+import { EXECUTION_ACTION } from "../../../../types/templateExecution";
 
 export default function ExecutionToolbar() {
   const navigate = useNavigate();
   const selectedExecutionItem = useTemplateExecutionStore(
     (state) => state.selectedExecutionItem,
   );
-  const executionStatus = useTemplateExecutionStore(
-    (state) => state.executionStatus,
+  const executionAction = useTemplateExecutionStore(
+    (state) => state.executionAction,
   );
-  const setExecutionStatus = useTemplateExecutionStore(
-    (state) => state.setExecutionStatus,
+  const setExecutionAction = useTemplateExecutionStore(
+    (state) => state.setExecutionAction,
   );
 
   const name = selectedExecutionItem?.name;
@@ -25,22 +23,22 @@ export default function ExecutionToolbar() {
 
   const handleExecute = () => {
     // To do API integration
-    setExecutionStatus(EXECUTION_STATUS.EXECUTE);
+    setExecutionAction(EXECUTION_ACTION.EXECUTE);
     alert("Start Executing ?");
   };
 
   const handlePause = () => {
     // To do API integration
-    setExecutionStatus(EXECUTION_STATUS.PAUSE);
+    setExecutionAction(EXECUTION_ACTION.PAUSE);
     alert("Pause execution ?");
   };
 
   const handleDelete = () => {
     // To do API integration
-    setExecutionStatus(EXECUTION_STATUS.DELETE);
+    setExecutionAction(EXECUTION_ACTION.DELETE);
     alert("Delete Workflow ?");
     setTimeout(() => {
-      setExecutionStatus(EXECUTION_STATUS.IDLE);
+      setExecutionAction(EXECUTION_ACTION.IDLE);
     }, 1000);
   };
 
@@ -66,19 +64,19 @@ export default function ExecutionToolbar() {
         <ToolbarExecutionButton
           icon={CirclePlay}
           label="Execute"
-          active={executionStatus === EXECUTION_STATUS.EXECUTE}
+          active={executionAction === EXECUTION_ACTION.EXECUTE}
           onClick={handleExecute}
         />
         <ToolbarExecutionButton
           icon={CirclePause}
           label="Pause"
-          active={executionStatus === EXECUTION_STATUS.PAUSE}
+          active={executionAction === EXECUTION_ACTION.PAUSE}
           onClick={handlePause}
         />
         <ToolbarExecutionButton
           icon={Trash}
           label="Delete"
-          active={executionStatus === EXECUTION_STATUS.DELETE}
+          active={executionAction === EXECUTION_ACTION.DELETE}
           onClick={handleDelete}
         />
       </div>
