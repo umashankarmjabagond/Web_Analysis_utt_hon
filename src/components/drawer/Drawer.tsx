@@ -1,10 +1,11 @@
+import { X } from "lucide-react";
 import { type ReactNode, useEffect } from "react";
 
 interface DrawerProps {
   opened: boolean;
   onClose: () => void;
   children: ReactNode;
-  title?: ReactNode;
+  title?: ReactNode | string;
   footer?: ReactNode;
   position?: "left" | "right" | "top" | "bottom";
   size?: "sm" | "md" | "lg" | "xl" | "full";
@@ -90,21 +91,39 @@ const Drawer = ({
 
       <div
         style={drawerStyle}
-        className={`dark absolute ${panel} ${opened ? open : close} z-50 flex flex-col bg-[var(--color-table-header)] text-[var(--color-text-primary)] shadow-2xl transition-transform duration-300 ${className}`}
+        className={`dark absolute ${panel} ${opened ? open : close} z-50 flex flex-col border border-[var(--app-divider)] bg-[var(--color-table-header)] text-[var(--color-text-primary)] shadow-2xl transition-transform duration-300 ${className}`}
       >
-        <div className="flex items-center gap-2 px-3 shrink-0">
-          <div className="flex-1">
-            {title && <h2 className="text-lg font-semibold">{title}</h2>}
-          </div>
+        {title && (
+          <div className="flex shrink-0 items-center border border-[var(--app-divider)] bg-[var(--background-primary-container)]">
+            <div className="min-w-0 flex-1 overflow-hidden">
+              {typeof title === "string" ? (
+                <h2 className="px-4 py-3 text-lg font-semibold">{title}</h2>
+              ) : (
+                title
+              )}
+            </div>
 
-          <button
-            onClick={onClose}
-            aria-label="Close drawer"
-            className="flex h-8 w-8 items-center justify-center rounded-[var(--radius-sm)] text-xl text-[var(--color-text-secondary)] transition-colors hover:bg-[var(--color-surface)] hover:text-[var(--color-primary)]"
-          >
-            ×
-          </button>
-        </div>
+            <button
+              onClick={onClose}
+              aria-label="Close drawer"
+              className="
+                flex
+                h-[34px]
+                w-[32px]
+                shrink-0
+                items-center
+                justify-center
+                p-2
+                text-[var(--color-text-secondary)]
+                transition-colors
+                hover:bg-[var(--color-surface)]
+                hover:text-[var(--color-primary)]
+                "
+            >
+              <X size={16} strokeWidth={2} />
+            </button>
+          </div>
+        )}
 
         <div
           className={`flex flex-1 flex-col overflow-hidden ${bodyClassName}`}

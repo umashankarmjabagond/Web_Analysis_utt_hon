@@ -39,7 +39,7 @@ const SpreadsheetTable = ({ data }: SpreadsheetProps) => {
         overflow-auto
         rounded-[var(--radius-sm)]
         border
-        border-[var(--color-table-border)]
+        border-[var(--color-border-1)]
         bg-[var(--color-table-row-odd)]
       "
     >
@@ -64,7 +64,7 @@ const SpreadsheetTable = ({ data }: SpreadsheetProps) => {
                 w-12
                 min-w-[48px]
                 border
-                border-[var(--color-table-border)]
+                border-[var(--color-border-1)]
                 bg-[var(--color-table-header)]
                 relative
               "
@@ -79,10 +79,12 @@ const SpreadsheetTable = ({ data }: SpreadsheetProps) => {
                   sticky
                   top-0
                   z-20
-                  h-8
-                  min-w-[140px]
+                  min-h-[8px]
+                  max-h-[48px]
+                  min-w-[80px]
+                  min-w-[120px]
                   border
-                  border-[var(--color-table-border)]
+                  border-[var(--color-border-1)]
                   bg-[var(--color-table-header)]
                   text-center
                   text-[13px]
@@ -102,6 +104,7 @@ const SpreadsheetTable = ({ data }: SpreadsheetProps) => {
               key={rowIndex}
               className="
                 bg-[var(--color-table-row-odd)]
+                !border-[var(--color-border-1)]
                 transition-colors
                 hover:bg-[var(--color-table-row-hover)]
               "
@@ -113,11 +116,12 @@ const SpreadsheetTable = ({ data }: SpreadsheetProps) => {
                   sticky
                   left-0
                   z-10
-                  h-8
-                  w-12
-                  min-w-[48px]
+                  min-h-[8px]
+                  max-h-[48px]
+                  min-w-[30px]
+                  max-w-[48px]
                   border
-                  border-[var(--color-table-border)]
+                  !border-[var(--color-border-1)]
                   bg-[var(--color-table-header)]
                   text-center
                   text-[13px]
@@ -136,11 +140,13 @@ const SpreadsheetTable = ({ data }: SpreadsheetProps) => {
                   contentEditable
                   suppressContentEditableWarning
                   className="
-                    h-8
-                    min-w-[140px]
+                    min-h-[8px]
+                    max-h-[48px]
+                    min-w-[80px]
+                    max-w-[120px]
                     border
-                    border-[var(--color-table-border)]
-                    bg-[var(--color-table-row-odd)]
+                    !border-[var(--color-border-1)]
+                    bg-[var(--background-primary-container)]
                     px-2
                     py-1
                     text-[13px]

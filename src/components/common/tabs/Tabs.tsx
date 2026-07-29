@@ -20,6 +20,7 @@ export function Tabs({
   activeTab,
   onTabChange,
   variant = "primary",
+  renderContent= true
 }: TabsProps) {
   const activeItem = items.find((item) => item.id === activeTab);
   const ActiveComponent = activeItem?.component;
@@ -65,7 +66,7 @@ export function Tabs({
         })}
       </div>
 
-      {!isNavigationTabs && ActiveComponent && (
+      {renderContent && !isNavigationTabs && ActiveComponent && (
         <div className="mt-4 h-full">
           <ActiveComponent />
         </div>

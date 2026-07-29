@@ -44,6 +44,8 @@ export default function WorkflowCanvas() {
     ],
     [],
   );
+  const activeTabItem = tabs.find((tab) => tab.id === activeTab);
+  const ActiveTabComponent = activeTabItem?.component;
 
   const handleNodeClick = () => {
     // setSelectedNode(node);
@@ -77,13 +79,17 @@ export default function WorkflowCanvas() {
           onClose={() => setIsDrawerOpen(false)}
           position="bottom"
           size="xl"
-        >
-          <div className="flex h-full flex-col">
+          title={
             <Tabs
               items={tabs}
               activeTab={activeTab}
               onTabChange={setActiveTab}
+              renderContent={false}
             />
+          }
+        >
+          <div className="h-full overflow-hidden">
+            {ActiveTabComponent && <ActiveTabComponent />}
           </div>
         </Drawer>
       )}
