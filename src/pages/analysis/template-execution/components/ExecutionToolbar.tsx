@@ -3,6 +3,7 @@ import ToolbarExecutionButton from "./ToolbarExecutionButton";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../../../constants/routes/routesConstant";
 import { useTemplateExecutionStore } from "../../../../store/templateExecutionStore";
+import Badge from "../../../../components/common/badge/Badge";
 
 export default function ExecutionToolbar() {
   const navigate = useNavigate();
@@ -14,11 +15,15 @@ export default function ExecutionToolbar() {
           {templateInfo?.name}
         </span>
 
-        {/* <Badge label="UNIT" variant="unit" /> */}
-        {/* TODO - Reusable */}
-        <span className="text-app-text-secondary border px-2 rounded-full">
-          Badge - {templateInfo?.type}
-        </span>
+        {templateInfo?.type && (
+          <Badge
+            variant="info"
+            fill="outline"
+            className="h-6 px-2 py-1 gap-1 rounded-2xl text-xs"
+          >
+            {templateInfo.type.toUpperCase()}
+          </Badge>
+        )}
       </div>
 
       <div className="flex h-8 w-[300px] items-center gap-2">

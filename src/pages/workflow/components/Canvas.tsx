@@ -3,6 +3,7 @@ import { useCallback, useEffect } from "react";
 import {
   Background,
   BackgroundVariant,
+  MarkerType,
   ReactFlow,
   useReactFlow,
 } from "@xyflow/react";
@@ -10,6 +11,7 @@ import {
 import type { Edge } from "@xyflow/react";
 
 import type {
+  WorkflowDragItem,
   WorkflowListItem,
   WorkflowNode,
 } from "../../../types/workFlowTypes";
@@ -17,6 +19,17 @@ import type {
 import Toolbar from "./toolbar/Toolbar";
 import { useWorkflowStore } from "../../../store/workflowStore";
 import { edgeTypes, nodeTypes } from "../../../types/workFlowTypes";
+
+import { backendToFlow } from "../../../utils/utils";
+
+import { useMemo, useState } from "react";
+import Dialog from "../../../components/common/dialogue/Dialog";
+import {
+  attributeCatalogSections,
+  dummyWorkflows,
+} from "../workflowPanelData ";
+
+import GroupedSelector from "../../../components/forms/select/GroupedSelector";
 
 /**
  * Generates a unique backend element name.
@@ -43,22 +56,40 @@ export default function Canvas() {
     nodes,
     edges,
     addNode,
+    setNodes,
+    setEdges,
     onNodesChange,
     onEdgesChange,
     onConnect,
     deleteSelectedNodes,
     deleteSelectedEdges,
     setSelectedNode,
+    setSelectedEdge,
+    selectedEdge,
     activeTool,
     saveHistory,
+    clearWorkflow,
   } = useWorkflowStore();
 
   const { screenToFlowPosition } = useReactFlow<WorkflowNode, Edge>();
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  useEffect(() => {
+    clearWorkflow();
+  }, [clearWorkflow]);
 
   const handleDragOver = useCallback((event: React.DragEvent) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = "move";
   }, []);
+
+  const handleEdgeInsert = useCallback(
+    (edge: { id: string; source: string; target: string }) => {
+      setSelectedEdge(edge as any);
+      setIsDialogOpen(true);
+    },
+    [setSelectedEdge],
+  );
 
   const handleDrop = useCallback(
     (event: React.DragEvent) => {
@@ -68,14 +99,40 @@ export default function Canvas() {
 
       if (!raw) return;
 
-      const item: WorkflowListItem = JSON.parse(raw);
+      const dragItem: WorkflowDragItem = JSON.parse(raw);
+
+      /**
+       * ==============================
+       * TEMPLATE DROP
+       * ==============================
+       */
+      if (dragItem.type === "template") {
+        const backendWorkflow = dummyWorkflows[dragItem.item.id];
+
+        if (!backendWorkflow) return;
+
+        const canvasWorkflow = backendToFlow(backendWorkflow);
+
+        setNodes(canvasWorkflow.nodes);
+        setEdges(canvasWorkflow.edges);
+
+        return;
+      }
+
+      /**
+       * ==============================
+       * ATTRIBUTE DROP
+       * ==============================
+       */
+
+      if (!dragItem.item.element) return;
 
       const position = screenToFlowPosition({
         x: event.clientX,
         y: event.clientY,
       });
 
-      const element = structuredClone(item.element);
+      const element = structuredClone(dragItem.item.element);
 
       element.Name = generateUniqueName(
         element.elementType,
@@ -84,20 +141,17 @@ export default function Canvas() {
 
       const node: WorkflowNode = {
         id: element.Name,
-
         type: "baseNode",
-
         position,
-
         data: {
-          label: item.title,
+          label: dragItem.item.title,
           element,
         },
       };
 
       addNode(node);
     },
-    [addNode, nodes, screenToFlowPosition],
+    [addNode, nodes, screenToFlowPosition, setNodes, setEdges],
   );
 
   const handleNodeClick = useCallback(
@@ -128,13 +182,86 @@ export default function Canvas() {
     saveHistory();
   }, [saveHistory]);
 
+  const flowEdges = useMemo(
+    () =>
+      edges.map((edge) => ({
+        ...edge,
+        data: {
+          ...(edge.data ?? {}),
+          onEdgeInsert: handleEdgeInsert,
+        },
+      })),
+    [edges, handleEdgeInsert],
+  );
+
+  const handleAddNewNode = (item: WorkflowListItem) => {
+    if (!selectedEdge || !item.element) return;
+
+    saveHistory();
+
+    const sourceNode = nodes.find((n) => n.id === selectedEdge.source);
+    const targetNode = nodes.find((n) => n.id === selectedEdge.target);
+
+    if (!sourceNode || !targetNode) return;
+
+    const element = structuredClone(item.element);
+
+    element.Name = generateUniqueName(
+      element.elementType,
+      nodes as WorkflowNode[],
+    );
+
+    const newNode: WorkflowNode = {
+      id: element.Name,
+      type: "baseNode",
+      position: {
+        x: (sourceNode.position.x + targetNode.position.x) / 2,
+        y: (sourceNode.position.y + targetNode.position.y) / 2,
+      },
+      data: {
+        label: item.title,
+        element,
+      },
+    };
+
+    const newEdges: Edge[] = [
+      ...edges.filter((edge) => edge.id !== selectedEdge.id),
+
+      {
+        id: `${sourceNode.id}-${newNode.id}`,
+        source: sourceNode.id,
+        target: newNode.id,
+        type: "workflow",
+        markerEnd: {
+          type: MarkerType.ArrowClosed,
+        },
+      },
+
+      {
+        id: `${newNode.id}-${targetNode.id}`,
+        source: newNode.id,
+        target: targetNode.id,
+        type: "workflow",
+        markerEnd: {
+          type: MarkerType.ArrowClosed,
+        },
+      },
+    ];
+
+    setNodes([...nodes, newNode]);
+    setEdges(newEdges);
+
+    setSelectedEdge(null);
+    setIsDialogOpen(false);
+  };
+
   return (
     <div className="h-full flex-1 bg-[#1f1f1f]">
       <Toolbar />
 
       <ReactFlow<WorkflowNode, Edge>
         nodes={nodes as WorkflowNode[]}
-        edges={edges}
+        edges={flowEdges}
         nodeTypes={nodeTypes}
         edgeTypes={edgeTypes}
         onNodesChange={onNodesChange}
@@ -155,7 +282,6 @@ export default function Canvas() {
         <Background variant={BackgroundVariant.Dots} gap={20} size={1} />
       </ReactFlow>
 
-      {/* Empty State */}
       {nodes.length === 0 && (
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
           <div className="max-w-md text-center">
@@ -171,6 +297,34 @@ export default function Canvas() {
           </div>
         </div>
       )}
+
+      <Dialog
+        isOpen={isDialogOpen}
+        title="Add Attribute"
+        subtitle="Workflow"
+        onClose={() => {
+          setIsDialogOpen(false);
+          setSelectedEdge(null);
+        }}
+        width={620}
+      >
+        <GroupedSelector
+          placeholder="Select an option"
+          sections={attributeCatalogSections.map((section) => ({
+            id: section.id,
+            title: section.title,
+            items: section.items.map((item) => ({
+              id: item.id,
+              label: item.title,
+              value: item,
+              icon: item.icon,
+            })),
+          }))}
+          onSelect={(item) => {
+            handleAddNewNode(item.value as WorkflowListItem);
+          }}
+        />
+      </Dialog>
     </div>
   );
 }

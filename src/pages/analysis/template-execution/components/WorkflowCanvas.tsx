@@ -71,17 +71,22 @@ export default function WorkflowCanvas() {
         </ReactFlow>
       </div>
 
-      {}
-      <Drawer
-        opened={isDrawerOpen}
-        onClose={() => setIsDrawerOpen(false)}
-        position="bottom"
-        size="xl"
-      >
-        <div className="flex h-full flex-col">
-          <Tabs items={tabs} activeTab={activeTab} onTabChange={setActiveTab} />
-        </div>
-      </Drawer>
+      {isDrawerOpen && (
+        <Drawer
+          opened={isDrawerOpen}
+          onClose={() => setIsDrawerOpen(false)}
+          position="bottom"
+          size="xl"
+        >
+          <div className="flex h-full flex-col">
+            <Tabs
+              items={tabs}
+              activeTab={activeTab}
+              onTabChange={setActiveTab}
+            />
+          </div>
+        </Drawer>
+      )}
     </>
   );
 }

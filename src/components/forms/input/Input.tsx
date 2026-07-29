@@ -11,7 +11,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   helperText?: string;
   fullWidth?: boolean;
   showPasswordToggle?: boolean;
-  startAdornment: ReactNode;
+  startAdornment?: ReactNode;
 }
 
 const variants = {

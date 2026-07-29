@@ -1,6 +1,10 @@
-import type { ComponentType, ReactNode, SelectHTMLAttributes, TextareaHTMLAttributes,
-  ButtonHTMLAttributes
- } from "react";
+import type {
+  ComponentType,
+  ReactNode,
+  SelectHTMLAttributes,
+  TextareaHTMLAttributes,
+  ButtonHTMLAttributes,
+} from "react";
 import type { DonutChartItem } from "./dashboardTypes";
 
 export interface BreadcrumbItem {
@@ -102,8 +106,7 @@ export interface SelectOption {
   value: string | number;
 }
 
-export interface SelectProps
-  extends SelectHTMLAttributes<HTMLSelectElement> {
+export interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
   label?: string;
   error?: string;
   helperText?: string;
@@ -112,16 +115,48 @@ export interface SelectProps
   placeHolder?: string;
 }
 
-export interface  TextAreaProps 
-  extends TextareaHTMLAttributes<HTMLTextAreaElement> {
-    label?: string;
-    error?: string;
-    helperText?: string;
-    fullWidth?: boolean;
+export interface TextAreaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
+  label?: string;
+  error?: string;
+  helperText?: string;
+  fullWidth?: boolean;
 }
 
-export interface IconButtonProps
-  extends ButtonHTMLAttributes<HTMLButtonElement> {
+export interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   icon: ReactNode;
   size?: "sm" | "md" | "lg";
+}
+
+type BadgeVariant = "neutral" | "success" | "warning" | "error" | "info";
+type BadgeSize = "xs" | "sm" | "md" | "lg";
+type BadgeAppearance = "solid" | "outline";
+
+export interface BadgeProps {
+  variant: BadgeVariant;
+  size?: BadgeSize;
+  fill?: BadgeAppearance;
+  icon?: React.ReactNode;
+  className?: string;
+  children: React.ReactNode;
+}
+
+export interface GroupedSelectorItem {
+  id: string;
+  label: string;
+  icon?: ReactNode;
+  value?: unknown;
+}
+
+export interface GroupedSelectorSection {
+  id: string;
+  title: string;
+  items: GroupedSelectorItem[];
+}
+
+export interface GroupedSelectorProps {
+  placeholder?: string;
+  sections: GroupedSelectorSection[];
+  onSelect: (item: GroupedSelectorItem) => void;
+  disabled?: boolean;
+  className?: string;
 }
