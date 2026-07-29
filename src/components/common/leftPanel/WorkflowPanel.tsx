@@ -12,17 +12,34 @@ import {
   attributeCatalogSections,
   catalogSections,
 } from "../../../pages/workflow/workflowPanelData ";
+import Input from "../../forms/input/Input";
 
 type CatalogTab = "templates" | "attributes";
 
 export default function WorkflowPanel() {
   const [activeTab, setActiveTab] = useState<CatalogTab>("templates");
+  const [search, setSearch] = useState("");
 
   const panelData = useMemo(
     () =>
       activeTab === "templates" ? catalogSections : attributeCatalogSections,
     [activeTab],
   );
+
+  const filteredPanelData = useMemo(() => {
+    if (!search.trim()) return panelData;
+
+    const query = search.toLowerCase();
+
+    return panelData
+      .map((section) => ({
+        ...section,
+        items: section.items.filter((item) =>
+          item.title.toLowerCase().includes(query),
+        ),
+      }))
+      .filter((section) => section.items.length > 0);
+  }, [panelData, search]);
 
   const handleDragStart = (
     event: React.DragEvent<HTMLDivElement>,
@@ -77,19 +94,20 @@ export default function WorkflowPanel() {
 
       {/* Search */}
       <div className="mt-4">
-        <div className="flex h-9 items-center rounded border border-[#6B6B6B] bg-[#2F2F2F] px-3">
-          <Search size={14} className="mr-2 text-[#B5B5B5]" />
-
-          <input
-            placeholder="Search..."
-            className="flex-1 bg-transparent text-[13px] text-white placeholder:text-[#A8A8A8] outline-none"
-          />
-        </div>
+        <Input
+          className="w-[288px] h-8 rounded-[4px] px-8 bg-app-surface border border-app-default-border-strong text-[14px] text-text-secondary"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Search..."
+          startAdornment={
+            <Search size={16} strokeWidth={2.5} color="#D0D0D0" />
+          }
+        />
       </div>
 
       {/* Sections */}
       <div className="mt-4 flex-1 space-y-4 overflow-y-auto pb-5">
-        {panelData.map((section) => (
+        {filteredPanelData.map((section) => (
           <Accordion
             key={section.title}
             title={section.title}
