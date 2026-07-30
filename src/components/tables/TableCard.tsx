@@ -38,19 +38,7 @@ function TableCard<T extends object>({
           {/* Title + Badge */}
 
           <div className="flex items-center gap-4 shrink-0">
-            <h2
-              className="
-              h-[24px]
-              whitespace-nowrap
-              text-[16px]
-              font-semibold
-              uppercase
-              tracking-[2px]
-              leading-[24px]
-              whitespace-nowrap
-              text-[var(--text-text-primary)]
-            "
-            >
+            <h2 className="h-[24px] whitespace-nowrap text-[16px] font-semibold uppercase tracking-[2px] leading-[24px] whitespace-nowrap text-[var(--text-text-primary)]">
               {title}
             </h2>
 

@@ -435,20 +435,6 @@ export default function Dashboard() {
             data={statusData}
             height="h-[344px]"
             border="border-[var(--color-button-text-primary)]"
-            headerActions={
-              <>
-                <Input />
-                <Input />
-                <Input />
-                <Input />
-                <Input />
-                <Input />
-                <Input />
-                <Input />
-                <Input />
-                <Input />
-              </>
-            }
           />
         </div>
       </div>
