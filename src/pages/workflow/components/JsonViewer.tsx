@@ -13,15 +13,15 @@ export default function JsonViewer() {
   }, [nodes, edges]);
 
   return (
-    <div className="flex h-full w-96 flex-col border-l border-[#444] bg-[#1F1F1F]">
+    <div className="flex h-full w-96 flex-col border-l border-component-toolbar-divider bg-app-background">
       {/* Header */}
-      <div className="border-b border-[#444] p-4">
+      <div className="border-b border-component-toolbar-divider p-4">
         <h2 className="text-lg font-semibold text-white">Workflow JSON</h2>
       </div>
 
       {/* Content */}
       <div className="flex-1 overflow-y-auto p-4">
-        <pre className="rounded bg-[#2B2B2B] p-3 text-xs text-green-300">
+        <pre className="rounded bg-app-code-background p-3 text-xs text-green-300">
           {JSON.stringify(backendJson, null, 2)}
         </pre>
 
@@ -29,7 +29,7 @@ export default function JsonViewer() {
           Selected Element
         </h2>
 
-        <pre className="rounded bg-[#2B2B2B] p-3 text-xs text-blue-300">
+        <pre className="rounded bg-app-code-background p-3 text-xs text-blue-300">
           {JSON.stringify(
             (selectedNode as WorkflowNode | null)?.data?.element ?? null,
             null,

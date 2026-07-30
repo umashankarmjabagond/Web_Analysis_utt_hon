@@ -99,11 +99,11 @@ export default function Toolbar() {
   };
 
   return (
-    <div className="flex h-12 items-center justify-between border-b border-[#3D3D3D] bg-[#232323] px-3">
+    <div className="flex h-12 items-center justify-between rounded-[6px] border border-app-divider bg-component-toolbar-background px-3">
       {/* LEFT */}
-
+      
       <div className="flex items-center gap-2">
-        <div className="flex items-center gap-2 border-r border-[#444] pr-4 text-sm text-white">
+        <div className="flex items-center w-[141px] gap-2 border-r border-component-toolbar-divider pr-4 text-sm text-white">
           <ArrowLeft
             className="cursor-pointer"
             onClick={() => navigate(ROUTES.DASHBOARD)}
@@ -153,12 +153,12 @@ export default function Toolbar() {
       {/* RIGHT */}
 
       <div className="flex items-center gap-6 text-sm">
-        <button className="flex items-center gap-1 text-[#55AFFF] hover:text-white transition-colors">
+        <button className="flex items-center gap-1 text-app-action-primary text-sm hover:text-white transition-colors">
           <Upload size={15} />
           Import Template
         </button>
 
-        <button className="flex items-center gap-1 text-[#55AFFF] hover:text-white transition-colors">
+        <button className="flex items-center gap-1 text-app-default-border text-sm hover:text-white transition-colors">
           <Download size={15} />
           Export Template
         </button>
@@ -212,6 +212,7 @@ export default function Toolbar() {
       >
         <div className="flex flex-col gap-6 text-sm">
           <Input
+           className="w-[288px] h-8 rounded bg-app-surface border border-search-border text-[14px] text-white"
             label="Template Name"
             value={templateName}
             onChange={(e) => setTemplateName(e.target.value)}

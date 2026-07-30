@@ -254,8 +254,10 @@ export default function Canvas() {
   };
 
   return (
-    <div className="h-full flex-1 bg-[#1f1f1f]">
-      <Toolbar />
+    <div className="relative h-full flex-1 bg-app-surface">
+      <div className="absolute left-4 right-3 top-5 z-10">
+        <Toolbar />
+      </div>
 
       <ReactFlow<WorkflowNode, Edge>
         nodes={nodes as WorkflowNode[]}
@@ -276,6 +278,7 @@ export default function Canvas() {
         nodesConnectable
         connectOnClick={activeTool === "connect"}
         onNodeDragStart={handleNodeDragStart}
+        proOptions={{ hideAttribution: true }}
       >
         <Background variant={BackgroundVariant.Dots} gap={20} size={1} />
       </ReactFlow>
@@ -283,11 +286,11 @@ export default function Canvas() {
       {nodes.length === 0 && (
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
           <div className="max-w-md text-center">
-            <h2 className="text-4xl font-medium text-gray-300">
+            <h2 className="text-4xl font-medium text-app-default-border">
               Create New Template
             </h2>
 
-            <p className="mt-4 text-sm leading-6 text-gray-500">
+            <p className="mt-4 text-base leading-6 text-app-default-border">
               Create a template from scratch using attributes or predefined
               templates as base from the left pane, customize it to your
               requirements, and save it as a custom template.

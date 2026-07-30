@@ -59,21 +59,21 @@ export default function WorkflowPanel() {
   };
 
   return (
-    <div className="flex h-full flex-col bg-[#2B2B2B]">
+    <div className="flex h-full flex-col bg-app-code-background">
       {/* Header */}
       <div>
-        <h3 className="mb-4 text-[12px] font-semibold uppercase tracking-[2.5px] text-[#F5F5F5]">
+        <h3 className="mb-4 text-[12px] font-semibold uppercase tracking-[2.5px] text-button-secondary">
           Catalog
         </h3>
 
         {/* Tabs */}
-        <div className="flex rounded bg-[#5A5A5A] p-0.5">
+        <div className="flex w-[193px] h-7 rounded-[4px] p-[2px] gap-1 bg-[#505050] shadow-[inset_1px_1px_1px_0px_rgba(0,0,0,0.15)]">
           <button
             onClick={() => setActiveTab("templates")}
-            className={`flex-1 rounded px-3 py-1.5 text-[13px] font-medium transition ${
+            className={`flex-1 w-[94px] h-6 rounded-[3px]  border px-3 py-[2px] gap-[10px] text-[13px] font-medium transition ${
               activeTab === "templates"
-                ? "bg-[#3F3F3F] text-white shadow"
-                : "text-[#D0D0D0]"
+                ? "bg-button-text-primary border-component-segmented-control-selected-border box-shadow: 1px 1px 1px 0px #00000026 text-white shadow"
+                : "text-app-text-secondary border-transparent"
             }`}
           >
             Templates
@@ -81,10 +81,10 @@ export default function WorkflowPanel() {
 
           <button
             onClick={() => setActiveTab("attributes")}
-            className={`flex-1 rounded px-3 py-1.5 text-[13px] font-medium transition ${
+            className={`flex-1 w-[94px] h-6 rounded-[3px] border rounded px-3 py-[2px] gap-[10px] text-[13px] font-medium transition ${
               activeTab === "attributes"
-                ? "bg-[#3F3F3F] text-white shadow"
-                : "text-[#D0D0D0]"
+                ? "bg-button-text-primary border-component-segmented-control-selected-border box-shadow: 1px 1px 1px 0px #00000026 text-white shadow"
+                : "text-app-text-secondary border-transparent"
             }`}
           >
             Attributes
@@ -95,13 +95,11 @@ export default function WorkflowPanel() {
       {/* Search */}
       <div className="mt-4">
         <Input
-          className="w-[288px] h-8 rounded-[4px] px-8 bg-app-surface border border-app-default-border-strong text-[14px] text-text-secondary"
+          className="w-[288px] h-8 rounded px-8 bg-app-surface border border-search-border text-[14px] text-text-secondary"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Search..."
-          startAdornment={
-            <Search size={16} strokeWidth={2.5} color="#D0D0D0" />
-          }
+          startAdornment={<Search size={16} strokeWidth={2.5} />}
         />
       </div>
 
