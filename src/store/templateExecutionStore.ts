@@ -4,13 +4,14 @@ import { immer } from "zustand/middleware/immer";
 import {
   EXECUTION_ACTION,
   type ExecutionAction,
+  type ExecutionFlowNode,
   type ExecutionItem,
 } from "../types/templateExecution";
 
 interface TemplateExecutionState {
   // Workflow
-  nodes: Node[];
-  setNodes: (nodes: Node[]) => void;
+  nodes: ExecutionFlowNode[];
+  setNodes: (nodes: ExecutionFlowNode[]) => void;
 
   edges: Edge[];
   setEdges: (edges: Edge[]) => void;
@@ -21,7 +22,7 @@ interface TemplateExecutionState {
 
   // Selection
   selectedNodeIds: string[];
-  handleNodeSelection: (nodeId: string) => void;
+  toggleSelectedNode: (nodeId: string) => void;
 
   selectedRowIds: string[];
   toggleSelectedRow: (rowId: string) => void;
@@ -34,8 +35,8 @@ interface TemplateExecutionState {
   setExecutionAction: (sttaus: ExecutionAction) => void;
 
   // Workflow Operations
-  updateNode: (nodeId: string, changes: Partial<Node>) => void;
-  loadWorkflow: (nodes: Node[], edges: Edge[]) => void;
+  updateNode: (nodeId: string, changes: Partial<ExecutionFlowNode>) => void;
+  loadWorkflow: (nodes: ExecutionFlowNode[], edges: Edge[]) => void;
 }
 
 export const useTemplateExecutionStore = create<TemplateExecutionState>()(
@@ -76,7 +77,7 @@ export const useTemplateExecutionStore = create<TemplateExecutionState>()(
       });
     },
 
-    handleNodeSelection: (nodeId) => {
+    toggleSelectedNode: (nodeId) => {
       set((state) => {
         const index = state.selectedNodeIds.indexOf(nodeId);
 
@@ -84,7 +85,6 @@ export const useTemplateExecutionStore = create<TemplateExecutionState>()(
           state.selectedNodeIds.splice(index, 1);
         } else {
           state.selectedNodeIds.push(nodeId);
-          state.isNodeDrawerOpen = true;
         }
       });
     },

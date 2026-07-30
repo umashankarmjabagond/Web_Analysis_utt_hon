@@ -2,8 +2,9 @@ import type { Edge, Node } from "@xyflow/react";
 import type { NODE_TYPES } from "../pages/analysis/template-execution/components/nodes/nodeConfig";
 
 // service types
+export type ExecutionFlowNode = BaseFlowNode | ExecutionHeaderFlowNode;
 export interface WorkflowData {
-  nodes: Node[];
+  nodes: ExecutionFlowNode[];
   edges: Edge[];
 }
 

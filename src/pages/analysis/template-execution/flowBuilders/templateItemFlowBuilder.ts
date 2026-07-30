@@ -1,6 +1,6 @@
-import type { Node } from "@xyflow/react";
 import type {
   CreateExecutionHeaderNodeProps,
+  ExecutionFlowNode,
   WorkflowData,
 } from "../../../../types/templateExecution";
 
@@ -13,7 +13,7 @@ const LAYOUT = {
 export const createTemplateItemHeaderNode = ({
   itemId,
   y = 178,
-}: CreateExecutionHeaderNodeProps): Node => ({
+}: CreateExecutionHeaderNodeProps): ExecutionFlowNode => ({
   id: `execution-header-${itemId}`,
   type: "executionHeader",
   position: {

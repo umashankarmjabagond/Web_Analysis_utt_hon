@@ -15,14 +15,15 @@ import Drawer from "../../../../components/drawer/Drawer";
 import { Tabs } from "../../../../components/common/tabs/Tabs";
 import { edgeTypes } from "./edges/edgeTypes";
 import Properties from "../../../KPI/Properties";
+import { useWorkflowCanvasInteractions } from "../../../../hooks/useWorkflowInteractions";
+import type {
+  BaseFlowNode,
+  ExecutionFlowNode,
+} from "../../../../types/templateExecution";
 
 export default function WorkflowCanvas() {
   const nodes = useTemplateExecutionStore((state) => state.nodes);
   const edges = useTemplateExecutionStore((state) => state.edges);
-
-  const handleNodeSelection = useTemplateExecutionStore(
-    (state) => state.handleNodeSelection,
-  );
 
   const isNodeDrawerOpen = useTemplateExecutionStore(
     (state) => state.isNodeDrawerOpen,
@@ -31,6 +32,8 @@ export default function WorkflowCanvas() {
   const setNodeDrawerOpen = useTemplateExecutionStore(
     (state) => state.setNodeDrawerOpen,
   );
+
+  const { handleNodeSelection } = useWorkflowCanvasInteractions();
 
   const [activeTab, setActiveTab] = useState("table");
 
@@ -62,13 +65,11 @@ export default function WorkflowCanvas() {
   const activeTabItem = tabs.find((tab) => tab.id === activeTab);
   const ActiveTabComponent = activeTabItem?.component;
 
-  const handleNodeClick: NodeMouseHandler = (_, node) => {
-    if (node.type === "executionHeader") {
-      return;
-    }
+  const onNodeClick: NodeMouseHandler<ExecutionFlowNode> = (_, node) => {
+    if (node.type === "executionHeader") return;
 
-    // Open Drawer
-    handleNodeSelection(node.id);
+    const baseNode = node as BaseFlowNode;
+    handleNodeSelection(baseNode.id, baseNode.data.status);
   };
 
   return (
@@ -79,8 +80,7 @@ export default function WorkflowCanvas() {
           edges={edges}
           nodeTypes={nodeTypes}
           edgeTypes={edgeTypes}
-          // fitView
-          onNodeClick={handleNodeClick}
+          onNodeClick={onNodeClick}
           proOptions={{ hideAttribution: true }}
         >
           <Background

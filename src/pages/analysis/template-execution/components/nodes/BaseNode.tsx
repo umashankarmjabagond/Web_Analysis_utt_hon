@@ -6,14 +6,14 @@ import type {
   BaseFlowNode,
   NodeType,
 } from "../../../../../types/templateExecution";
+import { useWorkflowCanvasInteractions } from "../../../../../hooks/useWorkflowInteractions";
 
 export default function BaseNode({ id, data, type }: NodeProps<BaseFlowNode>) {
   const checked = useTemplateExecutionStore((state) =>
     state.selectedNodeIds.includes(id),
   );
-  const handleNodeSelection = useTemplateExecutionStore(
-    (state) => state.handleNodeSelection,
-  );
+
+  const { handleNodeSelection } = useWorkflowCanvasInteractions();
 
   const nodeMeta = NODE_TYPES[type as NodeType];
   if (!nodeMeta) return null;
@@ -90,7 +90,7 @@ export default function BaseNode({ id, data, type }: NodeProps<BaseFlowNode>) {
           <input
             type="checkbox"
             checked={checked}
-            onChange={() => handleNodeSelection(id)}
+            onChange={() => handleNodeSelection(id, data.status)}
             onClick={(e) => e.stopPropagation()}
             className="nodrag nopan peer h-4 w-4 appearance-none rounded-xs border border-app-default-border bg-transparent checked:border-app-action-primary checked:bg-app-action-primary cursor-pointer"
           />
