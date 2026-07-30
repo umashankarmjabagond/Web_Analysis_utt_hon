@@ -42,14 +42,14 @@ const GroupedSelector: FC<GroupedSelectorProps> = ({
 
   return (
     <div ref={containerRef} className={clsx("w-full", className)}>
-      <div className="rounded-md bg-[#444444]">
+      <div className="rounded-md bg-component-toolbar-divider">
         {/* Header */}
         <button
           type="button"
           disabled={disabled}
           onClick={() => !disabled && setIsOpen((prev) => !prev)}
           className={clsx(
-            "flex h-11 w-full items-center justify-between rounded-md border border-[#76D8F7] bg-[#3F3F3F] px-4 text-left text-[15px] text-white outline-none",
+            "flex h-11 w-full items-center justify-between rounded-md border border-component-active-border bg-tab-active-bg px-4 text-left text-[15px] text-white outline-none",
             disabled && "cursor-not-allowed opacity-50",
           )}
         >
@@ -72,7 +72,7 @@ const GroupedSelector: FC<GroupedSelectorProps> = ({
             ) : (
               sections.map((section) => (
                 <div key={section.id} className="mb-6">
-                  <h3 className="mb-4 px-2 text-[15px] font-semibold text-[#F3F3F3]">
+                  <h3 className="mb-4 px-2 text-[15px] font-semibold text-text-light">
                     {section.title}
                   </h3>
 
@@ -82,15 +82,15 @@ const GroupedSelector: FC<GroupedSelectorProps> = ({
                         key={item.id}
                         type="button"
                         onClick={() => handleSelect(item)}
-                        className="flex w-full items-center gap-4 rounded-md px-6 py-[10px] text-left transition hover:bg-[#555555]"
+                        className="flex w-full items-center gap-4 rounded-md px-6 py-[10px] text-left transition hover:bg-app-surface-background"
                       >
                         <FileText
                           size={16}
                           strokeWidth={1.8}
-                          className="text-[#ECECEC]"
+                          className="text-text-soft-white"
                         />
 
-                        <span className="text-[14px] text-[#ECECEC]">
+                        <span className="text-[14px] text-text-soft-white">
                           {item.label}
                         </span>
                       </button>

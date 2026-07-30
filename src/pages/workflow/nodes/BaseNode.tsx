@@ -11,7 +11,7 @@ function BaseNode({ data }: BaseNodeProps) {
   const { label, element } = data;
 
   return (
-    <div className="relative min-w-[120px] rounded-md border border-[#555] bg-[#2B2B2B] shadow-md transition-all duration-200 hover:border-[#7aa2ff]">
+    <div className="relative min-w-[120px] rounded-md border border-app-surface-background bg-app-code-background shadow-md transition-all duration-200 hover:border-component-hover-border">
       {/* Target Handle */}
       <Handle
         type="target"
@@ -45,8 +45,8 @@ function BaseNode({ data }: BaseNodeProps) {
         style={{
           width: 12,
           height: 12,
-          background: "#E5E5E5",
-          border: "2px solid #555",
+          background: "var(--app-background-light)",
+          border: "2px solid var(--app-surface-background)",
         }}
       />
     </div>

@@ -25,8 +25,8 @@ export default function ToolbarButton({
         duration-150
         ${
           active
-            ? "bg-[#2F7DBD] text-white"
-            : "text-[#D5D5D5] hover:bg-[#404040]"
+            ? "bg-component-action-primary text-white"
+            : "text-text-muted hover:bg-app-surface-elevated"
         }
       `}
     >
