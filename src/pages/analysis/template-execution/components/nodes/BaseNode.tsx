@@ -1,44 +1,153 @@
-import { Handle, Position } from "@xyflow/react";
+import { Handle, Position, type NodeProps } from "@xyflow/react";
 import { NODE_TYPES } from "./nodeConfig";
+import { useTemplateExecutionStore } from "../../../../../store/templateExecutionStore";
+import { Check } from "lucide-react";
+import type {
+  BaseFlowNode,
+  NodeType,
+} from "../../../../../types/templateExecution";
+import { useWorkflowCanvasInteractions } from "../../../../../hooks/useWorkflowInteractions";
 
-export interface BaseNodeDataProps {
-  data: {
-    label: string;
-  };
-  type: string;
-}
+export default function BaseNode({ id, data, type }: NodeProps<BaseFlowNode>) {
+  const checked = useTemplateExecutionStore((state) =>
+    state.selectedNodeIds.includes(id),
+  );
 
-export default function BaseNode({ data, type }: BaseNodeDataProps) {
-  const nodeMeta = NODE_TYPES.find((item) => item.type === type);
+  const { handleNodeSelection } = useWorkflowCanvasInteractions();
+
+  const nodeMeta = NODE_TYPES[type as NodeType];
   if (!nodeMeta) return null;
-  const Icon = nodeMeta?.icon;
+
+  const Icon = nodeMeta.icon;
+
+  const nodeStatusStyles = {
+    default: {
+      background: "bg-app-default-node",
+      border: "border-app-divider",
+      tint: "",
+    },
+    success: {
+      background: "bg-app-node-success-background",
+      border: "border-app-node-success-border",
+      tint: "bg-app-node-success-tint",
+    },
+    warning: {
+      background: "bg-app-node-warning-background",
+      border: "border-app-node-warning-border",
+      tint: "bg-app-node-warning-tint",
+    },
+    error: {
+      background: "bg-app-node-error-background",
+      border: "border-app-node-error-border",
+      tint: "bg-app-node-error-tint",
+    },
+  } as const;
+
+  const nodeSelectionStyles = {
+    default: {
+      border: "border-app-node-selection-border",
+      tint: "bg-app-node-selection-tint",
+    },
+    success: {
+      border: "border-app-node-selection-success-border",
+      tint: "bg-app-node-selection-success-tint",
+    },
+    warning: {
+      border: "border-app-node-selection-border",
+      tint: "bg-app-node-selection-tint",
+    },
+    error: {
+      border: "border-app-node-selection-border",
+      tint: "bg-app-node-selection-tint",
+    },
+  } as const;
+
+  const statusStyle = nodeStatusStyles[data.status];
+  const selectionStyle = nodeSelectionStyles[data.status];
+
+  const nodeStyle = {
+    background: statusStyle.background,
+    border: checked ? selectionStyle.border : statusStyle.border,
+    tint: checked ? selectionStyle.tint : statusStyle.tint,
+  };
 
   return (
-    <div className="cursor-pointer rounded-lg border border-slate-300 bg-white shadow-sm min-w-30 overflow-hidden">
+    <div
+      className={`group nodrag nopan relative w-20 min-w-20 min-h-22 rounded-[4px] px-2 py-3 overflow-hidden border cursor-pointer ${nodeStyle.background} ${nodeStyle.border}`}
+    >
+      {nodeStyle.tint && (
+        <div
+          className={`absolute inset-0 pointer-events-none ${nodeStyle.tint}`}
+        />
+      )}
+
+      <div
+        className={`absolute top-1 left-1 z-20 ${
+          checked ? "block" : "hidden group-hover:block"
+        }`}
+      >
+        <div className="relative h-4 w-4 flex items-center justify-center">
+          <input
+            type="checkbox"
+            checked={checked}
+            onChange={() => handleNodeSelection(id, data.status)}
+            onClick={(e) => e.stopPropagation()}
+            className="nodrag nopan peer h-4 w-4 appearance-none rounded-xs border border-app-default-border bg-transparent checked:border-app-action-primary checked:bg-app-action-primary cursor-pointer"
+          />
+
+          <Check
+            className="pointer-events-none absolute h-3 w-3 text-black opacity-0 peer-checked:opacity-100"
+            strokeWidth={3}
+          />
+        </div>
+      </div>
+
+      {/* Target Handles */}
       <Handle
         type="target"
         position={Position.Left}
         style={{
-          width: 8,
-          height: 8,
-          background: "#E5E5E5",
-          border: "2px solid #555",
+          visibility: "hidden",
+          opacity: 0,
+          pointerEvents: "none",
         }}
       />
 
-      <div className="rounded-lg px-4 py-3 text-sm font-medium border flex flex-col items-center gap-2 border-amber-500">
-        <Icon size={16} className="shrink-0" />
-        <span>{data.label}</span>
+      <Handle
+        type="target"
+        position={Position.Top}
+        style={{
+          visibility: "hidden",
+          opacity: 0,
+          pointerEvents: "none",
+        }}
+      />
+
+      <div className="relative z-10 flex h-full flex-col items-center justify-center gap-2">
+        <Icon size={16} className="shrink-0 text-app-text-secondary" />
+        <span className="w-full h-10 line-clamp-2 text-center text-sm text-app-action-secondary leading-5">
+          {data.label}
+        </span>
       </div>
 
+      {/* Source Handles */}
       <Handle
         type="source"
         position={Position.Right}
         style={{
-          width: 8,
-          height: 8,
-          background: "#E5E5E5",
-          border: "2px solid #555",
+          visibility: "hidden",
+          opacity: 0,
+          pointerEvents: "none",
+        }}
+      />
+
+      <Handle
+        type="source"
+        position={Position.Bottom}
+        style={{
+          visibility: "hidden",
+          opacity: 0,
+          pointerEvents: "none",
         }}
       />
     </div>

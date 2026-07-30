@@ -1,133 +1,170 @@
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import type { TreeNodeData } from "../../../types/commonTypes";
 import Tree from "../tree/Tree";
-import { useState } from "react";
-import { Image } from "lucide-react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { Image, Search } from "lucide-react";
 import { ROUTES } from "../../../constants/routes/routesConstant";
+import Input from "../../forms/input/Input";
+import { useDebounce } from "../../../hooks/useDebounce";
+import { filterTree } from "../../../utils/utils";
+
+const TREE_DATA: TreeNodeData[] = [
+  {
+    id: "feed-water",
+    label: "Feed Water",
+    children: [
+      {
+        id: "fresh-water",
+        label: "Fresh Water",
+        image: <Image size={16} />,
+        children: [
+          {
+            id: "pump-101",
+            label: "Pump 101",
+          },
+          {
+            id: "pump-102",
+            label: "Pump 102",
+          },
+          {
+            id: "compressor-101",
+            label: "Compressor 101",
+          },
+        ],
+      },
+      {
+        id: "raw-water",
+        label: "Raw Water",
+        image: <Image size={16} />,
+        children: [
+          {
+            id: "tank-201",
+            label: "Tank 201",
+          },
+          {
+            id: "valve-202",
+            label: "Valve 202",
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: "power-boiler",
+    label: "Power Boiler",
+    children: [
+      {
+        id: "pgb1",
+        label: "PBG1",
+        image: <Image size={16} />,
+        children: [
+          {
+            id: "pump-301",
+            label: "Pump 301",
+          },
+          {
+            id: "motor-302",
+            label: "Motor 302",
+          },
+        ],
+      },
+      {
+        id: "pgb2",
+        label: "PBG2",
+        image: <Image size={16} />,
+        children: [
+          {
+            id: "56-FFC618",
+            label: "56-FFC618",
+          },
+          {
+            id: "56-FFC619",
+            label: "56-FFC619",
+          },
+
+          {
+            id: "56-FFC620",
+            label: "56-FFC620",
+          },
+          {
+            id: "56-FFC621",
+            label: "56-FFC621",
+          },
+
+          {
+            id: "56-FFC622",
+            label: "56-FFC622",
+          },
+          {
+            id: "56-FFC623",
+            label: "56-FFC623",
+          },
+
+          {
+            id: "56-FFC624",
+            label: "56-FFC624",
+          },
+          {
+            id: "56-FFC625",
+            label: "56-FFC625",
+          },
+        ],
+      },
+    ],
+  },
+];
 
 export default function DashboardPanel() {
+  const { plant, template, itemId } = useParams();
+  const selectedId = itemId ?? template ?? plant ?? null;
+
+  const [search, setSearch] = useState("");
+
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const TREE_DATA: TreeNodeData[] = [
-    {
-      id: "feed-water",
-      label: "Feed Water",
-      children: [
-        {
-          id: "fresh-water",
-          label: "Fresh Water",
-          image: <Image size={16} />,
-          children: [
-            {
-              id: "pump-101",
-              label: "Pump 101",
-            },
-            {
-              id: "pump-102",
-              label: "Pump 102",
-            },
-            {
-              id: "compressor-101",
-              label: "Compressor 101",
-            },
-          ],
-        },
-        {
-          id: "raw-water",
-          label: "Raw Water",
-          image: <Image size={16} />,
-          children: [
-            {
-              id: "tank-201",
-              label: "Tank 201",
-            },
-            {
-              id: "valve-202",
-              label: "Valve 202",
-            },
-          ],
-        },
-      ],
+  const handleSelect = useCallback(
+    (nodeId: string) => {
+      const routeSegments = findPath(TREE_DATA, nodeId);
+      if (!routeSegments) return;
+
+      navigate(`${ROUTES.DASHBOARD}/${routeSegments.join("/")}`);
     },
-    {
-      id: "power-boiler",
-      label: "Power Boiler",
-      children: [
-        {
-          id: "pgb1",
-          label: "PBG1",
-          image: <Image size={16} />,
-          children: [
-            {
-              id: "pump-301",
-              label: "Pump 301",
-            },
-            {
-              id: "motor-302",
-              label: "Motor 302",
-            },
-          ],
-        },
-        {
-          id: "pgb2",
-          label: "PBG2",
-          image: <Image size={16} />,
-          children: [
-            {
-              id: "56-FFC618",
-              label: "56-FFC618",
-            },
-            {
-              id: "56-FFC619",
-              label: "56-FFC619",
-            },
+    [navigate],
+  );
 
-            {
-              id: "56-FFC620",
-              label: "56-FFC620",
-            },
-            {
-              id: "56-FFC621",
-              label: "56-FFC621",
-            },
+  useEffect(() => {
+    if (selectedId) return;
 
-            {
-              id: "56-FFC622",
-              label: "56-FFC622",
-            },
-            {
-              id: "56-FFC623",
-              label: "56-FFC623",
-            },
+    if (location.pathname !== ROUTES.DASHBOARD) return;
 
-            {
-              id: "56-FFC624",
-              label: "56-FFC624",
-            },
-            {
-              id: "56-FFC625",
-              label: "56-FFC625",
-            },
-          ],
-        },
-      ],
-    },
-  ];
+    const firstPlant = TREE_DATA[0];
+    if (!firstPlant) return;
 
-  const [selectedId, setSelectedId] = useState<string | null>(null);
+    handleSelect(firstPlant.id);
+  }, [selectedId, location.pathname, handleSelect]);
 
-  const handleSelect = (nodeId: string) => {
-    setSelectedId(nodeId);
+  const debouncedSearch = useDebounce(search, 300);
 
-    const routeSegments = findPath(TREE_DATA, nodeId);
-    if (!routeSegments) return;
-
-    const route = `${ROUTES.DASHBOARD}/${routeSegments.join("/")}`;
-    navigate(route);
-  };
+  const filteredTree = useMemo(() => {
+    return filterTree(TREE_DATA, debouncedSearch);
+  }, [debouncedSearch]);
 
   return (
-    <Tree nodes={TREE_DATA} selectedId={selectedId} onSelect={handleSelect} />
+    <>
+      <Input
+        className="w-[288px] h-8 rounded-[4px] px-8 bg-app-surface border border-app-default-border-strong text-[14px] text-text-secondary"
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        placeholder="Search..."
+        startAdornment={<Search size={16} strokeWidth={2.5} color="#D0D0D0" />}
+      />
+      <Tree
+        nodes={filteredTree}
+        selectedId={selectedId}
+        onSelect={handleSelect}
+      />
+    </>
   );
 }
 

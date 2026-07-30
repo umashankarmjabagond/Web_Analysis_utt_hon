@@ -4,14 +4,11 @@ import {
   applyEdgeChanges,
   applyNodeChanges,
   MarkerType,
-} from "@xyflow/react";
-
-import type {
-  Connection,
-  Edge,
-  EdgeChange,
-  Node,
-  NodeChange,
+  type Connection,
+  type Edge,
+  type EdgeChange,
+  type Node,
+  type NodeChange,
 } from "@xyflow/react";
 
 export type ActiveTool = "pointer" | "connect";
@@ -27,6 +24,9 @@ interface WorkflowStore {
 
   selectedNode: Node | null;
 
+  // NEW
+  selectedEdge: Edge | null;
+
   activeTool: ActiveTool;
 
   history: WorkflowSnapshot[];
@@ -40,6 +40,9 @@ interface WorkflowStore {
   setEdges: (edges: Edge[]) => void;
 
   setSelectedNode: (node: Node | null) => void;
+
+  // NEW
+  setSelectedEdge: (edge: Edge | null) => void;
 
   setActiveTool: (tool: ActiveTool) => void;
 
@@ -58,6 +61,8 @@ interface WorkflowStore {
   deleteSelectedNodes: () => void;
 
   deleteSelectedEdges: () => void;
+  clearWorkflow: () => void;
+  setWorkflow: (nodes: Node[], edges: Edge[]) => void;
 }
 
 export const useWorkflowStore = create<WorkflowStore>((set, get) => ({
@@ -66,6 +71,9 @@ export const useWorkflowStore = create<WorkflowStore>((set, get) => ({
   edges: [],
 
   selectedNode: null,
+
+  // NEW
+  selectedEdge: null,
 
   activeTool: "pointer",
 
@@ -86,6 +94,12 @@ export const useWorkflowStore = create<WorkflowStore>((set, get) => ({
   setSelectedNode: (node) =>
     set({
       selectedNode: node,
+    }),
+
+  // NEW
+  setSelectedEdge: (edge) =>
+    set({
+      selectedEdge: edge,
     }),
 
   setActiveTool: (tool) =>
@@ -156,6 +170,17 @@ export const useWorkflowStore = create<WorkflowStore>((set, get) => ({
       ],
     });
   },
+
+  clearWorkflow: () =>
+    set({
+      nodes: [],
+      edges: [],
+      selectedNode: null,
+      selectedEdge: null,
+      history: [],
+      future: [],
+      activeTool: "pointer",
+    }),
 
   addNode: (node) => {
     get().saveHistory();
@@ -229,6 +254,9 @@ export const useWorkflowStore = create<WorkflowStore>((set, get) => ({
         ),
 
         selectedNode: null,
+
+        // NEW
+        selectedEdge: null,
       };
     });
   },
@@ -238,6 +266,16 @@ export const useWorkflowStore = create<WorkflowStore>((set, get) => ({
 
     set((state) => ({
       edges: state.edges.filter((edge) => !edge.selected),
+
+      // NEW
+      selectedEdge: null,
     }));
   },
+  setWorkflow: (nodes, edges) =>
+    set({
+      nodes,
+      edges,
+      selectedNode: null,
+      selectedEdge: null,
+    }),
 }));

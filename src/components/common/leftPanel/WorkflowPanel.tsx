@@ -1,64 +1,79 @@
 import { useMemo, useState } from "react";
+import { Search } from "lucide-react";
 
 import Accordion from "../../forms/accordion/Accordion";
 import TemplateCard from "../../../pages/workflow/components/TemplateCard";
 
-import { useWorkflowStore } from "../../../store/workflowStore";
-
-import type { WorkflowListItem } from "../../../types/workFlowTypes";
+import type {
+  WorkflowDragItem,
+  WorkflowListItem,
+} from "../../../types/workFlowTypes";
 import {
-  attributeSections,
+  attributeCatalogSections,
   catalogSections,
-  dummyWorkflows,
 } from "../../../pages/workflow/workflowPanelData ";
-import { backendToFlow } from "../../../utils/utils";
+import Input from "../../forms/input/Input";
 
 type CatalogTab = "templates" | "attributes";
 
 export default function WorkflowPanel() {
   const [activeTab, setActiveTab] = useState<CatalogTab>("templates");
+  const [search, setSearch] = useState("");
 
-  const setNodes = useWorkflowStore((state) => state.setNodes);
-  const setEdges = useWorkflowStore((state) => state.setEdges);
+  const panelData = useMemo(
+    () =>
+      activeTab === "templates" ? catalogSections : attributeCatalogSections,
+    [activeTab],
+  );
 
-  const panelData = useMemo(() => {
-    return activeTab === "templates" ? catalogSections : attributeSections;
-  }, [activeTab]);
+  const filteredPanelData = useMemo(() => {
+    if (!search.trim()) return panelData;
+
+    const query = search.toLowerCase();
+
+    return panelData
+      .map((section) => ({
+        ...section,
+        items: section.items.filter((item) =>
+          item.title.toLowerCase().includes(query),
+        ),
+      }))
+      .filter((section) => section.items.length > 0);
+  }, [panelData, search]);
 
   const handleDragStart = (
     event: React.DragEvent<HTMLDivElement>,
     item: WorkflowListItem,
   ) => {
-    event.dataTransfer.setData("application/reactflow", JSON.stringify(item));
+    const dragItem: WorkflowDragItem = {
+      type: activeTab === "templates" ? "template" : "attribute",
+      item,
+    };
+
+    event.dataTransfer.setData(
+      "application/reactflow",
+      JSON.stringify(dragItem),
+    );
 
     event.dataTransfer.effectAllowed = "move";
   };
 
-  const handleCardClick = (item: WorkflowListItem) => {
-    const backendWorkflow = dummyWorkflows[item.id];
-
-    if (!backendWorkflow) return;
-
-    const canvasWorkflow = backendToFlow(backendWorkflow);
-
-    setNodes(canvasWorkflow.nodes);
-    setEdges(canvasWorkflow.edges);
-  };
-
   return (
-    <div className="flex h-full flex-col">
-      <div className="p-4">
-        <h3 className="mb-4 text-lg font-semibold uppercase tracking-[3px] text-white">
+    <div className="flex h-full flex-col bg-[#2B2B2B]">
+      {/* Header */}
+      <div>
+        <h3 className="mb-4 text-[12px] font-semibold uppercase tracking-[2.5px] text-[#F5F5F5]">
           Catalog
         </h3>
 
-        <div className="flex rounded-md bg-[#5A5A5A] p-1">
+        {/* Tabs */}
+        <div className="flex rounded bg-[#5A5A5A] p-0.5">
           <button
             onClick={() => setActiveTab("templates")}
-            className={`flex-1 rounded-md px-4 py-2 text-sm font-medium transition ${
+            className={`flex-1 rounded px-3 py-1.5 text-[13px] font-medium transition ${
               activeTab === "templates"
-                ? "bg-[#3B3B3B] text-white"
-                : "text-gray-300"
+                ? "bg-[#3F3F3F] text-white shadow"
+                : "text-[#D0D0D0]"
             }`}
           >
             Templates
@@ -66,10 +81,10 @@ export default function WorkflowPanel() {
 
           <button
             onClick={() => setActiveTab("attributes")}
-            className={`flex-1 rounded-md px-4 py-2 text-sm font-medium transition ${
+            className={`flex-1 rounded px-3 py-1.5 text-[13px] font-medium transition ${
               activeTab === "attributes"
-                ? "bg-[#3B3B3B] text-white"
-                : "text-gray-300"
+                ? "bg-[#3F3F3F] text-white shadow"
+                : "text-[#D0D0D0]"
             }`}
           >
             Attributes
@@ -77,15 +92,22 @@ export default function WorkflowPanel() {
         </div>
       </div>
 
-      <div className="px-4">
-        <input
+      {/* Search */}
+      <div className="mt-4">
+        <Input
+          className="w-[288px] h-8 rounded-[4px] px-8 bg-app-surface border border-app-default-border-strong text-[14px] text-text-secondary"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
           placeholder="Search..."
-          className="w-full rounded-md border border-neutral-600 bg-[#3B3B3B] px-3 py-2 text-sm text-white outline-none"
+          startAdornment={
+            <Search size={16} strokeWidth={2.5} color="#D0D0D0" />
+          }
         />
       </div>
 
-      <div className="mt-4 flex-1 space-y-4 overflow-auto px-4 pb-4">
-        {panelData.map((section) => (
+      {/* Sections */}
+      <div className="mt-4 flex-1 space-y-4 overflow-y-auto pb-5">
+        {filteredPanelData.map((section) => (
           <Accordion
             key={section.title}
             title={section.title}
@@ -95,17 +117,8 @@ export default function WorkflowPanel() {
               <TemplateCard
                 key={item.id}
                 title={item.title}
-                draggable={activeTab === "templates"}
-                onDragStart={
-                  activeTab === "templates"
-                    ? (event) => handleDragStart(event, item)
-                    : undefined
-                }
-                onClick={
-                  activeTab === "attributes"
-                    ? () => handleCardClick(item)
-                    : undefined
-                }
+                draggable
+                onDragStart={(event) => handleDragStart(event, item)}
               />
             ))}
           </Accordion>

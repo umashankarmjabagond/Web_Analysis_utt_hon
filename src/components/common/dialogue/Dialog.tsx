@@ -14,11 +14,11 @@ const Dialog = ({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
       <div
-        className="relative rounded-xl bg-[#3C3C3C] shadow-2xl"
+        className="relative flex max-h-[80vh] flex-col overflow-hidden rounded-xl bg-[#272727] shadow-2xl"
         style={{ width }}
       >
         {/* Header */}
-        <div className="flex items-start justify-between p-8 pb-0">
+        <div className="flex items-start justify-between p-8 pb-6">
           <div>
             {subtitle && (
               <p className="mb-2 text-xs font-semibold uppercase tracking-[0.25em] text-gray-300">
@@ -37,8 +37,8 @@ const Dialog = ({
           </button>
         </div>
 
-        {/* Content */}
-        <div className="p-8">{children}</div>
+        {/* Scrollable Body */}
+        <div className="flex-1 overflow-y-auto px-8 pb-8">{children}</div>
       </div>
     </div>
   );

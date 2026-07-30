@@ -11,7 +11,7 @@ export default function WorkspaceHeader() {
 
   return (
     <div className="flex h-14 gap-2">
-      <div className="flex w-[300px] items-center rounded-md bg-[#2b2b2b] px-6">
+      <div className="flex w-[320px] items-center rounded-md bg-[#2b2b2b] px-6">
         <h2 className="text-sm font-semibold uppercase tracking-wide text-white">
           {panel?.header}
         </h2>

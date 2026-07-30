@@ -9,7 +9,6 @@ import {
   Circle,
   Square,
   Type,
-  ChevronDown,
   Download,
   Upload,
   MoveRight,
@@ -17,29 +16,101 @@ import {
 
 import ToolbarButton from "./ToolbarButton";
 import { useWorkflowStore } from "../../../../store/workflowStore";
+import Dropdown from "../../../../components/forms/dropdown/Dropdown";
+import { useState } from "react";
+import Dialog from "../../../../components/common/dialogue/Dialog";
+import Input from "../../../../components/forms/input/Input";
+import Button from "../../../../components/forms/button/Button";
+import Notification from "../../../../components/common/notification/Notification";
+import { useNavigate } from "react-router-dom";
+import { ROUTES } from "../../../../constants/routes/routesConstant";
 
 export default function Toolbar() {
   const {
+    nodes,
     activeTool,
     setActiveTool,
     deleteSelectedNodes,
     deleteSelectedEdges,
     undo,
     redo,
+    clearWorkflow,
   } = useWorkflowStore();
+
+  const navigate = useNavigate();
+
+  const [isSaveDialogOpen, setIsSaveDialogOpen] = useState(false);
+  const [showNotification, setShowNotification] = useState(false);
+  const [notificationType, setNotificationType] = useState<
+    "success" | "warning"
+  >("success");
+
+  const [notificationTitle, setNotificationTitle] = useState("");
+  const [notificationMessage, setNotificationMessage] = useState("");
+
+  const [templateType, setTemplateType] = useState<"regulatory" | "mpc" | null>(
+    null,
+  );
+
+  const [templateName, setTemplateName] = useState("");
+
+  const handleSave = () => {
+    const existingTemplates = JSON.parse(
+      localStorage.getItem("workflowTemplates") || "[]",
+    );
+
+    const newTemplate = {
+      id: crypto.randomUUID(),
+      name: templateName,
+      type: templateType,
+      createdAt: new Date().toISOString(),
+    };
+
+    existingTemplates.push(newTemplate);
+
+    localStorage.setItem(
+      "workflowTemplates",
+      JSON.stringify(existingTemplates),
+    );
+
+    console.log("Saved Template:", newTemplate);
+
+    setIsSaveDialogOpen(false);
+    setNotificationType("success");
+
+    setNotificationTitle(
+      templateType === "regulatory"
+        ? "Saved as Regulatory Template"
+        : "Saved as MPC Template",
+    );
+
+    setNotificationMessage(
+      templateType === "regulatory"
+        ? "You can find this template in the Catalog under Templates > Regulatory Templates."
+        : "You can find this template in the Catalog under Templates > MPC Templates.",
+    );
+
+    setShowNotification(true);
+    clearWorkflow();
+
+    setTimeout(() => {
+      setShowNotification(false);
+    }, 3000);
+  };
 
   return (
     <div className="flex h-12 items-center justify-between border-b border-[#3D3D3D] bg-[#232323] px-3">
       {/* LEFT */}
 
       <div className="flex items-center gap-2">
-        <button className="flex items-center gap-2 border-r border-[#444] pr-4 text-sm text-white">
-          <ArrowLeft size={16} />
-
+        <div className="flex items-center gap-2 border-r border-[#444] pr-4 text-sm text-white">
+          <ArrowLeft
+            className="cursor-pointer"
+            onClick={() => navigate(ROUTES.DASHBOARD)}
+            size={16}
+          />
           <span>New Template</span>
-        </button>
-
-        {/* Pointer */}
+        </div>
 
         <ToolbarButton
           title="Pointer"
@@ -48,11 +119,7 @@ export default function Toolbar() {
           onClick={() => setActiveTool("pointer")}
         />
 
-        {/* Connector 1 */}
-
         <ToolbarButton title="Connector 1" icon={<MoveRight size={15} />} />
-
-        {/* Connector 2 */}
 
         <ToolbarButton
           title="Connector 2"
@@ -61,23 +128,13 @@ export default function Toolbar() {
           onClick={() => setActiveTool("connect")}
         />
 
-        {/* Pencil */}
-
         <ToolbarButton title="Pencil" icon={<Pencil size={15} />} />
-
-        {/* Grid */}
 
         <ToolbarButton title="Grid" icon={<Grid2X2 size={15} />} />
 
-        {/* Undo */}
-
         <ToolbarButton title="Undo" icon={<Undo2 size={15} />} onClick={undo} />
 
-        {/* Redo */}
-
         <ToolbarButton title="Redo" icon={<Redo2 size={15} />} onClick={redo} />
-
-        {/* Delete */}
 
         <ToolbarButton
           title="Delete"
@@ -88,33 +145,103 @@ export default function Toolbar() {
           }}
         />
 
-        {/* Rectangle */}
-
         <ToolbarButton title="Rectangle" icon={<Square size={15} />} />
-
-        {/* Text */}
 
         <ToolbarButton title="Text" icon={<Type size={15} />} />
       </div>
 
       {/* RIGHT */}
 
-      <div className="flex items-center gap-6 text-sm text-[#55AFFF]">
-        <button className="flex items-center gap-1 hover:text-white">
+      <div className="flex items-center gap-6 text-sm">
+        <button className="flex items-center gap-1 text-[#55AFFF] hover:text-white transition-colors">
           <Upload size={15} />
           Import Template
         </button>
 
-        <button className="flex items-center gap-1 hover:text-white">
+        <button className="flex items-center gap-1 text-[#55AFFF] hover:text-white transition-colors">
           <Download size={15} />
           Export Template
         </button>
 
-        <button className="flex items-center gap-1 hover:text-white">
-          Save As
-          <ChevronDown size={15} />
-        </button>
+        <Dropdown
+          placeholder="Save As"
+          items={[
+            {
+              label: "Custom Regulatory Template",
+              value: "regulatory",
+            },
+            {
+              label: "Custom MPC Templates",
+              value: "mpc",
+            },
+          ]}
+          onSelect={(item) => {
+            if (nodes.length === 0) {
+              setNotificationType("warning");
+              setNotificationTitle("Nothing to Save");
+              setNotificationMessage(
+                "Please create a workflow before saving the template.",
+              );
+
+              setShowNotification(true);
+
+              setTimeout(() => {
+                setShowNotification(false);
+              }, 3000);
+
+              return;
+            }
+
+            setTemplateType(item.value as "regulatory" | "mpc");
+            const templates = JSON.parse(
+              localStorage.getItem("workflowTemplates") || "[]",
+            );
+
+            setTemplateName(`Custom_${templates.length + 1}`);
+            setIsSaveDialogOpen(true);
+          }}
+        />
       </div>
+      <Dialog
+        isOpen={isSaveDialogOpen}
+        subtitle="SAVE AS"
+        title={
+          templateType === "regulatory" ? "Regulatory Template" : "MPC Template"
+        }
+        onClose={() => setIsSaveDialogOpen(false)}
+      >
+        <div className="flex flex-col gap-6 text-sm">
+          <Input
+            label="Template Name"
+            value={templateName}
+            onChange={(e) => setTemplateName(e.target.value)}
+            placeholder="add template name"
+          />
+
+          <div className="flex justify-end gap-4">
+            <Button
+              variant="secondary"
+              onClick={() => setIsSaveDialogOpen(false)}
+            >
+              Cancel
+            </Button>
+
+            <Button variant="primary" onClick={handleSave}>
+              Save
+            </Button>
+          </div>
+        </div>
+      </Dialog>
+      {showNotification && (
+        <div className="fixed right-6 top-20 z-[9999]">
+          <Notification
+            type={notificationType}
+            title={notificationTitle}
+            message={notificationMessage}
+            onClose={() => setShowNotification(false)}
+          />
+        </div>
+      )}
     </div>
   );
 }

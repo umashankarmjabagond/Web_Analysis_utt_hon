@@ -10,7 +10,7 @@ export default function AppRoutes() {
   return (
     <Routes>
       <Route element={<MainLayout />}>
-        <Route index element={<Navigate to={ROUTES.WORKFLOW} replace />} />
+        <Route index element={<Navigate to={ROUTES.DASHBOARD} replace />} />
         <Route path={ROUTES.WORKFLOW} element={<WorkflowBuilder />} />
         <Route path={ROUTES.DASHBOARD} element={<Dashboard />} />
         <Route path="/dashboard/:plant" element={<DashboardContent />} />
