@@ -75,7 +75,7 @@ export default function Dropdown({
               key={item.value}
               type="button"
               onClick={() => handleSelect(item)}
-              className="cursor-pointer flex w-full items-center gap-2 px-4 py-3 text-left text-sm text-white transition-colors hover:bg-component-background-item-hover"
+              className="cursor-pointer flex w-full items-center gap-2 px-4 py-3 text-left text-sm text-white transition-colors hover:bg-component-background-item-hover hover:text-[var(--app-node-selection-border)]"
             >
               {item.icon}
 

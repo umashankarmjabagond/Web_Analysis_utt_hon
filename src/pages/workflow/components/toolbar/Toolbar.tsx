@@ -101,7 +101,7 @@ export default function Toolbar() {
   return (
     <div className="flex h-12 items-center justify-between rounded-[6px] border border-app-divider bg-component-toolbar-background px-3">
       {/* LEFT */}
-
+      
       <div className="flex items-center gap-2">
         <div className="flex items-center w-[141px] gap-2 border-r border-component-toolbar-divider pr-4 text-sm text-white">
           <ArrowLeft
@@ -212,6 +212,7 @@ export default function Toolbar() {
       >
         <div className="flex flex-col gap-6 text-sm">
           <Input
+           className="w-[288px] h-8 rounded bg-app-surface border border-search-border text-[14px] text-white"
             label="Template Name"
             value={templateName}
             onChange={(e) => setTemplateName(e.target.value)}
