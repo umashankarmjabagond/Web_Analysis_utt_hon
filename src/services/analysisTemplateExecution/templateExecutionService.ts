@@ -6,17 +6,15 @@ import type {
 } from "../../types/templateExecution";
 
 // signle workflowflow
-export const getExecutionWorkflow = async (
-  itemId: string,
-): Promise<ExexutionWorkflowResponse> => {
+export const getExecutionWorkflow = async () // itemId: string,
+: Promise<ExexutionWorkflowResponse> => {
   // TODO: API Call
   return workflowMockData as ExexutionWorkflowResponse;
 };
 
 // template workflow
-export const getTemplateExecutionWorkflows = async (
-  templateId: string,
-): Promise<TemplateExecutionResponse> => {
+export const getTemplateExecutionWorkflows = async () // templateId: string,
+: Promise<TemplateExecutionResponse> => {
   // TODO: API Call
   return templateWorkflowMockData as TemplateExecutionResponse;
 };

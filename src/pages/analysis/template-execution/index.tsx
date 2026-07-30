@@ -4,7 +4,7 @@ import ExecutionToolbar from "./components/ExecutionToolbar";
 import WorkflowCanvas from "./components/WorkflowCanvas";
 
 export default function TemplateExecution({
-  plant,
+  // plant,
   template,
   itemId,
 }: TemplateExecutionProps) {

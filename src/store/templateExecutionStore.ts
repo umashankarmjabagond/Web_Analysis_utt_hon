@@ -1,4 +1,4 @@
-import type { Edge, Node } from "@xyflow/react";
+import type { Edge } from "@xyflow/react";
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 import {
