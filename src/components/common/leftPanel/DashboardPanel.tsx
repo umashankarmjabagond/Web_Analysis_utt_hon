@@ -1,10 +1,12 @@
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import type { TreeNodeData } from "../../../types/commonTypes";
 import Tree from "../tree/Tree";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Image, Search } from "lucide-react";
 import { ROUTES } from "../../../constants/routes/routesConstant";
 import Input from "../../forms/input/Input";
+import { useDebounce } from "../../../hooks/useDebounce";
+import { filterTree } from "../../../utils/utils";
 
 const TREE_DATA: TreeNodeData[] = [
   {
@@ -116,6 +118,8 @@ export default function DashboardPanel() {
   const { plant, template, itemId } = useParams();
   const selectedId = itemId ?? template ?? plant ?? null;
 
+  const [search, setSearch] = useState("");
+
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -140,14 +144,26 @@ export default function DashboardPanel() {
     handleSelect(firstPlant.id);
   }, [selectedId, location.pathname, handleSelect]);
 
+  const debouncedSearch = useDebounce(search, 300);
+
+  const filteredTree = useMemo(() => {
+    return filterTree(TREE_DATA, debouncedSearch);
+  }, [debouncedSearch]);
+
   return (
     <>
       <Input
         className="w-[288px] h-8 rounded-[4px] px-8 bg-app-surface border border-app-default-border-strong text-[14px] text-text-secondary"
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
         placeholder="Search..."
         startAdornment={<Search size={16} strokeWidth={2.5} color="#D0D0D0" />}
       />
-      <Tree nodes={TREE_DATA} selectedId={selectedId} onSelect={handleSelect} />
+      <Tree
+        nodes={filteredTree}
+        selectedId={selectedId}
+        onSelect={handleSelect}
+      />
     </>
   );
 }

@@ -1,6 +1,7 @@
-import type { Edge, Node } from "@xyflow/react";
+import type { Edge } from "@xyflow/react";
 import { buildTemplateItemFlow } from "./templateItemFlowBuilder";
 import type {
+  ExecutionFlowNode,
   TemplateExecutionWorkflow,
   WorkflowData,
 } from "../../../../types/templateExecution";
@@ -10,11 +11,16 @@ const ROW_HEIGHT = 200;
 export const buildTemplateCanvas = (
   workflows: TemplateExecutionWorkflow[],
 ): WorkflowData => {
-  const nodes: Node[] = [];
+  const nodes: ExecutionFlowNode[] = [];
   const edges: Edge[] = [];
+  const PREPEND_HEADER = true;
 
   workflows.forEach((workflow, index) => {
-    const canvas = buildTemplateItemFlow(workflow.itemId, workflow.workflow);
+    const canvas = buildTemplateItemFlow(
+      workflow.itemId,
+      workflow.workflow,
+      PREPEND_HEADER,
+    );
 
     const shiftedNodes = shiftNodes(canvas.nodes, index * ROW_HEIGHT);
 
@@ -28,7 +34,10 @@ export const buildTemplateCanvas = (
   };
 };
 
-const shiftNodes = (nodes: Node[], offsetY: number): Node[] =>
+const shiftNodes = (
+  nodes: ExecutionFlowNode[],
+  offsetY: number,
+): ExecutionFlowNode[] =>
   nodes.map((node) => ({
     ...node,
     position: {

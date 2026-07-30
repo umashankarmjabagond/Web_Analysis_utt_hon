@@ -4,14 +4,11 @@ import {
   applyEdgeChanges,
   applyNodeChanges,
   MarkerType,
-} from "@xyflow/react";
-
-import type {
-  Connection,
-  Edge,
-  EdgeChange,
-  Node,
-  NodeChange,
+  type Connection,
+  type Edge,
+  type EdgeChange,
+  type Node,
+  type NodeChange,
 } from "@xyflow/react";
 
 export type ActiveTool = "pointer" | "connect";

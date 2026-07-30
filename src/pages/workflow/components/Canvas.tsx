@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import {
   Background,
@@ -6,30 +6,28 @@ import {
   MarkerType,
   ReactFlow,
   useReactFlow,
+  type Edge,
 } from "@xyflow/react";
 
-import type { Edge } from "@xyflow/react";
-
-import type {
-  WorkflowDragItem,
-  WorkflowListItem,
-  WorkflowNode,
+import {
+  edgeTypes,
+  nodeTypes,
+  type WorkflowDragItem,
+  type WorkflowListItem,
+  type WorkflowNode,
 } from "../../../types/workFlowTypes";
 
 import Toolbar from "./toolbar/Toolbar";
 import { useWorkflowStore } from "../../../store/workflowStore";
-import { edgeTypes, nodeTypes } from "../../../types/workFlowTypes";
 
 import { backendToFlow } from "../../../utils/utils";
-
-import { useMemo, useState } from "react";
 import Dialog from "../../../components/common/dialogue/Dialog";
+
+import GroupedSelector from "../../../components/forms/select/GroupedSelector";
 import {
   attributeCatalogSections,
   dummyWorkflows,
 } from "../workflowPanelData ";
-
-import GroupedSelector from "../../../components/forms/select/GroupedSelector";
 
 /**
  * Generates a unique backend element name.
@@ -85,7 +83,7 @@ export default function Canvas() {
 
   const handleEdgeInsert = useCallback(
     (edge: { id: string; source: string; target: string }) => {
-      setSelectedEdge(edge as any);
+      setSelectedEdge(edge as Edge);
       setIsDialogOpen(true);
     },
     [setSelectedEdge],

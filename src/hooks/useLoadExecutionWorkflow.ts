@@ -11,9 +11,9 @@ export const useLoadExecutionWorkflow = (
   templateId: string,
   itemId?: string,
 ) => {
-  const loadWorkFlow = useTemplateExecutionStore((state) => state.loadWorkFlow);
-  const setTemplateInfo = useTemplateExecutionStore(
-    (state) => state.setTemplateInfo,
+  const loadWorkflow = useTemplateExecutionStore((state) => state.loadWorkflow);
+  const setSelectedExecutionItem = useTemplateExecutionStore(
+    (state) => state.setSelectedExecutionItem,
   );
 
   useEffect(() => {
@@ -22,22 +22,23 @@ export const useLoadExecutionWorkflow = (
     const loadExecutionData = async () => {
       if (itemId) {
         // Load single execution
-        const workflow = await getExecutionWorkflow(itemId);
+        const response = await getExecutionWorkflow(itemId);
 
-        const canvas = buildTemplateItemFlow(itemId, workflow);
+        const canvas = buildTemplateItemFlow(itemId, response.workflow);
 
-        loadWorkFlow(canvas.nodes, canvas.edges);
+        setSelectedExecutionItem(response.asset);
+        loadWorkflow(canvas.nodes, canvas.edges);
       } else {
         // TODO: Load all execution workflows for template
         const response = await getTemplateExecutionWorkflows(templateId);
 
         const canvas = buildTemplateCanvas(response.workflows);
 
-        setTemplateInfo(response.template);
-        loadWorkFlow(canvas.nodes, canvas.edges);
+        setSelectedExecutionItem(response.template);
+        loadWorkflow(canvas.nodes, canvas.edges);
       }
     };
 
     loadExecutionData();
-  }, [templateId, itemId, loadWorkFlow, setTemplateInfo]);
+  }, [templateId, itemId, loadWorkflow, setSelectedExecutionItem]);
 };

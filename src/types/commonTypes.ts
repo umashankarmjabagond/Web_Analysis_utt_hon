@@ -93,6 +93,7 @@ export interface TabsProps {
   activeTab?: string | null;
   onTabChange?: (id: string) => void;
   variant?: "primary" | "secondary";
+  renderContent?: boolean;
 }
 
 export interface DonutChartProps {

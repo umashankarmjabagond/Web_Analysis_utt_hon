@@ -2,9 +2,15 @@ import type { Edge, Node } from "@xyflow/react";
 import type { NODE_TYPES } from "../pages/analysis/template-execution/components/nodes/nodeConfig";
 
 // service types
+export type ExecutionFlowNode = BaseFlowNode | ExecutionHeaderFlowNode;
 export interface WorkflowData {
-  nodes: Node[];
+  nodes: ExecutionFlowNode[];
   edges: Edge[];
+}
+
+export interface ExexutionWorkflowResponse {
+  asset: ExecutionItem;
+  workflow: WorkflowData;
 }
 
 export interface TemplateExecutionWorkflow {
@@ -13,11 +19,7 @@ export interface TemplateExecutionWorkflow {
 }
 
 export interface TemplateExecutionResponse {
-  template: {
-    id: string;
-    name: string;
-    type: string;
-  };
+  template: ExecutionItem;
   workflows: TemplateExecutionWorkflow[];
 }
 
@@ -56,15 +58,33 @@ export interface ToolbarButtonProps {
   onClick?: () => void;
 }
 
-// analysis template -  workflow canvas
-export interface WorkflowCanvasProps {
-  templateId: string;
-  itemId: string;
-}
-
 // analysis template
 export interface TemplateExecutionProps {
   plant: string;
   template: string;
   itemId?: string;
+}
+
+// execution store
+export const EXECUTION_ACTION = {
+  IDLE: "idle",
+  EXECUTE: "execute",
+  PAUSE: "pause",
+  DELETE: "delete",
+} as const;
+
+export type ExecutionItemType = "unit" | "asset";
+export type ExecutionAction =
+  (typeof EXECUTION_ACTION)[keyof typeof EXECUTION_ACTION];
+
+export type NodeExecutionStatus =
+  | "not-started"
+  | "pending"
+  | "in-progress"
+  | "completed";
+
+export interface ExecutionItem {
+  id: string;
+  name: string;
+  type: ExecutionItemType;
 }

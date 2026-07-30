@@ -1,4 +1,4 @@
-import { cloneElement, isValidElement } from "react";
+import { cloneElement, isValidElement, type ReactElement } from "react";
 import type { IconButtonProps } from "../../../types/commonTypes";
 import clsx from "clsx";
 
@@ -20,15 +20,13 @@ const IconButton = ({
   className,
   ...props
 }: IconButtonProps) => {
-
-    const renderedIcon =
-    isValidElement(icon)
-      ? cloneElement(icon as React.ReactElement<any>, {
-          size: iconSizes[size],
-          className: "text-[var(--color-button-focus)]",
-          strokeWidth: 2.25,
-        })
-      : icon;
+  const renderedIcon = isValidElement(icon)
+    ? cloneElement(icon as ReactElement, {
+        size: iconSizes[size],
+        className: "text-[var(--color-button-focus)]",
+        strokeWidth: 2.25,
+      })
+    : icon;
 
   return (
     <button
@@ -47,7 +45,7 @@ const IconButton = ({
         "disabled:cursor-not-allowed",
         "disabled:opacity-50",
         sizeClasses[size],
-        className
+        className,
       )}
       {...props}
     >

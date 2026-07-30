@@ -70,7 +70,7 @@ export abstract class BaseService {
     }
   }
 
-  private handleError(error: any) {
+  private handleError(error: unknown) {
     // const message = error?.response?.data?.message ?? "Something went wrong";
     // Notification.error(message);
   }

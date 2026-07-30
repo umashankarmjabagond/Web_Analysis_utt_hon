@@ -1,3 +1,6 @@
+import type { ColumnDef, RowData } from "@tanstack/react-table";
+import type { ReactNode } from "react";
+
 export interface DonutChartItem {
   name: string;
   value: number;
@@ -21,9 +24,27 @@ export interface StatusSummaryRow {
 }
 
 export interface WarningRow {
-  unitName: string;
+  unitName: string;   
   type: string;
   controllerName: string;
   attributeName: string;
   errorMessage: string;
+}
+
+export interface TableCardProps<T extends RowData> {
+  title: string;
+
+  columns: ColumnDef<T, any>[];
+
+  data: T[];
+
+  badge?: number;
+
+  height?: string;
+
+  border?: string;
+
+  headerActions?: ReactNode;
+
+  className?: string;
 }

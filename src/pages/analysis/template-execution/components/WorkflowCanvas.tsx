@@ -1,5 +1,10 @@
 import { useMemo, useState } from "react";
-import { Background, BackgroundVariant, ReactFlow } from "@xyflow/react";
+import {
+  Background,
+  BackgroundVariant,
+  ReactFlow,
+  type NodeMouseHandler,
+} from "@xyflow/react";
 
 import { nodeTypes } from "./nodes/nodeTypes";
 import { useTemplateExecutionStore } from "../../../../store/templateExecutionStore";
@@ -10,14 +15,27 @@ import Drawer from "../../../../components/drawer/Drawer";
 import { Tabs } from "../../../../components/common/tabs/Tabs";
 import { edgeTypes } from "./edges/edgeTypes";
 import Properties from "../../../KPI/Properties";
+import { useWorkflowCanvasInteractions } from "../../../../hooks/useWorkflowInteractions";
+import type {
+  BaseFlowNode,
+  ExecutionFlowNode,
+} from "../../../../types/templateExecution";
 
 export default function WorkflowCanvas() {
   const nodes = useTemplateExecutionStore((state) => state.nodes);
   const edges = useTemplateExecutionStore((state) => state.edges);
 
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const isNodeDrawerOpen = useTemplateExecutionStore(
+    (state) => state.isNodeDrawerOpen,
+  );
+
+  const setNodeDrawerOpen = useTemplateExecutionStore(
+    (state) => state.setNodeDrawerOpen,
+  );
+
+  const { handleNodeSelection } = useWorkflowCanvasInteractions();
+
   const [activeTab, setActiveTab] = useState("table");
-  // const [selectedNode, setSelectedNode] = useState<Node | null>(null);
 
   const tabs = useMemo(
     () => [
@@ -44,10 +62,14 @@ export default function WorkflowCanvas() {
     ],
     [],
   );
+  const activeTabItem = tabs.find((tab) => tab.id === activeTab);
+  const ActiveTabComponent = activeTabItem?.component;
 
-  const handleNodeClick = () => {
-    // setSelectedNode(node);
-    setIsDrawerOpen(true);
+  const onNodeClick: NodeMouseHandler<ExecutionFlowNode> = (_, node) => {
+    if (node.type === "executionHeader") return;
+
+    const baseNode = node as BaseFlowNode;
+    handleNodeSelection(baseNode.id, baseNode.data.status);
   };
 
   return (
@@ -58,8 +80,7 @@ export default function WorkflowCanvas() {
           edges={edges}
           nodeTypes={nodeTypes}
           edgeTypes={edgeTypes}
-          // fitView
-          onNodeClick={handleNodeClick}
+          onNodeClick={onNodeClick}
           proOptions={{ hideAttribution: true }}
         >
           <Background
@@ -71,19 +92,23 @@ export default function WorkflowCanvas() {
         </ReactFlow>
       </div>
 
-      {isDrawerOpen && (
+      {isNodeDrawerOpen && (
         <Drawer
-          opened={isDrawerOpen}
-          onClose={() => setIsDrawerOpen(false)}
+          opened={isNodeDrawerOpen}
+          onClose={() => setNodeDrawerOpen(false)}
           position="bottom"
           size="xl"
-        >
-          <div className="flex h-full flex-col">
+          title={
             <Tabs
               items={tabs}
               activeTab={activeTab}
               onTabChange={setActiveTab}
+              renderContent={false}
             />
+          }
+        >
+          <div className="h-full overflow-hidden">
+            {ActiveTabComponent && <ActiveTabComponent />}
           </div>
         </Drawer>
       )}

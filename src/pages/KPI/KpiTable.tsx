@@ -308,16 +308,16 @@ export default function KpiTable() {
   return (
     <div className="flex h-full flex-col">
       {/* Header */}
-      <div className="border-b border-[var(--color-border)] px-4 py-3 shrink-0">
+      <div className="px-4 py-3 shrink-0 text-center">
         <h3 className="text-sm font-semibold text-[var(--color-text-primary)]">
           View Data for 56-FFC618 Data Preprocessing
         </h3>
       </div>
 
       {/* Table */}
-      <div className="flex-1 overflow-hidden p-4">
+      {/* <div className="flex-1 overflow-hidden p-4"> */}
         <SpreadsheetTable data={tableData} />
-      </div>
+      {/* </div> */}
     </div>
   );
 }
