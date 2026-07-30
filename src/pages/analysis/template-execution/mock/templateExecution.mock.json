@@ -2,7 +2,7 @@
   "template": {
     "id": "pgb2",
     "name": "PGB2",
-    "type": "Unit"
+    "type": "unit"
   },
   "workflows": [
     {

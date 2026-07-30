@@ -1,50 +1,70 @@
 import type { Edge, Node } from "@xyflow/react";
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
-
-export type ExecutionStatus =
-  | "not-started"
-  | "pending"
-  | "in-progress"
-  | "completed";
-
-interface TemplateInfo {
-  id: string;
-  name: string;
-  type: string;
-}
+import {
+  EXECUTION_ACTION,
+  type ExecutionAction,
+  type ExecutionFlowNode,
+  type ExecutionItem,
+} from "../types/templateExecution";
 
 interface TemplateExecutionState {
-  nodes: Node[];
+  // Workflow
+  nodes: ExecutionFlowNode[];
+  setNodes: (nodes: ExecutionFlowNode[]) => void;
+
   edges: Edge[];
-  templateInfo: TemplateInfo | null;
-  selectedNodeIds: string[];
-  selectedExecutionIds: string[];
-  executionStatus: ExecutionStatus;
-  setNodes: (nodes: Node[]) => void;
   setEdges: (edges: Edge[]) => void;
-  setTemplateInfo: (template: TemplateInfo) => void;
-  updateNode: (nodeId: string, changes: Partial<Node>) => void;
+
+  // Context
+  selectedExecutionItem: ExecutionItem | null; // Unit or Asset
+  setSelectedExecutionItem: (item: ExecutionItem) => void;
+
+  // Selection
+  selectedNodeIds: string[];
   toggleSelectedNode: (nodeId: string) => void;
-  toggleExecution: (itemId: string) => void;
-  loadWorkFlow: (nodes: Node[], edges: Edge[]) => void;
+
+  selectedRowIds: string[];
+  toggleSelectedRow: (rowId: string) => void;
+
+  isNodeDrawerOpen: boolean;
+  setNodeDrawerOpen: (isOpen: boolean) => void;
+
+  // Toolbar
+  executionAction: ExecutionAction;
+  setExecutionAction: (sttaus: ExecutionAction) => void;
+
+  // Workflow Operations
+  updateNode: (nodeId: string, changes: Partial<ExecutionFlowNode>) => void;
+  loadWorkflow: (nodes: ExecutionFlowNode[], edges: Edge[]) => void;
 }
 
 export const useTemplateExecutionStore = create<TemplateExecutionState>()(
   immer((set) => ({
     nodes: [],
     edges: [],
-    templateInfo: null,
+    selectedExecutionItem: null,
     selectedNodeIds: [],
-    selectedExecutionIds: [],
-    executionStatus: "not-started",
+    selectedRowIds: [],
+    executionAction: EXECUTION_ACTION.IDLE,
+    isNodeDrawerOpen: false,
 
     setNodes: (nodes) => set({ nodes }),
     setEdges: (edges) => set({ edges }),
 
-    setTemplateInfo: (template) => {
+    setSelectedExecutionItem: (item) => {
       set((state) => {
-        state.templateInfo = template;
+        state.selectedExecutionItem = item;
+      });
+    },
+
+    setExecutionAction: (status) => {
+      set({ executionAction: status });
+    },
+
+    setNodeDrawerOpen: (isOpen) => {
+      set((state) => {
+        state.isNodeDrawerOpen = isOpen;
       });
     },
 
@@ -69,20 +89,28 @@ export const useTemplateExecutionStore = create<TemplateExecutionState>()(
       });
     },
 
-    toggleExecution: (itemId) => {
+    toggleSelectedRow: (rowId) => {
       set((state) => {
-        const index = state.selectedExecutionIds.indexOf(itemId);
+        const index = state.selectedRowIds.indexOf(rowId);
 
         if (index >= 0) {
-          state.selectedExecutionIds.splice(index, 1);
+          state.selectedRowIds.splice(index, 1);
         } else {
-          state.selectedExecutionIds.push(itemId);
+          state.selectedRowIds.push(rowId);
         }
       });
     },
 
-    loadWorkFlow: (nodes, edges) => {
-      set({ nodes, edges });
+    loadWorkflow: (nodes, edges) => {
+      set((state) => {
+        state.nodes = nodes;
+        state.edges = edges;
+
+        // Reset transient UI state
+        state.selectedNodeIds = [];
+        state.selectedRowIds = [];
+        state.isNodeDrawerOpen = false;
+      });
     },
   })),
 );

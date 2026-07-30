@@ -1,16 +1,16 @@
 import workflowMockData from "../../pages/analysis/template-execution/mock/workflow.mock.json";
-import templateWorkflowData from "../../pages/analysis/template-execution/mock/templateExecution.mock.json";
+import templateWorkflowMockData from "../../pages/analysis/template-execution/mock/templateExecution.mock.json";
 import type {
+  ExexutionWorkflowResponse,
   TemplateExecutionResponse,
-  WorkflowData,
 } from "../../types/templateExecution";
 
 // signle workflowflow
 export const getExecutionWorkflow = async (
   itemId: string,
-): Promise<WorkflowData> => {
+): Promise<ExexutionWorkflowResponse> => {
   // TODO: API Call
-  return workflowMockData as WorkflowData;
+  return workflowMockData as ExexutionWorkflowResponse;
 };
 
 // template workflow
@@ -18,5 +18,5 @@ export const getTemplateExecutionWorkflows = async (
   templateId: string,
 ): Promise<TemplateExecutionResponse> => {
   // TODO: API Call
-  return templateWorkflowData as TemplateExecutionResponse;
+  return templateWorkflowMockData as TemplateExecutionResponse;
 };

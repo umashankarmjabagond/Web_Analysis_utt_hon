@@ -1,170 +1,177 @@
 {
-  "nodes": [
-    {
-      "id": "87b120c6-ffd5-40e6-b3bc-fdfb2c6987bf",
-      "type": "dataSource",
-      "position": {
-        "x": 104,
-        "y": 140
+  "asset": {
+    "id": "56-FFC618",
+    "name": "56-FFC618",
+    "type": "asset"
+  },
+  "workflow": {
+    "nodes": [
+      {
+        "id": "87b120c6-ffd5-40e6-b3bc-fdfb2c6987bf",
+        "type": "dataSource",
+        "position": {
+          "x": 104,
+          "y": 140
+        },
+        "data": {
+          "label": "Data Source",
+          "status": "success"
+        },
+        "measured": {
+          "width": 120,
+          "height": 72
+        }
       },
-      "data": {
-        "label": "Data Source",
-        "status": "success"
+      {
+        "id": "3ab8c198-84fb-4759-975c-87cb2591a45e",
+        "type": "dataSink",
+        "position": {
+          "x": 428,
+          "y": 140
+        },
+        "data": {
+          "label": "Data Sink",
+          "status": "success"
+        },
+        "measured": {
+          "width": 120,
+          "height": 72
+        },
+        "selected": false,
+        "dragging": false
       },
-      "measured": {
-        "width": 120,
-        "height": 72
+      {
+        "id": "148a682d-741a-4439-a574-52208e8a3733",
+        "type": "dataSink",
+        "position": {
+          "x": 709,
+          "y": 140
+        },
+        "data": {
+          "label": "Data Sink",
+          "status": "warning"
+        },
+        "measured": {
+          "width": 120,
+          "height": 72
+        },
+        "selected": false,
+        "dragging": false
+      },
+      {
+        "id": "d18a1842-284c-46c0-b70c-0d8b7ea5d0ab",
+        "type": "dataPreprocessing",
+        "position": {
+          "x": 970,
+          "y": 140
+        },
+        "data": {
+          "label": "Data Preprocessing",
+          "status": "error"
+        },
+        "measured": {
+          "width": 158,
+          "height": 72
+        },
+        "selected": false,
+        "dragging": false
+      },
+      {
+        "id": "1bbfed94-59bb-4896-9d54-a6f9f9698b5a",
+        "type": "math",
+        "position": {
+          "x": 1310,
+          "y": 140
+        },
+        "data": {
+          "label": "Math",
+          "status": "error"
+        },
+        "measured": {
+          "width": 120,
+          "height": 72
+        },
+        "selected": false,
+        "dragging": false
+      },
+      {
+        "id": "e7902836-2e6c-444b-8bf1-a959213118db",
+        "type": "sorter",
+        "position": {
+          "x": 1676,
+          "y": 140
+        },
+        "data": {
+          "label": "Sorter",
+          "status": "success"
+        },
+        "measured": {
+          "width": 120,
+          "height": 72
+        }
       }
-    },
-    {
-      "id": "3ab8c198-84fb-4759-975c-87cb2591a45e",
-      "type": "dataSink",
-      "position": {
-        "x": 428,
-        "y": 140
+    ],
+    "edges": [
+      {
+        "source": "87b120c6-ffd5-40e6-b3bc-fdfb2c6987bf",
+        "target": "3ab8c198-84fb-4759-975c-87cb2591a45e",
+        "type": "workflow",
+        "markerEnd": {
+          "type": "arrowclosed"
+        },
+        "style": {
+          "strokeWidth": 2
+        },
+        "id": "xy-edge__87b120c6-ffd5-40e6-b3bc-fdfb2c6987bf-3ab8c198-84fb-4759-975c-87cb2591a45e"
       },
-      "data": {
-        "label": "Data Sink",
-        "status": "success"
+      {
+        "source": "3ab8c198-84fb-4759-975c-87cb2591a45e",
+        "target": "148a682d-741a-4439-a574-52208e8a3733",
+        "type": "workflow",
+        "markerEnd": {
+          "type": "arrowclosed"
+        },
+        "style": {
+          "strokeWidth": 2
+        },
+        "id": "xy-edge__3ab8c198-84fb-4759-975c-87cb2591a45e-148a682d-741a-4439-a574-52208e8a3733"
       },
-      "measured": {
-        "width": 120,
-        "height": 72
+      {
+        "source": "148a682d-741a-4439-a574-52208e8a3733",
+        "target": "d18a1842-284c-46c0-b70c-0d8b7ea5d0ab",
+        "type": "workflow",
+        "markerEnd": {
+          "type": "arrowclosed"
+        },
+        "style": {
+          "strokeWidth": 2
+        },
+        "id": "xy-edge__148a682d-741a-4439-a574-52208e8a3733-d18a1842-284c-46c0-b70c-0d8b7ea5d0ab"
       },
-      "selected": false,
-      "dragging": false
-    },
-    {
-      "id": "148a682d-741a-4439-a574-52208e8a3733",
-      "type": "dataSink",
-      "position": {
-        "x": 709,
-        "y": 140
+      {
+        "source": "d18a1842-284c-46c0-b70c-0d8b7ea5d0ab",
+        "target": "1bbfed94-59bb-4896-9d54-a6f9f9698b5a",
+        "type": "workflow",
+        "markerEnd": {
+          "type": "arrowclosed"
+        },
+        "style": {
+          "strokeWidth": 2
+        },
+        "id": "xy-edge__d18a1842-284c-46c0-b70c-0d8b7ea5d0ab-1bbfed94-59bb-4896-9d54-a6f9f9698b5a"
       },
-      "data": {
-        "label": "Data Sink",
-        "status": "warning"
-      },
-      "measured": {
-        "width": 120,
-        "height": 72
-      },
-      "selected": false,
-      "dragging": false
-    },
-    {
-      "id": "d18a1842-284c-46c0-b70c-0d8b7ea5d0ab",
-      "type": "dataPreprocessing",
-      "position": {
-        "x": 970,
-        "y": 140
-      },
-      "data": {
-        "label": "Data Preprocessing",
-        "status": "error"
-      },
-      "measured": {
-        "width": 158,
-        "height": 72
-      },
-      "selected": false,
-      "dragging": false
-    },
-    {
-      "id": "1bbfed94-59bb-4896-9d54-a6f9f9698b5a",
-      "type": "math",
-      "position": {
-        "x": 1310,
-        "y": 140
-      },
-      "data": {
-        "label": "Math",
-        "status": "error"
-      },
-      "measured": {
-        "width": 120,
-        "height": 72
-      },
-      "selected": false,
-      "dragging": false
-    },
-    {
-      "id": "e7902836-2e6c-444b-8bf1-a959213118db",
-      "type": "sorter",
-      "position": {
-        "x": 1676,
-        "y": 140
-      },
-      "data": {
-        "label": "Sorter",
-        "status": "success"
-      },
-      "measured": {
-        "width": 120,
-        "height": 72
+      {
+        "source": "1bbfed94-59bb-4896-9d54-a6f9f9698b5a",
+        "target": "e7902836-2e6c-444b-8bf1-a959213118db",
+        "type": "workflow",
+        "markerEnd": {
+          "type": "arrowclosed"
+        },
+        "style": {
+          "strokeWidth": 2
+        },
+        "id": "xy-edge__1bbfed94-59bb-4896-9d54-a6f9f9698b5a-e7902836-2e6c-444b-8bf1-a959213118db"
       }
-    }
-  ],
-  "edges": [
-    {
-      "source": "87b120c6-ffd5-40e6-b3bc-fdfb2c6987bf",
-      "target": "3ab8c198-84fb-4759-975c-87cb2591a45e",
-      "type": "workflow",
-      "markerEnd": {
-        "type": "arrowclosed"
-      },
-      "style": {
-        "strokeWidth": 2
-      },
-      "id": "xy-edge__87b120c6-ffd5-40e6-b3bc-fdfb2c6987bf-3ab8c198-84fb-4759-975c-87cb2591a45e"
-    },
-    {
-      "source": "3ab8c198-84fb-4759-975c-87cb2591a45e",
-      "target": "148a682d-741a-4439-a574-52208e8a3733",
-      "type": "workflow",
-      "markerEnd": {
-        "type": "arrowclosed"
-      },
-      "style": {
-        "strokeWidth": 2
-      },
-      "id": "xy-edge__3ab8c198-84fb-4759-975c-87cb2591a45e-148a682d-741a-4439-a574-52208e8a3733"
-    },
-    {
-      "source": "148a682d-741a-4439-a574-52208e8a3733",
-      "target": "d18a1842-284c-46c0-b70c-0d8b7ea5d0ab",
-      "type": "workflow",
-      "markerEnd": {
-        "type": "arrowclosed"
-      },
-      "style": {
-        "strokeWidth": 2
-      },
-      "id": "xy-edge__148a682d-741a-4439-a574-52208e8a3733-d18a1842-284c-46c0-b70c-0d8b7ea5d0ab"
-    },
-    {
-      "source": "d18a1842-284c-46c0-b70c-0d8b7ea5d0ab",
-      "target": "1bbfed94-59bb-4896-9d54-a6f9f9698b5a",
-      "type": "workflow",
-      "markerEnd": {
-        "type": "arrowclosed"
-      },
-      "style": {
-        "strokeWidth": 2
-      },
-      "id": "xy-edge__d18a1842-284c-46c0-b70c-0d8b7ea5d0ab-1bbfed94-59bb-4896-9d54-a6f9f9698b5a"
-    },
-    {
-      "source": "1bbfed94-59bb-4896-9d54-a6f9f9698b5a",
-      "target": "e7902836-2e6c-444b-8bf1-a959213118db",
-      "type": "workflow",
-      "markerEnd": {
-        "type": "arrowclosed"
-      },
-      "style": {
-        "strokeWidth": 2
-      },
-      "id": "xy-edge__1bbfed94-59bb-4896-9d54-a6f9f9698b5a-e7902836-2e6c-444b-8bf1-a959213118db"
-    }
-  ]
+    ]
+  }
 }
