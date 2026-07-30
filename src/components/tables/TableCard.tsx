@@ -1,9 +1,8 @@
 import Table from "./Table";
-import type { RowData } from "@tanstack/react-table";
 
 import type { TableCardProps } from "../../types/dashboardTypes";
 
-function TableCard<T extends RowData>({
+function TableCard<T extends object>({
   title,
   columns,
   data,
@@ -98,7 +97,7 @@ function TableCard<T extends RowData>({
           overflow-y-auto
         "
       >
-        <Table columns={columns} data={data} stickyHeader zebraStripes />
+        <Table<T> columns={columns} data={data} stickyHeader zebraStripes />
       </div>
     </div>
   );
