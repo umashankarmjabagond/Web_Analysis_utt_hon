@@ -2,7 +2,7 @@ import type { ColumnDef } from "@tanstack/react-table";
 
 export interface TableProps<T extends object> {
   data: T[];
-  columns?: ColumnDef<T>[];
+  columns?: ColumnDef<T, any>[];
   sortable?: boolean;
   filterable?: boolean;
   pagination?: boolean;
