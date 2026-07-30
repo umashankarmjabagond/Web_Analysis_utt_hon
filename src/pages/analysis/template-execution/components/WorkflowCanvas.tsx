@@ -20,8 +20,10 @@ import type {
   BaseFlowNode,
   ExecutionFlowNode,
 } from "../../../../types/templateExecution";
+import { useParams } from "react-router-dom";
 
 export default function WorkflowCanvas() {
+  const { template, itemId } = useParams();
   const nodes = useTemplateExecutionStore((state) => state.nodes);
   const edges = useTemplateExecutionStore((state) => state.edges);
 
@@ -76,6 +78,7 @@ export default function WorkflowCanvas() {
     <>
       <div className="h-full bg-app-surface cursor-pointer">
         <ReactFlow
+          key={`template-${template}-item-${itemId ?? "unit"}`}
           nodes={nodes}
           edges={edges}
           nodeTypes={nodeTypes}

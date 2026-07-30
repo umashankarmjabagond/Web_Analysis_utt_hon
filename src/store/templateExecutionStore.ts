@@ -110,6 +110,7 @@ export const useTemplateExecutionStore = create<TemplateExecutionState>()(
         state.selectedNodeIds = [];
         state.selectedRowIds = [];
         state.isNodeDrawerOpen = false;
+        state.executionAction = EXECUTION_ACTION.IDLE;
       });
     },
   })),
