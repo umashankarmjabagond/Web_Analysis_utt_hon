@@ -98,10 +98,10 @@ export interface TabsProps {
 
 export interface DonutChartProps {
   data: DonutChartItem[];
-  size?: number | undefined;
+  size?: number;
   colors: Record<string, string>;
+  className?: string;
 }
-
 export interface SelectOption {
   label: string;
   value: string | number;

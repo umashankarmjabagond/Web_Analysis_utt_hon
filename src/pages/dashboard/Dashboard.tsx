@@ -8,7 +8,7 @@ const statCards: StatCardData[] = [
     chartData: [
       {
         name: "Good",
-        value: 10,
+        value: 100,
       },
       {
         name: "Warning",
@@ -25,7 +25,7 @@ const statCards: StatCardData[] = [
     chartData: [
       {
         name: "Good",
-        value: 154,
+        value: 54,
       },
       {
         name: "Warning",

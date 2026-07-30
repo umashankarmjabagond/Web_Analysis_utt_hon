@@ -1,5 +1,5 @@
 export const STATUS_COLORS = {
-  Good: "#68D560",
-  Warning: "#FFDB42",
-  Error: "#FF644C",
+  Good: "var(--color-badge-success-bg)",
+  Warning: "var(--app-node-warning-border)",
+  Error: "var(--semantic-bad)",
 } as const;
