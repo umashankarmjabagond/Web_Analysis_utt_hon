@@ -387,3 +387,29 @@ body {
   );
   background-size: 25px 25px;
 }
+
+
+
+
+/* =========================================================
+   Hide Scrollbar (Only for elements with .no-scrollbar)
+========================================================= */
+
+.no-scrollbar {
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  /* Firefox */
+  scrollbar-width: none !important;
+
+  /* IE & Edge */
+  -ms-overflow-style: none;
+}
+
+/* Chrome, Edge, Safari */
+.no-scrollbar::-webkit-scrollbar {
+  width: 0 !important;
+  height: 0 !important;
+  display: none !important;
+  background: transparent;
+}
