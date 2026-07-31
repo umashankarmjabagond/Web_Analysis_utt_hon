@@ -8,11 +8,12 @@ export default function TemplateExecution({
   template,
   itemId,
 }: TemplateExecutionProps) {
+  const executionContext = itemId ? "asset" : "unit";
   useLoadExecutionWorkflow(template, itemId);
   return (
     <div className="relative h-full">
       <ExecutionToolbar />
-      <WorkflowCanvas />
+      <WorkflowCanvas executionContext={executionContext} />
     </div>
   );
 }
