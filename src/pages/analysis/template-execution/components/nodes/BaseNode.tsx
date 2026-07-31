@@ -7,6 +7,8 @@ import type {
   NodeType,
 } from "../../../../../types/templateExecution";
 import { useWorkflowCanvasInteractions } from "../../../../../hooks/useWorkflowInteractions";
+import { Fragment } from "react/jsx-runtime";
+import type { CSSProperties } from "react";
 
 export default function BaseNode({ id, data, type }: NodeProps<BaseFlowNode>) {
   const checked = useTemplateExecutionStore((state) =>
@@ -71,6 +73,24 @@ export default function BaseNode({ id, data, type }: NodeProps<BaseFlowNode>) {
     tint: checked ? selectionStyle.tint : statusStyle.tint,
   };
 
+  type HandleConfig = {
+    id: string;
+    position: Position;
+  };
+
+  const HANDLE_CONFIG: HandleConfig[] = [
+    { id: "top", position: Position.Top },
+    { id: "right", position: Position.Right },
+    { id: "bottom", position: Position.Bottom },
+    { id: "left", position: Position.Left },
+  ];
+
+  const handleStyle: CSSProperties = {
+    visibility: "hidden",
+    opacity: 0,
+    pointerEvents: "none",
+  };
+
   return (
     <div
       className={`group nodrag nopan relative w-20 min-w-20 min-h-22 rounded-[4px] px-2 py-3 overflow-hidden border cursor-pointer ${nodeStyle.background} ${nodeStyle.border}`}
@@ -103,7 +123,7 @@ export default function BaseNode({ id, data, type }: NodeProps<BaseFlowNode>) {
       </div>
 
       {/* Target Handles */}
-      <Handle
+      {/* <Handle
         type="target"
         position={Position.Left}
         style={{
@@ -121,7 +141,7 @@ export default function BaseNode({ id, data, type }: NodeProps<BaseFlowNode>) {
           opacity: 0,
           pointerEvents: "none",
         }}
-      />
+      /> */}
 
       <div className="relative z-10 flex h-full flex-col items-center justify-center gap-2">
         <Icon size={16} className="shrink-0 text-app-text-secondary" />
@@ -130,8 +150,26 @@ export default function BaseNode({ id, data, type }: NodeProps<BaseFlowNode>) {
         </span>
       </div>
 
+      {HANDLE_CONFIG.map((handle) => (
+        <Fragment key={handle.id}>
+          <Handle
+            id={handle.id}
+            type="target"
+            position={handle.position}
+            style={handleStyle}
+          />
+
+          <Handle
+            id={handle.id}
+            type="source"
+            position={handle.position}
+            style={handleStyle}
+          />
+        </Fragment>
+      ))}
+
       {/* Source Handles */}
-      <Handle
+      {/* <Handle
         type="source"
         position={Position.Right}
         style={{
@@ -149,7 +187,7 @@ export default function BaseNode({ id, data, type }: NodeProps<BaseFlowNode>) {
           opacity: 0,
           pointerEvents: "none",
         }}
-      />
+      /> */}
     </div>
   );
 }
