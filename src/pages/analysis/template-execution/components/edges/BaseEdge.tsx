@@ -3,17 +3,11 @@ import {
   getBezierPath,
   getSmoothStepPath,
   getStraightPath,
-  type Edge,
-  type EdgeProps,
 } from "@xyflow/react";
-
-type WorkflowEdgeData = {
-  pathType: "default" | "smoothstep" | "straight" | "bezier";
-  animated?: boolean;
-};
-
-type WorkflowEdge = Edge<WorkflowEdgeData, "workflow">;
-type ExecutionWorkflowEdgeProps = EdgeProps<WorkflowEdge>;
+import type {
+  ExecutionWorkflowEdgeProps,
+  WorkflowEdgeData,
+} from "../../../../../types/templateExecution";
 
 export default function ExecuctionWorkflowEdge({
   id,

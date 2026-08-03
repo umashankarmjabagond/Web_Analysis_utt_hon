@@ -61,7 +61,7 @@ export default function ExecutionNodeDrawer() {
       }
     >
       <div className="h-full overflow-hidden">
-        {ActiveTabComponent && <ActiveTabComponent />}
+        {isNodeDrawerOpen && ActiveTabComponent && <ActiveTabComponent />}
       </div>
     </Drawer>
   );

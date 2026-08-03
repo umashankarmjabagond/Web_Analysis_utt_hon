@@ -18,6 +18,7 @@ import type {
 import { useParams } from "react-router-dom";
 import ExecutionNodeDrawer from "./ExecutionNodeDrawer";
 import ExecutionDetailsPanel from "./ExecutionDetailsPanel";
+import { useMemo } from "react";
 
 export default function WorkflowCanvas({
   executionContext,
@@ -28,10 +29,6 @@ export default function WorkflowCanvas({
   const nodes = useTemplateExecutionStore((state) => state.nodes);
   const edges = useTemplateExecutionStore((state) => state.edges);
 
-  const isNodeDrawerOpen = useTemplateExecutionStore(
-    (state) => state.isNodeDrawerOpen,
-  );
-
   const { handleNodeSelection } = useWorkflowCanvasInteractions();
 
   const onNodeClick: NodeMouseHandler<ExecutionFlowNode> = (_, node) => {
@@ -41,29 +38,50 @@ export default function WorkflowCanvas({
     handleNodeSelection(baseNode.id, baseNode.data.status);
   };
 
+  const { contentWidth, contentHeight } = useMemo(() => {
+    const mxaX = Math.max(...nodes.map((n) => n.position.x + 200), 800);
+    const mxaY = Math.max(...nodes.map((n) => n.position.y + 150), 400);
+    return { contentWidth: mxaX, contentHeight: mxaY };
+  }, [nodes]);
+
   return (
     <>
       <div
-        className={`h-full bg-app-surface ${showDetailsPanel && "flex h-full flex-col"} `}
+        className={`h-full bg-app-surface ${showDetailsPanel ? "flex flex-col" : ""} `}
       >
-        <div className={showDetailsPanel ? "flex-1 min-h-0" : "h-full"}>
-          <ReactFlow
-            key={`template-${template}-item-${itemId ?? "unit"}`}
-            nodes={nodes}
-            edges={edges}
-            nodeTypes={nodeTypes}
-            edgeTypes={edgeTypes}
-            onNodeClick={onNodeClick}
-            connectionMode={ConnectionMode.Loose}
-            proOptions={{ hideAttribution: true }}
-          >
-            <Background
-              color="var(--app-surface-elevated)"
-              size={3}
-              variant={BackgroundVariant.Dots}
-              gap={25}
-            />
-          </ReactFlow>
+        <div
+          className={`overflow-auto ${showDetailsPanel ? "flex-1 min-h-0" : "h-full"}`}
+        >
+          <div style={{ width: contentWidth, height: contentHeight }}>
+            <ReactFlow
+              key={`template-${template}-item-${itemId ?? "unit"}`}
+              nodes={nodes}
+              edges={edges}
+              nodeTypes={nodeTypes}
+              edgeTypes={edgeTypes}
+              onNodeClick={onNodeClick}
+              connectionMode={ConnectionMode.Loose}
+              preventScrolling={false}
+              panOnScroll={false}
+              panOnDrag={false}
+              zoomOnScroll={false}
+              zoomOnPinch={false}
+              zoomOnDoubleClick={false}
+              nodesDraggable={false}
+              minZoom={1}
+              maxZoom={1}
+              fitView={false}
+              defaultViewport={{ x: 0, y: 0, zoom: 1 }}
+              proOptions={{ hideAttribution: true }}
+            >
+              <Background
+                color="var(--app-surface-elevated)"
+                size={3}
+                variant={BackgroundVariant.Dots}
+                gap={25}
+              />
+            </ReactFlow>
+          </div>
         </div>
 
         {showDetailsPanel && (
@@ -73,7 +91,7 @@ export default function WorkflowCanvas({
         )}
       </div>
 
-      {isNodeDrawerOpen && <ExecutionNodeDrawer />}
+      <ExecutionNodeDrawer />
     </>
   );
 }

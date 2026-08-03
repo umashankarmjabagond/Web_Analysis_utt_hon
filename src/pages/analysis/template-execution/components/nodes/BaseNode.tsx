@@ -4,6 +4,7 @@ import { useTemplateExecutionStore } from "../../../../../store/templateExecutio
 import { Check } from "lucide-react";
 import type {
   BaseFlowNode,
+  HandleConfig,
   NodeType,
 } from "../../../../../types/templateExecution";
 import { useWorkflowCanvasInteractions } from "../../../../../hooks/useWorkflowInteractions";
@@ -71,11 +72,6 @@ export default function BaseNode({ id, data, type }: NodeProps<BaseFlowNode>) {
     background: statusStyle.background,
     border: checked ? selectionStyle.border : statusStyle.border,
     tint: checked ? selectionStyle.tint : statusStyle.tint,
-  };
-
-  type HandleConfig = {
-    id: string;
-    position: Position;
   };
 
   const HANDLE_CONFIG: HandleConfig[] = [
