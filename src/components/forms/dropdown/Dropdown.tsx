@@ -69,7 +69,7 @@ export default function Dropdown({
       {/* Menu */}
 
       {isOpen && (
-        <div className="absolute right-0 top-full z-50 mt-2 w-64 overflow-hidden rounded-md border border-app-surface-secondary bg-search-background shadow-xl">
+        <div className="absolute -left-30 lg:left-auto lg:right-0 top-full z-50 mt-2 w-64 overflow-hidden rounded-md border border-app-surface-secondary bg-search-background shadow-xl">
           {items.map((item) => (
             <button
               key={item.value}
