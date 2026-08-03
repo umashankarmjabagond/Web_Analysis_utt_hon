@@ -67,6 +67,8 @@ export default function Canvas() {
     activeTool,
     saveHistory,
     clearWorkflow,
+    pendingCatalogItem,
+    setPendingCatalogItem,
   } = useWorkflowStore();
 
   const { screenToFlowPosition } = useReactFlow<WorkflowNode, Edge>();
@@ -75,6 +77,57 @@ export default function Canvas() {
   useEffect(() => {
     clearWorkflow();
   }, [clearWorkflow]);
+
+  useEffect(() => {
+    if (!pendingCatalogItem) return;
+
+    // Template
+    if (pendingCatalogItem.element?.elementType === "Template") {
+      const backendWorkflow = dummyWorkflows[pendingCatalogItem.id];
+
+      if (backendWorkflow) {
+        const canvasWorkflow = backendToFlow(backendWorkflow);
+
+        setNodes(canvasWorkflow.nodes);
+        setEdges(canvasWorkflow.edges);
+      }
+
+      setPendingCatalogItem(null);
+      return;
+    }
+
+    // Attribute
+    const element = structuredClone(pendingCatalogItem.element);
+
+    element.Name = generateUniqueName(
+      element.elementType,
+      nodes as WorkflowNode[],
+    );
+
+    const node: WorkflowNode = {
+      id: element.Name,
+      type: "baseNode",
+      position: {
+        x: 400,
+        y: 250,
+      },
+      data: {
+        label: pendingCatalogItem.title,
+        element,
+      },
+    };
+
+    addNode(node);
+
+    setPendingCatalogItem(null);
+  }, [
+    pendingCatalogItem,
+    addNode,
+    nodes,
+    setNodes,
+    setEdges,
+    setPendingCatalogItem,
+  ]);
 
   const handleDragOver = useCallback((event: React.DragEvent) => {
     event.preventDefault();
