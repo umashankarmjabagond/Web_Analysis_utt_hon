@@ -1,4 +1,4 @@
-import type { Edge, Node } from "@xyflow/react";
+import type { Edge, EdgeProps, Node, Position } from "@xyflow/react";
 import type { NODE_TYPES } from "../pages/analysis/template-execution/components/nodes/nodeConfig";
 
 // service types
@@ -42,6 +42,20 @@ export type BaseNodeData = {
 };
 
 export type BaseFlowNode = Node<BaseNodeData>;
+
+export type HandleConfig = {
+  id: string;
+  position: Position;
+};
+
+// base edge
+export type WorkflowEdgeData = {
+  pathType: "default" | "smoothstep" | "straight" | "bezier";
+  animated?: boolean;
+};
+
+export type WorkflowEdge = Edge<WorkflowEdgeData, "workflow">;
+export type ExecutionWorkflowEdgeProps = EdgeProps<WorkflowEdge>;
 
 // execution header node
 type ExecutionHeaderData = {
