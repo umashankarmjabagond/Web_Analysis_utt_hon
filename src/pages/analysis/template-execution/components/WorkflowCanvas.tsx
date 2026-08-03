@@ -1,6 +1,7 @@
 import {
   Background,
   BackgroundVariant,
+  ConnectionMode,
   ReactFlow,
   type NodeMouseHandler,
 } from "@xyflow/react";
@@ -53,6 +54,7 @@ export default function WorkflowCanvas({
             nodeTypes={nodeTypes}
             edgeTypes={edgeTypes}
             onNodeClick={onNodeClick}
+            connectionMode={ConnectionMode.Loose}
             proOptions={{ hideAttribution: true }}
           >
             <Background

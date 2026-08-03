@@ -111,6 +111,8 @@
             "source": "e5e72960-10f6-4e8b-8c44-588d32a079fb",
             "target": "a9f32970-b62c-4c4a-8a9d-6c654188ab4b",
             "type": "workflow",
+            "sourceHandle": "right",
+            "targetHandle": "left",
             "markerEnd": {
               "type": "arrowclosed"
             },
@@ -123,6 +125,8 @@
             "source": "a9f32970-b62c-4c4a-8a9d-6c654188ab4b",
             "target": "6853c526-51a0-4bcd-9830-b132336e2ad5",
             "type": "workflow",
+            "sourceHandle": "right",
+            "targetHandle": "left",
             "markerEnd": {
               "type": "arrowclosed"
             },
@@ -135,6 +139,8 @@
             "source": "6853c526-51a0-4bcd-9830-b132336e2ad5",
             "target": "cc03e1ca-0945-402b-80d8-7a0e79524256",
             "type": "workflow",
+            "sourceHandle": "right",
+            "targetHandle": "left",
             "markerEnd": {
               "type": "arrowclosed"
             },
@@ -147,6 +153,8 @@
             "source": "cc03e1ca-0945-402b-80d8-7a0e79524256",
             "target": "90e85fa0-3655-4fb4-9397-0331cf51c01f",
             "type": "workflow",
+            "sourceHandle": "right",
+            "targetHandle": "left",
             "markerEnd": {
               "type": "arrowclosed"
             },
@@ -159,6 +167,8 @@
             "source": "90e85fa0-3655-4fb4-9397-0331cf51c01f",
             "target": "bbd35482-b236-4161-a65e-c33f51833830",
             "type": "workflow",
+            "sourceHandle": "right",
+            "targetHandle": "left",
             "markerEnd": {
               "type": "arrowclosed"
             },
@@ -308,6 +318,8 @@
             "source": "cc13d575-be36-4be0-938e-ea6cf70e5e49",
             "target": "5196dffa-a820-4159-92ec-a7ae33caa983",
             "type": "workflow",
+            "sourceHandle": "right",
+            "targetHandle": "left",
             "markerEnd": {
               "type": "arrowclosed"
             },
@@ -320,6 +332,8 @@
             "source": "5196dffa-a820-4159-92ec-a7ae33caa983",
             "target": "0cc14155-9810-4f79-9be6-9207fe27469c",
             "type": "workflow",
+            "sourceHandle": "right",
+            "targetHandle": "left",
             "markerEnd": {
               "type": "arrowclosed"
             },
@@ -332,6 +346,8 @@
             "source": "0cc14155-9810-4f79-9be6-9207fe27469c",
             "target": "2b5fa492-1dd7-44e5-8f28-9a0dfa02a6e9",
             "type": "workflow",
+            "sourceHandle": "right",
+            "targetHandle": "left",
             "markerEnd": {
               "type": "arrowclosed"
             },
@@ -344,6 +360,8 @@
             "source": "2b5fa492-1dd7-44e5-8f28-9a0dfa02a6e9",
             "target": "671e1a70-3ad5-4f6f-81e7-497449182e83",
             "type": "workflow",
+            "sourceHandle": "right",
+            "targetHandle": "left",
             "markerEnd": {
               "type": "arrowclosed"
             },
@@ -356,6 +374,8 @@
             "source": "671e1a70-3ad5-4f6f-81e7-497449182e83",
             "target": "c3dbf176-c097-4f66-a943-1b8f22d85cef",
             "type": "workflow",
+            "sourceHandle": "right",
+            "targetHandle": "left",
             "markerEnd": {
               "type": "arrowclosed"
             },
@@ -368,6 +388,8 @@
             "source": "c3dbf176-c097-4f66-a943-1b8f22d85cef",
             "target": "f3e26708-55ea-48ac-9ea7-7a421b27a187",
             "type": "workflow",
+            "sourceHandle": "right",
+            "targetHandle": "left",
             "markerEnd": {
               "type": "arrowclosed"
             },
@@ -380,6 +402,8 @@
             "source": "f3e26708-55ea-48ac-9ea7-7a421b27a187",
             "target": "6a4f2483-f43c-4883-ade7-019f275cfecd",
             "type": "workflow",
+            "sourceHandle": "right",
+            "targetHandle": "left",
             "markerEnd": {
               "type": "arrowclosed"
             },
@@ -561,6 +585,8 @@
             "source": "20bce2db-c55c-44bd-bbeb-a7c082315bd3",
             "target": "7f50e753-143d-44d0-b40a-c4479e7d8680",
             "type": "workflow",
+            "sourceHandle": "right",
+            "targetHandle": "left",
             "markerEnd": {
               "type": "arrowclosed"
             },
@@ -573,6 +599,8 @@
             "source": "7f50e753-143d-44d0-b40a-c4479e7d8680",
             "target": "38f0e739-b0b2-44d0-a8f7-d866a8379daf",
             "type": "workflow",
+            "sourceHandle": "right",
+            "targetHandle": "left",
             "markerEnd": {
               "type": "arrowclosed"
             },
@@ -585,6 +613,8 @@
             "source": "38f0e739-b0b2-44d0-a8f7-d866a8379daf",
             "target": "90c7321b-3615-4f2b-9aac-1929483c6b34",
             "type": "workflow",
+            "sourceHandle": "right",
+            "targetHandle": "left",
             "markerEnd": {
               "type": "arrowclosed"
             },
@@ -597,6 +627,8 @@
             "source": "90c7321b-3615-4f2b-9aac-1929483c6b34",
             "target": "fc69e5d9-7cac-498b-ae7e-5beac29ac17f",
             "type": "workflow",
+            "sourceHandle": "right",
+            "targetHandle": "left",
             "markerEnd": {
               "type": "arrowclosed"
             },
@@ -609,6 +641,8 @@
             "source": "fc69e5d9-7cac-498b-ae7e-5beac29ac17f",
             "target": "a0b61bae-0caa-492f-a71c-ba2ae483ed34",
             "type": "workflow",
+            "sourceHandle": "right",
+            "targetHandle": "left",
             "markerEnd": {
               "type": "arrowclosed"
             },
@@ -621,6 +655,8 @@
             "source": "a0b61bae-0caa-492f-a71c-ba2ae483ed34",
             "target": "d0d04946-59de-4bc0-896d-21010b0ab1e5",
             "type": "workflow",
+            "sourceHandle": "right",
+            "targetHandle": "left",
             "markerEnd": {
               "type": "arrowclosed"
             },
@@ -633,6 +669,8 @@
             "source": "d0d04946-59de-4bc0-896d-21010b0ab1e5",
             "target": "e2ed0928-b3dd-4722-9958-a23d651bd133",
             "type": "workflow",
+            "sourceHandle": "right",
+            "targetHandle": "left",
             "markerEnd": {
               "type": "arrowclosed"
             },
@@ -645,6 +683,8 @@
             "source": "e2ed0928-b3dd-4722-9958-a23d651bd133",
             "target": "dbf06d05-d61f-4df2-b781-39e46ad4cd46",
             "type": "workflow",
+            "sourceHandle": "right",
+            "targetHandle": "left",
             "markerEnd": {
               "type": "arrowclosed"
             },
@@ -657,6 +697,8 @@
             "source": "dbf06d05-d61f-4df2-b781-39e46ad4cd46",
             "target": "28b57768-89fa-4940-946f-a13e80ebbf34",
             "type": "workflow",
+            "sourceHandle": "right",
+            "targetHandle": "left",
             "markerEnd": {
               "type": "arrowclosed"
             },
@@ -664,6 +706,40 @@
               "strokeWidth": 2
             },
             "id": "xy-edge__dbf06d05-d61f-4df2-b781-39e46ad4cd46-28b57768-89fa-4940-946f-a13e80ebbf34"
+          },
+          {
+            "source": "7f50e753-143d-44d0-b40a-c4479e7d8680",
+            "target": "fc69e5d9-7cac-498b-ae7e-5beac29ac17f",
+            "type": "workflow",
+            "sourceHandle": "top",
+            "targetHandle": "top",
+            "data": {
+              "pathType": "smoothstep"
+            },
+            "markerEnd": {
+              "type": "arrowclosed"
+            },
+            "style": {
+              "strokeWidth": 2
+            },
+            "id": "xy-edge__20bce2db-c55c-44bd-bbeb-a7c082315123-7f50e753-143d-44d0-b40a-c4479e7d8680"
+          },
+          {
+            "source": "90c7321b-3615-4f2b-9aac-1929483c6b34",
+            "target": "a0b61bae-0caa-492f-a71c-ba2ae483ed34",
+            "type": "workflow",
+            "sourceHandle": "bottom",
+            "targetHandle": "bottom",
+            "data": {
+              "pathType": "smoothstep"
+            },
+            "markerEnd": {
+              "type": "arrowclosed"
+            },
+            "style": {
+              "strokeWidth": 2
+            },
+            "id": "xy-edge__20bce2db-c55c-44bd-bbeb-a7c082315875-7f50e753-143d-44d0-b40a-c4479e7d8680"
           }
         ]
       }
@@ -822,6 +898,8 @@
             "source": "ac65f7fb-5c2a-44d0-aa9f-07e4c3fb7899",
             "target": "1e9b6dbf-f67e-438a-80ae-15907bbe8f1c",
             "type": "workflow",
+            "sourceHandle": "right",
+            "targetHandle": "left",
             "markerEnd": {
               "type": "arrowclosed"
             },
@@ -834,6 +912,8 @@
             "source": "1e9b6dbf-f67e-438a-80ae-15907bbe8f1c",
             "target": "8ecfa00a-ee09-4ee3-befe-9c27f7aac3b3",
             "type": "workflow",
+            "sourceHandle": "right",
+            "targetHandle": "left",
             "markerEnd": {
               "type": "arrowclosed"
             },
@@ -846,6 +926,8 @@
             "source": "8ecfa00a-ee09-4ee3-befe-9c27f7aac3b3",
             "target": "1dd16699-0af5-4a11-9b25-8d9f1308fc0f",
             "type": "workflow",
+            "sourceHandle": "right",
+            "targetHandle": "left",
             "markerEnd": {
               "type": "arrowclosed"
             },
@@ -858,6 +940,8 @@
             "source": "1dd16699-0af5-4a11-9b25-8d9f1308fc0f",
             "target": "bdb0356c-6758-465f-8e5d-70fa312af8a4",
             "type": "workflow",
+            "sourceHandle": "right",
+            "targetHandle": "left",
             "markerEnd": {
               "type": "arrowclosed"
             },
@@ -870,6 +954,8 @@
             "source": "bdb0356c-6758-465f-8e5d-70fa312af8a4",
             "target": "c1189ccb-62eb-4bb0-9d88-780de3a39093",
             "type": "workflow",
+            "sourceHandle": "right",
+            "targetHandle": "left",
             "markerEnd": {
               "type": "arrowclosed"
             },
@@ -882,6 +968,8 @@
             "source": "c1189ccb-62eb-4bb0-9d88-780de3a39093",
             "target": "c1ba9f55-b6f2-41a7-bf88-6e069bd84554",
             "type": "workflow",
+            "sourceHandle": "right",
+            "targetHandle": "left",
             "markerEnd": {
               "type": "arrowclosed"
             },
@@ -894,6 +982,8 @@
             "source": "c1ba9f55-b6f2-41a7-bf88-6e069bd84554",
             "target": "c5344f5d-307a-48d2-9e91-e64a18098273",
             "type": "workflow",
+            "sourceHandle": "right",
+            "targetHandle": "left",
             "markerEnd": {
               "type": "arrowclosed"
             },
@@ -906,6 +996,8 @@
             "source": "c5344f5d-307a-48d2-9e91-e64a18098273",
             "target": "c039c2be-c110-4e69-84e9-0843600f4d05",
             "type": "workflow",
+            "sourceHandle": "right",
+            "targetHandle": "left",
             "markerEnd": {
               "type": "arrowclosed"
             },
