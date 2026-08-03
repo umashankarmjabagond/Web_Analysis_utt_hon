@@ -7,7 +7,7 @@ import type {
 } from "../../types/dashboardTypes";
 import StatCard from "./components/StatCard";
 
-import { createColumnHelper, type ColumnDef } from "@tanstack/react-table";
+import { createColumnHelper } from "@tanstack/react-table";
 const statCards: StatCardData[] = [
   {
     title: "TOTAL UNITS",
@@ -277,7 +277,7 @@ const warningData: WarningRow[] = [
 
 const statusColumnHelper = createColumnHelper<StatusSummaryRow>();
 
-const statusColumns: ColumnDef<StatusSummaryRow, any>[] = [
+const statusColumns = [
   statusColumnHelper.accessor("unitName", {
     header: "Unit Name",
   }),
@@ -366,7 +366,7 @@ const statusColumns: ColumnDef<StatusSummaryRow, any>[] = [
 
 const warningColumnHelper = createColumnHelper<WarningRow>();
 
-const warningColumns: ColumnDef<WarningRow, any>[] = [
+const warningColumns = [
   warningColumnHelper.accessor("unitName", {
     header: "Unit Name",
   }),
@@ -437,14 +437,6 @@ export default function Dashboard() {
             border="border-[var(--color-button-text-primary)]"
             headerActions={
               <>
-                <Input />
-                <Input />
-                <Input />
-                <Input />
-                <Input />
-                <Input />
-                <Input />
-                <Input />
                 <Input />
                 <Input />
               </>

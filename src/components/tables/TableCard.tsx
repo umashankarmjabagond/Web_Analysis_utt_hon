@@ -1,7 +1,5 @@
 import Table from "./Table";
-
 import type { TableCardProps } from "../../types/dashboardTypes";
-
 function TableCard<T extends object>({
   title,
   columns,

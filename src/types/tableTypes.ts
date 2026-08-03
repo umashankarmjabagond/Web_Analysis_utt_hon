@@ -1,8 +1,8 @@
-import type { ColumnDef } from "@tanstack/react-table";
+import type { ColumnDef, RowData } from "@tanstack/react-table";
 
-export interface TableProps<T extends object> {
+export interface TableProps<T extends RowData> {
   data: T[];
-  columns?: ColumnDef<T, any>[];
+  columns?: ColumnDef<T>[];
   sortable?: boolean;
   filterable?: boolean;
   pagination?: boolean;

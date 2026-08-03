@@ -103,7 +103,7 @@ const Table = <T extends object>({
         </div>
       )}
 
-      {/* ---------------- Table ---------------- */}
+      {/*---------------- Table ----------------*/}
 
       <table
         className={`
