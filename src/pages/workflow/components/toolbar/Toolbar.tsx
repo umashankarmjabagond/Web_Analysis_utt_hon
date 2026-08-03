@@ -25,6 +25,8 @@ import Notification from "../../../../components/common/notification/Notificatio
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../../../constants/routes/routesConstant";
 
+import { ChevronDown } from "lucide-react";
+
 export default function Toolbar() {
   const {
     nodes,
@@ -53,6 +55,9 @@ export default function Toolbar() {
   );
 
   const [templateName, setTemplateName] = useState("");
+
+  const [showMoreMenu, setShowMoreMenu] = useState(false);
+const [showActionMenu, setShowActionMenu] = useState(false);
 
   const handleSave = () => {
     const existingTemplates = JSON.parse(
@@ -99,11 +104,11 @@ export default function Toolbar() {
   };
 
   return (
-    <div className="flex h-12 items-center justify-between border-b border-[#3D3D3D] bg-[#232323] px-3">
+    <div className="flex min-h-12 items-center rounded-[6px] border border-app-divider bg-component-toolbar-background px-1 lg: justify-between">
       {/* LEFT */}
-
-      <div className="flex items-center gap-2">
-        <div className="flex items-center gap-2 border-r border-[#444] pr-4 text-sm text-white">
+      
+      <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1[141px pr-1 text-xs text-white md:px] md:text-sm md:pr-4">
           <ArrowLeft
             className="cursor-pointer"
             onClick={() => navigate(ROUTES.DASHBOARD)}
@@ -128,6 +133,135 @@ export default function Toolbar() {
           onClick={() => setActiveTool("connect")}
         />
 
+        <div className="relative lg:hidden">
+  <button
+    onClick={() => setShowMoreMenu(!showMoreMenu)}
+    className="flex items-center gap-1 rounded border border-app-divider px-1 py-1 text-xs text-white"
+  >
+    More
+    <ChevronDown size={14} />
+  </button>
+
+  {showMoreMenu && (
+    <div className="absolute right-0 top-full z-50 mt-2 flex flex-col rounded-md border border-app-divider bg-component-toolbar-background shadow-lg">
+  <button className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-white">
+    <Pencil size={14} />
+    
+  </button>
+
+  <button className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-white">
+    <Grid2X2 size={14} />
+    
+  </button>
+
+  <button
+    onClick={undo}
+    className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-white"
+  >
+    <Undo2 size={14} />
+    
+  </button>
+
+  <button
+    onClick={redo}
+    className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-white"
+  >
+    <Redo2 size={14} />
+    
+  </button>
+
+  <button
+    onClick={() => {
+      deleteSelectedEdges();
+      deleteSelectedNodes();
+    }}
+    className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-white"
+  >
+    <Circle size={14} />
+    
+  </button>
+
+  <button className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-white">
+    <Square size={14} />
+    
+  </button>
+
+  <button className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-white">
+    <Type size={14} />
+    
+  </button>
+</div>
+  )}
+</div>
+
+{/* RIGHT TABLET */}
+
+<div className="relative lg:hidden">
+  <button
+    onClick={() => setShowActionMenu(!showActionMenu)}
+    className="flex items-center gap-1 rounded border border-app-divider px-1 py-1 text-xs text-white"
+  >
+    Actions
+    <ChevronDown size={14} />
+  </button>
+
+  {showActionMenu && (
+    <div className="absolute right-0 top-full z-50 mt-2 w-52 rounded-md border border-app-divider bg-component-toolbar-background shadow-lg">
+      <button className="block w-full px-3 py-2 text-left text-sm text-white hover:bg-app-surface">
+        Import Template
+      </button>
+
+      <button className="block w-full px-3 py-2 text-left text-sm text-white hover:bg-app-surface">
+        Export Template
+      </button>
+
+      <div className="border-t border-app-divider p-2">
+        <Dropdown
+          placeholder="Save As"
+          items={[
+            {
+              label: "Custom Regulatory Template",
+              value: "regulatory",
+            },
+            {
+              label: "Custom MPC Templates",
+              value: "mpc",
+            },
+          ]}
+          onSelect={(item) => {
+  if (nodes.length === 0) {
+    setNotificationType("warning");
+    setNotificationTitle("Nothing to Save");
+    setNotificationMessage(
+      "Please create a workflow before saving the template.",
+    );
+
+    setShowNotification(true);
+
+    setTimeout(() => {
+      setShowNotification(false);
+    }, 3000);
+
+    return;
+  }
+
+  setTemplateType(item.value as "regulatory" | "mpc");
+
+  const templates = JSON.parse(
+    localStorage.getItem("workflowTemplates") || "[]",
+  );
+
+  setTemplateName(`Custom_${templates.length + 1}`);
+
+  setIsSaveDialogOpen(true);
+}}
+        />
+      </div>
+    </div>
+  )}
+</div>
+
+<div className="hidden lg:flex items-center gap-2">
         <ToolbarButton title="Pencil" icon={<Pencil size={15} />} />
 
         <ToolbarButton title="Grid" icon={<Grid2X2 size={15} />} />
@@ -148,60 +282,68 @@ export default function Toolbar() {
         <ToolbarButton title="Rectangle" icon={<Square size={15} />} />
 
         <ToolbarButton title="Text" icon={<Type size={15} />} />
+
+        </div>
       </div>
 
       {/* RIGHT */}
 
-      <div className="flex items-center gap-6 text-sm">
-        <button className="flex items-center gap-1 text-[#55AFFF] hover:text-white transition-colors">
-          <Upload size={15} />
-          Import Template
-        </button>
+      {/* RIGHT DESKTOP */}
 
-        <button className="flex items-center gap-1 text-[#55AFFF] hover:text-white transition-colors">
-          <Download size={15} />
-          Export Template
-        </button>
+<div className="hidden lg:flex items-center gap-6 text-sm">
+  <button className="flex items-center gap-1 text-app-action-primary text-sm hover:text-white transition-colors">
+    <Upload size={15} />
+    Import Template
+  </button>
 
-        <Dropdown
-          placeholder="Save As"
-          items={[
-            {
-              label: "Custom Regulatory Template",
-              value: "regulatory",
-            },
-            {
-              label: "Custom MPC Templates",
-              value: "mpc",
-            },
-          ]}
-          onSelect={(item) => {
-            if (nodes.length === 0) {
-              setNotificationType("warning");
-              setNotificationTitle("Nothing to Save");
-              setNotificationMessage(
-                "Please create a workflow before saving the template.",
-              );
+  <button className="flex items-center gap-1 text-app-default-border text-sm hover:text-white transition-colors">
+    <Download size={15} />
+    Export Template
+  </button>
 
-              setShowNotification(true);
+  <Dropdown
+    placeholder="Save As"
+    items={[
+      {
+        label: "Custom Regulatory Template",
+        value: "regulatory",
+      },
+      {
+        label: "Custom MPC Templates",
+        value: "mpc",
+      },
+    ]}
+    onSelect={(item) => {
+  if (nodes.length === 0) {
+    setNotificationType("warning");
+    setNotificationTitle("Nothing to Save");
+    setNotificationMessage(
+      "Please create a workflow before saving the template.",
+    );
 
-              setTimeout(() => {
-                setShowNotification(false);
-              }, 3000);
+    setShowNotification(true);
 
-              return;
-            }
+    setTimeout(() => {
+      setShowNotification(false);
+    }, 3000);
 
-            setTemplateType(item.value as "regulatory" | "mpc");
-            const templates = JSON.parse(
-              localStorage.getItem("workflowTemplates") || "[]",
-            );
+    return;
+  }
 
-            setTemplateName(`Custom_${templates.length + 1}`);
-            setIsSaveDialogOpen(true);
-          }}
-        />
-      </div>
+  setTemplateType(item.value as "regulatory" | "mpc");
+
+  const templates = JSON.parse(
+    localStorage.getItem("workflowTemplates") || "[]",
+  );
+
+  setTemplateName(`Custom_${templates.length + 1}`);
+
+  setIsSaveDialogOpen(true);
+}}
+  />
+</div>
+
+
       <Dialog
         isOpen={isSaveDialogOpen}
         subtitle="SAVE AS"
@@ -212,6 +354,7 @@ export default function Toolbar() {
       >
         <div className="flex flex-col gap-6 text-sm">
           <Input
+           className="w-[288px] h-8 rounded bg-app-surface border border-search-border text-[14px] text-white"
             label="Template Name"
             value={templateName}
             onChange={(e) => setTemplateName(e.target.value)}

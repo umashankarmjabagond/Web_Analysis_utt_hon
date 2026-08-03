@@ -115,6 +115,8 @@
       {
         "source": "87b120c6-ffd5-40e6-b3bc-fdfb2c6987bf",
         "target": "3ab8c198-84fb-4759-975c-87cb2591a45e",
+        "sourceHandle": "right",
+        "targetHandle": "left",
         "type": "workflow",
         "markerEnd": {
           "type": "arrowclosed"
@@ -122,11 +124,16 @@
         "style": {
           "strokeWidth": 2
         },
+        "data": {
+          "pathType": "smoothstep"
+        },
         "id": "xy-edge__87b120c6-ffd5-40e6-b3bc-fdfb2c6987bf-3ab8c198-84fb-4759-975c-87cb2591a45e"
       },
       {
         "source": "3ab8c198-84fb-4759-975c-87cb2591a45e",
         "target": "148a682d-741a-4439-a574-52208e8a3733",
+        "sourceHandle": "right",
+        "targetHandle": "left",
         "type": "workflow",
         "markerEnd": {
           "type": "arrowclosed"
@@ -139,6 +146,8 @@
       {
         "source": "148a682d-741a-4439-a574-52208e8a3733",
         "target": "d18a1842-284c-46c0-b70c-0d8b7ea5d0ab",
+        "sourceHandle": "right",
+        "targetHandle": "left",
         "type": "workflow",
         "markerEnd": {
           "type": "arrowclosed"
@@ -151,6 +160,8 @@
       {
         "source": "d18a1842-284c-46c0-b70c-0d8b7ea5d0ab",
         "target": "1bbfed94-59bb-4896-9d54-a6f9f9698b5a",
+        "sourceHandle": "right",
+        "targetHandle": "left",
         "type": "workflow",
         "markerEnd": {
           "type": "arrowclosed"
@@ -163,6 +174,8 @@
       {
         "source": "1bbfed94-59bb-4896-9d54-a6f9f9698b5a",
         "target": "e7902836-2e6c-444b-8bf1-a959213118db",
+        "sourceHandle": "right",
+        "targetHandle": "left",
         "type": "workflow",
         "markerEnd": {
           "type": "arrowclosed"
@@ -171,6 +184,41 @@
           "strokeWidth": 2
         },
         "id": "xy-edge__1bbfed94-59bb-4896-9d54-a6f9f9698b5a-e7902836-2e6c-444b-8bf1-a959213118db"
+      },
+      {
+        "source": "3ab8c198-84fb-4759-975c-87cb2591a45e",
+        "target": "d18a1842-284c-46c0-b70c-0d8b7ea5d0ab",
+        "sourceHandle": "bottom",
+        "targetHandle": "bottom",
+        "type": "workflow",
+        "data": {
+          "pathType": "smoothstep"
+        },
+        "markerEnd": {
+          "type": "arrowclosed"
+        },
+        "style": {
+          "strokeWidth": 2
+        },
+        "id": "xy-edge__1bbfed94-59bb-4896-9d54-a6f9f9ndhwr455-e7902836-2e6c-444b-8bf1-a959213118db"
+      },
+
+      {
+        "source": "148a682d-741a-4439-a574-52208e8a3733",
+        "target": "e7902836-2e6c-444b-8bf1-a959213118db",
+        "sourceHandle": "top",
+        "targetHandle": "top",
+        "type": "workflow",
+        "data": {
+          "pathType": "smoothstep"
+        },
+        "markerEnd": {
+          "type": "arrowclosed"
+        },
+        "style": {
+          "strokeWidth": 2
+        },
+        "id": "xy-edge__1bbfed94-59bb-4896-9d54-a6f9f9534sbw5-e7902836-2e6c-444b-8bf1-a959213118db"
       }
     ]
   }

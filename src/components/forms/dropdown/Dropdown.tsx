@@ -54,7 +54,7 @@ export default function Dropdown({
       <button
         type="button"
         onClick={() => setIsOpen((prev) => !prev)}
-        className="cursor-pointer flex items-center gap-1 text-sm text-[#55AFFF] hover:text-white transition-colors"
+        className="cursor-pointer flex items-center gap-1 text-sm text-app-default-border hover:text-white transition-colors"
       >
         <span>{placeholder}</span>
 
@@ -69,13 +69,13 @@ export default function Dropdown({
       {/* Menu */}
 
       {isOpen && (
-        <div className="absolute right-0 top-full z-50 mt-2 w-64 overflow-hidden rounded-md border border-[#4A4A4A] bg-[#2F2F2F] shadow-xl">
+        <div className="absolute -left-30 lg:left-auto lg:right-0 top-full z-50 mt-2 w-64 overflow-hidden rounded-md border border-app-surface-secondary bg-search-background shadow-xl">
           {items.map((item) => (
             <button
               key={item.value}
               type="button"
               onClick={() => handleSelect(item)}
-              className="cursor-pointer flex w-full items-center gap-2 px-4 py-3 text-left text-sm text-white transition-colors hover:bg-[#3C3C3C]"
+              className="cursor-pointer flex w-full items-center gap-2 px-4 py-3 text-left text-sm text-white transition-colors hover:bg-component-background-item-hover hover:text-[var(--app-node-selection-border)]"
             >
               {item.icon}
 

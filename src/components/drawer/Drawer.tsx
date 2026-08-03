@@ -1,7 +1,9 @@
 import { X } from "lucide-react";
 import { type ReactNode, useEffect } from "react";
 
+type DrawerVariant = "overlay" | "panel";
 interface DrawerProps {
+  variant?: DrawerVariant;
   opened: boolean;
   onClose: () => void;
   children: ReactNode;
@@ -46,6 +48,7 @@ const positionClasses = {
 };
 
 const Drawer = ({
+  variant = "overlay",
   opened,
   onClose,
   children,
@@ -57,7 +60,10 @@ const Drawer = ({
   className = "",
   closeOnOverlayClick = false,
 }: DrawerProps) => {
+  const isOverlay = variant === "overlay";
   useEffect(() => {
+    if (!isOverlay) return;
+
     const handleKeyDown = ({ key }: KeyboardEvent) =>
       key === "Escape" && onClose();
 
@@ -74,24 +80,28 @@ const Drawer = ({
 
   const isSideDrawer = position === "left" || position === "right";
 
-  const drawerStyle = isSideDrawer
-    ? { width: drawerSizes[size] }
-    : { height: drawerSizes[size], maxHeight: "calc(100% - 16px)" };
+  const drawerStyle = isOverlay
+    ? isSideDrawer
+      ? { width: drawerSizes[size] }
+      : { height: drawerSizes[size], maxHeight: "calc(100% - 16px)" }
+    : undefined;
 
   const { panel, open, close } = positionClasses[position];
 
   return (
     <>
-      <div
-        onClick={() => closeOnOverlayClick && onClose()}
-        className={`absolute inset-0 z-40 bg-black/40 transition-opacity duration-300 ${
-          opened ? "visible opacity-100" : "invisible opacity-0"
-        }`}
-      />
+      {isOverlay && (
+        <div
+          onClick={() => closeOnOverlayClick && onClose()}
+          className={`absolute inset-0 z-40 bg-black/40 transition-opacity duration-300 ${
+            opened ? "visible opacity-100" : "invisible opacity-0"
+          }`}
+        />
+      )}
 
       <div
         style={drawerStyle}
-        className={`dark absolute ${panel} ${opened ? open : close} z-50 flex flex-col border border-[var(--app-divider)] bg-[var(--color-table-header)] text-[var(--color-text-primary)] shadow-2xl transition-transform duration-300 ${className}`}
+        className={`dark  ${isOverlay ? `absolute ${panel} ${opened ? open : close} z-50` : "relative w-full"}  flex flex-col border border-[var(--app-divider)] bg-[var(--color-table-header)] text-[var(--color-text-primary)] shadow-2xl transition-transform duration-300 ${className}`}
       >
         {title && (
           <div className="flex shrink-0 items-center border border-[var(--app-divider)] bg-[var(--background-primary-container)]">
@@ -118,6 +128,7 @@ const Drawer = ({
                 transition-colors
                 hover:bg-[var(--color-surface)]
                 hover:text-[var(--color-primary)]
+                cursor-pointer
                 "
             >
               <X size={16} strokeWidth={2} />

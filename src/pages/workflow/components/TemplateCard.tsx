@@ -12,7 +12,7 @@ export default function TemplateCard({
       draggable={draggable}
       onClick={onClick}
       onDragStart={onDragStart}
-      className={`flex h-20 select-none flex-col items-center justify-center rounded border border-[#707070] bg-[#4A4A4A] px-2 text-center transition-all duration-200 hover:border-[#9CA3AF] hover:bg-[#535353] ${
+      className={`flex h-20 select-none flex-col items-center justify-center rounded border border-app-divider bg-app-surface-secondary px-2 text-center transition-all duration-200 hover:border-app-border-muted hover:bg-app-default-node ${
         draggable ? "cursor-grab active:cursor-grabbing" : "cursor-pointer"
       }`}
     >

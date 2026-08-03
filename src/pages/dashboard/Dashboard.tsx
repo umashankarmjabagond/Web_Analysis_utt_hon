@@ -1,4 +1,3 @@
-import Input from "../../components/forms/input/Input";
 import TableCard from "../../components/tables/TableCard";
 import type {
   StatCardData,
@@ -435,12 +434,7 @@ export default function Dashboard() {
             data={statusData}
             height="h-[344px]"
             border="border-[var(--color-button-text-primary)]"
-            headerActions={
-              <>
-                <Input />
-                <Input />
-              </>
-            }
+            headerActions={<></>}
           />
         </div>
       </div>

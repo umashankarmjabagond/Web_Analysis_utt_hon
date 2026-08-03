@@ -11,26 +11,26 @@ export default function Accordion({
   const [isOpen, setIsOpen] = useState(defaultOpen);
 
   return (
-    <div className="rounded bg-[#4B4B4B] p-3 shadow-sm">
+    <div className="rounded bg-app-surface-tertiary p-3 shadow-sm">
       <button
         onClick={() => setIsOpen((prev) => !prev)}
         className="flex w-full items-center justify-between"
       >
         {/* Left */}
-        <span className="text-[13px] font-medium text-[#F5F5F5]">{title}</span>
+        <span className="text-[14px] leading-5 font-medium text-button-secondary">{title}</span>
 
         {/* Right */}
         <div className="flex items-center gap-2">
           {count !== undefined && (
-            <div className="flex h-5 min-w-[20px] items-center justify-center rounded-full bg-[#E5E5E5] px-1 text-[11px] font-semibold text-[#2B2B2B]">
+            <div className="flex h-5 min-w-[20px] items-center justify-center rounded-full bg-app-background-light px-1 text-[11px] font-semibold text-app-code-background">
               {count}
             </div>
           )}
 
           {isOpen ? (
-            <ChevronDown size={16} className="text-[#D4D4D4]" />
+            <ChevronDown size={16} className="text-text-muted-light" />
           ) : (
-            <ChevronRight size={16} className="text-[#D4D4D4]" />
+            <ChevronRight size={16} className="text-text-muted-light" />
           )}
         </div>
       </button>

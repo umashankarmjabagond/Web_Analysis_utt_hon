@@ -4,15 +4,16 @@ import ExecutionToolbar from "./components/ExecutionToolbar";
 import WorkflowCanvas from "./components/WorkflowCanvas";
 
 export default function TemplateExecution({
-  plant,
+  // plant,
   template,
   itemId,
 }: TemplateExecutionProps) {
+  const executionContext = itemId ? "asset" : "unit";
   useLoadExecutionWorkflow(template, itemId);
   return (
     <div className="relative h-full">
       <ExecutionToolbar />
-      <WorkflowCanvas />
+      <WorkflowCanvas executionContext={executionContext} />
     </div>
   );
 }

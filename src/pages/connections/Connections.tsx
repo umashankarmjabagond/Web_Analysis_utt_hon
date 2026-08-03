@@ -119,9 +119,9 @@ export default function Connections() {
       </div>
 
       <div className="flex flex-1 gap-6 min-h-0">
-        <div className="flex-1 h-[495px] rounded-[8px] bg-[var(--color-button-secondary)] overflow-hidden">
+        <div className="flex-1 h-[495px] rounded-[8px] bg-background-primary-container overflow-hidden">
           <div className="p-4">
-            <h3 className="h-6 text-[16px] font-bold leading-6 text-[#F0F0F0]">
+            <h3 className="h-6 text-[16px] font-bold leading-6 text-app-text-primary">
               All Columns
             </h3>
           </div>
@@ -153,9 +153,9 @@ export default function Connections() {
           </Button>
         </div>
 
-        <div className="flex-1 h-[495px] rounded-[8px] bg-[#404040] overflow-hidden">
+        <div className="flex-1 h-[495px] rounded-[8px] bg-background-primary-container overflow-hidden">
           <div className="p-4">
-            <h3 className="h-6 text-[16px] font-bold leading-6 text-[#F0F0F0]">
+            <h3 className="h-6 text-[16px] font-bold leading-6 text-app-text-primary">
               Selected Columns
             </h3>
           </div>

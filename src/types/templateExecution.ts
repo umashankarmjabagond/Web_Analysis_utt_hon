@@ -88,3 +88,8 @@ export interface ExecutionItem {
   name: string;
   type: ExecutionItemType;
 }
+
+// analysis template -  workflow canvas
+export interface WorkflowCanvasProps {
+  executionContext: ExecutionItemType;
+}

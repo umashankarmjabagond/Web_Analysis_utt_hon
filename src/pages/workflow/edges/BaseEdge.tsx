@@ -68,7 +68,7 @@ export default function WorkflowEdge({
         path={path}
         markerEnd={markerEnd}
         style={{
-          stroke: selected ? "#4F9DFF" : "#BDBDBD",
+          stroke: selected ? "var(--component-accent-primary)" : "var(--color-text-muted-secondary)",
           strokeWidth: 2,
         }}
       />
@@ -87,7 +87,7 @@ export default function WorkflowEdge({
                 target,
               });
             }}
-            className="flex h-7 w-7 items-center justify-center rounded-md border border-[#55AFFF] bg-[#232323] text-[#55AFFF] shadow-lg transition-all hover:scale-110 hover:bg-[#2E3A46]"
+            className="flex h-7 w-7 items-center justify-center rounded-md border border-component-border bg-component-toolbar-background text-component-border shadow-lg transition-all"
           >
             <Plus size={14} strokeWidth={2.5} />
           </button>

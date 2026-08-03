@@ -4,7 +4,7 @@ import Workspace from "../Workspace/Workspace";
 
 export default function MainLayout() {
   return (
-    <div className="flex h-screen flex-col bg-[#1f1f1f]">
+    <div className="flex h-screen flex-col bg-app-background">
       <Header />
 
       <div className="flex flex-1 gap-2 overflow-hidden p-2">
