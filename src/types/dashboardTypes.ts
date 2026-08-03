@@ -31,10 +31,10 @@ export interface WarningRow {
   errorMessage: string;
 }
 
-export interface TableCardProps<T extends RowData> {
+export interface TableCardProps<T extends    RowData> {
   title: string;
 
-  columns: ColumnDef<T, any>[];
+  columns: ColumnDef<T>[];
 
   data: T[];
 
