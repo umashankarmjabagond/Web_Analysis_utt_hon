@@ -1,6 +1,7 @@
-interface SpreadsheetProps {
-  data: Array<Record<string, unknown>> | unknown[][];
-}
+import type { ReactNode } from "react";
+import type { SpreadsheetProps } from "../../types/commonTypes";
+
+type CellValue = string | number | boolean | null | undefined | object;
 
 const getExcelColumn = (index: number): string => {
   let column = "";
@@ -15,6 +16,28 @@ const getExcelColumn = (index: number): string => {
   return column;
 };
 
+const renderCellValue = (value: CellValue): ReactNode => {
+  if (value == null) return "";
+
+  if (
+    typeof value === "string" ||
+    typeof value === "number" ||
+    typeof value === "boolean"
+  ) {
+    return value;
+  }
+
+  if (Array.isArray(value)) {
+    return value.join(", ");
+  }
+
+  if (typeof value === "object") {
+    return JSON.stringify(value);
+  }
+
+  return String(value);
+};
+
 const SpreadsheetTable = ({ data }: SpreadsheetProps) => {
   if (!data || data.length === 0) {
     return (
@@ -24,18 +47,18 @@ const SpreadsheetTable = ({ data }: SpreadsheetProps) => {
     );
   }
 
-  // Convert object rows into array rows
-  const rows: unknown[][] = Array.isArray(data[0])
-    ? (data as unknown[][])
-    : data.map((item) => Object.values(item));
+  const rows: CellValue[][] = Array.isArray(data[0])
+    ? (data as CellValue[][])
+    : data.map((item) => Object.values(item) as CellValue[]);
 
-  const totalColumns = Math.max(...rows.map((r) => r.length));
+  const totalColumns = Math.max(...rows.map((row) => row.length));
 
   return (
     <div
-      className="dark
-        w-full
+      className="
+        dark
         h-full
+        w-full
         overflow-auto
         rounded-[var(--radius-sm)]
         border
@@ -53,7 +76,6 @@ const SpreadsheetTable = ({ data }: SpreadsheetProps) => {
         <thead>
           <tr>
             {/* Top Left Corner */}
-
             <th
               className="
                 sticky
@@ -66,12 +88,10 @@ const SpreadsheetTable = ({ data }: SpreadsheetProps) => {
                 border
                 border-[var(--color-border-1)]
                 bg-[var(--color-table-header)]
-                relative
               "
-            ></th>
+            />
 
             {/* Excel Columns */}
-
             {Array.from({ length: totalColumns }).map((_, index) => (
               <th
                 key={index}
@@ -79,9 +99,7 @@ const SpreadsheetTable = ({ data }: SpreadsheetProps) => {
                   sticky
                   top-0
                   z-20
-                  min-h-[8px]
-                  max-h-[48px]
-                  min-w-[80px]
+                  h-8
                   min-w-[120px]
                   border
                   border-[var(--color-border-1)]
@@ -104,24 +122,20 @@ const SpreadsheetTable = ({ data }: SpreadsheetProps) => {
               key={rowIndex}
               className="
                 bg-[var(--color-table-row-odd)]
-                !border-[var(--color-border-1)]
                 transition-colors
                 hover:bg-[var(--color-table-row-hover)]
               "
             >
               {/* Row Number */}
-
               <th
                 className="
                   sticky
                   left-0
                   z-10
-                  min-h-[8px]
-                  max-h-[48px]
-                  min-w-[30px]
-                  max-w-[48px]
+                  h-8
+                  min-w-[48px]
                   border
-                  !border-[var(--color-border-1)]
+                  border-[var(--color-border-1)]
                   bg-[var(--color-table-header)]
                   text-center
                   text-[13px]
@@ -133,19 +147,16 @@ const SpreadsheetTable = ({ data }: SpreadsheetProps) => {
               </th>
 
               {/* Cells */}
-
               {Array.from({ length: totalColumns }).map((_, colIndex) => (
                 <td
                   key={`${rowIndex}-${colIndex}`}
                   contentEditable
                   suppressContentEditableWarning
                   className="
-                    min-h-[8px]
-                    max-h-[48px]
-                    min-w-[80px]
-                    max-w-[120px]
+                    h-8
+                    min-w-[120px]
                     border
-                    !border-[var(--color-border-1)]
+                    border-[var(--color-border-1)]
                     bg-[var(--background-primary-container)]
                     px-2
                     py-1
@@ -158,7 +169,7 @@ const SpreadsheetTable = ({ data }: SpreadsheetProps) => {
                     focus:ring-[var(--color-primary)]
                   "
                 >
-                  {row[colIndex] ?? ""}
+                  {renderCellValue(row[colIndex])}
                 </td>
               ))}
             </tr>

@@ -126,14 +126,7 @@ export interface WorkflowSection {
 /* -------------------------------------------------------------------------- */
 
 export interface WorkflowNodeData extends Record<string, unknown> {
-  /**
-   * Display label shown inside the node.
-   */
   label: string;
-
-  /**
-   * Actual backend element.
-   */
   element: BackendElement;
 }
 
