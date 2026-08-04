@@ -4,8 +4,7 @@ import Button from "../../components/forms/button/Button";
 import Input from "../../components/forms/input/Input";
 import Select from "../../components/forms/select/Select";
 import TextArea from "../../components/forms/textarea/TextArea";
-import { Check, CircleHelp, RefreshCw } from "lucide-react";
-import IconButton from "../../components/forms/iconbutton/IconButton";
+import { Check, CircleHelp, RotateCw } from "lucide-react";
 
 const COLUMN_OPTIONS = [
   {
@@ -41,6 +40,11 @@ const Properties = () => {
 
   const [replacementExpression, setReplacementExpression] = useState("");
 
+  const [badExpressionLoading, setBadExpressionLoading] = useState(false);
+
+  const [replacementExpressionLoading, setReplacementExpressionLoading] =
+    useState(false);
+
   const handleSave = () => {
     console.log({
       warningThreshold,
@@ -59,6 +63,41 @@ const Properties = () => {
     console.log("Apply To All");
   };
 
+  const handleBadExpressionRefresh = () => {
+    setBadExpressionLoading(true);
+    setTimeout(() => {
+      setBadExpressionLoading(false);
+    }, 2000);
+  };
+
+  const handleReplacementRefresh = () => {
+    setReplacementExpressionLoading(true);
+
+    setTimeout(() => {
+      setReplacementExpressionLoading(false);
+    }, 2000);
+  };
+
+  const handlePercentageChange = (
+    value: string,
+    setter: React.Dispatch<React.SetStateAction<string>>,
+  ) => {
+    if (value === "") {
+      setter("");
+      return;
+    }
+
+    if (!/^\d{0,3}(\.\d{0,2})?$/.test(value)) {
+      return;
+    }
+
+    const number = Number(value);
+
+    if (number < 0 || number > 100) {
+      return;
+    }
+    setter(value);
+  };
   return (
     <div className="flex h-full flex-col bg-panel-bg">
       {/* Header */}
@@ -70,15 +109,12 @@ const Properties = () => {
         </div>
 
         <div className="flex items-center gap-2">
-          <Button variant="secondary" 
-                size="medium" 
-                onClick={handleHelp}
-                icon={
-        <CircleHelp
-            size={13}
-            strokeWidth={2.2}
-        />
-    }>
+          <Button
+            variant="secondary"
+            size="medium"
+            onClick={handleHelp}
+            icon={<CircleHelp size={13} strokeWidth={2.2} />}
+          >
             Help
           </Button>
 
@@ -106,14 +142,13 @@ const Properties = () => {
 
           <div className="flex flex-1 flex-col pt-2">
             {COLUMN_OPTIONS.map((column) => {
-                const selected = referenceColumn === column.value;
+              const selected = referenceColumn === column.value;
 
-                return (
-                    <div key={column.value} className="px-4 py-1">
-
-                    <button
-                        onClick={() => setReferenceColumn(column.value)}
-                        className={`
+              return (
+                <div key={column.value} className="px-4 py-1">
+                  <button
+                    onClick={() => setReferenceColumn(column.value)}
+                    className={`
                         flex
                         h-11
                         w-full
@@ -124,32 +159,30 @@ const Properties = () => {
                         text-left
                         transition-all
                         ${
-                            selected
+                          selected
                             ? "bg-panel-hover shadow-md text-[var(--color-button-primary)]"
                             : "text-text-accent hover:bg-panel-hover/40"
                         }
                         `}
-                    >
-                        <span>{column.label}</span>
+                  >
+                    <span>{column.label}</span>
 
-                        {selected && (
-                        <Check
-                            size={16}
-                            className="text-[var(--color-button-primary)]"
-                        />
-                        )}
-                    </button>
-
-                    </div>
-                );
-                })}
+                    {selected && (
+                      <Check
+                        size={16}
+                        className="text-[var(--color-button-primary)]"
+                      />
+                    )}
+                  </button>
+                </div>
+              );
+            })}
           </div>
         </div>
 
         {/* Right Panel */}
 
         <div className="flex flex-1 flex-col overflow-y-auto p-6">
-
           <div>
             <span className="text-s font-bold text-text-accent">
               Edit the expressions you wish to preprocess
@@ -166,13 +199,17 @@ const Properties = () => {
               <Input
                 label="Warning Threshold %"
                 value={warningThreshold}
-                onChange={(e) => setWarningThreshold(e.target.value)}
+                onChange={(e) =>
+                  handlePercentageChange(e.target.value, setWarningThreshold)
+                }
               />
 
               <Input
                 label="Abort Threshold %"
                 value={abortThreshold}
-                onChange={(e) => setAbortThreshold(e.target.value)}
+                onChange={(e) =>
+                  handlePercentageChange(e.target.value, setAbortThreshold)
+                }
               />
             </div>
           </div>
@@ -197,37 +234,59 @@ const Properties = () => {
                 />
               </div>
             </div>
-            
-            <div className="flex items-end gap-3">
-                <div className="flex-1">
-                    <TextArea
-                    label="Bad Data Expression"
-                    placeholder="Enter bad data expression..."
-                    rows={5}
-                    value={badDataExpression}
-                    onChange={(e) => setBadDataExpression(e.target.value)}
-                    />
-                </div>
 
-                <IconButton
-                    icon={<RefreshCw />}
+            <div className="flex gap-3">
+              <div className="flex-1">
+                <TextArea
+                  label="Bad Data Expression"
+                  placeholder="Enter bad data expression..."
+                  rows={5}
+                  value={badDataExpression}
+                  onChange={(e) => setBadDataExpression(e.target.value)}
                 />
+              </div>
+
+              <RotateCw
+                strokeWidth={2}
+                onClick={handleBadExpressionRefresh}
+                className={`
+                  mt-7
+                  cursor-pointer
+                  transition-transform
+                  ${
+                    badExpressionLoading
+                      ? "animate-spin pointer-events-none"
+                      : "hover:rotate-90"
+                  }
+                `}
+              />
             </div>
 
-            <div className="flex items-end gap-3">
-                <div className="flex-1">
-                    <TextArea
-                    label="Replacement Expression"
-                    placeholder="Enter replacement expression..."
-                    rows={5}
-                    value={replacementExpression}
-                    onChange={(e) => setReplacementExpression(e.target.value)}
-                    />
-                </div>
-                
-                <IconButton
-                    icon={<RefreshCw />}
+            <div className="flex gap-3">
+              <div className="flex-1">
+                <TextArea
+                  label="Replacement Expression"
+                  placeholder="Enter replacement expression..."
+                  rows={5}
+                  value={replacementExpression}
+                  onChange={(e) => setReplacementExpression(e.target.value)}
                 />
+              </div>
+
+              <RotateCw
+                strokeWidth={2}
+                onClick={handleReplacementRefresh}
+                className={`
+                  mt-7
+                  cursor-pointer
+                  transition-transform
+                  ${
+                    replacementExpressionLoading
+                      ? "animate-spin pointer-events-none"
+                      : "hover:rotate-90"
+                  }
+                `}
+              />
             </div>
           </div>
         </div>
