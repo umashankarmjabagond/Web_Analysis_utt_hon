@@ -1,7 +1,9 @@
+import type { MouseEventHandler } from "react";
 import WorkflowEdge from "../pages/workflow/edges/BaseEdge";
 import BaseNode from "../pages/workflow/nodes/BaseNode";
 
 import type { Edge, Node, Viewport } from "@xyflow/react";
+import type { LucideIcon } from "lucide-react";
 
 export const edgeTypes = {
   workflow: WorkflowEdge,
@@ -10,10 +12,6 @@ export const edgeTypes = {
 export const nodeTypes = {
   baseNode: BaseNode,
 };
-
-/* -------------------------------------------------------------------------- */
-/*                               React Flow Types                             */
-/* -------------------------------------------------------------------------- */
 
 export interface WorkflowTemplate {
   id?: string;
@@ -39,10 +37,6 @@ export interface WorkflowCanvasData {
 
 export type WorkflowEdge = Edge;
 
-/* -------------------------------------------------------------------------- */
-/*                               Drag & Drop Types                            */
-/* -------------------------------------------------------------------------- */
-
 export type DragItemType = "template" | "attribute";
 
 export interface WorkflowDragItem {
@@ -50,10 +44,6 @@ export interface WorkflowDragItem {
 
   item: WorkflowListItem;
 }
-
-/* -------------------------------------------------------------------------- */
-/*                            Backend Workflow Types                          */
-/* -------------------------------------------------------------------------- */
 
 export interface BackendWorkflow {
   LoopName: string;
@@ -93,26 +83,12 @@ export interface BackendElement {
   paProperties?: Record<string, unknown>;
 }
 
-/* -------------------------------------------------------------------------- */
-/*                             Workflow Panel Types                           */
-/* -------------------------------------------------------------------------- */
-
 export interface WorkflowListItem {
   id: string;
-
   title: string;
-
-  /**
-   * Optional description shown in dialogs/search.
-   */
   description?: string;
-
-  /**
-   * Backend element represented by this catalog item.
-   * For templates this is only metadata.
-   * For attributes this is the node to create.
-   */
   element: BackendElement;
+  icon?: LucideIcon;
 }
 
 export interface WorkflowSection {
@@ -121,25 +97,25 @@ export interface WorkflowSection {
   items: WorkflowListItem[];
 }
 
-/* -------------------------------------------------------------------------- */
-/*                             React Flow Node Data                           */
-/* -------------------------------------------------------------------------- */
-
 export interface WorkflowNodeData extends Record<string, unknown> {
   label: string;
   element: BackendElement;
 }
 
 export type WorkflowNode = Node<WorkflowNodeData>;
-
 export interface KpiItem {
   name: string;
-
   value: string | number;
 }
 
 export interface CalculatedKpisAndErrorsProps {
   kpis?: KpiItem[];
-
   errors?: string[];
+}
+
+export interface ToolbarButtonProps {
+  icon: LucideIcon;
+  title: string;
+  active?: boolean;
+  onClick?: MouseEventHandler<HTMLButtonElement>;
 }

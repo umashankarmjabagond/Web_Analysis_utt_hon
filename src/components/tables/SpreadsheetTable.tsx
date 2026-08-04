@@ -17,7 +17,7 @@ const getExcelColumn = (index: number): string => {
 };
 
 const renderCellValue = (value: CellValue): ReactNode => {
-  if (value == null) return "";
+  if (value === null) return "";
 
   if (
     typeof value === "string" ||

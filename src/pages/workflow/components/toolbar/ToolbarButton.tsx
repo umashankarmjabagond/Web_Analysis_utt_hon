@@ -1,12 +1,8 @@
-interface ToolbarButtonProps {
-  icon: React.ElementType;
-  label: string;
-  active?: boolean;
-}
+import type { ToolbarButtonProps } from "../../../../types/workFlowTypes";
 
 export default function ToolbarButton({
-  icon,
-  active,
+  icon: Icon,
+  active = false,
   title,
   onClick,
 }: ToolbarButtonProps) {
@@ -30,7 +26,7 @@ export default function ToolbarButton({
         }
       `}
     >
-      {icon}
+      <Icon size={15} />
     </button>
   );
 }
