@@ -63,7 +63,7 @@ export default function WorkflowPanel() {
   };
 
   const handleTabletClick = (item: WorkflowListItem) => {
-    if (window.innerWidth < 1024) {
+    if (window.innerWidth < 1280) {
       setPendingCatalogItem(item);
     }
   };
