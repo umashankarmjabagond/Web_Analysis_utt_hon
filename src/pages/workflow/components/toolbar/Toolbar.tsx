@@ -103,7 +103,7 @@ export default function Toolbar() {
   };
 
   return (
-    <div className="flex min-h-12 items-center rounded-[6px] border border-app-divider bg-component-toolbar-background px-1 lg: justify-between">
+    <div className="flex min-h-12 items-center rounded-[6px] border border-app-divider bg-component-toolbar-background px-1 xl: justify-between">
       {/* LEFT */}
 
       <div className="flex items-center gap-1">
@@ -132,7 +132,7 @@ export default function Toolbar() {
           onClick={() => setActiveTool("connect")}
         />
 
-        <div className="relative lg:hidden">
+        <div className="relative xl:hidden">
           <button
             onClick={() => {
               setShowMoreMenu((prev) => !prev);
@@ -145,7 +145,7 @@ export default function Toolbar() {
           </button>
 
           {showMoreMenu && (
-            <div className="absolute right-0 top-full z-50 mt-2 flex flex-col rounded-md border border-app-divider bg-component-toolbar-background shadow-lg">
+            <div className="absolute right-0 top-full z-50 mt-2 flex flex-col rounded-md border border-app-divider bg-component-toolbar-background shadow-xl">
               <button className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-white">
                 <Pencil size={14} />
               </button>
@@ -191,7 +191,7 @@ export default function Toolbar() {
 
         {/* RIGHT TABLET */}
 
-        <div className="relative lg:hidden">
+        <div className="relative xl:hidden">
           <button
             onClick={() => {
               setShowActionMenu((prev) => !prev);
@@ -204,7 +204,7 @@ export default function Toolbar() {
           </button>
 
           {showActionMenu && (
-            <div className="absolute right-0 top-full z-50 mt-2 w-52 rounded-md border border-app-divider bg-component-toolbar-background shadow-lg">
+            <div className="absolute right-0 top-full z-50 mt-2 w-52 rounded-md border border-app-divider bg-component-toolbar-background shadow-xl">
               <button className="block w-full px-3 py-2 text-left text-sm text-white hover:bg-app-surface">
                 Import Template
               </button>
@@ -287,7 +287,7 @@ export default function Toolbar() {
 
       {/* RIGHT DESKTOP */}
 
-      <div className="hidden lg:flex items-center gap-6 text-sm">
+      <div className="hidden xl:flex items-center gap-6 text-sm">
         <button className="flex items-center gap-1 text-app-action-primary text-sm hover:text-white transition-colors">
           <Upload size={15} />
           Import Template
