@@ -161,3 +161,13 @@ export interface GroupedSelectorProps {
   disabled?: boolean;
   className?: string;
 }
+
+export interface TooltipProps {
+  children: React.ReactElement;
+  content: React.ReactNode;
+  placement?: "top" | "bottom" | "left" | "right";
+  disabled?: boolean;
+  maxWidth?: number | string;
+  showArrow?: boolean;
+  className?: string;
+}
