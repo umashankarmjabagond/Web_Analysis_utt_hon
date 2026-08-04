@@ -365,13 +365,12 @@ export default function Canvas() {
         <GroupedSelector
           placeholder="Select an option"
           sections={attributeCatalogSections.map((section) => ({
-            id: section.id,
+            id: section.id ?? section.title,
             title: section.title,
             items: section.items.map((item) => ({
               id: item.id,
               label: item.title,
               value: item,
-              icon: item.icon,
             })),
           }))}
           onSelect={(item) => {

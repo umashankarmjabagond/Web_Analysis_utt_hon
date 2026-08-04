@@ -1,6 +1,7 @@
 import { cloneElement, isValidElement, type ReactElement } from "react";
 import type { IconButtonProps } from "../../../types/commonTypes";
 import clsx from "clsx";
+import type { LucideProps } from "lucide-react";
 
 const sizeClasses = {
   sm: "h-7 w-7",
@@ -21,7 +22,7 @@ const IconButton = ({
   ...props
 }: IconButtonProps) => {
   const renderedIcon = isValidElement(icon)
-    ? cloneElement(icon as ReactElement, {
+    ? cloneElement(icon as ReactElement<LucideProps>, {
         size: iconSizes[size],
         className: "text-[var(--color-button-focus)]",
         strokeWidth: 2.25,

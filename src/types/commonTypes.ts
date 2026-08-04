@@ -171,3 +171,9 @@ export interface TooltipProps {
   showArrow?: boolean;
   className?: string;
 }
+
+export type CellValue = string | number | boolean | null | undefined;
+
+export interface SpreadsheetProps {
+  data: Array<Record<string, CellValue>> | CellValue[][];
+}

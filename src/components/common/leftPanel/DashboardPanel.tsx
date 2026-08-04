@@ -2,7 +2,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import type { TreeNodeData } from "../../../types/commonTypes";
 import Tree from "../tree/Tree";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Image, Search } from "lucide-react";
+import { Search } from "lucide-react";
 import { ROUTES } from "../../../constants/routes/routesConstant";
 import Input from "../../forms/input/Input";
 import { useDebounce } from "../../../hooks/useDebounce";
@@ -16,7 +16,7 @@ const TREE_DATA: TreeNodeData[] = [
       {
         id: "fresh-water",
         label: "Fresh Water",
-        image: <Image size={16} />,
+        image: "",
         children: [
           {
             id: "pump-101",
@@ -35,7 +35,7 @@ const TREE_DATA: TreeNodeData[] = [
       {
         id: "raw-water",
         label: "Raw Water",
-        image: <Image size={16} />,
+        image: "",
         children: [
           {
             id: "tank-201",
@@ -56,7 +56,7 @@ const TREE_DATA: TreeNodeData[] = [
       {
         id: "pgb1",
         label: "PBG1",
-        image: <Image size={16} />,
+        image: "",
         children: [
           {
             id: "pump-301",
@@ -71,7 +71,7 @@ const TREE_DATA: TreeNodeData[] = [
       {
         id: "pgb2",
         label: "PBG2",
-        image: <Image size={16} />,
+        image: "",
         children: [
           {
             id: "56-FFC618",
