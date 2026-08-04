@@ -14,11 +14,15 @@ import {
 } from "../../../pages/workflow/workflowPanelData ";
 import Input from "../../forms/input/Input";
 
+import { useWorkflowStore } from "../../../store/workflowStore";
+
 type CatalogTab = "templates" | "attributes";
 
 export default function WorkflowPanel() {
   const [activeTab, setActiveTab] = useState<CatalogTab>("templates");
   const [search, setSearch] = useState("");
+
+  const { setPendingCatalogItem } = useWorkflowStore();
 
   const panelData = useMemo(
     () =>
@@ -56,6 +60,12 @@ export default function WorkflowPanel() {
     );
 
     event.dataTransfer.effectAllowed = "move";
+  };
+
+  const handleTabletClick = (item: WorkflowListItem) => {
+    if (window.innerWidth < 1024) {
+      setPendingCatalogItem(item);
+    }
   };
 
   return (
@@ -116,6 +126,7 @@ export default function WorkflowPanel() {
                 key={item.id}
                 title={item.title}
                 draggable
+                onClick={() => handleTabletClick(item)}
                 onDragStart={(event) => handleDragStart(event, item)}
               />
             ))}

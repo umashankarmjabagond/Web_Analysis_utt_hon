@@ -134,7 +134,10 @@ export default function Toolbar() {
 
         <div className="relative lg:hidden">
           <button
-            onClick={() => setShowMoreMenu(!showMoreMenu)}
+            onClick={() => {
+              setShowMoreMenu((prev) => !prev);
+              setShowActionMenu(false);
+            }}
             className="flex items-center gap-1 rounded border border-app-divider px-1 py-1 text-xs text-white"
           >
             More
@@ -190,7 +193,10 @@ export default function Toolbar() {
 
         <div className="relative lg:hidden">
           <button
-            onClick={() => setShowActionMenu(!showActionMenu)}
+            onClick={() => {
+              setShowActionMenu((prev) => !prev);
+              setShowMoreMenu(false);
+            }}
             className="flex items-center gap-1 rounded border border-app-divider px-1 py-1 text-xs text-white"
           >
             Actions
