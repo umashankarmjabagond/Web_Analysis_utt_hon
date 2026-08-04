@@ -2,250 +2,257 @@
 
 :root {
   /* Gray  */
-  --gray-primary: #202020;
-  --gray-background: #1f1f1f;
-  --gray-toolbar: #232323;
-  --gray-header: #262626;
-  --gray-surface: #272727;
-  --gray-code: #2b2b2b;
-  --gray-search: #2f2f2f;
-  --gray-card: #303030;
-  --gray-node: #353535;
-  --gray-hover: #3c3c3c;
-  --gray-tab: #3f3f3f;
-  --gray-panel: #404040;
-  --gray-divider: #444444;
-  --gray-surface-secondary: #4a4a4a;
-  --gray-surface-tertiary: #4b4b4b;
-  --gray-container: #555555;
-  --gray-tab-container: #5a5a5a;
-  --gray-scrollbar: #606060;
-  --gray-search-border: #6b6b6b;
-  --gray-border: #707070;
-  --gray-border-light: #808080;
-  --gray-border-strong: #909090;
-  --gray-disabled: #9ca3af;
-  --gray-placeholder: #a8a8a8;
-  --gray-border-default: #b0b0b0;
-  --gray-icon: #b5b5b5;
-  --gray-muted: #bdbdbd;
-  --gray-text-primary: #111827;
-  --gray-table-border: #d1d5db;
-  --gray-text-secondary: #d0d0d0;
-  --gray-text-light: #d4d4d4;
-  --gray-text-muted: #d5d5d5;
+  --gray-50: #f5f5f5;
+  --gray-100: #d5d5d5;
+  --gray-150: #d4d4d4;
+  --gray-175: #cbd5e1;
+  --gray-200: #d1d5db;
+  --gray-250: #bdbdbd;
+  --gray-275: #c8c8c8;
+  --gray-300: #b5b5b5;
+  --gray-350: #b0b0b0;
+  --gray-400: #a8a8a8;
+  --gray-450: #9ca3af;
+  --gray-475: #94a3b8;
+  --gray-500: #909090;
+  --gray-550: #808080;
+  --gray-600: #707070;
+  --gray-650: #6b6b6b;
+  --gray-700: #606060;
+  --gray-750: #5a5a5a;
+  --gray-800: #555555;
+  --gray-850: #4b4b4b;
+  --gray-900: #4a4a4a;
+  --gray-950: #444444;
+  --gray-1000: #404040;
+  --gray-1050: #3f3f3f;
+  --gray-1100: #3c3c3c;
+  --gray-1150: #353535;
+  --gray-1200: #303030;
+  --gray-1225: #334155;
+  --gray-1250: #2f2f2f;
+  --gray-1275: #2c2c2c;
+  --gray-1300: #2b2b2b;
+  --gray-1350: #272727;
+  --gray-1400: #262626;
+  --gray-1450: #232323;
+  --gray-1500: #202020;
+  --gray-1550: #1f1f1f;
+  --gray-1600: #111827;
+  --gray-1650: #1e293b;
 
   /* White  */
-  --white-primary: #ffffff;
-  --white-secondary: #f8fafc;
-  --white-soft: #f5f5f5;
-  --white-light: #f3f3f3;
-  --white-app: #f0f0f0;
-  --white-muted: #ececec;
-  --white-background: #e5e5e5;
-  --white-hover: #eef2f7;
+  --white-50: #ffffff;
+  --white-100: #f8fafc;
+  --white-200: #f5f5f5;
+  --white-300: #f3f3f3;
+  --white-400: #f0f0f0;
+  --white-500: #ececec;
+  --white-600: #e5e5e5;
+  --white-650: #e8e8e8;
+  --white-700: #eef2f7;
+  --white-750: #e5e7eb;
 
   /* Black  */
-  --black-primary: #000000;
+  --black-100: #000000;
 
   /* Blue  */
-  --blue-primary: #64c3ff;
-  --blue-hover: #5abef7;
-  --blue-border: #55afff;
-  --blue-dark: #4f9dff;
-  --blue-light: #76d8f7;
-  --blue-focus: #62bbf3;
-  --blue-hover-border: #7aa2ff;
-  --blue-brand: #2563eb;
-  --blue-brand-hover: #1d4ed8;
-  --blue-button-text: #1976d2;
-  --blue-info: #0284c7;
-  --blue-info-dark: #38bdf8;
+  --blue-100: #76d8f7;
+  --blue-200: #64c3ff;
+  --blue-300: #62bbf3;
+  --blue-400: #5abef7;
+  --blue-500: #55afff;
+  --blue-600: #4f9dff;
+  --blue-700: #38bdf8;
+  --blue-800: #0284c7;
+  --blue-900: #2563eb;
+  --blue-1000: #1d4ed8;
+  --blue-1100: #1976d2;
+  --blue-1200: #7aa2ff;
+  --blue-1250: #60a5fa;
+  --blue-1300: #3b82f6;
 
   /* Purple  */
-  --purple-primary: #7c3aed;
-  --purple-light: #a78bfa;
+  --purple-100: #a78bfa;
+  --purple-200: #7c3aed;
 
   /* Green  */
-  --green-primary: #68d560;
-  --green-dark: #16a34a;
-  --green-light: #22c55e;
+  --green-100: #68d560;
+  --green-200: #22c55e;
+  --green-300: #16a34a;
 
   /* Yellow  */
-  --yellow-primary: #ffdb42;
-  --yellow-dark: #f59e0b;
-  --yellow-light: #fbbf24;
+  --yellow-100: #ffdb42;
+  --yellow-200: #fbbf24;
+  --yellow-300: #f59e0b;
 
   /* Red  */
-  --red-primary: #ff644c;
-  --red-dark: #dc2626;
-  --red-light: #ef4444;
+  --red-100: #ff644c;
+  --red-200: #ef4444;
+  --red-300: #dc2626;
 
   /* Misc  */
   --teal-hover: #2e3a46;
   --blue-action: #335d77;
 
-  --app-primary: var(--gray-primary);
-  --app-surface: var(--gray-surface);
-  --app-surface-elevated: var(--gray-panel);
-  --app-surface-secondary: var(--gray-surface-secondary);
-  --app-surface-tertiary: var(--gray-surface-tertiary);
+  --app-primary: var(--gray-1500);
+  --app-surface: var(--gray-1350);
+  --app-surface-elevated: var(--gray-1000);
+  --app-surface-secondary: var(--gray-900);
+  --app-surface-tertiary: var(--gray-850);
 
   /* Text */
-  --app-text-primary: var(--white-app);
-  --app-text-secondary: var(--gray-text-secondary);
-  --color-text-light: var(--white-light);
-  --color-text-soft-white: var(--white-muted);
-  --color-text-muted: var(--gray-text-muted);
-  --color-text-muted-secondary: var(--gray-muted);
-  --color-text-muted-light: var(--gray-text-light);
+  --app-text-primary: var(--white-400);
+  --app-text-secondary: var(--gray-100);
+  --color-text-light: var(--white-300);
+  --color-text-soft-white: var(--white-500);
+  --color-text-muted: var(--gray-100);
+  --color-text-muted-secondary: var(--gray-250);
+  --color-text-muted-light: var(--gray-150);
 
   /* Divider */
-  --app-divider: var(--gray-border);
+  --app-divider: var(--gray-600);
 
   /* Border */
-  --app-default-border: var(--gray-border-default);
-  --app-default-border-strong: var(--gray-border-strong);
-  --component-toolbar-divider: var(--gray-divider);
-  --component-active-border: var(--blue-light);
-  --component-border: var(--blue-border);
-  --component-hover-border: var(--blue-hover-border);
+  --app-default-border: var(--gray-350);
+  --app-default-border-strong: var(--gray-500);
+  --component-toolbar-divider: var(--gray-950);
+  --component-active-border: var(--blue-100);
+  --component-border: var(--blue-500);
+  --component-hover-border: var(--blue-1200);
 
   /* Workflow */
-  --app-default-edge: var(--gray-border-strong);
-  --app-default-node: var(--gray-node);
-  --app-node-success-border: #68d56080; /* Keep for now (alpha) */
-  --app-node-warning-background: var(--black-primary);
-  --app-node-error-background: var(--black-primary);
-  --app-node-selection-success-border: var(--green-primary);
-  --app-node-selection-border: var(--blue-primary);
+  --app-default-edge: var(--gray-500);
+  --app-default-node: var(--gray-1150);
+
+  /* Success */
+  --app-node-selection-success-border: var(--green-100);
+  --app-node-selection-border: var(--blue-200);
   --app-node-selection-success-tint: #68d5604d;
   --app-node-selection-tint: #afddf533;
 
   /* Workflow Node Success */
-  --app-node-success-background: var(--black-primary);
+  --app-node-success-background: var(--black-100);
   --app-node-success-tint: #68d5601a;
   --app-node-success-border: #68d56080;
 
   /* Workflow Node Warning */
-  --app-node-warning-background: var(--black-primary);
+  --app-node-warning-background: var(--black-100);
   --app-node-warning-tint: #ffdb4266;
-  --app-node-warning-border: var(--yellow-primary);
+  --app-node-warning-border: var(--yellow-100);
 
   /* Workflow Node Error */
-  --app-node-error-background: var(--black-primary);
+  --app-node-error-background: var(--black-100);
   --app-node-error-tint: #ff644c4d;
-  --app-node-error-border: var(--red-primary);
+  --app-node-error-border: var(--red-100);
 
   /* Action */
-  --app-action-primary: #64c3ff;
-  --app-action-secondary: #c8c8c8;
+  --app-action-primary: var(--blue-200);
+  --app-action-secondary: var(--gray-275);
 
   /* Badges */
   /* Neutral */
-  --app-badge-neutral-bg: var(--gray-panel);
-  --app-badge-neutral-outline: var(--gray-text-secondary);
-  --app-badge-neutral-text: var(--gray-text-secondary);
+  --app-badge-neutral-bg: var(--gray-1000);
+  --app-badge-neutral-outline: var(--gray-100);
+  --app-badge-neutral-text: var(--gray-100);
 
   /* Success */
-  --app-badge-success-bg: var(--green-primary);
-  --app-badge-success-outline: var(--green-primary);
-  --app-badge-success-text: var(--white-primary);
+  --app-badge-success-bg: var(--green-100);
+  --app-badge-success-outline: var(--green-100);
+  --app-badge-success-text: var(--white-50);
 
   /* Warning */
-  --app-badge-warning-bg: var(--yellow-primary);
-  --app-badge-warning-outline: var(--yellow-primary);
-  --app-badge-warning-text: var(--gray-card);
+  --app-badge-warning-bg: var(--yellow-100);
+  --app-badge-warning-outline: var(--yellow-100);
+  --app-badge-warning-text: var(--gray-1200);
 
   /* Error */
-  --app-badge-error-bg: var(--red-primary);
-  --app-badge-error-outline: var(--red-primary);
-  --app-badge-error-text: var(--white-primary);
+  --app-badge-error-bg: var(--red-100);
+  --app-badge-error-outline: var(--red-100);
+  --app-badge-error-text: var(--white-50);
 
   /* Info */
-  --app-badge-info-bg: var(--blue-primary);
-  --app-badge-info-outline: var(--blue-primary);
-  --app-badge-info-text: var(--white-primary);
+  --app-badge-info-bg: var(--blue-200);
+  --app-badge-info-outline: var(--blue-200);
+  --app-badge-info-text: var(--white-50);
 
   /* Brand */
-  --color-primary: var(--blue-brand);
-  --color-primary-hover: var(--blue-brand-hover);
-  --color-secondary: var(--purple-primary);
+  --color-primary: var(--blue-900);
+  --color-primary-hover: var(--blue-1000);
+  --color-secondary: var(--purple-200);
 
   /* Backgrounds */
-  --color-background: var(--white-primary);
-  --color-surface: var(--white-secondary);
-  --color-card: var(--white-primary);
-  --background-primary-container: var(--gray-panel);
-  --app-code-background: var(--gray-code);
-  --app-background-light: var(--white-background);
-  --component-background-item-hover: var(--gray-hover);
-  --app-surface-background: var(--gray-container);
+  --color-background: var(--white-50);
+  --color-surface: var(--white-100);
+  --color-card: var(--white-50);
+  --background-primary-container: var(--gray-1000);
+  --app-code-background: var(--gray-1300);
+  --app-background-light: var(--white-600);
+  --component-background-item-hover: var(--gray-1100);
+  --app-surface-background: var(--gray-800);
   --component-action-primary: var(--blue-action);
-  --app-background: var(--gray-background);
+  --app-background: var(--gray-1550);
   --component-hover-background: var(--teal-hover);
-  --component-header-background: var(--gray-header);
+  --component-header-background: var(--gray-1400);
 
   /* Text */
-  --color-text-primary: var(--gray-text-primary);
-  --color-text-secondary: var(--gray-text-secondary);
-  --color-text-disabled: var(--gray-disabled);
-  --color-text-accent: var(--gray-text-secondary);
+  --color-text-primary: var(--gray-1600);
+  --color-text-secondary: var(--gray-100);
+  --color-text-disabled: var(--gray-450);
+  --color-text-accent: var(--gray-100);
 
   /* Border */
-  --color-border: #e5e7eb;
-  --color-border-1: var(--gray-border);
-  --component-card-border: var(--gray-card);
-  --app-border-muted: var(--gray-disabled);
-
-  /* Fixed panel background */
-  --color-panel-bg: var(--gray-surface);
+  --color-border: var(--white-750);
+  --color-border-1: var(--gray-600);
+  --component-card-border: var(--gray-1200);
+  --app-border-muted: var(--gray-450);
 
   /* Fixed Toast/Notification colors  */
-  --color-toast-bg: var(--gray-panel);
-  --color-toast-title: var(--white-app);
-  --color-badge-icon: var(--gray-card);
-  --color-badge-success-bg: var(--green-primary);
+  --color-panel-bg: var(--gray-1350);
+  --color-toast-bg: var(--gray-1000);
+  --color-toast-title: var(--white-400);
+  --color-badge-icon: var(--gray-1200);
+  --color-badge-success-bg: var(--green-100);
 
   /* Status */
-  --color-success: var(--green-dark);
-  --color-warning: var(--yellow-dark);
-  --color-danger: var(--red-dark);
-  --color-info: var(--blue-info);
-  --semantic-bad: var(--red-primary);
+  --color-success: var(--green-300);
+  --color-warning: var(--yellow-300);
+  --color-danger: var(--red-300);
+  --color-info: var(--blue-800);
+  --semantic-bad: var(--red-100);
 
   /* Tabs */
-  --color-tab-active-border: var(--blue-primary);
-  --color-tab-active-text: var(--white-primary);
-  --color-tab-inactive-text: var(--gray-text-secondary);
-  --color-tab-container-bg: var(--gray-tab-container);
-  --color-tab-active-bg: var(--gray-tab);
+  --color-tab-active-border: var(--blue-200);
+  --color-tab-active-text: var(--white-50);
+  --color-tab-inactive-text: var(--gray-100);
+  --color-tab-container-bg: var(--gray-750);
+  --color-tab-active-bg: var(--gray-1050);
 
   /* Table */
-  --color-table-header: var(--white-light);
-  --color-table-row-odd: var(--white-primary);
-  --color-table-row-even: var(--white-secondary);
-  --color-table-row-hover: var(--white-hover);
-  --color-table-border: var(--gray-table-border);
+  --color-table-header: var(--white-300);
+  --color-table-row-odd: var(--white-50);
+  --color-table-row-even: var(--white-100);
+  --color-table-row-hover: var(--white-700);
+  --color-table-border: var(--gray-200);
 
   /* Button */
-  --color-button-primary: var(--blue-primary);
-  --color-button-primary-hover: var(--blue-hover);
-  --color-button-secondary: var(--white-soft);
-  --color-button-secondary-hover: #e8e8e8;
-  --color-button-text-primary: var(--gray-card);
-  --color-button-text-secondary: var(--blue-button-text);
-  --color-button-focus: var(--blue-focus);
+  --color-button-primary: var(--blue-200);
+  --color-button-primary-hover: var(--blue-400);
+  --color-button-secondary: var(--white-200);
+  --color-button-secondary-hover: var(--white-650);
+  --color-button-text-primary: var(--gray-1200);
+  --color-button-text-secondary: var(--blue-1100);
+  --color-button-focus: var(--blue-300);
 
   /* Search */
-  --color-search-border: var(--gray-search-border);
-  --color-search-background: var(--gray-search);
-  --color-search-placeholder: var(--gray-placeholder);
-  --color-search-icon: var(--gray-icon);
+  --color-search-border: var(--gray-650);
+  --color-search-background: var(--gray-1250);
+  --color-search-placeholder: var(--gray-400);
+  --color-search-icon: var(--gray-300);
 
   /* Toolbar */
-  --component-toolbar-background: var(--gray-toolbar);
-  --component-accent-primary: var(--blue-dark);
+  --component-toolbar-background: var(--gray-1450);
+  --component-accent-primary: var(--blue-600);
 
   /* Shadows */
   --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -256,55 +263,60 @@
   --radius-lg: 12px;
 
   /* Segmented Control */
-  --component-segmented-control-selected-border: #808080;
+  --component-segmented-control-selected-border: var(--gray-550);
 }
 
 /* DARK THEME */
-
 .dark {
   /* Brand */
-  --color-primary: #60a5fa;
-  --color-primary-hover: #3b82f6;
-  --color-secondary: var(--purple-light);
+  --color-primary: var(--blue-1250);
+  --color-primary-hover: var(--blue-1300);
+  --color-secondary: var(--purple-100);
 
   /* Backgrounds */
-  --color-background: var(--gray-surface);
-  --color-surface: #1e293b;
-  --color-card: #2c2c2c;
-  --background-primary-container: var(--gray-panel);
-  --app-background-light: var(--white-background);
-  --component-background-item-hover: var(--gray-hover);
-  --app-surface-background: var(--gray-container);
+  --color-background: var(--gray-1350);
+
+  /* Dark specific colors (keep as they are) */
+  --color-surface: var(--gray-1650);
+  --color-card: var(--gray-1275);
+  --background-primary-container: var(--gray-1000);
+  --app-background-light: var(--white-600);
+  --component-background-item-hover: var(--gray-1100);
+  --app-surface-background: var(--gray-800);
   --component-action-primary: var(--blue-action);
-  --app-background: var(--gray-background);
+  --app-background: var(--gray-1550);
   --component-hover-background: var(--teal-hover);
-  --component-header-background: var(--gray-header);
+  --component-header-background: var(--gray-1400);
 
   /* Text */
-  --color-text-primary: var(--white-secondary);
-  --color-text-secondary: #cbd5e1;
-  --color-text-disabled: #94a3b8;
-  --color-text-light: var(--white-light);
-  --color-text-soft-white: var(--white-muted);
-  --color-text-muted: var(--gray-text-muted);
-  --color-text-muted-secondary: var(--gray-muted);
-  --color-text-muted-light: var(--gray-text-light);
+  --color-text-primary: var(--white-100);
+
+  /* Keep dark specific */
+  --color-text-secondary: var(--gray-175);
+  --color-text-disabled: var(--gray-475);
+  --color-text-light: var(--white-300);
+  --color-text-soft-white: var(--white-500);
+  --color-text-muted: var(--gray-100);
+  --color-text-muted-secondary: var(--gray-250);
+  --color-text-muted-light: var(--gray-150);
 
   /* Border */
-  --color-border: #334155;
-  --app-border-muted: var(--gray-disabled);
-  --component-toolbar-divider: var(--gray-divider);
-  --component-active-border: var(--blue-light);
-  --component-border: var(--blue-border);
-  --component-hover-border: var(--blue-hover-border);
+  /* Keep dark specific */
+  --color-border: var(--gray-1225);
+  --app-border-muted: var(--gray-450);
+  --component-toolbar-divider: var(--gray-950);
+  --component-active-border: var(--blue-100);
+  --component-border: var(--blue-500);
+  --component-hover-border: var(--blue-1200);
 
   /* Status */
-  --color-success: var(--green-light);
-  --color-warning: var(--yellow-light);
-  --color-danger: var(--red-light);
-  --color-info: var(--blue-info-dark);
+  --color-success: var(--green-200);
+  --color-warning: var(--yellow-200);
+  --color-danger: var(--red-200);
+  --color-info: var(--blue-700);
 
   /* Shadow */
+
   --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.5);
 
   /* Radius */
@@ -313,13 +325,15 @@
   --radius-lg: 12px;
 
   /* Tabs */
-  --color-tab-active-border: var(--blue-primary);
-  --color-tab-active-text: var(--white-primary);
-  --color-tab-inactive-text: var(--gray-text-secondary);
-  --color-tab-container-bg: var(--gray-tab-container);
-  --color-tab-active-bg: var(--gray-tab);
+  --color-tab-active-border: var(--blue-200);
+  --color-tab-active-text: var(--white-50);
+  --color-tab-inactive-text: var(--gray-100);
+  --color-tab-container-bg: var(--gray-750);
+  --color-tab-active-bg: var(--gray-1050);
 
   /* Table */
+
+  /* Keep dark specific */
   --color-table-header: #252525;
   --color-table-row-odd: #2c2c2c;
   --color-table-row-even: #303030;
@@ -327,30 +341,30 @@
   --color-table-border: #454545;
 
   /* Button */
-  --color-button-primary: var(--blue-primary);
-  --color-button-primary-hover: var(--blue-hover);
-  --color-button-secondary: var(--gray-panel);
-  --color-button-secondary-hover: var(--gray-surface-secondary);
-  --color-button-text-primary: var(--gray-card);
-  --color-button-text-secondary: var(--blue-primary);
-  --color-button-focus: var(--blue-focus);
+  --color-button-primary: var(--blue-200);
+  --color-button-primary-hover: var(--blue-400);
+  --color-button-secondary: var(--gray-1000);
+  --color-button-secondary-hover: var(--gray-900);
+  --color-button-text-primary: var(--gray-1200);
+  --color-button-text-secondary: var(--blue-200);
+  --color-button-focus: var(--blue-300);
 
   /* Search */
-  --color-search-border: var(--gray-search-border);
-  --color-search-background: var(--gray-search);
-  --color-search-placeholder: var(--gray-placeholder);
-  --color-search-icon: var(--gray-icon);
+  --color-search-border: var(--gray-650);
+  --color-search-background: var(--gray-1250);
+  --color-search-placeholder: var(--gray-400);
+  --color-search-icon: var(--gray-300);
 
   /* Segmented Control */
-  --component-segmented-control-selected-border: var(--gray-border-light);
+  --component-segmented-control-selected-border: var(--gray-550);
 
   /* Surface */
-  --app-surface-secondary: var(--gray-surface-secondary);
-  --app-surface-tertiary: var(--gray-surface-tertiary);
+  --app-surface-secondary: var(--gray-900);
+  --app-surface-tertiary: var(--gray-850);
 
   /* Toolbar */
-  --component-toolbar-background: var(--gray-toolbar);
-  --component-accent-primary: var(--blue-dark);
+  --component-toolbar-background: var(--gray-1450);
+  --component-accent-primary: var(--blue-600);
 }
 
 @theme {
@@ -542,10 +556,6 @@
   --color-component-accent-primary: var(--component-accent-primary);
 }
 
-/* =========================================================
-   GLOBAL STYLES
-========================================================= */
-
 body {
   background: var(--color-background);
   color: var(--color-text-primary);
@@ -565,13 +575,13 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--gray-scrollbar);
+  background: var(--gray-700);
   border-radius: 9999px;
   border: 2px solid var(--app-surface);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--gray-border-strong);
+  background: var(--gray-500);
 }
 
 ::-webkit-scrollbar-corner {
