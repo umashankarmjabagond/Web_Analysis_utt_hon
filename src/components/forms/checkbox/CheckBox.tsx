@@ -7,18 +7,27 @@ const Checkbox: React.FC<CheckboxProps> = ({
   disabled = false,
   label,
   className = "",
+  size=16,
   ...props
 }) => {
   return (
     <label className="flex items-center gap-2">
-      <div className="relative flex h-4 w-4 items-center justify-center shrink-0">
+      <div
+        className="relative flex items-center justify-center shrink-0"
+        style={{
+          width : size,
+          height : size,
+        }}
+      >
         <input
           type="checkbox"
           checked={checked}
+          style={{
+          width : size,
+          height : size,
+        }}
           className={`
           peer
-          h-4
-          w-4
           appearance-none
           rounded-xs
           border

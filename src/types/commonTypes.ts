@@ -176,4 +176,5 @@ export interface TooltipProps {
 export interface CheckboxProps extends InputHTMLAttributes<HTMLInputElement> {
   checked: boolean;
   label?: string;
+  size?:number;
 }
