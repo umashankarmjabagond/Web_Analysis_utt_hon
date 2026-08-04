@@ -11,6 +11,8 @@ import {
   type NodeChange,
 } from "@xyflow/react";
 
+import type { WorkflowListItem } from "../types/workFlowTypes";
+
 export type ActiveTool = "pointer" | "connect";
 
 interface WorkflowSnapshot {
@@ -63,6 +65,13 @@ interface WorkflowStore {
   deleteSelectedEdges: () => void;
   clearWorkflow: () => void;
   setWorkflow: (nodes: Node[], edges: Edge[]) => void;
+
+  pendingCatalogItem: WorkflowListItem | null;
+
+  setPendingCatalogItem: (
+    item: WorkflowListItem | null,
+  ) => void;
+
 }
 
 export const useWorkflowStore = create<WorkflowStore>((set, get) => ({
@@ -80,6 +89,8 @@ export const useWorkflowStore = create<WorkflowStore>((set, get) => ({
   history: [],
 
   future: [],
+
+  pendingCatalogItem: null,
 
   setNodes: (nodes) =>
     set({
@@ -101,6 +112,11 @@ export const useWorkflowStore = create<WorkflowStore>((set, get) => ({
     set({
       selectedEdge: edge,
     }),
+
+    setPendingCatalogItem: (item) =>
+  set({
+    pendingCatalogItem: item,
+  }),
 
   setActiveTool: (tool) =>
     set({
@@ -177,6 +193,7 @@ export const useWorkflowStore = create<WorkflowStore>((set, get) => ({
       edges: [],
       selectedNode: null,
       selectedEdge: null,
+      pendingCatalogItem: null,
       history: [],
       future: [],
       activeTool: "pointer",
@@ -272,10 +289,11 @@ export const useWorkflowStore = create<WorkflowStore>((set, get) => ({
     }));
   },
   setWorkflow: (nodes, edges) =>
-    set({
-      nodes,
-      edges,
-      selectedNode: null,
-      selectedEdge: null,
-    }),
+  set({
+    nodes,
+    edges,
+    selectedNode: null,
+    selectedEdge: null,
+    pendingCatalogItem: null,
+  }),
 }));
