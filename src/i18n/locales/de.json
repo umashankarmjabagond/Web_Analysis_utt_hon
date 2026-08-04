@@ -1,0 +1,88 @@
+{
+  "COMMON": {
+    "SAVE": "Speichern",
+    "CANCEL": "Abbrechen",
+    "DELETE": "Löschen",
+    "SEARCH": "Suchen",
+    "RESET": "Zurücksetzen",
+    "YES": "Ja",
+    "NO": "Nein",
+    "OK": "OK",
+    "CLOSE": "Schließen",
+
+    "GOOD": "Gut",
+    "WARNING": "Warnung",
+    "ERROR": "Fehler"
+  },
+
+  "SIDEBAR": {
+    "HOME": "Startseite",
+    "WORKFLOW": "Workflow",
+    "DASHBOARD": "Dashboard",
+    "SETTINGS": "Einstellungen",
+    "HELP": "Hilfe",
+    "DOCUMENTS": "Dokumente"
+  },
+
+  "DASHBOARD": {
+    "POWER_BOILER": "Leistungskessel",
+    "AREA": "BEREICH",
+
+    "TOTAL_UNITS": "GESAMTE EINHEITEN",
+    "MPC_ASSETS": "MPC-ANLAGEN",
+    "TOTAL_CONTROLLERS": "GESAMTE REGLER",
+    "REGULATORY_ASSETS": "REGELUNGSANLAGEN",
+
+    "UNIT_WISE_STATUS_SUMMARY": "Einheitenbezogene Statusübersicht",
+    "WARNING_ERROR_SUMMARY": "Warnungs- und Fehlerübersicht"
+  },
+
+  "TABLE": {
+    "NO_DATA": "Keine Datensätze gefunden",
+
+    "UNIT_NAME": "Einheitenname",
+    "TOTAL_CONTROLLERS": "Gesamte Regler",
+    "GOOD": "Gut",
+    "WARNINGS": "Warnungen",
+    "ERRORS": "Fehler",
+
+    "CONTROLLER_NAME": "Reglername",
+    "ATTRIBUTE_NAME": "Attributname",
+    "ERROR_MESSAGE": "Fehlermeldung"
+  },
+
+  "FILTER": {
+    "ATTRIBUTES": "Attribute",
+    "TYPE": "Typ",
+
+    "ALL": "Alle",
+    "DATA_SOURCE": "Datenquelle",
+    "DATA_SINK": "Datensenke",
+    "VALVE_STICTION": "Ventilreibung",
+    "REGULATORY": "Regelung",
+    "MPC": "MPC"
+  },
+
+  "BUTTON": {
+    "SUBMIT": "Senden",
+    "NEXT": "Weiter",
+    "BACK": "Zurück"
+  },
+
+  "DRAWER": {
+    "TITLE": "Projektdetails"
+  },
+
+  "DIALOG": {
+    "DELETE_TITLE": "Projekt löschen",
+    "DELETE_MESSAGE": "Möchten Sie dieses Projekt wirklich löschen?"
+  },
+
+  "LANGUAGE": {
+    "ENGLISH": "Englisch",
+    "GERMAN": "Deutsch",
+    "TAMIL": "Tamil",
+    "RUSSIAN": "Russisch",
+    "CHINESE": "Chinesisch"
+  }
+}

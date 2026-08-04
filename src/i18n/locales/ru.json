@@ -1,0 +1,88 @@
+{
+  "COMMON": {
+    "SAVE": "Сохранить",
+    "CANCEL": "Отмена",
+    "DELETE": "Удалить",
+    "SEARCH": "Поиск",
+    "RESET": "Сброс",
+    "YES": "Да",
+    "NO": "Нет",
+    "OK": "ОК",
+    "CLOSE": "Закрыть",
+
+    "GOOD": "Хорошо",
+    "WARNING": "Предупреждение",
+    "ERROR": "Ошибка"
+  },
+
+  "SIDEBAR": {
+    "HOME": "Главная",
+    "WORKFLOW": "Рабочий процесс",
+    "DASHBOARD": "Панель управления",
+    "SETTINGS": "Настройки",
+    "HELP": "Помощь",
+    "DOCUMENTS": "Документы"
+  },
+
+  "DASHBOARD": {
+    "POWER_BOILER": "Энергетический котёл",
+    "AREA": "ОБЛАСТЬ",
+
+    "TOTAL_UNITS": "ОБЩЕЕ КОЛИЧЕСТВО УСТАНОВОК",
+    "MPC_ASSETS": "АКТИВЫ MPC",
+    "TOTAL_CONTROLLERS": "ОБЩЕЕ КОЛИЧЕСТВО КОНТРОЛЛЕРОВ",
+    "REGULATORY_ASSETS": "РЕГУЛЯТОРНЫЕ АКТИВЫ",
+
+    "UNIT_WISE_STATUS_SUMMARY": "Сводка состояния по установкам",
+    "WARNING_ERROR_SUMMARY": "Сводка предупреждений и ошибок"
+  },
+
+  "TABLE": {
+    "NO_DATA": "Данные не найдены",
+
+    "UNIT_NAME": "Название установки",
+    "TOTAL_CONTROLLERS": "Всего контроллеров",
+    "GOOD": "Хорошо",
+    "WARNINGS": "Предупреждения",
+    "ERRORS": "Ошибки",
+
+    "CONTROLLER_NAME": "Название контроллера",
+    "ATTRIBUTE_NAME": "Название атрибута",
+    "ERROR_MESSAGE": "Сообщение об ошибке"
+  },
+
+  "FILTER": {
+    "ATTRIBUTES": "Атрибуты",
+    "TYPE": "Тип",
+
+    "ALL": "Все",
+    "DATA_SOURCE": "Источник данных",
+    "DATA_SINK": "Приёмник данных",
+    "VALVE_STICTION": "Заедание клапана",
+    "REGULATORY": "Регулирующий",
+    "MPC": "MPC"
+  },
+
+  "BUTTON": {
+    "SUBMIT": "Отправить",
+    "NEXT": "Далее",
+    "BACK": "Назад"
+  },
+
+  "DRAWER": {
+    "TITLE": "Сведения о проекте"
+  },
+
+  "DIALOG": {
+    "DELETE_TITLE": "Удалить проект",
+    "DELETE_MESSAGE": "Вы уверены, что хотите удалить этот проект?"
+  },
+
+  "LANGUAGE": {
+    "ENGLISH": "Английский",
+    "GERMAN": "Немецкий",
+    "TAMIL": "Тамильский",
+    "RUSSIAN": "Русский",
+    "CHINESE": "Китайский"
+  }
+}

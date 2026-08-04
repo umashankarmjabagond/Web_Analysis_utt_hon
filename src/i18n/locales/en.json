@@ -1,0 +1,88 @@
+{
+  "COMMON": {
+    "SAVE": "Save",
+    "CANCEL": "Cancel",
+    "DELETE": "Delete",
+    "SEARCH": "Search",
+    "RESET": "Reset",
+    "YES": "Yes",
+    "NO": "No",
+    "OK": "OK",
+    "CLOSE": "Close",
+
+    "GOOD": "Good",
+    "WARNING": "Warning",
+    "ERROR": "Error"
+  },
+
+  "SIDEBAR": {
+    "HOME": "Home",
+    "WORKFLOW": "Workflow",
+    "DASHBOARD": "Dashboard",
+    "SETTINGS": "Settings",
+    "HELP": "Help",
+    "DOCUMENTS": "Documents"
+  },
+
+  "DASHBOARD": {
+    "POWER_BOILER": "Power Boiler",
+    "AREA": "AREA",
+
+    "TOTAL_UNITS": "TOTAL UNITS",
+    "MPC_ASSETS": "MPC ASSETS",
+    "TOTAL_CONTROLLERS": "TOTAL CONTROLLERS",
+    "REGULATORY_ASSETS": "REGULATORY ASSETS",
+
+    "UNIT_WISE_STATUS_SUMMARY": "Unit Wise Status Summary",
+    "WARNING_ERROR_SUMMARY": "Warning And Error Summary"
+  },
+
+  "TABLE": {
+    "NO_DATA": "No Records Found",
+
+    "UNIT_NAME": "Unit Name",
+    "TOTAL_CONTROLLERS": "Total Controllers",
+    "GOOD": "Good",
+    "WARNINGS": "Warnings",
+    "ERRORS": "Errors",
+
+    "CONTROLLER_NAME": "Controller Name",
+    "ATTRIBUTE_NAME": "Attribute Name",
+    "ERROR_MESSAGE": "Error Message"
+  },
+
+  "FILTER": {
+    "ATTRIBUTES": "Attributes",
+    "TYPE": "Type",
+
+    "ALL": "All",
+    "DATA_SOURCE": "Data Source",
+    "DATA_SINK": "Data Sink",
+    "VALVE_STICTION": "Valve Stiction",
+    "REGULATORY": "Regulatory",
+    "MPC": "MPC"
+  },
+
+  "BUTTON": {
+    "SUBMIT": "Submit",
+    "NEXT": "Next",
+    "BACK": "Back"
+  },
+
+  "DRAWER": {
+    "TITLE": "Project Details"
+  },
+
+  "DIALOG": {
+    "DELETE_TITLE": "Delete Project",
+    "DELETE_MESSAGE": "Are you sure you want to delete this project?"
+  },
+
+  "LANGUAGE": {
+    "ENGLISH": "English",
+    "GERMAN": "German",
+    "TAMIL": "Tamil",
+    "RUSSIAN": "Russian",
+    "CHINESE": "Chinese"
+  }
+}

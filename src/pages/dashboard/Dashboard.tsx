@@ -413,7 +413,7 @@ export default function Dashboard() {
   "
     >
       <div className="flex items-center gap-3 w-full">
-        <h1 className="text-lg font-semibold tracking-wide">Power Boiler</h1>
+        <h1 className="text-lg font-semibold tracking-wide">{t('DASHBOARD.POWER_BOILER')}</h1>
 
         <span className="rounded-full border border-sky-500 px-2 py-0.5 text-xs font-medium text-sky-400">
           AREA
