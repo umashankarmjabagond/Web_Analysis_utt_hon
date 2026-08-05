@@ -259,7 +259,7 @@ export default function Toolbar() {
           )}
         </div>
 
-        <div className="hidden lg:flex items-center gap-2">
+        <div className="hidden xl:flex items-center gap-2">
           <ToolbarButton title="Pencil" icon={Pencil} />
 
           <ToolbarButton title="Grid" icon={Grid2X2} />
