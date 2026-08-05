@@ -16,20 +16,20 @@ const GroupedSelector: FC<GroupedSelectorProps> = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(true); // Open by default like Figma
 
-  useEffect(() => {
-    const handleOutsideClick = (event: MouseEvent) => {
-      if (
-        containerRef.current &&
-        !containerRef.current.contains(event.target as Node)
-      ) {
-        setIsOpen(false);
-      }
-    };
+  // useEffect(() => {
+  //   const handleOutsideClick = (event: MouseEvent) => {
+  //     if (
+  //       containerRef.current &&
+  //       !containerRef.current.contains(event.target as Node)
+  //     ) {
+  //       setIsOpen(false);
+  //     }
+  //   };
 
-    document.addEventListener("mousedown", handleOutsideClick);
+  //   document.addEventListener("mousedown", handleOutsideClick);
 
-    return () => document.removeEventListener("mousedown", handleOutsideClick);
-  }, []);
+  //   return () => document.removeEventListener("mousedown", handleOutsideClick);
+  // }, []);
 
   const handleSelect = (item: GroupedSelectorItem) => {
     onSelect(item);
