@@ -112,3 +112,29 @@ git push origin feature/<feature-name>
 Create a Pull Request for review.
 
 ---
+
+## Testing
+
+Run all tests
+
+```bash
+npm test
+```
+
+Run tests in watch mode
+
+```bash
+npm run test:watch
+```
+
+Generate coverage report
+
+```bash
+npm run test:coverage
+```
+
+The coverage report is generated in the `coverage/` directory.
+
+Open `coverage/index.html` in your browser to view it.
+
+> Note: The `coverage/` directory is generated automatically and is intentionally excluded from Git.

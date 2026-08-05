@@ -1,4 +1,4 @@
-import { AxiosRequestConfig } from "axios";
+import type { AxiosRequestConfig } from "axios";
 import api from "./api";
 
 export abstract class BaseService {
@@ -71,7 +71,6 @@ export abstract class BaseService {
   }
 
   private handleError(error: unknown) {
-    // const message = error?.response?.data?.message ?? "Something went wrong";
-    // Notification.error(message);
+    console.error("API Error:", error);
   }
 }
