@@ -5,6 +5,8 @@ import Input from "../../components/forms/input/Input";
 import Select from "../../components/forms/select/Select";
 import TextArea from "../../components/forms/textarea/TextArea";
 import { Check, CircleHelp, RotateCw } from "lucide-react";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
 
 const COLUMN_OPTIONS = [
   {
@@ -29,39 +31,52 @@ const COLUMN_OPTIONS = [
   },
 ];
 
+const schema = z.object({
+  warningThreshold: z
+    .string()
+    .regex(/^\d{1,3}(\.\d{1,2})?$/, "Enter a valid percentage")
+    .refine((value) => Number(value) >= 0 && Number(value) <= 100, {
+      message: "Value must be between 0 and 100",
+    }),
+
+  abortThreshold: z
+    .string()
+    .regex(/^\d{1,3}(\.\d{1,2})?$/, "Enter a valid percentage")
+    .refine((value) => Number(value) >= 0 && Number(value) <= 100, {
+      message: "Value must be between 0 and 100",
+    }),
+
+  referenceColumn: z.string(),
+
+  badDataExpression: z.string(),
+
+  replacementExpression: z.string(),
+});
+
 const Properties = () => {
-  const [warningThreshold, setWarningThreshold] = useState("10");
-
-  const [abortThreshold, setAbortThreshold] = useState("20");
-
-  const [referenceColumn, setReferenceColumn] = useState("mode");
-
-  const [badDataExpression, setBadDataExpression] = useState("");
-
-  const [replacementExpression, setReplacementExpression] = useState("");
-
   const [badExpressionLoading, setBadExpressionLoading] = useState(false);
 
   const [replacementExpressionLoading, setReplacementExpressionLoading] =
     useState(false);
 
-  const handleSave = () => {
-    console.log({
-      warningThreshold,
-      abortThreshold,
-      referenceColumn,
-      badDataExpression,
-      replacementExpression,
-    });
-  };
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    setError,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      warningThreshold: "10",
+      abortThreshold: "20",
+      referenceColumn: "mode",
+      badDataExpression: "",
+      replacementExpression: "",
+    },
+  });
 
-  const handleHelp = () => {
-    console.log("Help");
-  };
-
-  const handleApplyToAll = () => {
-    console.log("Apply To All");
-  };
+  const referenceColumn = watch("referenceColumn");
 
   const handleBadExpressionRefresh = () => {
     setBadExpressionLoading(true);
@@ -78,26 +93,21 @@ const Properties = () => {
     }, 2000);
   };
 
-  const handlePercentageChange = (
-    value: string,
-    setter: React.Dispatch<React.SetStateAction<string>>,
-  ) => {
-    if (value === "") {
-      setter("");
+  const handleSave = (data: any) => {
+    const result = schema.safeParse(data);
+
+    if (!result.success) {
+      result.error.issues.forEach((issue) => {
+        setError(issue.path[0] as any, {
+          message: issue.message,
+        });
+      });
+
       return;
     }
 
-    if (!/^\d{0,3}(\.\d{0,2})?$/.test(value)) {
-      return;
-    }
-
-    const number = Number(value);
-
-    if (number < 0 || number > 100) {
-      return;
-    }
-    setter(value);
   };
+
   return (
     <div className="flex h-full flex-col bg-panel-bg">
       {/* Header */}
@@ -112,13 +122,12 @@ const Properties = () => {
           <Button
             variant="secondary"
             size="medium"
-            onClick={handleHelp}
             icon={<CircleHelp size={13} strokeWidth={2.2} />}
           >
             Help
           </Button>
 
-          <Button variant="secondary" size="medium" onClick={handleApplyToAll}>
+          <Button variant="secondary" size="medium">
             Apply To All
           </Button>
 
@@ -147,7 +156,7 @@ const Properties = () => {
               return (
                 <div key={column.value} className="px-4 py-1">
                   <button
-                    onClick={() => setReferenceColumn(column.value)}
+                    onClick={() => setValue("referenceColumn", column.value)}
                     className={`
                         flex
                         h-11
@@ -198,18 +207,14 @@ const Properties = () => {
             <div className="grid grid-cols-2 gap-6">
               <Input
                 label="Warning Threshold %"
-                value={warningThreshold}
-                onChange={(e) =>
-                  handlePercentageChange(e.target.value, setWarningThreshold)
-                }
+                error={errors.warningThreshold?.message}
+                {...register("warningThreshold")}
               />
 
               <Input
                 label="Abort Threshold %"
-                value={abortThreshold}
-                onChange={(e) =>
-                  handlePercentageChange(e.target.value, setAbortThreshold)
-                }
+                error={errors.abortThreshold?.message}
+                {...register("abortThreshold")}
               />
             </div>
           </div>
@@ -229,8 +234,7 @@ const Properties = () => {
               <div className="flex-1">
                 <Select
                   options={COLUMN_OPTIONS}
-                  value={referenceColumn}
-                  onChange={(e) => setReferenceColumn(e.target.value)}
+                  {...register("referenceColumn")}
                 />
               </div>
             </div>
@@ -241,8 +245,7 @@ const Properties = () => {
                   label="Bad Data Expression"
                   placeholder="Enter bad data expression..."
                   rows={5}
-                  value={badDataExpression}
-                  onChange={(e) => setBadDataExpression(e.target.value)}
+                  {...register("badDataExpression")}
                 />
               </div>
 
@@ -268,8 +271,7 @@ const Properties = () => {
                   label="Replacement Expression"
                   placeholder="Enter replacement expression..."
                   rows={5}
-                  value={replacementExpression}
-                  onChange={(e) => setReplacementExpression(e.target.value)}
+                  {...register("replacementExpression")}
                 />
               </div>
 
@@ -295,11 +297,9 @@ const Properties = () => {
       {/* Footer */}
 
       <div className="flex items-center justify-end gap-3 border-t border-border-1 px-6 py-4">
-        <Button variant="secondary" onClick={handleHelp}>
-          Cancel
-        </Button>
+        <Button variant="secondary">Cancel</Button>
 
-        <Button variant="primary" onClick={handleSave}>
+        <Button variant="primary" onClick={handleSubmit(handleSave)}>
           Save
         </Button>
       </div>
