@@ -5,9 +5,12 @@ import Input from "../../components/forms/input/Input";
 import Select from "../../components/forms/select/Select";
 import TextArea from "../../components/forms/textarea/TextArea";
 import { Check, CircleHelp, RotateCw } from "lucide-react";
-import { z } from "zod";
 import { useForm } from "react-hook-form";
+import { propertiesSchema, type PropertiesFormData } from "../../schemas/propertiesSchema";
 
+interface PropertiesProps {
+  onCancel?: () => void;
+}
 const COLUMN_OPTIONS = [
   {
     label: "01-LC0524.MODE",
@@ -31,29 +34,9 @@ const COLUMN_OPTIONS = [
   },
 ];
 
-const schema = z.object({
-  warningThreshold: z
-    .string()
-    .regex(/^\d{1,3}(\.\d{1,2})?$/, "Enter a valid percentage")
-    .refine((value) => Number(value) >= 0 && Number(value) <= 100, {
-      message: "Value must be between 0 and 100",
-    }),
 
-  abortThreshold: z
-    .string()
-    .regex(/^\d{1,3}(\.\d{1,2})?$/, "Enter a valid percentage")
-    .refine((value) => Number(value) >= 0 && Number(value) <= 100, {
-      message: "Value must be between 0 and 100",
-    }),
 
-  referenceColumn: z.string(),
-
-  badDataExpression: z.string(),
-
-  replacementExpression: z.string(),
-});
-
-const Properties = () => {
+const Properties: React.FC<PropertiesProps> = ({ onCancel }) => {
   const [badExpressionLoading, setBadExpressionLoading] = useState(false);
 
   const [replacementExpressionLoading, setReplacementExpressionLoading] =
@@ -66,7 +49,8 @@ const Properties = () => {
     setValue,
     setError,
     formState: { errors },
-  } = useForm({
+  } = useForm<PropertiesFormData>({
+    mode: "onChange",
     defaultValues: {
       warningThreshold: "10",
       abortThreshold: "20",
@@ -93,19 +77,18 @@ const Properties = () => {
     }, 2000);
   };
 
-  const handleSave = (data: any) => {
-    const result = schema.safeParse(data);
+  const handleSave = (data: PropertiesFormData) => {
+    const result = propertiesSchema.safeParse(data);
 
     if (!result.success) {
       result.error.issues.forEach((issue) => {
-        setError(issue.path[0] as any, {
+        setError(issue.path[0] as keyof PropertiesFormData, {
           message: issue.message,
         });
       });
 
       return;
     }
-
   };
 
   return (
@@ -131,7 +114,7 @@ const Properties = () => {
             Apply To All
           </Button>
 
-          <Button variant="primary" size="medium" onClick={handleSave}>
+          <Button variant="primary" size="medium" onClick={handleSubmit(handleSave)}>
             Save
           </Button>
         </div>
@@ -297,7 +280,7 @@ const Properties = () => {
       {/* Footer */}
 
       <div className="flex items-center justify-end gap-3 border-t border-border-1 px-6 py-4">
-        <Button variant="secondary">Cancel</Button>
+        <Button variant="secondary" onClick={onCancel}>Cancel</Button>
 
         <Button variant="primary" onClick={handleSubmit(handleSave)}>
           Save

@@ -31,7 +31,10 @@ export default function ExecutionNodeDrawer() {
       {
         id: "properties",
         label: "Properties",
-        component: Properties,
+        component: () => (
+          <Properties 
+            onCancel={() => setNodeDrawerOpen(false)}/>
+        ),
       },
       {
         id: "connections",
