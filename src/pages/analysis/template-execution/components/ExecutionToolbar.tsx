@@ -24,19 +24,19 @@ export default function ExecutionToolbar() {
   const handleExecute = () => {
     // To do API integration
     setExecutionAction(EXECUTION_ACTION.EXECUTE);
-    alert("Start Executing ?");
+    confirm("Start Executing ?");
   };
 
   const handlePause = () => {
     // To do API integration
     setExecutionAction(EXECUTION_ACTION.PAUSE);
-    alert("Pause execution ?");
+    confirm("Pause execution ?");
   };
 
   const handleDelete = () => {
     // To do API integration
     setExecutionAction(EXECUTION_ACTION.DELETE);
-    alert("Delete Workflow ?");
+    confirm("Delete Workflow ?");
     setTimeout(() => {
       setExecutionAction(EXECUTION_ACTION.IDLE);
     }, 1000);

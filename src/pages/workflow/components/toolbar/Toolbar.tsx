@@ -119,16 +119,16 @@ export default function Toolbar() {
         <ToolbarButton
           title="Pointer"
           active={activeTool === "pointer"}
-          icon={<MousePointer2 size={15} />}
+          icon={MousePointer2}
           onClick={() => setActiveTool("pointer")}
         />
 
-        <ToolbarButton title="Connector 1" icon={<MoveRight size={15} />} />
+        <ToolbarButton title="Connector 1" icon={MoveRight} />
 
         <ToolbarButton
           title="Connector 2"
           active={activeTool === "connect"}
-          icon={<GitBranch size={15} />}
+          icon={GitBranch}
           onClick={() => setActiveTool("connect")}
         />
 
@@ -260,34 +260,26 @@ export default function Toolbar() {
         </div>
 
         <div className="hidden xl:flex items-center gap-2">
-          <ToolbarButton title="Pencil" icon={<Pencil size={15} />} />
+          <ToolbarButton title="Pencil" icon={Pencil} />
 
-          <ToolbarButton title="Grid" icon={<Grid2X2 size={15} />} />
+          <ToolbarButton title="Grid" icon={Grid2X2} />
 
-          <ToolbarButton
-            title="Undo"
-            icon={<Undo2 size={15} />}
-            onClick={undo}
-          />
+          <ToolbarButton title="Undo" icon={Undo2} onClick={undo} />
 
-          <ToolbarButton
-            title="Redo"
-            icon={<Redo2 size={15} />}
-            onClick={redo}
-          />
+          <ToolbarButton title="Redo" icon={Redo2} onClick={redo} />
 
           <ToolbarButton
             title="Delete"
-            icon={<Circle size={15} />}
+            icon={Circle}
             onClick={() => {
               deleteSelectedEdges();
               deleteSelectedNodes();
             }}
           />
 
-          <ToolbarButton title="Rectangle" icon={<Square size={15} />} />
+          <ToolbarButton title="Rectangle" icon={Square} />
 
-          <ToolbarButton title="Text" icon={<Type size={15} />} />
+          <ToolbarButton title="Text" icon={Type} />
         </div>
       </div>
 

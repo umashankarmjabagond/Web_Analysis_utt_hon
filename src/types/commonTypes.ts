@@ -178,3 +178,8 @@ export interface CheckboxProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   size?:number;
 }
+export type CellValue = string | number | boolean | null | undefined;
+
+export interface SpreadsheetProps {
+  data: Array<Record<string, CellValue>> | CellValue[][];
+}
