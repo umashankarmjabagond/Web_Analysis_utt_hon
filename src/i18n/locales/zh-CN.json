@@ -1,0 +1,59 @@
+{
+  "COMMON_SAVE": "保存",
+  "COMMON_CANCEL": "取消",
+  "COMMON_DELETE": "删除",
+  "COMMON_SEARCH": "搜索",
+  "COMMON_RESET": "重置",
+  "COMMON_YES": "是",
+  "COMMON_NO": "否",
+  "COMMON_OK": "确定",
+  "COMMON_CLOSE": "关闭",
+
+  "COMMON_GOOD": "正常",
+  "COMMON_WARNING": "警告",
+  "COMMON_ERROR": "错误",
+
+  "SIDEBAR_HOME": "首页",
+  "SIDEBAR_WORKFLOW": "工作流",
+  "SIDEBAR_DASHBOARD": "仪表板",
+  "SIDEBAR_SETTINGS": "设置",
+  "SIDEBAR_HELP": "帮助",
+  "SIDEBAR_DOCUMENTS": "文档",
+
+  "DASHBOARD_POWER_BOILER": "动力锅炉",
+  "DASHBOARD_AREA": "区域",
+  "DASHBOARD_TOTAL_UNITS": "设备总数",
+  "DASHBOARD_MPC_ASSETS": "MPC资产",
+  "DASHBOARD_TOTAL_CONTROLLERS": "控制器总数",
+  "DASHBOARD_REGULATORY_ASSETS": "调节资产",
+  "DASHBOARD_UNIT_WISE_STATUS_SUMMARY": "设备状态汇总",
+  "DASHBOARD_WARNING_ERROR_SUMMARY": "警告和错误汇总",
+
+  "TABLE_NO_DATA": "未找到数据",
+  "TABLE_UNIT_NAME": "设备名称",
+  "TABLE_TOTAL_CONTROLLERS": "控制器总数",
+  "TABLE_GOOD": "正常",
+  "TABLE_WARNINGS": "警告",
+  "TABLE_ERRORS": "错误",
+  "TABLE_CONTROLLER_NAME": "控制器名称",
+  "TABLE_ATTRIBUTE_NAME": "属性名称",
+  "TABLE_ERROR_MESSAGE": "错误信息",
+
+  "FILTER_ATTRIBUTES": "属性",
+  "FILTER_TYPE": "类型",
+  "FILTER_ALL": "全部",
+  "FILTER_DATA_SOURCE": "数据源",
+  "FILTER_DATA_SINK": "数据目标",
+  "FILTER_VALVE_STICTION": "阀门卡滞",
+  "FILTER_REGULATORY": "调节",
+  "FILTER_MPC": "MPC",
+
+  "BUTTON_SUBMIT": "提交",
+  "BUTTON_NEXT": "下一步",
+  "BUTTON_BACK": "返回",
+
+  "DRAWER_TITLE": "项目详情",
+
+  "DIALOG_DELETE_TITLE": "删除项目",
+  "DIALOG_DELETE_MESSAGE": "确定要删除此项目吗？"
+}

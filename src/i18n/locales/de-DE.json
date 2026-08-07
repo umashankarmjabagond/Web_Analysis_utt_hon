@@ -1,0 +1,59 @@
+{
+  "COMMON_SAVE": "Speichern",
+  "COMMON_CANCEL": "Abbrechen",
+  "COMMON_DELETE": "Löschen",
+  "COMMON_SEARCH": "Suchen",
+  "COMMON_RESET": "Zurücksetzen",
+  "COMMON_YES": "Ja",
+  "COMMON_NO": "Nein",
+  "COMMON_OK": "OK",
+  "COMMON_CLOSE": "Schließen",
+
+  "COMMON_GOOD": "Gut",
+  "COMMON_WARNING": "Warnung",
+  "COMMON_ERROR": "Fehler",
+
+  "SIDEBAR_HOME": "Startseite",
+  "SIDEBAR_WORKFLOW": "Workflow",
+  "SIDEBAR_DASHBOARD": "Dashboard",
+  "SIDEBAR_SETTINGS": "Einstellungen",
+  "SIDEBAR_HELP": "Hilfe",
+  "SIDEBAR_DOCUMENTS": "Dokumente",
+
+  "DASHBOARD_POWER_BOILER": "Leistungskessel",
+  "DASHBOARD_AREA": "BEREICH",
+  "DASHBOARD_TOTAL_UNITS": "GESAMTE EINHEITEN",
+  "DASHBOARD_MPC_ASSETS": "MPC-ANLAGEN",
+  "DASHBOARD_TOTAL_CONTROLLERS": "GESAMTE REGLER",
+  "DASHBOARD_REGULATORY_ASSETS": "REGELUNGSANLAGEN",
+  "DASHBOARD_UNIT_WISE_STATUS_SUMMARY": "Einheitenbezogene Statusübersicht",
+  "DASHBOARD_WARNING_ERROR_SUMMARY": "Warnungs- und Fehlerübersicht",
+
+  "TABLE_NO_DATA": "Keine Datensätze gefunden",
+  "TABLE_UNIT_NAME": "Einheitenname",
+  "TABLE_TOTAL_CONTROLLERS": "Gesamte Regler",
+  "TABLE_GOOD": "Gut",
+  "TABLE_WARNINGS": "Warnungen",
+  "TABLE_ERRORS": "Fehler",
+  "TABLE_CONTROLLER_NAME": "Reglername",
+  "TABLE_ATTRIBUTE_NAME": "Attributname",
+  "TABLE_ERROR_MESSAGE": "Fehlermeldung",
+
+  "FILTER_ATTRIBUTES": "Attribute",
+  "FILTER_TYPE": "Typ",
+  "FILTER_ALL": "Alle",
+  "FILTER_DATA_SOURCE": "Datenquelle",
+  "FILTER_DATA_SINK": "Datensenke",
+  "FILTER_VALVE_STICTION": "Ventilreibung",
+  "FILTER_REGULATORY": "Regelung",
+  "FILTER_MPC": "MPC",
+
+  "BUTTON_SUBMIT": "Senden",
+  "BUTTON_NEXT": "Weiter",
+  "BUTTON_BACK": "Zurück",
+
+  "DRAWER_TITLE": "Projektdetails",
+
+  "DIALOG_DELETE_TITLE": "Projekt löschen",
+  "DIALOG_DELETE_MESSAGE": "Möchten Sie dieses Projekt wirklich löschen?"
+}

@@ -1,0 +1,59 @@
+{
+  "COMMON_SAVE": "Сохранить",
+  "COMMON_CANCEL": "Отмена",
+  "COMMON_DELETE": "Удалить",
+  "COMMON_SEARCH": "Поиск",
+  "COMMON_RESET": "Сброс",
+  "COMMON_YES": "Да",
+  "COMMON_NO": "Нет",
+  "COMMON_OK": "ОК",
+  "COMMON_CLOSE": "Закрыть",
+
+  "COMMON_GOOD": "Хорошо",
+  "COMMON_WARNING": "Предупреждение",
+  "COMMON_ERROR": "Ошибка",
+
+  "SIDEBAR_HOME": "Главная",
+  "SIDEBAR_WORKFLOW": "Рабочий процесс",
+  "SIDEBAR_DASHBOARD": "Панель управления",
+  "SIDEBAR_SETTINGS": "Настройки",
+  "SIDEBAR_HELP": "Помощь",
+  "SIDEBAR_DOCUMENTS": "Документы",
+
+  "DASHBOARD_POWER_BOILER": "Энергетический котёл",
+  "DASHBOARD_AREA": "ОБЛАСТЬ",
+  "DASHBOARD_TOTAL_UNITS": "ОБЩЕЕ КОЛИЧЕСТВО УСТАНОВОК",
+  "DASHBOARD_MPC_ASSETS": "АКТИВЫ MPC",
+  "DASHBOARD_TOTAL_CONTROLLERS": "ОБЩЕЕ КОЛИЧЕСТВО КОНТРОЛЛЕРОВ",
+  "DASHBOARD_REGULATORY_ASSETS": "РЕГУЛЯТОРНЫЕ АКТИВЫ",
+  "DASHBOARD_UNIT_WISE_STATUS_SUMMARY": "Сводка состояния по установкам",
+  "DASHBOARD_WARNING_ERROR_SUMMARY": "Сводка предупреждений и ошибок",
+
+  "TABLE_NO_DATA": "Данные не найдены",
+  "TABLE_UNIT_NAME": "Название установки",
+  "TABLE_TOTAL_CONTROLLERS": "Всего контроллеров",
+  "TABLE_GOOD": "Хорошо",
+  "TABLE_WARNINGS": "Предупреждения",
+  "TABLE_ERRORS": "Ошибки",
+  "TABLE_CONTROLLER_NAME": "Название контроллера",
+  "TABLE_ATTRIBUTE_NAME": "Название атрибута",
+  "TABLE_ERROR_MESSAGE": "Сообщение об ошибке",
+
+  "FILTER_ATTRIBUTES": "Атрибуты",
+  "FILTER_TYPE": "Тип",
+  "FILTER_ALL": "Все",
+  "FILTER_DATA_SOURCE": "Источник данных",
+  "FILTER_DATA_SINK": "Приёмник данных",
+  "FILTER_VALVE_STICTION": "Заедание клапана",
+  "FILTER_REGULATORY": "Регулирующий",
+  "FILTER_MPC": "MPC",
+
+  "BUTTON_SUBMIT": "Отправить",
+  "BUTTON_NEXT": "Далее",
+  "BUTTON_BACK": "Назад",
+
+  "DRAWER_TITLE": "Сведения о проекте",
+
+  "DIALOG_DELETE_TITLE": "Удалить проект",
+  "DIALOG_DELETE_MESSAGE": "Вы уверены, что хотите удалить этот проект?"
+}
