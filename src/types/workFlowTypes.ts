@@ -119,3 +119,7 @@ export interface ToolbarButtonProps {
   active?: boolean;
   onClick?: MouseEventHandler<HTMLButtonElement>;
 }
+
+export interface PropertiesProps {
+  onCancel?: () => void;
+}

@@ -4,6 +4,7 @@ import type {
   SelectHTMLAttributes,
   TextareaHTMLAttributes,
   ButtonHTMLAttributes,
+  InputHTMLAttributes,
 } from "react";
 import type { DonutChartItem } from "./dashboardTypes";
 
@@ -172,6 +173,11 @@ export interface TooltipProps {
   className?: string;
 }
 
+export interface CheckboxProps extends InputHTMLAttributes<HTMLInputElement> {
+  checked: boolean;
+  label?: string;
+  size?:number;
+}
 export type CellValue = string | number | boolean | null | undefined;
 
 export interface SpreadsheetProps {
