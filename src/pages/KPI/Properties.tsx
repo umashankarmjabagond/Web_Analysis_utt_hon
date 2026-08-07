@@ -4,8 +4,13 @@ import Button from "../../components/forms/button/Button";
 import Input from "../../components/forms/input/Input";
 import Select from "../../components/forms/select/Select";
 import TextArea from "../../components/forms/textarea/TextArea";
-import { Check, CircleHelp, RefreshCw } from "lucide-react";
-import IconButton from "../../components/forms/iconbutton/IconButton";
+import { Check, CircleHelp, RotateCw } from "lucide-react";
+import { useForm } from "react-hook-form";
+import {
+  propertiesSchema,
+  type PropertiesFormData,
+} from "../../schemas/propertiesSchema";
+import type { PropertiesProps } from "../../types/workFlowTypes";
 
 const COLUMN_OPTIONS = [
   {
@@ -30,33 +35,59 @@ const COLUMN_OPTIONS = [
   },
 ];
 
-const Properties = () => {
-  const [warningThreshold, setWarningThreshold] = useState("10");
+const Properties: React.FC<PropertiesProps> = ({ onCancel }) => {
+  const [badExpressionLoading, setBadExpressionLoading] = useState(false);
 
-  const [abortThreshold, setAbortThreshold] = useState("20");
+  const [replacementExpressionLoading, setReplacementExpressionLoading] =
+    useState(false);
 
-  const [referenceColumn, setReferenceColumn] = useState("mode");
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    setError,
+    formState: { errors },
+  } = useForm<PropertiesFormData>({
+    mode: "onChange",
+    defaultValues: {
+      warningThreshold: "10",
+      abortThreshold: "20",
+      referenceColumn: "mode",
+      badDataExpression: "",
+      replacementExpression: "",
+    },
+  });
 
-  const [badDataExpression, setBadDataExpression] = useState("");
+  const referenceColumn = watch("referenceColumn");
 
-  const [replacementExpression, setReplacementExpression] = useState("");
-
-  const handleSave = () => {
-    console.log({
-      warningThreshold,
-      abortThreshold,
-      referenceColumn,
-      badDataExpression,
-      replacementExpression,
-    });
+  const handleBadExpressionRefresh = () => {
+    setBadExpressionLoading(true);
+    setTimeout(() => {
+      setBadExpressionLoading(false);
+    }, 2000);
   };
 
-  const handleHelp = () => {
-    console.log("Help");
+  const handleReplacementRefresh = () => {
+    setReplacementExpressionLoading(true);
+
+    setTimeout(() => {
+      setReplacementExpressionLoading(false);
+    }, 2000);
   };
 
-  const handleApplyToAll = () => {
-    console.log("Apply To All");
+  const handleSave = (data: PropertiesFormData) => {
+    const result = propertiesSchema.safeParse(data);
+
+    if (!result.success) {
+      result.error.issues.forEach((issue) => {
+        setError(issue.path[0] as keyof PropertiesFormData, {
+          message: issue.message,
+        });
+      });
+
+      return;
+    }
   };
 
   return (
@@ -70,23 +101,23 @@ const Properties = () => {
         </div>
 
         <div className="flex items-center gap-2">
-          <Button variant="secondary" 
-                size="medium" 
-                onClick={handleHelp}
-                icon={
-        <CircleHelp
-            size={13}
-            strokeWidth={2.2}
-        />
-    }>
+          <Button
+            variant="secondary"
+            size="medium"
+            icon={<CircleHelp size={13} strokeWidth={2.2} />}
+          >
             Help
           </Button>
 
-          <Button variant="secondary" size="medium" onClick={handleApplyToAll}>
+          <Button variant="secondary" size="medium">
             Apply To All
           </Button>
 
-          <Button variant="primary" size="medium" onClick={handleSave}>
+          <Button
+            variant="primary"
+            size="medium"
+            onClick={handleSubmit(handleSave)}
+          >
             Save
           </Button>
         </div>
@@ -106,14 +137,13 @@ const Properties = () => {
 
           <div className="flex flex-1 flex-col pt-2">
             {COLUMN_OPTIONS.map((column) => {
-                const selected = referenceColumn === column.value;
+              const selected = referenceColumn === column.value;
 
-                return (
-                    <div key={column.value} className="px-4 py-1">
-
-                    <button
-                        onClick={() => setReferenceColumn(column.value)}
-                        className={`
+              return (
+                <div key={column.value} className="px-4 py-1">
+                  <button
+                    onClick={() => setValue("referenceColumn", column.value)}
+                    className={`
                         flex
                         h-11
                         w-full
@@ -124,32 +154,30 @@ const Properties = () => {
                         text-left
                         transition-all
                         ${
-                            selected
+                          selected
                             ? "bg-panel-hover shadow-md text-[var(--color-button-primary)]"
                             : "text-text-accent hover:bg-panel-hover/40"
                         }
                         `}
-                    >
-                        <span>{column.label}</span>
+                  >
+                    <span>{column.label}</span>
 
-                        {selected && (
-                        <Check
-                            size={16}
-                            className="text-[var(--color-button-primary)]"
-                        />
-                        )}
-                    </button>
-
-                    </div>
-                );
-                })}
+                    {selected && (
+                      <Check
+                        size={16}
+                        className="text-[var(--color-button-primary)]"
+                      />
+                    )}
+                  </button>
+                </div>
+              );
+            })}
           </div>
         </div>
 
         {/* Right Panel */}
 
         <div className="flex flex-1 flex-col overflow-y-auto p-6">
-
           <div>
             <span className="text-s font-bold text-text-accent">
               Edit the expressions you wish to preprocess
@@ -165,14 +193,14 @@ const Properties = () => {
             <div className="grid grid-cols-2 gap-6">
               <Input
                 label="Warning Threshold %"
-                value={warningThreshold}
-                onChange={(e) => setWarningThreshold(e.target.value)}
+                error={errors.warningThreshold?.message}
+                {...register("warningThreshold")}
               />
 
               <Input
                 label="Abort Threshold %"
-                value={abortThreshold}
-                onChange={(e) => setAbortThreshold(e.target.value)}
+                error={errors.abortThreshold?.message}
+                {...register("abortThreshold")}
               />
             </div>
           </div>
@@ -192,42 +220,61 @@ const Properties = () => {
               <div className="flex-1">
                 <Select
                   options={COLUMN_OPTIONS}
-                  value={referenceColumn}
-                  onChange={(e) => setReferenceColumn(e.target.value)}
+                  {...register("referenceColumn")}
                 />
               </div>
             </div>
-            
-            <div className="flex items-end gap-3">
-                <div className="flex-1">
-                    <TextArea
-                    label="Bad Data Expression"
-                    placeholder="Enter bad data expression..."
-                    rows={5}
-                    value={badDataExpression}
-                    onChange={(e) => setBadDataExpression(e.target.value)}
-                    />
-                </div>
 
-                <IconButton
-                    icon={<RefreshCw />}
+            <div className="flex gap-3">
+              <div className="flex-1">
+                <TextArea
+                  label="Bad Data Expression"
+                  placeholder="Enter bad data expression..."
+                  rows={5}
+                  {...register("badDataExpression")}
                 />
+              </div>
+
+              <RotateCw
+                strokeWidth={2}
+                onClick={handleBadExpressionRefresh}
+                className={`
+                  mt-7
+                  cursor-pointer
+                  transition-transform
+                  ${
+                    badExpressionLoading
+                      ? "animate-spin pointer-events-none"
+                      : "hover:rotate-90"
+                  }
+                `}
+              />
             </div>
 
-            <div className="flex items-end gap-3">
-                <div className="flex-1">
-                    <TextArea
-                    label="Replacement Expression"
-                    placeholder="Enter replacement expression..."
-                    rows={5}
-                    value={replacementExpression}
-                    onChange={(e) => setReplacementExpression(e.target.value)}
-                    />
-                </div>
-                
-                <IconButton
-                    icon={<RefreshCw />}
+            <div className="flex gap-3">
+              <div className="flex-1">
+                <TextArea
+                  label="Replacement Expression"
+                  placeholder="Enter replacement expression..."
+                  rows={5}
+                  {...register("replacementExpression")}
                 />
+              </div>
+
+              <RotateCw
+                strokeWidth={2}
+                onClick={handleReplacementRefresh}
+                className={`
+                  mt-7
+                  cursor-pointer
+                  transition-transform
+                  ${
+                    replacementExpressionLoading
+                      ? "animate-spin pointer-events-none"
+                      : "hover:rotate-90"
+                  }
+                `}
+              />
             </div>
           </div>
         </div>
@@ -236,11 +283,11 @@ const Properties = () => {
       {/* Footer */}
 
       <div className="flex items-center justify-end gap-3 border-t border-border-1 px-6 py-4">
-        <Button variant="secondary" onClick={handleHelp}>
+        <Button variant="secondary" onClick={onCancel}>
           Cancel
         </Button>
 
-        <Button variant="primary" onClick={handleSave}>
+        <Button variant="primary" onClick={handleSubmit(handleSave)}>
           Save
         </Button>
       </div>

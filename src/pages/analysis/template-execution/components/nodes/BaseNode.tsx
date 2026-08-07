@@ -11,6 +11,7 @@ import { useWorkflowCanvasInteractions } from "../../../../../hooks/useWorkflowI
 import { Fragment } from "react/jsx-runtime";
 import type { CSSProperties } from "react";
 import Tooltip from "../../../../../components/common/tooltip/Tooltip";
+import Checkbox from "../../../../../components/forms/checkbox/CheckBox";
 
 export default function BaseNode({ id, data, type }: NodeProps<BaseFlowNode>) {
   const checked = useTemplateExecutionStore((state) =>
@@ -111,20 +112,12 @@ export default function BaseNode({ id, data, type }: NodeProps<BaseFlowNode>) {
             checked ? "block" : "hidden group-hover:block"
           }`}
         >
-          <div className="relative h-4 w-4 flex items-center justify-center">
-            <input
-              type="checkbox"
-              checked={checked}
-              onChange={() => handleNodeSelection(id, data.status)}
-              onClick={(e) => e.stopPropagation()}
-              className="nodrag nopan peer h-4 w-4 appearance-none rounded-xs border border-app-default-border bg-transparent checked:border-app-action-primary checked:bg-app-action-primary cursor-pointer"
-            />
-
-            <Check
-              className="pointer-events-none absolute h-3 w-3 text-black opacity-0 peer-checked:opacity-100"
-              strokeWidth={3}
-            />
-          </div>
+          <Checkbox
+            checked={checked}
+            className="nodrag nopan"
+            onClick={(e) => e.stopPropagation()}
+            onChange={() => handleNodeSelection(id, data.status)}
+          />
         </div>
 
         <div className="relative z-10 flex h-full flex-col items-center justify-center gap-2">
