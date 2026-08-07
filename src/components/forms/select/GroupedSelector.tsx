@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type FC } from "react";
+import { useRef, useState, type FC } from "react";
 import { ChevronDown, ChevronUp, FileText } from "lucide-react";
 import clsx from "clsx";
 import type {
@@ -15,21 +15,6 @@ const GroupedSelector: FC<GroupedSelectorProps> = ({
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(true); // Open by default like Figma
-
-  // useEffect(() => {
-  //   const handleOutsideClick = (event: MouseEvent) => {
-  //     if (
-  //       containerRef.current &&
-  //       !containerRef.current.contains(event.target as Node)
-  //     ) {
-  //       setIsOpen(false);
-  //     }
-  //   };
-
-  //   document.addEventListener("mousedown", handleOutsideClick);
-
-  //   return () => document.removeEventListener("mousedown", handleOutsideClick);
-  // }, []);
 
   const handleSelect = (item: GroupedSelectorItem) => {
     onSelect(item);

@@ -4,7 +4,7 @@ import Drawer from "../../../../components/drawer/Drawer";
 import KpiTable from "../../../KPI/KpiTable";
 import CalculatedKpisAndErrors from "../../../KPI/CalculatedKpisAndErrors";
 import Properties from "../../../KPI/Properties";
-import Connections from "../../../connections/Connections";
+import Connections from "../../../KPI/Connections";
 
 export default function ExecutionDetailsPanel() {
   const DetailsPanel = Drawer;
