@@ -1,5 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { MarkerType } from "@xyflow/react";
+import {
+  MarkerType,
+  type Edge,
+} from "@xyflow/react";
+
 import {
   backendToFlow,
   filterTree,
@@ -9,6 +13,14 @@ import {
   prepareWorkflowForCanvas,
   removeNode,
 } from "./utils";
+
+import type {
+  BackendWorkflow,
+  WorkflowCanvasData,
+  WorkflowNode,
+} from "../types/workFlowTypes";
+
+import type { TreeNodeData } from "../types/commonTypes";
 
 describe("workflowUtils", () => {
   describe("prepareWorkflowForCanvas", () => {
@@ -27,7 +39,7 @@ describe("workflowUtils", () => {
           y: 0,
           zoom: 1,
         },
-      } as any;
+      } as unknown as WorkflowCanvasData;
 
       const result = prepareWorkflowForCanvas(workflow);
 
@@ -47,7 +59,7 @@ describe("workflowUtils", () => {
           y: 10,
           zoom: 2,
         },
-      } as any;
+      } as unknown as WorkflowCanvasData;
 
       const result = prepareWorkflowForCanvas(workflow);
 
@@ -65,7 +77,7 @@ describe("workflowUtils", () => {
             ParentNames: null,
           },
         ],
-      } as any;
+      } as unknown as BackendWorkflow;
 
       const result = backendToFlow(backend);
 
@@ -91,7 +103,7 @@ describe("workflowUtils", () => {
             ParentNames: ["Start"],
           },
         ],
-      } as any;
+      } as unknown as BackendWorkflow;
 
       const result = backendToFlow(backend);
 
@@ -112,7 +124,7 @@ describe("workflowUtils", () => {
             ParentNames: null,
           },
         ],
-      } as any;
+      } as unknown as BackendWorkflow;
 
       const result = backendToFlow(backend);
 
@@ -131,7 +143,7 @@ describe("workflowUtils", () => {
             },
           },
         },
-      ] as any;
+      ] as unknown as WorkflowNode[];
 
       const result = flowToBackend(nodes, []);
 
@@ -158,23 +170,25 @@ describe("workflowUtils", () => {
             },
           },
         },
-      ] as any;
+      ] as unknown as WorkflowNode[];
 
       const edges = [
         {
           source: "Start",
           target: "Email",
         },
-      ] as any;
+      ] as unknown as Edge[];
 
       const result = flowToBackend(nodes, edges);
 
-      expect(result.Elements[1].ParentNames).toEqual(["Start"]);
+      expect(result.Elements[1].ParentNames).toEqual([
+        "Start",
+      ]);
     });
   });
 
   describe("filterTree", () => {
-    const tree = [
+    const tree: TreeNodeData[] = [
       {
         id: "1",
         label: "Animals",
@@ -193,7 +207,7 @@ describe("workflowUtils", () => {
         id: "4",
         label: "Plants",
       },
-    ] as any;
+    ];
 
     it("returns all nodes when search is empty", () => {
       expect(filterTree(tree, "")).toEqual(tree);
@@ -210,9 +224,7 @@ describe("workflowUtils", () => {
       const result = filterTree(tree, "Dog");
 
       expect(result).toHaveLength(1);
-
       expect(result[0].children).toHaveLength(1);
-
       expect(result[0].children?.[0].label).toBe("Dog");
     });
 
@@ -228,7 +240,7 @@ describe("workflowUtils", () => {
   });
 
   describe("nodeExists", () => {
-    const tree = [
+    const tree: TreeNodeData[] = [
       {
         id: "root",
         label: "Root",
@@ -261,7 +273,7 @@ describe("workflowUtils", () => {
   });
 
   describe("findNode", () => {
-    const tree = [
+    const tree: TreeNodeData[] = [
       {
         id: "root",
         label: "Root",
@@ -285,7 +297,9 @@ describe("workflowUtils", () => {
     });
 
     it("finds nested node", () => {
-      expect(findNode(tree, "grandChild")?.id).toBe("grandChild");
+      expect(findNode(tree, "grandChild")?.id).toBe(
+        "grandChild",
+      );
     });
 
     it("returns null when node is not found", () => {
@@ -294,7 +308,7 @@ describe("workflowUtils", () => {
   });
 
   describe("removeNode", () => {
-    const tree = [
+    const tree: TreeNodeData[] = [
       {
         id: "root",
         label: "Root",
@@ -318,13 +332,20 @@ describe("workflowUtils", () => {
     });
 
     it("removes nested node recursively", () => {
-      const result = removeNode(tree, "grandChild");
+      const result = removeNode(
+        tree,
+        "grandChild",
+      );
 
-      expect(result[0].children?.[0].children).toEqual([]);
+      expect(
+        result[0].children?.[0].children,
+      ).toEqual([]);
     });
 
     it("returns original tree when node does not exist", () => {
-      expect(removeNode(tree, "invalid")).toEqual(tree);
+      expect(
+        removeNode(tree, "invalid"),
+      ).toEqual(tree);
     });
   });
 });

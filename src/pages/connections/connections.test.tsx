@@ -7,6 +7,12 @@ import type { TreeNodeData } from "../../types/commonTypes";
 import { render, screen } from "../../test";
 import Connections from "./Connections";
 
+type MockTreeNode = {
+  id: string;
+  label: string;
+  children?: MockTreeNode[];
+};
+
 vi.mock("../../utils/utils", async () => {
   const actual =
     await vi.importActual<typeof import("../../utils/utils")>(
@@ -23,13 +29,13 @@ vi.mock("../../utils/utils", async () => {
 
 vi.mock("../../components/common/tree/Tree", () => ({
   default: ({
-    nodes,
-    onSelect,
-  }: {
-    nodes: any[];
+  nodes,
+  onSelect,
+}: {
+  nodes: MockTreeNode[];
     onSelect: (id: string) => void;
   }) => {
-    const renderNodes = (items: any[]): ReactNode[] =>
+    const renderNodes = (items: MockTreeNode[]): ReactNode[] =>
       items.flatMap((node) => [
         <button key={node.id} onClick={() => onSelect(node.id)}>
           {node.label}
