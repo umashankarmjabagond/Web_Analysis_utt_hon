@@ -1,0 +1,59 @@
+{
+  "COMMON_SAVE": "حفظ",
+  "COMMON_CANCEL": "إلغاء",
+  "COMMON_DELETE": "حذف",
+  "COMMON_SEARCH": "بحث",
+  "COMMON_RESET": "إعادة تعيين",
+  "COMMON_YES": "نعم",
+  "COMMON_NO": "لا",
+  "COMMON_OK": "موافق",
+  "COMMON_CLOSE": "إغلاق",
+
+  "COMMON_GOOD": "جيد",
+  "COMMON_WARNING": "تحذير",
+  "COMMON_ERROR": "خطأ",
+
+  "SIDEBAR_HOME": "الرئيسية",
+  "SIDEBAR_WORKFLOW": "سير العمل",
+  "SIDEBAR_DASHBOARD": "لوحة التحكم",
+  "SIDEBAR_SETTINGS": "الإعدادات",
+  "SIDEBAR_HELP": "المساعدة",
+  "SIDEBAR_DOCUMENTS": "المستندات",
+
+  "DASHBOARD_POWER_BOILER": "غلاية الطاقة",
+  "DASHBOARD_AREA": "المنطقة",
+  "DASHBOARD_TOTAL_UNITS": "إجمالي الوحدات",
+  "DASHBOARD_MPC_ASSETS": "أصول MPC",
+  "DASHBOARD_TOTAL_CONTROLLERS": "إجمالي وحدات التحكم",
+  "DASHBOARD_REGULATORY_ASSETS": "الأصول التنظيمية",
+  "DASHBOARD_UNIT_WISE_STATUS_SUMMARY": "ملخص حالة الوحدات",
+  "DASHBOARD_WARNING_ERROR_SUMMARY": "ملخص التحذيرات والأخطاء",
+
+  "TABLE_NO_DATA": "لا توجد بيانات",
+  "TABLE_UNIT_NAME": "اسم الوحدة",
+  "TABLE_TOTAL_CONTROLLERS": "إجمالي وحدات التحكم",
+  "TABLE_GOOD": "جيد",
+  "TABLE_WARNINGS": "تحذيرات",
+  "TABLE_ERRORS": "أخطاء",
+  "TABLE_CONTROLLER_NAME": "اسم وحدة التحكم",
+  "TABLE_ATTRIBUTE_NAME": "اسم الخاصية",
+  "TABLE_ERROR_MESSAGE": "رسالة الخطأ",
+
+  "FILTER_ATTRIBUTES": "الخصائص",
+  "FILTER_TYPE": "النوع",
+  "FILTER_ALL": "الكل",
+  "FILTER_DATA_SOURCE": "مصدر البيانات",
+  "FILTER_DATA_SINK": "وجهة البيانات",
+  "FILTER_VALVE_STICTION": "التصاق الصمام",
+  "FILTER_REGULATORY": "تنظيمي",
+  "FILTER_MPC": "MPC",
+
+  "BUTTON_SUBMIT": "إرسال",
+  "BUTTON_NEXT": "التالي",
+  "BUTTON_BACK": "السابق",
+
+  "DRAWER_TITLE": "تفاصيل المشروع",
+
+  "DIALOG_DELETE_TITLE": "حذف المشروع",
+  "DIALOG_DELETE_MESSAGE": "هل أنت متأكد من رغبتك في حذف هذا المشروع؟"
+}

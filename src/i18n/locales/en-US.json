@@ -1,0 +1,59 @@
+{
+  "COMMON_SAVE": "Save",
+  "COMMON_CANCEL": "Cancel",
+  "COMMON_DELETE": "Delete",
+  "COMMON_SEARCH": "Search",
+  "COMMON_RESET": "Reset",
+  "COMMON_YES": "Yes",
+  "COMMON_NO": "No",
+  "COMMON_OK": "OK",
+  "COMMON_CLOSE": "Close",
+
+  "COMMON_GOOD": "Good",
+  "COMMON_WARNING": "Warning",
+  "COMMON_ERROR": "Error",
+
+  "SIDEBAR_HOME": "Home",
+  "SIDEBAR_WORKFLOW": "Workflow",
+  "SIDEBAR_DASHBOARD": "Dashboard",
+  "SIDEBAR_SETTINGS": "Settings",
+  "SIDEBAR_HELP": "Help",
+  "SIDEBAR_DOCUMENTS": "Documents",
+
+  "DASHBOARD_POWER_BOILER": "Power Boiler",
+  "DASHBOARD_AREA": "AREA",
+  "DASHBOARD_TOTAL_UNITS": "TOTAL UNITS",
+  "DASHBOARD_MPC_ASSETS": "MPC ASSETS",
+  "DASHBOARD_TOTAL_CONTROLLERS": "TOTAL CONTROLLERS",
+  "DASHBOARD_REGULATORY_ASSETS": "REGULATORY ASSETS",
+  "DASHBOARD_UNIT_WISE_STATUS_SUMMARY": "Unit Wise Status Summary",
+  "DASHBOARD_WARNING_ERROR_SUMMARY": "Warning And Error Summary",
+
+  "TABLE_NO_DATA": "No Records Found",
+  "TABLE_UNIT_NAME": "Unit Name",
+  "TABLE_TOTAL_CONTROLLERS": "Total Controllers",
+  "TABLE_GOOD": "Good",
+  "TABLE_WARNINGS": "Warnings",
+  "TABLE_ERRORS": "Errors",
+  "TABLE_CONTROLLER_NAME": "Controller Name",
+  "TABLE_ATTRIBUTE_NAME": "Attribute Name",
+  "TABLE_ERROR_MESSAGE": "Error Message",
+
+  "FILTER_ATTRIBUTES": "Attributes",
+  "FILTER_TYPE": "Type",
+  "FILTER_ALL": "All",
+  "FILTER_DATA_SOURCE": "Data Source",
+  "FILTER_DATA_SINK": "Data Sink",
+  "FILTER_VALVE_STICTION": "Valve Stiction",
+  "FILTER_REGULATORY": "Regulatory",
+  "FILTER_MPC": "MPC",
+
+  "BUTTON_SUBMIT": "Submit",
+  "BUTTON_NEXT": "Next",
+  "BUTTON_BACK": "Back",
+
+  "DRAWER_TITLE": "Project Details",
+
+  "DIALOG_DELETE_TITLE": "Delete Project",
+  "DIALOG_DELETE_MESSAGE": "Are you sure you want to delete this project?"
+}
