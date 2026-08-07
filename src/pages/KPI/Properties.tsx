@@ -6,11 +6,12 @@ import Select from "../../components/forms/select/Select";
 import TextArea from "../../components/forms/textarea/TextArea";
 import { Check, CircleHelp, RotateCw } from "lucide-react";
 import { useForm } from "react-hook-form";
-import { propertiesSchema, type PropertiesFormData } from "../../schemas/propertiesSchema";
+import {
+  propertiesSchema,
+  type PropertiesFormData,
+} from "../../schemas/propertiesSchema";
+import type { PropertiesProps } from "../../types/workFlowTypes";
 
-interface PropertiesProps {
-  onCancel?: () => void;
-}
 const COLUMN_OPTIONS = [
   {
     label: "01-LC0524.MODE",
@@ -33,8 +34,6 @@ const COLUMN_OPTIONS = [
     value: "status",
   },
 ];
-
-
 
 const Properties: React.FC<PropertiesProps> = ({ onCancel }) => {
   const [badExpressionLoading, setBadExpressionLoading] = useState(false);
@@ -114,7 +113,11 @@ const Properties: React.FC<PropertiesProps> = ({ onCancel }) => {
             Apply To All
           </Button>
 
-          <Button variant="primary" size="medium" onClick={handleSubmit(handleSave)}>
+          <Button
+            variant="primary"
+            size="medium"
+            onClick={handleSubmit(handleSave)}
+          >
             Save
           </Button>
         </div>
@@ -280,7 +283,9 @@ const Properties: React.FC<PropertiesProps> = ({ onCancel }) => {
       {/* Footer */}
 
       <div className="flex items-center justify-end gap-3 border-t border-border-1 px-6 py-4">
-        <Button variant="secondary" onClick={onCancel}>Cancel</Button>
+        <Button variant="secondary" onClick={onCancel}>
+          Cancel
+        </Button>
 
         <Button variant="primary" onClick={handleSubmit(handleSave)}>
           Save
