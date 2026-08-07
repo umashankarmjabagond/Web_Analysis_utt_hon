@@ -6,6 +6,7 @@ import Button from "../../components/forms/button/Button";
 import type { TreeNodeData } from "../../types/commonTypes";
 
 import { CircleHelp, ChevronRight, ChevronLeft } from "lucide-react";
+import { findNode, nodeExists, removeNode } from "../../utils/utils";
 
 const allColumnsData: TreeNodeData[] = [
   {
@@ -52,20 +53,6 @@ export default function Connections() {
 
     const node = findNode(allColumns, selectedNodeId);
 
-    function nodeExists(nodes: TreeNodeData[], targetId: string): boolean {
-      for (const node of nodes) {
-        if (node.id === targetId) {
-          return true;
-        }
-
-        if (node.children && nodeExists(node.children, targetId)) {
-          return true;
-        }
-      }
-
-      return false;
-    }
-
     if (!node) {
       return;
     }
@@ -87,7 +74,7 @@ export default function Connections() {
 
   return (
     <div className="flex h-[590px] w-full flex-col gap-6 --color-background p-6 text-white border-l border-r border-b border-border-1">
-      <div className="flex items-center justify-between h-[32px]">
+      <div className="flex h-[32px] items-center justify-between">
         <h5 className="h-8 w-[146px] text-[24px] font-bold leading-8 text-white">
           Connections
         </h5>
@@ -118,8 +105,8 @@ export default function Connections() {
         </div>
       </div>
 
-      <div className="flex flex-1 gap-6 min-h-0">
-        <div className="flex-1 h-[495px] rounded-[8px] bg-background-primary-container overflow-hidden">
+      <div className="flex min-h-0 flex-1 gap-6">
+        <div className="h-[495px] flex-1 overflow-hidden rounded-[8px] bg-background-primary-container">
           <div className="p-4">
             <h3 className="h-6 text-[16px] font-bold leading-6 text-app-text-primary">
               All Columns
@@ -153,7 +140,7 @@ export default function Connections() {
           </Button>
         </div>
 
-        <div className="flex-1 h-[495px] rounded-[8px] bg-background-primary-container overflow-hidden">
+        <div className="h-[495px] flex-1 overflow-hidden rounded-[8px] bg-background-primary-container">
           <div className="p-4">
             <h3 className="h-6 text-[16px] font-bold leading-6 text-app-text-primary">
               Selected Columns
@@ -171,34 +158,4 @@ export default function Connections() {
       </div>
     </div>
   );
-}
-
-function findNode(
-  nodes: TreeNodeData[],
-  targetId: string,
-): TreeNodeData | null {
-  for (const node of nodes) {
-    if (node.id === targetId) {
-      return node;
-    }
-
-    if (node.children) {
-      const result = findNode(node.children, targetId);
-
-      if (result) {
-        return result;
-      }
-    }
-  }
-
-  return null;
-}
-
-function removeNode(nodes: TreeNodeData[], targetId: string): TreeNodeData[] {
-  return nodes
-    .filter((node) => node.id !== targetId)
-    .map((node) => ({
-      ...node,
-      children: node.children ? removeNode(node.children, targetId) : undefined,
-    }));
 }
