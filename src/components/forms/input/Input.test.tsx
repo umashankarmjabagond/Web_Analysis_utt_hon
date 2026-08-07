@@ -65,22 +65,37 @@ describe("Input", () => {
   });
 
   it("toggles password visibility", async () => {
-    const user = userEvent.setup();
+  const user = userEvent.setup();
 
-    render(<Input type="password" showPasswordToggle />);
+  render(
+    <Input
+      type="password"
+      showPasswordToggle
+      data-testid="password-input"
+    />,
+  );
 
-    const input = screen.getByDisplayValue("") as HTMLInputElement;
+  const input =
+    screen.getByTestId(
+      "password-input",
+    );
 
-    expect(input.type).toBe("password");
+  const button =
+    screen.getByRole("button");
 
-    await user.click(screen.getByRole("button"));
+  expect(input).toHaveAttribute(
+    "type",
+    "password",
+  );
 
-    expect(input.type).toBe("text");
+  await user.click(button);
 
-    await user.click(screen.getByRole("button"));
+  expect(input).toHaveAttribute(
+    "type",
+    "text",
+  );
+});
 
-    expect(input.type).toBe("password");
-  });
 
   it("renders start adornment", () => {
     render(<Input startAdornment={<span>₹</span>} />);
@@ -93,4 +108,112 @@ describe("Input", () => {
 
     expect(screen.getByRole("textbox")).toBeDisabled();
   });
+
+  it("keeps password type when showPassword is false", () => {
+  render(
+    <Input
+      type="password"
+      data-testid="password-input"
+    />,
+  );
+
+  expect(
+    screen.getByTestId("password-input"),
+  ).toHaveAttribute(
+    "type",
+    "password",
+  );
+});
+
+it("uses text type when input type is text", () => {
+  render(
+    <Input
+      type="text"
+      data-testid="text-input"
+    />,
+  );
+
+  expect(
+    screen.getByTestId("text-input"),
+  ).toHaveAttribute(
+    "type",
+    "text",
+  );
+});
+
+it("changes password input to text after toggle", async () => {
+  const user = userEvent.setup();
+
+  render(
+    <Input
+      type="password"
+      showPasswordToggle
+      data-testid="password-input"
+    />,
+  );
+
+  const input =
+    screen.getByTestId("password-input");
+
+  const toggleButton =
+    screen.getByRole("button");
+
+  expect(input).toHaveAttribute(
+    "type",
+    "password",
+  );
+
+  await user.click(toggleButton);
+
+  expect(input).toHaveAttribute(
+    "type",
+    "text",
+  );
+});
+
+it("changes text back to password after second toggle", async () => {
+  const user = userEvent.setup();
+
+  render(
+    <Input
+      type="password"
+      showPasswordToggle
+      data-testid="password-input"
+    />,
+  );
+
+  const input =
+    screen.getByTestId("password-input");
+
+  const toggleButton =
+    screen.getByRole("button");
+
+  await user.click(toggleButton);
+
+  expect(input).toHaveAttribute(
+    "type",
+    "text",
+  );
+
+  await user.click(toggleButton);
+
+  expect(input).toHaveAttribute(
+    "type",
+    "password",
+  );
+});
+
+it("does not apply w-full when fullWidth is false", () => {
+  const { container } = render(
+    <Input
+      fullWidth={false}
+      data-testid="input"
+    />,
+  );
+
+  const wrapper = container.firstChild as HTMLElement;
+
+  expect(wrapper).not.toHaveClass("w-full");
+});
+
 });
