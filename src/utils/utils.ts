@@ -161,3 +161,50 @@ export const filterTree = (
     return acc;
   }, []);
 };
+
+export function nodeExists(nodes: TreeNodeData[], targetId: string): boolean {
+  for (const node of nodes) {
+    if (node.id === targetId) {
+      return true;
+    }
+
+    if (node.children && nodeExists(node.children, targetId)) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+export function findNode(
+  nodes: TreeNodeData[],
+  targetId: string,
+): TreeNodeData | null {
+  for (const node of nodes) {
+    if (node.id === targetId) {
+      return node;
+    }
+
+    if (node.children) {
+      const result = findNode(node.children, targetId);
+
+      if (result) {
+        return result;
+      }
+    }
+  }
+
+  return null;
+}
+
+export function removeNode(
+  nodes: TreeNodeData[],
+  targetId: string,
+): TreeNodeData[] {
+  return nodes
+    .filter((node) => node.id !== targetId)
+    .map((node) => ({
+      ...node,
+      children: node.children ? removeNode(node.children, targetId) : undefined,
+    }));
+}
