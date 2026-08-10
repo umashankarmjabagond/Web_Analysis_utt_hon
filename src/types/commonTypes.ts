@@ -131,14 +131,21 @@ export interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>
   size?: "sm" | "md" | "lg";
 }
 
-type BadgeVariant = "neutral" | "success" | "warning" | "error" | "info";
-type BadgeSize = "xs" | "sm" | "md" | "lg";
-type BadgeAppearance = "solid" | "outline";
+export type BadgeVariant =
+  | "neutral"
+  | "success"
+  | "warning"
+  | "danger"
+  | "info";
+export type BadgeSize = "xs" | "sm" | "md" | "lg";
+export type BadgeFill = "solid" | "outline";
+export type BadgeType = "categorical" | "numeric";
 
 export interface BadgeProps {
+  type?: BadgeType;
   variant: BadgeVariant;
   size?: BadgeSize;
-  fill?: BadgeAppearance;
+  fill?: BadgeFill;
   icon?: React.ReactNode;
   className?: string;
   children: React.ReactNode;
@@ -179,7 +186,7 @@ export interface TooltipProps {
 export interface CheckboxProps extends InputHTMLAttributes<HTMLInputElement> {
   checked: boolean;
   label?: string;
-  size?:number;
+  size?: number;
 }
 export type CellValue = string | number | boolean | null | undefined;
 

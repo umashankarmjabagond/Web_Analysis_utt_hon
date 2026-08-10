@@ -1,49 +1,66 @@
-import type { BadgeProps } from "../../../types/commonTypes";
+import type {
+  BadgeFill,
+  BadgeProps,
+  BadgeSize,
+  BadgeType,
+  BadgeVariant,
+} from "../../../types/commonTypes";
+import { cn } from "../../../utils/utils";
 
-const variants = {
+const variants: Record<BadgeVariant, Record<BadgeFill, string>> = {
   neutral: {
     solid:
-      "bg-app-badge-neutral-background text-app-badge-neutral-text border border-transparent",
+      "bg-badge-neutral-solid-background border-badge-neutral-solid-border text-badge-neutral-solid-foreground",
     outline:
-      "bg-transparent border border-app-badge-neutral-outline text-app-badge-neutral-outline",
+      "bg-badge-neutral-outline-background border-badge-neutral-outline-border text-badge-neutral-outline-foreground",
   },
+
   success: {
     solid:
-      "bg-app-badge-success-background text-app-badge-success-text border border-transparent",
+      "bg-badge-success-solid-background border-badge-success-solid-border text-badge-success-solid-foreground",
     outline:
-      "bg-transparent border border-app-badge-success-outline text-app-badge-success-outline",
+      "bg-badge-success-outline-background border-badge-success-outline-border text-badge-success-outline-foreground",
   },
+
   warning: {
     solid:
-      "bg-app-badge-warning-background text-app-badge-warning-text border border-transparent",
+      "bg-badge-warning-solid-background border-badge-warning-solid-border text-badge-warning-solid-foreground",
     outline:
-      "bg-transparent border border-app-badge-warning-outline text-app-badge-warning-outline",
+      "bg-badge-warning-outline-background border-badge-warning-outline-border text-badge-warning-outline-foreground",
   },
-  error: {
+
+  danger: {
     solid:
-      "bg-app-badge-error-background text-app-badge-error-text border border-transparent",
+      "bg-badge-danger-solid-background border-badge-danger-solid-border text-badge-danger-solid-foreground",
     outline:
-      "bg-transparent border border-app-badge-error-outline text-app-badge-error-outline",
+      "bg-badge-danger-outline-background border-badge-danger-outline-border text-badge-danger-outline-foreground",
   },
+
   info: {
     solid:
-      "bg-app-badge-info-background text-app-badge-info-text border border-transparent",
+      "bg-badge-info-solid-background border-badge-info-solid-border text-badge-info-solid-foreground",
     outline:
-      "bg-app-surface-elevated border border-app-badge-info-outline text-app-badge-info-outline",
+      "bg-badge-info-outline-background border-badge-info-outline-border text-badge-info-outline-foreground",
   },
 };
 
-const sizes = {
+const sizes: Record<BadgeSize, string> = {
   xs: "h-4 px-1.5 text-[10px]",
   sm: "h-5 px-2 text-xs",
   md: "h-6 px-2.5 text-sm",
   lg: "h-7 px-3 text-base",
 };
 
+const typeStyles: Record<BadgeType, string> = {
+  categorical: "uppercase",
+  numeric: "h-5 min-w-5 px-1.5 text-[11px] font-bold text-[12px]",
+};
+
 const baseStyles =
-  "inline-flex items-center justify-center rounded-full font-medium whitespace-nowrap";
+  "inline-flex items-center justify-center gap-1 rounded-full font-medium whitespace-nowrap";
 
 export default function Badge({
+  type = "categorical",
   variant,
   size = "md",
   fill = "solid",
@@ -53,12 +70,16 @@ export default function Badge({
 }: BadgeProps) {
   return (
     <span
-      className={`${baseStyles} ${variants[variant][fill]} ${sizes[size]} ${className ?? ""}`}
+      className={cn(
+        baseStyles,
+        variants[variant][fill],
+        sizes[size],
+        typeStyles[type],
+        className,
+      )}
     >
-      <span className="">
-        {icon && <span className="mr-1">{icon}</span>}
-        {children}
-      </span>
+      {icon && <span className="mr-1">{icon}</span>}
+      {children}
     </span>
   );
 }

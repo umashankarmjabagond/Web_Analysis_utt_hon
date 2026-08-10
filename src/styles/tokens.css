@@ -117,6 +117,9 @@
     0 20px 25px rgb(0 0 0 / 0.15), 0 8px 10px rgb(0 0 0 / 0.08); /* Extra Large */
 
   --shadow-600: 4px 4px 8px rgb(0 0 0 / 0.2); /* Offset */
+  --shadow-700: inset 1px 1px 1px rgb(0 0 0 / 0.15); /* Inset */
+  --shadow-800:
+    0 11px 15px -2px rgb(0 0 0 / 0.2), 15px 30px 40px 0 rgb(0 0 0 / 0.2); /* Dialog */
 }
 
 :root {
@@ -131,6 +134,7 @@
   --surface-control: var(--gray-500); /* #909090 */
   --surface-emphasis: var(--gray-1200); /* 303030 */
   --surface-accent: var(--blue-200); /* #64C3FF */
+  --surface-control-light: var(--gray-180); /* #D0D0D0 */
 
   /* Foreground / Text */
   --foreground: var(--white-400); /* #F0F0F0 */
@@ -220,6 +224,9 @@
   --input-placeholder: var(--foreground-placeholder);
 
   --input-hover-border: var(--border-default);
+
+  --input-icon-foreground: var(--foreground-secondary);
+  --input-icon-hover-foreground: var(--foreground);
 
   --input-focus-border: var(--border-accent);
   --input-focus-ring: var(--focus-ring);
@@ -445,9 +452,9 @@
   /* Badge */
 
   /* Neutral */
-  --badge-neutral-solid-background: var(--surface-elevated);
+  --badge-neutral-solid-background: var(--surface-control-light);
   --badge-neutral-solid-border: var(--surface-elevated);
-  --badge-neutral-solid-foreground: var(--foreground-secondary);
+  --badge-neutral-solid-foreground: var(--foreground-inverse-secondary);
 
   --badge-neutral-outline-background: transparent;
   --badge-neutral-outline-border: var(--border-default);
@@ -512,6 +519,7 @@
   /* Segmented Tabs */
 
   --segmented-tab-container-background: var(--surface-secondary);
+  --segmented-tab-container-shadow: var(--shadow-700);
 
   --segmented-tab-background: transparent;
   --segmented-tab-border: transparent;
@@ -533,18 +541,17 @@
 
   /* Accordion */
 
-  --accordion-background: var(--surface);
+  --accordion-background: var(--surface-elevated);
   --accordion-border: var(--border-default);
 
   --accordion-header-background: transparent;
-  --accordion-header-border: var(--border-separator);
   --accordion-header-foreground: var(--foreground);
 
   --accordion-header-hover-background: var(--surface-hover);
   --accordion-header-hover-foreground: var(--foreground);
 
-  --accordion-content-background: var(--surface-card);
-  --accordion-content-foreground: var(--foreground-secondary);
+  --accordion-expander: var(--foreground-secondary);
+  --accordion-expander-hover: var(--foreground-strong);
 
   --accordion-focus-ring: var(--focus-ring);
 
@@ -552,32 +559,13 @@
 
   /* Toast */
 
-  /* Base */
   --toast-background: var(--surface-card);
   --toast-border: var(--border-default);
-  --toast-foreground: var(--foreground);
+  --toast-title: var(--foreground-strong);
+  --toast-description: var(--foreground-secondary);
 
   --toast-shadow: var(--shadow-600);
-
-  /* Info */
-  --toast-info-background: var(--surface-card);
-  --toast-info-border: var(--info);
-  --toast-info-foreground: var(--foreground);
-
-  /* Success */
-  --toast-success-background: var(--surface-card);
-  --toast-success-border: var(--success);
-  --toast-success-foreground: var(--foreground);
-
-  /* Warning */
-  --toast-warning-background: var(--surface-card);
-  --toast-warning-border: var(--warning);
-  --toast-warning-foreground: var(--foreground);
-
-  /* Danger */
-  --toast-danger-background: var(--surface-card);
-  --toast-danger-border: var(--danger);
-  --toast-danger-foreground: var(--foreground);
+  --toast-close-foreground: var(--foreground-secondary);
 
   /* Checkbox */
 
@@ -625,17 +613,17 @@
 
   /* Dialog */
 
-  --dialog-background: var(--surface-card);
-  --dialog-border: var(--border-default);
+  --dialog-background: var(--surface);
+  --dialog-border: transparent;
   --dialog-foreground: var(--foreground);
 
-  --dialog-shadow: var(--black-100);
-  --dialog-overlay: var(--black-100);
+  --dialog-shadow: var(--shadow-800);
+  --dialog-overlay: rgb(0 0 0 / 0.6);
 
   --dialog-header-border: var(--border-separator);
   --dialog-footer-border: var(--border-separator);
 
-  --dialog-title: var(--foreground-strong);
+  --dialog-title: var(--foreground);
   --dialog-description: var(--foreground-secondary);
 
   /* Tree */
@@ -666,6 +654,47 @@
 
   /* Disabled */
   --tree-disabled-foreground: var(--foreground-disabled);
+
+  /* Breadcrumb */
+
+  --breadcrumb-foreground: var(--foreground-secondary);
+  --breadcrumb-hover-foreground: var(--foreground-accent);
+  --breadcrumb-separator: var(--foreground-muted);
+  --breadcrumb-focus-ring: var(--focus-ring);
+
+  /* Card */
+
+  --card-background: var(--surface-card);
+  --card-border: var(--border-default);
+
+  --card-foreground: var(--foreground);
+  --card-foreground-secondary: var(--foreground-secondary);
+
+  --card-hover-background: var(--surface-hover);
+  --card-hover-border: var(--border-muted);
+
+  --card-focus-ring: var(--focus-ring);
+
+  --card-disabled-foreground: var(--foreground-disabled);
+
+  /* Drawer */
+
+  --drawer-background: var(--surface);
+  --drawer-border: var(--border-default);
+  --drawer-foreground: var(--foreground);
+
+  --drawer-overlay: rgb(0 0 0 / 0.4);
+  --drawer-shadow: var(--shadow-500);
+
+  --drawer-header-background: var(--surface-elevated);
+  --drawer-header-border: var(--border-default);
+  --drawer-header-foreground: var(--foreground);
+
+  --drawer-close-foreground: var(--foreground);
+  --drawer-close-hover-background: var(--surface-hover);
+  --drawer-close-hover-foreground: var(--foreground-accent);
+
+  --drawer-footer-border: var(--border-default);
 
   /* Chart */
   --chart-success: var(--success);
@@ -770,6 +799,8 @@
   --color-input-placeholder: var(--input-placeholder);
 
   --color-input-hover-border: var(--input-hover-border);
+  --color-input-icon-foreground: var(--input-icon-foreground);
+  --color-input-icon-hover-foreground: var(--input-icon-hover-foreground);
 
   --color-input-focus-border: var(--input-focus-border);
   --color-input-focus-ring: var(--input-focus-ring);
@@ -1176,13 +1207,43 @@
   --color-tab-disabled-border: var(--tab-disabled-border);
   --color-tab-disabled-foreground: var(--tab-disabled-foreground);
 
+  /* Segmented Tabs */
+  --color-segmented-tab-container-background: var(
+    --segmented-tab-container-background
+  );
+
+  --color-segmented-tab-background: var(--segmented-tab-background);
+  --color-segmented-tab-border: var(--segmented-tab-border);
+  --color-segmented-tab-foreground: var(--segmented-tab-foreground);
+
+  --color-segmented-tab-hover-background: var(--segmented-tab-hover-background);
+  --color-segmented-tab-hover-border: var(--segmented-tab-hover-border);
+  --color-segmented-tab-hover-foreground: var(--segmented-tab-hover-foreground);
+
+  --color-segmented-tab-active-background: var(
+    --segmented-tab-active-background
+  );
+  --color-segmented-tab-active-border: var(--segmented-tab-active-border);
+  --color-segmented-tab-active-foreground: var(
+    --segmented-tab-active-foreground
+  );
+
+  --color-segmented-tab-disabled-background: var(
+    --segmented-tab-disabled-background
+  );
+  --color-segmented-tab-disabled-border: var(--segmented-tab-disabled-border);
+  --color-segmented-tab-disabled-foreground: var(
+    --segmented-tab-disabled-foreground
+  );
+
+  --shadow-segmented-tab-container: var(--segmented-tab-container-shadow);
+
   /* Accordion */
 
   --color-accordion-background: var(--accordion-background);
   --color-accordion-border: var(--accordion-border);
 
   --color-accordion-header-background: var(--accordion-header-background);
-  --color-accordion-header-border: var(--accordion-header-border);
   --color-accordion-header-foreground: var(--accordion-header-foreground);
 
   --color-accordion-header-hover-background: var(
@@ -1192,8 +1253,8 @@
     --accordion-header-hover-foreground
   );
 
-  --color-accordion-content-background: var(--accordion-content-background);
-  --color-accordion-content-foreground: var(--accordion-content-foreground);
+  --color-accordion-expander: var(--accordion-expander);
+  --color-accordion-expander-hover: var(--accordion-expander-hover);
 
   --color-accordion-focus-ring: var(--accordion-focus-ring);
 
@@ -1201,32 +1262,14 @@
 
   /* Toast */
 
-  /* Base */
   --color-toast-background: var(--toast-background);
   --color-toast-border: var(--toast-border);
-  --color-toast-foreground: var(--toast-foreground);
+  --color-toast-title: var(--toast-title);
+  --color-toast-description: var(--toast-description);
 
-  --color-toast-shadow: var(--toast-shadow);
+  --shadow-toast: var(--toast-shadow);
 
-  /* Info */
-  --color-toast-info-background: var(--toast-info-background);
-  --color-toast-info-border: var(--toast-info-border);
-  --color-toast-info-foreground: var(--toast-info-foreground);
-
-  /* Success */
-  --color-toast-success-background: var(--toast-success-background);
-  --color-toast-success-border: var(--toast-success-border);
-  --color-toast-success-foreground: var(--toast-success-foreground);
-
-  /* Warning */
-  --color-toast-warning-background: var(--toast-warning-background);
-  --color-toast-warning-border: var(--toast-warning-border);
-  --color-toast-warning-foreground: var(--toast-warning-foreground);
-
-  /* Danger */
-  --color-toast-danger-background: var(--toast-danger-background);
-  --color-toast-danger-border: var(--toast-danger-border);
-  --color-toast-danger-foreground: var(--toast-danger-foreground);
+  --color-toast-close-foreground: var(--toast-close-foreground);
 
   /* Checkbox */
 
@@ -1315,6 +1358,45 @@
 
   /* Disabled */
   --color-tree-disabled-foreground: var(--tree-disabled-foreground);
+
+  /* Breadcrumb */
+
+  --color-breadcrumb-foreground: var(--breadcrumb-foreground);
+  --color-breadcrumb-hover-foreground: var(--breadcrumb-hover-foreground);
+  --color-breadcrumb-separator: var(--breadcrumb-separator);
+  --color-breadcrumb-focus-ring: var(--breadcrumb-focus-ring);
+
+  /* Card */
+
+  --color-card-background: var(--card-background);
+  --color-card-border: var(--card-border);
+
+  --color-card-foreground: var(--card-foreground);
+  --color-card-foreground-secondary: var(--card-foreground-secondary);
+
+  --color-card-hover-background: var(--card-hover-background);
+  --color-card-hover-border: var(--card-hover-border);
+
+  --color-card-focus-ring: var(--card-focus-ring);
+
+  --color-card-disabled-foreground: var(--card-disabled-foreground);
+
+  /* Drawer */
+
+  --color-drawer-background: var(--drawer-background);
+  --color-drawer-border: var(--drawer-border);
+  --color-drawer-foreground: var(--drawer-foreground);
+
+  --color-drawer-overlay: var(--drawer-overlay);
+  --color-drawer-header-background: var(--drawer-header-background);
+  --color-drawer-header-border: var(--drawer-header-border);
+  --color-drawer-header-foreground: var(--drawer-header-foreground);
+
+  --color-drawer-close-foreground: var(--drawer-close-foreground);
+  --color-drawer-close-hover-background: var(--drawer-close-hover-background);
+  --color-drawer-close-hover-foreground: var(--drawer-close-hover-foreground);
+
+  --color-drawer-footer-border: var(--drawer-footer-border);
 
   /* Chart */
 
