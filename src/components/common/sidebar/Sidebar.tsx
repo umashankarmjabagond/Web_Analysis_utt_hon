@@ -18,7 +18,10 @@ const menus = [
 
 export default function Sidebar() {
   return (
-    <aside className="w-16 rounded-md bg-surface">
+    <aside
+      className="w-16 rounded-md bg-surface"
+      style={{ background: "#272727" }}
+    >
       <nav className="flex flex-col items-center gap-1 p-2">
         {menus.map(({ name, path, icon: Icon }) => (
           <NavLink
