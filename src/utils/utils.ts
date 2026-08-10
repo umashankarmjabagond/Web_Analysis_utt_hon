@@ -7,6 +7,8 @@ import type {
   WorkflowNode,
 } from "../types/workFlowTypes";
 import type { TreeNodeData } from "../types/commonTypes";
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
 
 export function prepareWorkflowForCanvas(
   workflow: WorkflowCanvasData,
@@ -207,4 +209,8 @@ export function removeNode(
       ...node,
       children: node.children ? removeNode(node.children, targetId) : undefined,
     }));
+}
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
 }

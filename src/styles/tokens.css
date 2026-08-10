@@ -1,0 +1,1335 @@
+:root {
+  /* Gray  */
+  --gray-50: #f5f5f5;
+  --gray-100: #d5d5d5;
+  --gray-150: #d4d4d4;
+  --gray-175: #cbd5e1;
+  --gray-180: #d0d0d0;
+  --gray-200: #d1d5db;
+  --gray-250: #bdbdbd;
+  --gray-275: #c8c8c8;
+  --gray-300: #b5b5b5;
+  --gray-350: #b0b0b0;
+  --gray-400: #a8a8a8;
+  --gray-450: #9ca3af;
+  --gray-475: #94a3b8;
+  --gray-500: #909090;
+  --gray-550: #808080;
+  --gray-600: #707070;
+  --gray-650: #6b6b6b;
+  --gray-700: #606060;
+  --gray-725: #5c5c5c;
+  --gray-750: #5a5a5a;
+  --gray-775: #505050;
+  --gray-800: #555555;
+  --gray-850: #4b4b4b;
+  --gray-900: #4a4a4a;
+  --gray-950: #444444;
+  --gray-1000: #404040;
+  --gray-1050: #3f3f3f;
+  --gray-1100: #3c3c3c;
+  --gray-1150: #353535;
+  --gray-1200: #303030;
+  --gray-1225: #334155;
+  --gray-1250: #2f2f2f;
+  --gray-1275: #2c2c2c;
+  --gray-1300: #2b2b2b;
+  --gray-1350: #272727;
+  --gray-1400: #262626;
+  --gray-1450: #232323;
+  --gray-1500: #202020;
+  --gray-1550: #1f1f1f;
+  --gray-1600: #111827;
+  --gray-1650: #1e293b;
+
+  /* White  */
+  --white-50: #ffffff;
+  --white-100: #f8fafc;
+  --white-200: #f5f5f5;
+  --white-300: #f3f3f3;
+  --white-400: #f0f0f0;
+  --white-500: #eef2f7;
+  --white-600: #ececec;
+  --white-650: #e8e8e8;
+  --white-700: #e5e7eb;
+  --white-750: #e5e5e5;
+
+  /* Black  */
+  --black-100: #000000;
+
+  /* Blue  */
+  --blue-100: #9df1ff;
+  --blue-150: #76d8f7;
+  --blue-200: #64c3ff;
+  --blue-300: #62bbf3;
+  --blue-400: #5abef7;
+  --blue-500: #55afff;
+  --blue-600: #38bdf8;
+  --blue-700: #1792e5;
+  --blue-800: #0284c7;
+  --blue-850: #1976d2;
+  --blue-900: #4f9dff;
+  --blue-1000: #60a5fa;
+  --blue-1100: #3b82f6;
+  --blue-1200: #7aa2ff;
+  --blue-1250: #2563eb;
+  --blue-1300: #1d4ed8;
+
+  /* Navy */
+  --navy-100: #335d77;
+  --navy-200: #0b4872;
+
+  /* Purple  */
+  --purple-100: #a78bfa;
+  --purple-200: #7c3aed;
+
+  /* Green  */
+  --green-100: #68d560;
+  --green-200: #22c55e;
+  --green-300: #16a34a;
+
+  /* Yellow  */
+  --yellow-100: #ffdb42;
+  --yellow-200: #fbbf24;
+  --yellow-300: #f59e0b;
+
+  /* Red  */
+  --red-100: #ff644c;
+  --red-200: #ef4444;
+  --red-300: #dc2626;
+
+  /* Status */
+  --success: var(--green-100);
+  --warning: var(--yellow-100);
+  --danger: var(--red-100);
+  --info: var(--blue-200);
+
+  /* Shadow */
+
+  --shadow-100: 0 1px 2px rgb(0 0 0 / 0.05); /* Extra Small */
+  --shadow-200:
+    0 1px 3px rgb(0 0 0 / 0.1), 0 1px 2px rgb(0 0 0 / 0.06); /* Small */
+  --shadow-300:
+    0 4px 6px rgb(0 0 0 / 0.1), 0 2px 4px rgb(0 0 0 / 0.06); /* Medium */
+  --shadow-400:
+    0 10px 15px rgb(0 0 0 / 0.1), 0 4px 6px rgb(0 0 0 / 0.05); /* Large */
+  --shadow-500:
+    0 20px 25px rgb(0 0 0 / 0.15), 0 8px 10px rgb(0 0 0 / 0.08); /* Extra Large */
+
+  --shadow-600: 4px 4px 8px rgb(0 0 0 / 0.2); /* Offset */
+}
+
+:root {
+  /* Body / Containers */
+  --background: var(--gray-1500); /* #202020 */
+
+  --surface: var(--gray-1350); /* #272727 */
+  --surface-secondary: var(--gray-775); /* #505050 */
+  --surface-card: var(--gray-1150); /* #353535 */
+  --surface-elevated: var(--gray-1000); /* #404040 */
+  --surface-muted: var(--gray-700); /* #606060 */
+  --surface-control: var(--gray-500); /* #909090 */
+  --surface-emphasis: var(--gray-1200); /* 303030 */
+  --surface-accent: var(--blue-200); /* #64C3FF */
+
+  /* Foreground / Text */
+  --foreground: var(--white-400); /* #F0F0F0 */
+  --foreground-strong: var(--white-50); /* #FFFFFF */
+  --foreground-secondary: var(--gray-180); /* #D0D0D0 */
+  --foreground-muted: var(--gray-275); /* #C8C8C8 */
+  --foreground-tertiary: var(--gray-350); /* #B0B0B0 */
+  --foreground-disabled: var(--gray-500); /* #909090 */
+  --foreground-placeholder: var(--gray-700); /* #606060 */
+  --foreground-accent: var(--blue-200); /* #64C3FF */
+  --foreground-inverse: var(--black-100);
+  --foreground-inverse-secondary: var(--gray-1200); /* #303030 */
+
+  /* Border */
+  --border-default: var(--gray-600); /* #707070 */
+  --border-strong: var(--gray-500); /* #909090 */
+  --border-emphasis: var(--gray-550); /* #808080 */
+  --border-separator: var(--gray-775); /* #505050 */
+  --border-subtle: var(--gray-775); /* #505050 */
+  --border-bold: var(--gray-350); /* #B0B0B0 */
+  --border-accent: var(--blue-200); /* #64C3FF */
+  --border-muted: var(--gray-725); /* #5c5c5c */
+  --border-readonly: var(--gray-725); /* #5c5c5c */
+  --border-inverse: var(--white-400); /* #F0F0F0 */
+  --border-surface: var(--gray-1200); /* #303030 */
+  --border-black: var(--black-100); /* #000000 */
+
+  /* Selection */
+  --selection-background: var(--navy-200); /* #0b4872 */
+  --selection-indicator: var(--blue-700); /* #1792e5 */
+
+  /* hover */
+  --surface-hover: var(--gray-1150); /* #353535 */
+
+  /* focus */
+  --focus-ring: var(--blue-200);
+
+  /* Workflow Node */
+
+  /* Default */
+  --node-default-background: var(--gray-1150);
+  --node-default-border: var(--border-default);
+
+  /* Hover */
+  --node-hover-background: #335d774d;
+  --node-hover-border: var(--border-accent);
+
+  /* Status nodes share black base */
+  --node-status-background: var(--black-100);
+
+  /* Success */
+  --node-success-tint: #68d5601a;
+  --node-success-border: #68d56080;
+  --node-success-selected-tint: #68d5604d;
+  --node-success-selected-border: var(--success);
+
+  /* Warning */
+  --node-warning-tint: #ffdb4266;
+  --node-warning-border: var(--warning);
+
+  /* Error */
+  --node-error-tint: #ff644c4d;
+  --node-error-border: var(--danger);
+
+  /* Selection */
+  --node-selection-tint: #afddf533;
+  --node-selection-border: var(--border-accent);
+
+  /* Workflow Edge */
+  --edge-default: var(--gray-500);
+  --edge-selected: var(--border-accent);
+
+  /* Workflow Handle */
+  --handle-background: var(--white-50);
+  --handle-border: var(--gray-500);
+
+  /* ---------------- Component ------------------------- */
+
+  /* Toolbar */
+  --toolbar-item-active-background: var(--navy-100);
+  --toolbar-item-active-foreground: var(--blue-100);
+
+  /* Input */
+  --input-background: var(--surface);
+  --input-border: var(--border-strong);
+  --input-foreground: var(--foreground);
+  --input-placeholder: var(--foreground-placeholder);
+
+  --input-hover-border: var(--border-default);
+
+  --input-focus-border: var(--border-accent);
+  --input-focus-ring: var(--focus-ring);
+
+  --input-disabled-background: var(--surface-card);
+  --input-disabled-border: var(--border-muted);
+  --input-disabled-foreground: var(--foreground-disabled);
+
+  --input-error-border: var(--danger);
+  --input-error-ring: var(--danger);
+  --input-error-foreground: var(--foreground);
+
+  /* Textarea */
+  --textarea-background: var(--surface);
+  --textarea-border: var(--border-strong);
+  --textarea-foreground: var(--foreground);
+  --textarea-placeholder: var(--foreground-placeholder);
+
+  --textarea-hover-border: var(--border-default);
+  --textarea-focus-border: var(--border-accent);
+  --textarea-focus-ring: var(--focus-ring);
+
+  --textarea-disabled-background: var(--surface-card);
+  --textarea-disabled-border: var(--border-muted);
+  --textarea-disabled-foreground: var(--foreground-disabled);
+
+  --textarea-error-border: var(--danger);
+  --textarea-error-ring: var(--danger);
+  --textarea-error-foreground: var(--foreground);
+
+  --textarea-resize-handle: var(--foreground-disabled);
+
+  /* Button */
+
+  /* Primary - Solid */
+  --button-primary-solid-background: var(--blue-200);
+  --button-primary-solid-border: var(--blue-200);
+  --button-primary-solid-foreground: var(--foreground-inverse-secondary);
+
+  --button-primary-solid-hover-background: var(--blue-300);
+  --button-primary-solid-hover-border: var(--blue-300);
+
+  --button-primary-solid-active-background: var(--blue-400);
+  --button-primary-solid-active-border: var(--blue-400);
+
+  /* Primary - Outline */
+  --button-primary-outline-background: var(--surface-elevated);
+  --button-primary-outline-border: var(--border-accent);
+  --button-primary-outline-foreground: var(--foreground-accent);
+
+  --button-primary-outline-hover-background: var(--selection-background);
+  --button-primary-outline-hover-border: var(--border-accent);
+
+  --button-primary-outline-active-background: var(--navy-100);
+  --button-primary-outline-active-border: var(--border-accent);
+
+  /* Secondary */
+  --button-secondary-background: var(--surface-secondary);
+  --button-secondary-border: var(--border-emphasis);
+  --button-secondary-foreground: var(--foreground-tertiary);
+
+  --button-secondary-hover-background: var(--surface-muted);
+  --button-secondary-hover-border: var(--border-strong);
+
+  --button-secondary-active-background: var(--surface-control);
+  --button-secondary-active-border: var(--border-strong);
+
+  /* Success - Solid */
+  --button-success-solid-background: var(--success);
+  --button-success-solid-border: var(--success);
+  --button-success-solid-foreground: var(--foreground-inverse);
+
+  --button-success-solid-hover-background: var(--green-200);
+  --button-success-solid-hover-border: var(--green-200);
+
+  --button-success-solid-active-background: var(--green-300);
+  --button-success-solid-active-border: var(--green-300);
+
+  /* Success - Outline */
+  --button-success-outline-background: var(--surface-elevated);
+  --button-success-outline-border: var(--success);
+  --button-success-outline-foreground: var(--success);
+
+  --button-success-outline-hover-background: #68d5601a;
+  --button-success-outline-active-background: #68d56033;
+
+  /* Warning - Solid */
+  --button-warning-solid-background: var(----warning);
+  --button-warning-solid-border: var(----warning);
+  --button-warning-solid-foreground: var(--foreground-inverse-secondary);
+
+  --button-warning-solid-hover-background: var(--yellow-200);
+  --button-warning-solid-hover-border: var(--yellow-200);
+
+  --button-warning-solid-active-background: var(--yellow-300);
+  --button-warning-solid-active-border: var(--yellow-300);
+
+  /* Warning - Outline */
+  --button-warning-outline-background: var(--surface-elevated);
+  --button-warning-outline-border: var(----warning);
+  --button-warning-outline-foreground: var(----warning);
+
+  --button-warning-outline-hover-background: #ffdb421a;
+  --button-warning-outline-active-background: #ffdb4233;
+
+  /* Danger - Solid */
+  --button-danger-solid-background: var(--danger);
+  --button-danger-solid-border: var(--danger);
+  --button-danger-solid-foreground: var(--foreground-inverse);
+
+  --button-danger-solid-hover-background: var(--red-200);
+  --button-danger-solid-hover-border: var(--red-200);
+
+  --button-danger-solid-active-background: var(--red-300);
+  --button-danger-solid-active-border: var(--red-300);
+
+  /* Danger - Outline */
+  --button-danger-outline-background: var(--surface-elevated);
+  --button-danger-outline-border: var(--danger);
+  --button-danger-outline-foreground: var(--danger);
+
+  --button-danger-outline-hover-background: #ff644c1a;
+  --button-danger-outline-active-background: #ff644c33;
+
+  /* Shared Button States */
+  --button-focus-ring: var(--focus-ring);
+
+  --button-disabled-background: var(--surface-control);
+  --button-disabled-border: var(--border-strong);
+  --button-disabled-foreground: var(--foreground-disabled);
+
+  /* Select / Dropdown Trigger */
+
+  --select-background: var(--surface);
+  --select-border: var(--border-strong);
+  --select-foreground: var(--foreground);
+  --select-placeholder: var(--foreground-placeholder);
+
+  --select-hover-background: var(--surface);
+  --select-hover-border: var(--border-default);
+
+  --select-focus-background: var(--surface);
+  --select-focus-border: var(--border-accent);
+  --select-focus-ring: var(--focus-ring);
+
+  --select-open-background: var(--surface);
+  --select-open-border: var(--border-accent);
+
+  --select-disabled-background: var(--surface-card);
+  --select-disabled-border: var(--border-muted);
+  --select-disabled-foreground: var(--foreground-disabled);
+
+  --select-error-border: var(--danger);
+  --select-error-ring: var(--danger);
+  --select-error-foreground: var(--foreground);
+
+  --select-icon: var(--foreground-secondary);
+  --select-icon-disabled: var(--foreground-disabled);
+
+  /* Dropdown Menu */
+
+  --dropdown-background: var(--surface-card);
+  --dropdown-border: var(--border-default);
+  --dropdown-shadow: var(--black-100);
+
+  /* Item */
+  --dropdown-item-background: transparent;
+  --dropdown-item-foreground: var(--foreground);
+
+  --dropdown-item-hover-background: var(--surface-hover);
+  --dropdown-item-hover-foreground: var(--foreground);
+
+  --dropdown-item-active-background: var(--surface-secondary);
+  --dropdown-item-active-foreground: var(--foreground);
+
+  --dropdown-item-selected-background: var(--selection-background);
+  --dropdown-item-selected-foreground: var(--foreground-strong);
+
+  --dropdown-item-disabled-background: transparent;
+  --dropdown-item-disabled-foreground: var(--foreground-disabled);
+
+  /* Divider */
+  --dropdown-divider: var(--border-separator);
+
+  /* Icon */
+  --dropdown-icon: var(--foreground-secondary);
+  --dropdown-icon-selected: var(--foreground-accent);
+  --dropdown-icon-disabled: var(--foreground-disabled);
+
+  /* Table */
+
+  /* Header */
+  --table-header-background: var(--surface-secondary);
+  --table-header-border: var(--border-default);
+  --table-header-foreground: var(--foreground);
+
+  /* Rows */
+  --table-row-odd: var(--surface);
+  --table-row-even: var(--surface-card);
+
+  --table-row-hover-background: var(--surface-hover);
+  --table-row-selected-background: var(--selection-background);
+
+  --table-row-foreground: var(--foreground);
+  --table-row-selected-foreground: var(--foreground-strong);
+
+  /* Cell */
+  --table-cell-border: var(--border-separator);
+
+  /* Resize / Grid */
+  --table-grid-border: var(--border-default);
+
+  /* Focus */
+  --table-focus-ring: var(--focus-ring);
+
+  /* Sticky */
+  --table-sticky-background: var(--surface);
+
+  /* Sort */
+  --table-sort-icon: var(--foreground-disabled);
+  --table-sort-icon-active: var(--foreground-accent);
+
+  /* Badge */
+
+  /* Neutral */
+  --badge-neutral-solid-background: var(--surface-elevated);
+  --badge-neutral-solid-border: var(--surface-elevated);
+  --badge-neutral-solid-foreground: var(--foreground-secondary);
+
+  --badge-neutral-outline-background: transparent;
+  --badge-neutral-outline-border: var(--border-default);
+  --badge-neutral-outline-foreground: var(--foreground-secondary);
+
+  /* Info */
+  --badge-info-solid-background: var(--info);
+  --badge-info-solid-border: var(--info);
+  --badge-info-solid-foreground: var(--foreground-inverse-secondary);
+
+  --badge-info-outline-background: transparent;
+  --badge-info-outline-border: var(--info);
+  --badge-info-outline-foreground: var(--info);
+
+  /* Success */
+  --badge-success-solid-background: var(--success);
+  --badge-success-solid-border: var(--success);
+  --badge-success-solid-foreground: var(--foreground-inverse);
+
+  --badge-success-outline-background: transparent;
+  --badge-success-outline-border: var(--success);
+  --badge-success-outline-foreground: var(--success);
+
+  /* Warning */
+  --badge-warning-solid-background: var(----warning);
+  --badge-warning-solid-border: var(----warning);
+  --badge-warning-solid-foreground: var(--foreground-inverse-secondary);
+
+  --badge-warning-outline-background: transparent;
+  --badge-warning-outline-border: var(----warning);
+  --badge-warning-outline-foreground: var(----warning);
+
+  /* Danger */
+  --badge-danger-solid-background: var(--danger);
+  --badge-danger-solid-border: var(--danger);
+  --badge-danger-solid-foreground: var(--foreground-inverse);
+
+  --badge-danger-outline-background: transparent;
+  --badge-danger-outline-border: var(--danger);
+  --badge-danger-outline-foreground: var(--danger);
+
+  /* Tabs */
+
+  --tab-background: transparent;
+  --tab-border: transparent;
+  --tab-foreground: var(--foreground-secondary);
+
+  --tab-hover-background: transparent;
+  --tab-hover-border: var(--border-accent);
+  --tab-hover-foreground: var(--foreground);
+
+  --tab-active-background: var(--surface-emphasis);
+  --tab-active-border: var(--border-accent);
+  --tab-active-foreground: var(--foreground);
+
+  --tab-focus-ring: var(--focus-ring);
+
+  --tab-disabled-background: transparent;
+  --tab-disabled-border: transparent;
+  --tab-disabled-foreground: var(--foreground-disabled);
+
+  /* Segmented Tabs */
+
+  --segmented-tab-container-background: var(--surface-secondary);
+
+  --segmented-tab-background: transparent;
+  --segmented-tab-border: transparent;
+  --segmented-tab-foreground: var(--foreground-secondary);
+
+  --segmented-tab-hover-background: var(--surface-hover);
+  --segmented-tab-hover-border: transparent;
+  --segmented-tab-hover-foreground: var(--foreground);
+
+  --segmented-tab-active-background: var(--surface);
+  --segmented-tab-active-border: var(--border-default);
+  --segmented-tab-active-foreground: var(--foreground-strong);
+
+  --segmented-tab-focus-ring: var(--focus-ring);
+
+  --segmented-tab-disabled-background: transparent;
+  --segmented-tab-disabled-border: transparent;
+  --segmented-tab-disabled-foreground: var(--foreground-disabled);
+
+  /* Accordion */
+
+  --accordion-background: var(--surface);
+  --accordion-border: var(--border-default);
+
+  --accordion-header-background: transparent;
+  --accordion-header-border: var(--border-separator);
+  --accordion-header-foreground: var(--foreground);
+
+  --accordion-header-hover-background: var(--surface-hover);
+  --accordion-header-hover-foreground: var(--foreground);
+
+  --accordion-content-background: var(--surface-card);
+  --accordion-content-foreground: var(--foreground-secondary);
+
+  --accordion-focus-ring: var(--focus-ring);
+
+  --accordion-disabled-foreground: var(--foreground-disabled);
+
+  /* Toast */
+
+  /* Base */
+  --toast-background: var(--surface-card);
+  --toast-border: var(--border-default);
+  --toast-foreground: var(--foreground);
+
+  --toast-shadow: var(--black-100);
+
+  /* Info */
+  --toast-info-background: var(--surface-card);
+  --toast-info-border: var(--info);
+  --toast-info-foreground: var(--foreground);
+
+  /* Success */
+  --toast-success-background: var(--surface-card);
+  --toast-success-border: var(--success);
+  --toast-success-foreground: var(--foreground);
+
+  /* Warning */
+  --toast-warning-background: var(--surface-card);
+  --toast-warning-border: var(----warning);
+  --toast-warning-foreground: var(--foreground);
+
+  /* Danger */
+  --toast-danger-background: var(--surface-card);
+  --toast-danger-border: var(--danger);
+  --toast-danger-foreground: var(--foreground);
+
+  /* Checkbox */
+
+  --checkbox-background: var(--surface);
+  --checkbox-border: var(--border-strong);
+  --checkbox-checkmark: var(--foreground-inverse);
+
+  --checkbox-hover-border: var(--border-default);
+
+  --checkbox-checked-background: var(--blue-200);
+  --checkbox-checked-border: var(--blue-200);
+  --checkbox-checked-checkmark: var(--foreground-inverse-secondary);
+
+  --checkbox-focus-ring: var(--focus-ring);
+
+  --checkbox-disabled-background: var(--surface-card);
+  --checkbox-disabled-border: var(--border-muted);
+  --checkbox-disabled-checkmark: var(--foreground-disabled);
+
+  /* Radio */
+
+  --radio-background: var(--surface);
+  --radio-border: var(--border-strong);
+  --radio-indicator: var(--foreground-inverse);
+
+  --radio-hover-border: var(--border-default);
+
+  --radio-checked-background: var(--blue-200);
+  --radio-checked-border: var(--blue-200);
+  --radio-checked-indicator: var(--foreground-inverse-secondary);
+
+  --radio-focus-ring: var(--focus-ring);
+
+  --radio-disabled-background: var(--surface-card);
+  --radio-disabled-border: var(--border-muted);
+  --radio-disabled-indicator: var(--foreground-disabled);
+
+  /* Tooltip */
+
+  --tooltip-background: var(--surface-elevated);
+  --tooltip-border: var(--border-default);
+  --tooltip-foreground: var(--foreground-secondary);
+
+  --tooltip-shadow: var(--shadow-600);
+
+  /* Dialog */
+
+  --dialog-background: var(--surface-card);
+  --dialog-border: var(--border-default);
+  --dialog-foreground: var(--foreground);
+
+  --dialog-shadow: var(--black-100);
+  --dialog-overlay: var(--black-100);
+
+  --dialog-header-border: var(--border-separator);
+  --dialog-footer-border: var(--border-separator);
+
+  --dialog-title: var(--foreground-strong);
+  --dialog-description: var(--foreground-secondary);
+
+  /* Tree */
+
+  --tree-background: transparent;
+
+  /* Node */
+  --tree-node-background: transparent;
+  --tree-node-border: transparent;
+  --tree-node-foreground: var(--foreground);
+
+  /* Hover */
+  --tree-node-hover-background: var(--surface-hover);
+  --tree-node-hover-border: transparent;
+  --tree-node-hover-foreground: var(--foreground);
+
+  /* Selected */
+  --tree-node-selected-background: var(--selection-background);
+  --tree-node-selected-border: var(--border-accent);
+  --tree-node-selected-foreground: var(--foreground);
+
+  /* Focus */
+  --tree-node-focus-ring: var(--focus-ring);
+
+  /* Expand / Collapse */
+  --tree-expander: var(--foreground-accent);
+  --tree-expander-hover: var(--foreground-strong);
+
+  /* Disabled */
+  --tree-disabled-foreground: var(--foreground-disabled);
+
+  /* Chart */
+  --chart-success: var(--success);
+  --chart-warning: var(----warning);
+  --chart-danger: var(--danger);
+  --chart-info: var(--info);
+
+  /* Default Scrollbar */
+
+  --scrollbar-default-track: var(--gray-700); /* #606060 */
+  --scrollbar-default-thumb: var(--gray-180); /* #d0d0d0 */
+  --scrollbar-default-thumb-hover: var(--gray-250); /* #bdbdbd */
+
+  /* Table Scrollbar */
+
+  --scrollbar-table-track: #00000005;
+  --scrollbar-table-thumb: var(--gray-700); /* #606060 */
+  --scrollbar-table-thumb-hover: var(--gray-900); /* #4a4a4a */
+}
+
+@theme {
+  --font-sans: "Honeywell Sans Web", sans-serif;
+
+  --color-surface: var(--surface);
+  --color-surface-secondary: var(--surface-secondary);
+  --color-surface-card: var(--surface-card);
+  --color-surface-elevated: var(--surface-elevated);
+  --color-surface-muted: var(--surface-muted);
+  --color-surface-control: var(--surface-control);
+  --color-surface-emphasis: var(--surface-emphasis);
+  --color-surface-accent: var(--surface-accent);
+
+  /* Foreground / Text / Icon */
+  --color-foreground: var(--foreground);
+  --color-foreground-strong: var(--foreground-strong);
+  --color-foreground-secondary: var(--foreground-secondary);
+  --color-foreground-muted: var(--foreground-muted);
+  --color-foreground-tertiary: var(--foreground-tertiary);
+  --color-foreground-disabled: var(--foreground-disabled);
+  --color-foreground-placeholder: var(--foreground-placeholder);
+  --color-foreground-accent: var(--foreground-accent);
+  --color-foreground-inverse: var(--foreground-inverse);
+  --color-foreground-inverse-secondary: var(--foreground-inverse-secondary);
+
+  /* Border */
+  --color-border-default: var(--border-default);
+  --color-border-strong: var(--border-strong);
+  --color-border-emphasis: var(--border-emphasis);
+  --color-border-separator: var(--border-separator);
+  --color-border-subtle: var(--border-subtle);
+  --color-border-accent: var(--border-accent);
+  --color-border-muted: var(--border-muted);
+  --color-border-inverse: var(--border-inverse);
+  --color-border-surface: var(--border-surface);
+  --color-border-black: var(--border-black);
+
+  /* Selection */
+  --color-selection-indicator: var(--selection-indicator);
+  --color-selection-background: var(--selection-background);
+
+  /* hover */
+  --color-surface-hover: var(--surface-hover);
+
+  /* focus */
+  --color-focus-ring: var(--focus-ring);
+
+  /* Workflow Node */
+  --color-node-default-background: var(--node-default-background);
+  --color-node-default-border: var(--node-default-border);
+
+  --color-node-hover-background: var(--node-hover-background);
+  --color-node-hover-border: var(--node-hover-border);
+
+  --color-node-status-background: var(--node-status-background);
+
+  --color-node-selection-tint: var(--node-selection-tint);
+  --color-node-selection-border: var(--node-selection-border);
+
+  --color-node-success-tint: var(--node-success-tint);
+  --color-node-success-border: var(--node-success-border);
+  --color-node-success-selected-tint: var(--node-success-selected-tint);
+  --color-node-success-selected-border: var(--node-success-selected-border);
+
+  --color-node-warning-tint: var(--node-warning-tint);
+  --color-node-warning-border: var(--node-warning-border);
+
+  --color-node-error-tint: var(--node-error-tint);
+  --color-node-error-border: var(--node-error-border);
+
+  /* Workflow Edge */
+  --color-edge-default: var(--edge-default);
+  --color-edge-selected: var(--edge-selected);
+
+  /* Workflow Handle */
+  --color-handle-background: var(--handle-background);
+  --color-handle-border: var(--handle-border);
+
+  /* Input */
+  --color-input-background: var(--input-background);
+  --color-input-border: var(--input-border);
+  --color-input-foreground: var(--input-foreground);
+  --color-input-placeholder: var(--input-placeholder);
+
+  --color-input-hover-border: var(--input-hover-border);
+
+  --color-input-focus-border: var(--input-focus-border);
+  --color-input-focus-ring: var(--input-focus-ring);
+
+  --color-input-disabled-background: var(--input-disabled-background);
+  --color-input-disabled-border: var(--input-disabled-border);
+  --color-input-disabled-foreground: var(--input-disabled-foreground);
+
+  --color-input-error-border: var(--input-error-border);
+  --color-input-error-ring: var(--input-error-ring);
+  --color-input-error-foreground: var(--input-error-foreground);
+
+  /* Textarea */
+  --color-textarea-background: var(--textarea-background);
+  --color-textarea-border: var(--textarea-border);
+  --color-textarea-foreground: var(--textarea-foreground);
+  --color-textarea-placeholder: var(--textarea-placeholder);
+
+  --color-textarea-hover-border: var(--textarea-hover-border);
+
+  --color-textarea-focus-border: var(--textarea-focus-border);
+  --color-textarea-focus-ring: var(--textarea-focus-ring);
+
+  --color-textarea-disabled-background: var(--textarea-disabled-background);
+  --color-textarea-disabled-border: var(--textarea-disabled-border);
+  --color-textarea-disabled-foreground: var(--textarea-disabled-foreground);
+
+  --color-textarea-error-border: var(--textarea-error-border);
+  --color-textarea-error-ring: var(--textarea-error-ring);
+  --color-textarea-error-foreground: var(--textarea-error-foreground);
+
+  --color-textarea-resize-handle: var(--textarea-resize-handle);
+
+  /* Toolbar */
+  --color-toolbar-item-active-background: var(--toolbar-item-active-background);
+  --color-toolbar-item-active-foreground: var(--toolbar-item-active-foreground);
+
+  /* Button */
+
+  /* Shared Button States */
+  --color-button-focus-ring: var(--button-focus-ring);
+
+  --color-button-disabled-background: var(--button-disabled-background);
+  --color-button-disabled-border: var(--button-disabled-border);
+  --color-button-disabled-foreground: var(--button-disabled-foreground);
+
+  /* Primary - Solid */
+  --color-button-primary-solid-background: var(
+    --button-primary-solid-background
+  );
+  --color-button-primary-solid-border: var(--button-primary-solid-border);
+  --color-button-primary-solid-foreground: var(
+    --button-primary-solid-foreground
+  );
+
+  --color-button-primary-solid-hover-background: var(
+    --button-primary-solid-hover-background
+  );
+  --color-button-primary-solid-hover-border: var(
+    --button-primary-solid-hover-border
+  );
+
+  --color-button-primary-solid-active-background: var(
+    --button-primary-solid-active-background
+  );
+  --color-button-primary-solid-active-border: var(
+    --button-primary-solid-active-border
+  );
+
+  /* Primary - Outline */
+  --color-button-primary-outline-background: var(
+    --button-primary-outline-background
+  );
+  --color-button-primary-outline-border: var(--button-primary-outline-border);
+  --color-button-primary-outline-foreground: var(
+    --button-primary-outline-foreground
+  );
+
+  --color-button-primary-outline-hover-background: var(
+    --button-primary-outline-hover-background
+  );
+  --color-button-primary-outline-hover-border: var(
+    --button-primary-outline-hover-border
+  );
+
+  --color-button-primary-outline-active-background: var(
+    --button-primary-outline-active-background
+  );
+  --color-button-primary-outline-active-border: var(
+    --button-primary-outline-active-border
+  );
+
+  /* Secondary */
+  --color-button-secondary-background: var(--button-secondary-background);
+  --color-button-secondary-border: var(--button-secondary-border);
+  --color-button-secondary-foreground: var(--button-secondary-foreground);
+
+  --color-button-secondary-hover-background: var(
+    --button-secondary-hover-background
+  );
+  --color-button-secondary-hover-border: var(--button-secondary-hover-border);
+
+  --color-button-secondary-active-background: var(
+    --button-secondary-active-background
+  );
+  --color-button-secondary-active-border: var(--button-secondary-active-border);
+
+  /* Success - Solid */
+  --color-button-success-solid-background: var(
+    --button-success-solid-background
+  );
+  --color-button-success-solid-border: var(--button-success-solid-border);
+  --color-button-success-solid-foreground: var(
+    --button-success-solid-foreground
+  );
+
+  --color-button-success-solid-hover-background: var(
+    --button-success-solid-hover-background
+  );
+  --color-button-success-solid-hover-border: var(
+    --button-success-solid-hover-border
+  );
+
+  --color-button-success-solid-active-background: var(
+    --button-success-solid-active-background
+  );
+  --color-button-success-solid-active-border: var(
+    --button-success-solid-active-border
+  );
+
+  /* Success - Outline */
+  --color-button-success-outline-background: var(
+    --button-success-outline-background
+  );
+  --color-button-success-outline-border: var(--button-success-outline-border);
+  --color-button-success-outline-foreground: var(
+    --button-success-outline-foreground
+  );
+
+  --color-button-success-outline-hover-background: var(
+    --button-success-outline-hover-background
+  );
+  --color-button-success-outline-active-background: var(
+    --button-success-outline-active-background
+  );
+
+  /* Warning - Solid */
+  --color-button-warning-solid-background: var(
+    --button-warning-solid-background
+  );
+  --color-button-warning-solid-border: var(--button-warning-solid-border);
+  --color-button-warning-solid-foreground: var(
+    --button-warning-solid-foreground
+  );
+
+  --color-button-warning-solid-hover-background: var(
+    --button-warning-solid-hover-background
+  );
+  --color-button-warning-solid-hover-border: var(
+    --button-warning-solid-hover-border
+  );
+
+  --color-button-warning-solid-active-background: var(
+    --button-warning-solid-active-background
+  );
+  --color-button-warning-solid-active-border: var(
+    --button-warning-solid-active-border
+  );
+
+  /* Warning - Outline */
+  --color-button-warning-outline-background: var(
+    --button-warning-outline-background
+  );
+  --color-button-warning-outline-border: var(--button-warning-outline-border);
+  --color-button-warning-outline-foreground: var(
+    --button-warning-outline-foreground
+  );
+
+  --color-button-warning-outline-hover-background: var(
+    --button-warning-outline-hover-background
+  );
+  --color-button-warning-outline-active-background: var(
+    --button-warning-outline-active-background
+  );
+
+  /* Danger - Solid */
+  --color-button-danger-solid-background: var(--button-danger-solid-background);
+  --color-button-danger-solid-border: var(--button-danger-solid-border);
+  --color-button-danger-solid-foreground: var(--button-danger-solid-foreground);
+
+  --color-button-danger-solid-hover-background: var(
+    --button-danger-solid-hover-background
+  );
+  --color-button-danger-solid-hover-border: var(
+    --button-danger-solid-hover-border
+  );
+
+  --color-button-danger-solid-active-background: var(
+    --button-danger-solid-active-background
+  );
+  --color-button-danger-solid-active-border: var(
+    --button-danger-solid-active-border
+  );
+
+  /* Danger - Outline */
+  --color-button-danger-outline-background: var(
+    --button-danger-outline-background
+  );
+  --color-button-danger-outline-border: var(--button-danger-outline-border);
+  --color-button-danger-outline-foreground: var(
+    --button-danger-outline-foreground
+  );
+
+  --color-button-danger-outline-hover-background: var(
+    --button-danger-outline-hover-background
+  );
+  --color-button-danger-outline-active-background: var(
+    --button-danger-outline-active-background
+  );
+
+  /* Select / Dropdown Trigger */
+
+  --color-select-background: var(--select-background);
+  --color-select-border: var(--select-border);
+  --color-select-foreground: var(--select-foreground);
+  --color-select-placeholder: var(--select-placeholder);
+
+  --color-select-hover-background: var(--select-hover-background);
+  --color-select-hover-border: var(--select-hover-border);
+
+  --color-select-focus-background: var(--select-focus-background);
+  --color-select-focus-border: var(--select-focus-border);
+  --color-select-focus-ring: var(--select-focus-ring);
+
+  --color-select-open-background: var(--select-open-background);
+  --color-select-open-border: var(--select-open-border);
+
+  --color-select-disabled-background: var(--select-disabled-background);
+  --color-select-disabled-border: var(--select-disabled-border);
+  --color-select-disabled-foreground: var(--select-disabled-foreground);
+
+  --color-select-error-border: var(--select-error-border);
+  --color-select-error-ring: var(--select-error-ring);
+  --color-select-error-foreground: var(--select-error-foreground);
+
+  --color-select-icon: var(--select-icon);
+  --color-select-icon-disabled: var(--select-icon-disabled);
+
+  /* Dropdown Menu */
+
+  --color-dropdown-background: var(--dropdown-background);
+  --color-dropdown-border: var(--dropdown-border);
+  --color-dropdown-shadow: var(--dropdown-shadow);
+
+  /* Item */
+  --color-dropdown-item-background: var(--dropdown-item-background);
+  --color-dropdown-item-foreground: var(--dropdown-item-foreground);
+
+  --color-dropdown-item-hover-background: var(--dropdown-item-hover-background);
+  --color-dropdown-item-hover-foreground: var(--dropdown-item-hover-foreground);
+
+  --color-dropdown-item-active-background: var(
+    --dropdown-item-active-background
+  );
+  --color-dropdown-item-active-foreground: var(
+    --dropdown-item-active-foreground
+  );
+
+  --color-dropdown-item-selected-background: var(
+    --dropdown-item-selected-background
+  );
+  --color-dropdown-item-selected-foreground: var(
+    --dropdown-item-selected-foreground
+  );
+
+  --color-dropdown-item-disabled-background: var(
+    --dropdown-item-disabled-background
+  );
+  --color-dropdown-item-disabled-foreground: var(
+    --dropdown-item-disabled-foreground
+  );
+
+  /* Divider */
+  --color-dropdown-divider: var(--dropdown-divider);
+
+  /* Icon */
+  --color-dropdown-icon: var(--dropdown-icon);
+  --color-dropdown-icon-selected: var(--dropdown-icon-selected);
+  --color-dropdown-icon-disabled: var(--dropdown-icon-disabled);
+
+  /* Table */
+
+  /* Header */
+  --color-table-header-background: var(--table-header-background);
+  --color-table-header-border: var(--table-header-border);
+  --color-table-header-foreground: var(--table-header-foreground);
+
+  /* Rows */
+  --color-table-row-odd: var(--table-row-odd);
+  --color-table-row-even: var(--table-row-even);
+
+  --color-table-row-hover-background: var(--table-row-hover-background);
+  --color-table-row-selected-background: var(--table-row-selected-background);
+
+  --color-table-row-foreground: var(--table-row-foreground);
+  --color-table-row-selected-foreground: var(--table-row-selected-foreground);
+
+  /* Cell */
+  --color-table-cell-border: var(--table-cell-border);
+
+  /* Resize / Grid */
+  --color-table-grid-border: var(--table-grid-border);
+
+  /* Focus */
+  --color-table-focus-ring: var(--table-focus-ring);
+
+  /* Sticky */
+  --color-table-sticky-background: var(--table-sticky-background);
+
+  /* Sort */
+  --color-table-sort-icon: var(--table-sort-icon);
+  --color-table-sort-icon-active: var(--table-sort-icon-active);
+
+  /* Badge */
+
+  /* Neutral */
+  --color-badge-neutral-solid-background: var(--badge-neutral-solid-background);
+  --color-badge-neutral-solid-border: var(--badge-neutral-solid-border);
+  --color-badge-neutral-solid-foreground: var(--badge-neutral-solid-foreground);
+
+  --color-badge-neutral-outline-background: var(
+    --badge-neutral-outline-background
+  );
+  --color-badge-neutral-outline-border: var(--badge-neutral-outline-border);
+  --color-badge-neutral-outline-foreground: var(
+    --badge-neutral-outline-foreground
+  );
+
+  /* Info */
+  --color-badge-info-solid-background: var(--badge-info-solid-background);
+  --color-badge-info-solid-border: var(--badge-info-solid-border);
+  --color-badge-info-solid-foreground: var(--badge-info-solid-foreground);
+
+  --color-badge-info-outline-background: var(--badge-info-outline-background);
+  --color-badge-info-outline-border: var(--badge-info-outline-border);
+  --color-badge-info-outline-foreground: var(--badge-info-outline-foreground);
+
+  /* Success */
+  --color-badge-success-solid-background: var(--badge-success-solid-background);
+  --color-badge-success-solid-border: var(--badge-success-solid-border);
+  --color-badge-success-solid-foreground: var(--badge-success-solid-foreground);
+
+  --color-badge-success-outline-background: var(
+    --badge-success-outline-background
+  );
+  --color-badge-success-outline-border: var(--badge-success-outline-border);
+  --color-badge-success-outline-foreground: var(
+    --badge-success-outline-foreground
+  );
+
+  /* Warning */
+  --color-badge-warning-solid-background: var(--badge-warning-solid-background);
+  --color-badge-warning-solid-border: var(--badge-warning-solid-border);
+  --color-badge-warning-solid-foreground: var(--badge-warning-solid-foreground);
+
+  --color-badge-warning-outline-background: var(
+    --badge-warning-outline-background
+  );
+  --color-badge-warning-outline-border: var(--badge-warning-outline-border);
+  --color-badge-warning-outline-foreground: var(
+    --badge-warning-outline-foreground
+  );
+
+  /* Danger */
+  --color-badge-danger-solid-background: var(--badge-danger-solid-background);
+  --color-badge-danger-solid-border: var(--badge-danger-solid-border);
+  --color-badge-danger-solid-foreground: var(--badge-danger-solid-foreground);
+
+  --color-badge-danger-outline-background: var(
+    --badge-danger-outline-background
+  );
+  --color-badge-danger-outline-border: var(--badge-danger-outline-border);
+  --color-badge-danger-outline-foreground: var(
+    --badge-danger-outline-foreground
+  );
+
+  /* Tabs */
+
+  --color-tab-background: var(--tab-background);
+  --color-tab-border: var(--tab-border);
+  --color-tab-foreground: var(--tab-foreground);
+
+  --color-tab-hover-background: var(--tab-hover-background);
+  --color-tab-hover-border: var(--tab-hover-border);
+  --color-tab-hover-foreground: var(--tab-hover-foreground);
+
+  --color-tab-active-background: var(--tab-active-background);
+  --color-tab-active-border: var(--tab-active-border);
+  --color-tab-active-foreground: var(--tab-active-foreground);
+
+  --color-tab-focus-ring: var(--tab-focus-ring);
+
+  --color-tab-disabled-background: var(--tab-disabled-background);
+  --color-tab-disabled-border: var(--tab-disabled-border);
+  --color-tab-disabled-foreground: var(--tab-disabled-foreground);
+
+  /* Accordion */
+
+  --color-accordion-background: var(--accordion-background);
+  --color-accordion-border: var(--accordion-border);
+
+  --color-accordion-header-background: var(--accordion-header-background);
+  --color-accordion-header-border: var(--accordion-header-border);
+  --color-accordion-header-foreground: var(--accordion-header-foreground);
+
+  --color-accordion-header-hover-background: var(
+    --accordion-header-hover-background
+  );
+  --color-accordion-header-hover-foreground: var(
+    --accordion-header-hover-foreground
+  );
+
+  --color-accordion-content-background: var(--accordion-content-background);
+  --color-accordion-content-foreground: var(--accordion-content-foreground);
+
+  --color-accordion-focus-ring: var(--accordion-focus-ring);
+
+  --color-accordion-disabled-foreground: var(--accordion-disabled-foreground);
+
+  /* Toast */
+
+  /* Base */
+  --color-toast-background: var(--toast-background);
+  --color-toast-border: var(--toast-border);
+  --color-toast-foreground: var(--toast-foreground);
+
+  --color-toast-shadow: var(--toast-shadow);
+
+  /* Info */
+  --color-toast-info-background: var(--toast-info-background);
+  --color-toast-info-border: var(--toast-info-border);
+  --color-toast-info-foreground: var(--toast-info-foreground);
+
+  /* Success */
+  --color-toast-success-background: var(--toast-success-background);
+  --color-toast-success-border: var(--toast-success-border);
+  --color-toast-success-foreground: var(--toast-success-foreground);
+
+  /* Warning */
+  --color-toast-warning-background: var(--toast-warning-background);
+  --color-toast-warning-border: var(--toast-warning-border);
+  --color-toast-warning-foreground: var(--toast-warning-foreground);
+
+  /* Danger */
+  --color-toast-danger-background: var(--toast-danger-background);
+  --color-toast-danger-border: var(--toast-danger-border);
+  --color-toast-danger-foreground: var(--toast-danger-foreground);
+
+  /* Checkbox */
+
+  --color-checkbox-background: var(--checkbox-background);
+  --color-checkbox-border: var(--checkbox-border);
+  --color-checkbox-checkmark: var(--checkbox-checkmark);
+
+  --color-checkbox-hover-border: var(--checkbox-hover-border);
+
+  --color-checkbox-checked-background: var(--checkbox-checked-background);
+  --color-checkbox-checked-border: var(--checkbox-checked-border);
+  --color-checkbox-checked-checkmark: var(--checkbox-checked-checkmark);
+
+  --color-checkbox-focus-ring: var(--checkbox-focus-ring);
+
+  --color-checkbox-disabled-background: var(--checkbox-disabled-background);
+  --color-checkbox-disabled-border: var(--checkbox-disabled-border);
+  --color-checkbox-disabled-checkmark: var(--checkbox-disabled-checkmark);
+
+  /* Radio */
+
+  --color-radio-background: var(--radio-background);
+  --color-radio-border: var(--radio-border);
+  --color-radio-indicator: var(--radio-indicator);
+
+  --color-radio-hover-border: var(--radio-hover-border);
+
+  --color-radio-checked-background: var(--radio-checked-background);
+  --color-radio-checked-border: var(--radio-checked-border);
+  --color-radio-checked-indicator: var(--radio-checked-indicator);
+
+  --color-radio-focus-ring: var(--radio-focus-ring);
+
+  --color-radio-disabled-background: var(--radio-disabled-background);
+  --color-radio-disabled-border: var(--radio-disabled-border);
+  --color-radio-disabled-indicator: var(--radio-disabled-indicator);
+
+  /* Tooltip */
+
+  --color-tooltip-background: var(--tooltip-background);
+  --color-tooltip-border: var(--tooltip-border);
+  --color-tooltip-foreground: var(--tooltip-foreground);
+
+  --color-tooltip-shadow: var(--tooltip-shadow);
+
+  /* Dialog */
+
+  --color-dialog-background: var(--dialog-background);
+  --color-dialog-border: var(--dialog-border);
+  --color-dialog-foreground: var(--dialog-foreground);
+
+  --color-dialog-shadow: var(--dialog-shadow);
+  --color-dialog-overlay: var(--dialog-overlay);
+
+  --color-dialog-header-border: var(--dialog-header-border);
+  --color-dialog-footer-border: var(--dialog-footer-border);
+
+  --color-dialog-title: var(--dialog-title);
+  --color-dialog-description: var(--dialog-description);
+
+  /* Tree */
+
+  --color-tree-background: var(--tree-background);
+
+  /* Node */
+  --color-tree-node-background: var(--tree-node-background);
+  --color-tree-node-border: var(--tree-node-border);
+  --color-tree-node-foreground: var(--tree-node-foreground);
+
+  /* Hover */
+  --color-tree-node-hover-background: var(--tree-node-hover-background);
+  --color-tree-node-hover-border: var(--tree-node-hover-border);
+  --color-tree-node-hover-foreground: var(--tree-node-hover-foreground);
+
+  /* Selected */
+  --color-tree-node-selected-background: var(--tree-node-selected-background);
+  --color-tree-node-selected-border: var(--tree-node-selected-border);
+  --color-tree-node-selected-foreground: var(--tree-node-selected-foreground);
+
+  /* Focus */
+  --color-tree-node-focus-ring: var(--tree-node-focus-ring);
+
+  /* Expand / Collapse */
+  --color-tree-expander: var(--tree-expander);
+  --color-tree-expander-hover: var(--tree-expander-hover);
+
+  /* Disabled */
+  --color-tree-disabled-foreground: var(--tree-disabled-foreground);
+
+  /* Chart */
+
+  --color-chart-success: var(--chart-success);
+  --color-chart-warning: var(--chart-warning);
+  --color-chart-danger: var(--chart-danger);
+  --color-chart-info: var(--chart-info);
+
+  /* Scrollbar */
+
+  --color-scrollbar-default-track: var(--scrollbar-default-track);
+  --color-scrollbar-default-thumb: var(--scrollbar-default-thumb);
+  --color-scrollbar-default-thumb-hover: var(--scrollbar-default-thumb-hover);
+
+  --color-scrollbar-table-track: var(--scrollbar-table-track);
+  --color-scrollbar-table-thumb: var(--scrollbar-table-thumb);
+  --color-scrollbar-table-thumb-hover: var(--scrollbar-table-thumb-hover);
+}

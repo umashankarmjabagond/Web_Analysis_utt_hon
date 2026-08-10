@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { TooltipProps } from "../../../types/commonTypes";
+import { cn } from "../../../utils/utils";
 
 export default function Tooltip({
   children,
@@ -68,12 +69,19 @@ export default function Tooltip({
         <div
           role="tooltip"
           style={{ maxWidth: maxWidth ?? 300 }}
-          className={`absolute w-max z-50 rounded bg-app-surface-elevated px-2 py-2 text-app-text-primary font-medium text-[14px] ${PLACEMENT_STYLES[placement]["tooltip"]} ${className}`}
+          className={cn(
+            "absolute z-50 w-max rounded bg-tooltip-background px-2 py-2 text-[14px] font-medium text-tooltip-foreground shadow-tooltip",
+            PLACEMENT_STYLES[placement].tooltip,
+            className,
+          )}
         >
           {content}
           {showArrow && (
             <div
-              className={`absolute h-2 w-2 bg-app-surface-elevated rotate-45 ${PLACEMENT_STYLES[placement]["arrow"]}`}
+              className={cn(
+                "absolute h-2 w-2 rotate-45 bg-tooltip-background",
+                PLACEMENT_STYLES[placement].arrow,
+              )}
             />
           )}
         </div>

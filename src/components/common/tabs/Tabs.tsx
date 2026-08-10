@@ -1,11 +1,12 @@
 import { NavLink } from "react-router-dom";
 import type { TabsProps } from "../../../types/commonTypes";
+import { cn } from "../../../utils/utils";
 
 const variants = {
   primary: {
-    active: "border-tab-active-border text-tab-active-text",
+    active: "border-tab-active-border text-tab-active-foreground font-bold",
     inactive:
-      "border-transparent text-tab-inactive-text hover:border-tab-active-border hover:text-tab-active-text",
+      "border-tab-border text-tab-foreground hover:border-tab-hover-border hover:text-tab-hover-foreground",
   },
 
   secondary: {
@@ -20,7 +21,7 @@ export function Tabs({
   activeTab,
   onTabChange,
   variant = "primary",
-  renderContent= true
+  renderContent = true,
 }: TabsProps) {
   const activeItem = items.find((item) => item.id === activeTab);
   const ActiveComponent = activeItem?.component;
@@ -39,9 +40,12 @@ export function Tabs({
                 key={item.id}
                 to={item.path}
                 className={({ isActive }) =>
-                  `px-4 py-2 border-b-2 text-sm font-medium transition-colors ${
-                    isActive ? selectedVariant.active : selectedVariant.inactive
-                  }`
+                  cn(
+                    "px-4 py-2 border-b-2 text-sm font-medium transition-colors",
+                    isActive
+                      ? selectedVariant.active
+                      : selectedVariant.inactive,
+                  )
                 }
               >
                 {item.label}
@@ -54,11 +58,13 @@ export function Tabs({
               key={item.id}
               disabled={item.disabled}
               onClick={() => onTabChange?.(item.id)}
-              className={`px-4 py-2 cursor-pointer border-b-2 transition-colors ${
+              className={cn(
+                "px-4 py-2 cursor-pointer border-b-2 transition-colors",
                 activeTab === item.id
                   ? selectedVariant.active
-                  : selectedVariant.inactive
-              } ${item.disabled ? "cursor-not-allowed opacity-50" : ""}`}
+                  : selectedVariant.inactive,
+                item.disabled && "cursor-not-allowed opacity-50",
+              )}
             >
               {item.label}
             </button>
