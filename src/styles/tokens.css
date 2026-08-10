@@ -386,11 +386,28 @@
   --select-icon: var(--foreground-secondary);
   --select-icon-disabled: var(--foreground-disabled);
 
+  /* Select / Dropdown Options */
+
+  --select-option-background: var(--surface);
+  --select-option-foreground: var(--foreground);
+
+  --select-option-hover-background: var(--surface-hover);
+  --select-option-hover-foreground: var(--foreground);
+
+  --select-option-group-foreground: var(--foreground-secondary);
+
+  --select-option-disabled-foreground: var(--foreground-disabled);
+
   /* Dropdown Menu */
 
   --dropdown-background: var(--surface-card);
   --dropdown-border: var(--border-default);
-  --dropdown-shadow: var(--black-100);
+  --dropdown-shadow: var(--shadow-300);
+
+  /* Dropdown Trigger */
+  --dropdown-trigger-foreground: var(--foreground-secondary);
+  --dropdown-trigger-hover-foreground: var(--foreground);
+  --dropdown-trigger-icon: var(--foreground-secondary);
 
   /* Item */
   --dropdown-item-background: transparent;
@@ -1049,11 +1066,32 @@
   --color-select-icon: var(--select-icon);
   --color-select-icon-disabled: var(--select-icon-disabled);
 
+  /* Select / Dropdown Options */
+
+  --color-select-option-background: var(--select-option-background);
+  --color-select-option-foreground: var(--select-option-foreground);
+
+  --color-select-option-hover-background: var(--select-option-hover-background);
+  --color-select-option-hover-foreground: var(--select-option-hover-foreground);
+
+  --color-select-option-group-foreground: var(--select-option-group-foreground);
+
+  --color-select-option-disabled-foreground: var(
+    --select-option-disabled-foreground
+  );
+
   /* Dropdown Menu */
 
   --color-dropdown-background: var(--dropdown-background);
   --color-dropdown-border: var(--dropdown-border);
   --color-dropdown-shadow: var(--dropdown-shadow);
+
+  /* Dropdown Trigger */
+  --color-dropdown-trigger-foreground: var(--dropdown-trigger-foreground);
+  --color-dropdown-trigger-hover-foreground: var(
+    --dropdown-trigger-hover-foreground
+  );
+  --color-dropdown-trigger-icon: var(--dropdown-trigger-icon);
 
   /* Item */
   --color-dropdown-item-background: var(--dropdown-item-background);
