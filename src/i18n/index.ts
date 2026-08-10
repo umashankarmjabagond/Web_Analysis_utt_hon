@@ -10,45 +10,72 @@ import arSA from "./locales/ar-SA.json";
 
 import { DEFAULT_LANGUAGE, Language } from "./languages";
 
+const resources = {
+  [Language.EN_US]: {
+    translation: enUS,
+  },
+  [Language.DE_DE]: {
+    translation: deDE,
+  },
+  [Language.RU_RU]: {
+    translation: ruRU,
+  },
+  [Language.ZH_CN]: {
+    translation: zhCN,
+  },
+  [Language.AR_SA]: {
+    translation: arSA,
+  },
+};
+
+const supportedLanguages = Object.keys(resources);
+
+/**
+ * Resolution order
+ *
+ * Browser : en-IN
+ * 1. en-IN
+ * 2. en
+ *    -> en-US
+ * 3. fallback -> en-US
+ */
+function resolveLanguage(browserLanguage: string): string {
+  // 1. Exact locale
+  if (supportedLanguages.includes(browserLanguage)) {
+    return browserLanguage;
+  }
+
+  // 2. Base language
+  const browserBase = browserLanguage.split("-")[0].toLowerCase();
+
+  const matchedLanguage = supportedLanguages.find((language) => {
+    return language.split("-")[0].toLowerCase() === browserBase;
+  });
+
+  if (matchedLanguage) {
+    return matchedLanguage;
+  }
+
+  // 3. Fallback
+  return DEFAULT_LANGUAGE;
+}
+
+const detectedLanguage = resolveLanguage(navigator.language);
+
 i18n
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
-    resources: {
-      [Language.EN_US]: {
-        translation: enUS,
-      },
-      [Language.DE_DE]: {
-        translation: deDE,
-      },
-      [Language.RU_RU]: {
-        translation: ruRU,
-      },
-      [Language.ZH_CN]: {
-        translation: zhCN,
-      },
-      [Language.AR_SA]: {
-        translation: arSA,
-      },
-    },
+    lng: detectedLanguage,
 
-    supportedLngs: [
-      Language.EN_US,
-      Language.DE_DE,
-      Language.RU_RU,
-      Language.ZH_CN,
-      Language.AR_SA,
-    ],
+    resources,
+
+    supportedLngs: supportedLanguages,
 
     fallbackLng: DEFAULT_LANGUAGE,
 
     interpolation: {
       escapeValue: false,
-    },
-
-    detection: {
-      order: ["navigator"],
-      caches: [],
     },
   });
 
@@ -59,10 +86,8 @@ const updateDocumentDirection = (language: string) => {
   document.documentElement.dir = isRTL ? "rtl" : "ltr";
 };
 
-// Set on initial load
-updateDocumentDirection(i18n.resolvedLanguage ?? i18n.language);
+updateDocumentDirection(i18n.language);
 
-// Update whenever the language changes
 i18n.on("languageChanged", updateDocumentDirection);
 
 export default i18n;

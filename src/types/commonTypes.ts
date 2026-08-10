@@ -7,6 +7,7 @@ import type {
   InputHTMLAttributes,
 } from "react";
 import type { DonutChartItem } from "./dashboardTypes";
+import type { LucideIcon } from "lucide-react";
 
 export interface BreadcrumbItem {
   id: string;
@@ -55,9 +56,10 @@ export interface AccordionProps {
 
 export interface TemplateCardProps {
   title: string;
+  icon?: LucideIcon;
   draggable?: boolean;
+  onDragStart?: React.DragEventHandler<HTMLDivElement>;
   onClick?: () => void;
-  onDragStart?: (event: React.DragEvent<HTMLDivElement>) => void;
 }
 export interface TreeNodeData {
   id: string;
@@ -158,6 +160,7 @@ export interface GroupedSelectorSection {
 export interface GroupedSelectorProps {
   placeholder?: string;
   sections: GroupedSelectorSection[];
+  icon?: LucideIcon;
   onSelect: (item: GroupedSelectorItem) => void;
   disabled?: boolean;
   className?: string;

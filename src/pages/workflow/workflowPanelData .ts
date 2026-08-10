@@ -3,6 +3,41 @@ import type {
   WorkflowSection,
 } from "../../types/workFlowTypes";
 
+import {
+  Database,
+  HardDrive,
+  Table,
+  ArrowUpDown,
+  SlidersHorizontal,
+  Activity,
+  Braces,
+  Waves,
+  Cpu,
+  Sigma,
+  Calculator,
+  Code2,
+  Binary,
+  GitCompare,
+  Boxes,
+  Workflow,
+  ScanSearch,
+  ChartSpline,
+  TrendingUp,
+  FunctionSquare,
+  SquareSigma,
+  ChartBar,
+  Network,
+  FlaskConical,
+  Link2,
+  Brain,
+  FileCode2,
+  SquareStack,
+  MapPinned,
+  GitBranch,
+  Gauge,
+  BrainCircuit,
+} from "lucide-react";
+
 import standaloneWorkflow from "./Standalone_BK3BFC0126.json";
 
 /* -------------------------------------------------------------------------- */
@@ -20,7 +55,112 @@ export const catalogSections: WorkflowSection[] = [
       {
         id: "standalone",
         title: "Standalone",
+        icon: Boxes,
         description: "Standalone PID Template",
+        element: {
+          Name: "",
+          elementType: "Template",
+          ParentNames: null,
+        },
+      },
+      {
+        id: "standalone-tu",
+        title: "Standalone (Tu...)",
+        icon: SquareStack,
+        description: "",
+        element: {
+          Name: "",
+          elementType: "Template",
+          ParentNames: null,
+        },
+      },
+      {
+        id: "positioner",
+        title: "Positioner",
+        icon: MapPinned,
+        description: "",
+        element: {
+          Name: "",
+          elementType: "Template",
+          ParentNames: null,
+        },
+      },
+      {
+        id: "selector",
+        title: "Selector",
+        icon: GitBranch,
+        description: "",
+        element: {
+          Name: "",
+          elementType: "Template",
+          ParentNames: null,
+        },
+      },
+      {
+        id: "instrument",
+        title: "Instrument",
+        icon: Gauge,
+        description: "",
+        element: {
+          Name: "",
+          elementType: "Template",
+          ParentNames: null,
+        },
+      },
+      {
+        id: "analyzer",
+        title: "Analyzer",
+        icon: ScanSearch,
+        description: "",
+        element: {
+          Name: "",
+          elementType: "Template",
+          ParentNames: null,
+        },
+      },
+    ],
+  },
+  {
+    title: "MPC Templates",
+    items: [
+      {
+        id: "rmpct",
+        title: "RMPCT",
+        icon: Cpu,
+        description: "",
+        element: {
+          Name: "",
+          elementType: "Template",
+          ParentNames: null,
+        },
+      },
+      {
+        id: "dmc",
+        title: "DMC",
+        icon: Workflow,
+        description: "",
+        element: {
+          Name: "",
+          elementType: "Template",
+          ParentNames: null,
+        },
+      },
+      {
+        id: "generic-apc",
+        title: "Generic APC",
+        icon: Boxes,
+        description: "",
+        element: {
+          Name: "",
+          elementType: "Template",
+          ParentNames: null,
+        },
+      },
+      {
+        id: "estimator",
+        title: "Estimator",
+        icon: BrainCircuit,
+        description: "",
         element: {
           Name: "",
           elementType: "Template",
@@ -34,16 +174,17 @@ export const catalogSections: WorkflowSection[] = [
 /* -------------------------------------------------------------------------- */
 /*                            ATTRIBUTE CATALOG                               */
 /* -------------------------------------------------------------------------- */
-
 const createAttribute = (
   id: string,
   title: string,
   description: string,
   elementType: string,
+  icon: any,
 ) => ({
   id,
   title,
   description,
+  icon,
   element: {
     Name: title,
     elementType,
@@ -58,137 +199,174 @@ const createAttribute = (
 
 export const attributeCatalogSections: WorkflowSection[] = [
   {
-    id: "data",
-    title: "Data",
+    id: "data-manipulation",
+    title: "Data Manipulation",
     items: [
       createAttribute(
         "datasource",
         "Data Source",
-        "Read historian data file",
+        "Read historian data",
         "DataSource",
-      ),
-      createAttribute(
-        "datapreprocessor",
-        "Data Pre Processor",
-        "Data quality + interpolation",
-        "DataPreProcessor",
+        Database,
       ),
       createAttribute(
         "datasink",
         "Data Sink",
-        "Terminal output collector",
+        "Write output",
         "DataSink",
+        HardDrive,
       ),
       createAttribute(
-        "tagmap",
-        "Tag Map",
-        "MPC data organization bridge",
-        "TagMap",
+        "datapreprocessor",
+        "Data Preprocessor",
+        "Preprocess data",
+        "DataPreProcessor",
+        Table,
       ),
       createAttribute(
-        "datathrottling",
-        "Data Throttling",
-        "Compression detection",
-        "DataThrottling",
+        "sorter",
+        "Sorter",
+        "Sort records",
+        "Sorter",
+        ArrowUpDown,
       ),
     ],
   },
+
   {
-    id: "pid",
-    title: "PID Analysis",
+    id: "pid-monitoring",
+    title: "PID Monitoring",
     items: [
       createAttribute(
         "controller",
         "Controller",
-        "PID controller health KPIs",
+        "Controller KPIs",
         "Controller",
+        SlidersHorizontal,
       ),
-      createAttribute(
-        "pa",
-        "Performance Assessment",
-        "Performance Assessment",
-        "PA",
-      ),
+      createAttribute("pa", "PA", "Performance Assessment", "PA", Activity),
       createAttribute(
         "oscillationindex",
         "Oscillation Index",
-        "Detect oscillation",
+        "Oscillation detection",
         "OscillationIndex",
+        Waves,
       ),
       createAttribute(
         "valvestiction",
         "Valve Stiction",
         "Valve health",
         "ValveStiction",
+        Braces,
       ),
-      createAttribute(
-        "coherency",
-        "Coherency",
-        "Signal coherence analysis",
-        "Coherency",
-      ),
-      createAttribute(
-        "diagnosis",
-        "Diagnosis",
-        "Final PID health decision",
-        "Diagnosis",
-      ),
-      createAttribute(
-        "controllerdiag",
-        "Controller Diagnostics",
-        "Tuning diagnostics",
-        "ControllerDiag",
-      ),
-      createAttribute("tuning", "PID Tuning", "PID tuning", "Tuning"),
     ],
   },
+
+  {
+    id: "apc-monitoring",
+    title: "APC Monitoring",
+    items: [
+      createAttribute("rmpct", "RMPCT", "", "RMPCT", Cpu),
+      createAttribute("dmc", "DMC", "", "DMC", Cpu),
+      createAttribute("macs", "MACS", "", "MACS", Cpu),
+      createAttribute("mvpa", "MVPA", "", "MVPA", Activity),
+      createAttribute("estimator", "Estimator", "", "Estimator", Brain),
+      createAttribute("cpo", "CPO", "", "CPO", Cpu),
+      createAttribute("connoisser", "Connoisser", "", "Connoisser", ScanSearch),
+      createAttribute("genericapc", "Generic APC", "", "GenericAPC", Workflow),
+    ],
+  },
+
+  {
+    id: "taiji",
+    title: "Taiji",
+    items: [
+      createAttribute("planttest", "Plant Test", "", "PlantTest", FlaskConical),
+      createAttribute("plantmodel", "Plant Model", "", "PlantModel", Network),
+    ],
+  },
+
+  {
+    id: "correlation",
+    title: "Correlation Mapping",
+    items: [
+      createAttribute("cccm", "CCCM", "", "CCCM", Link2),
+      createAttribute(
+        "correlationmatrix",
+        "Correlation Matrix",
+        "",
+        "CorrelationMatrix",
+        ChartSpline,
+      ),
+    ],
+  },
+
   {
     id: "math",
-    title: "Math & Statistics",
+    title: "Math",
     items: [
-      createAttribute("math", "Math", ".NET expression evaluation", "Math"),
-      createAttribute("pymath", "PyMath", "Python expression block", "PyMath"),
+      createAttribute("math", "Math", "", "Math", Calculator),
+      createAttribute("comcode", "COM CodeBlock", "", "COMCodeBlock", Code2),
       createAttribute(
-        "statistics",
-        "Statistics",
-        "Signal statistics",
-        "Statistics",
+        "matlabcode",
+        "Matlab CodeBlock",
+        "",
+        "MatlabCodeBlock",
+        FileCode2,
       ),
-      createAttribute("psd", "PSD", "Spectral analysis", "PSD"),
+      createAttribute("classifier", "Classifier", "", "Classifier", Binary),
       createAttribute(
-        "sixsigma",
-        "Six Sigma",
-        "Process capability",
-        "SixSigma",
+        "multimath",
+        "Multi Math",
+        "",
+        "MultiMath",
+        FunctionSquare,
+      ),
+      createAttribute(
+        "selectorswitch",
+        "Selector Switch",
+        "",
+        "SelectorSwitch",
+        GitCompare,
       ),
     ],
   },
+
   {
-    id: "mpc",
-    title: "MPC",
+    id: "sixsigma",
+    title: "Six sigma calculations",
     items: [
-      createAttribute("rmpct", "RMPCT", "Core MPC KPI computation", "RMPCT"),
-      createAttribute("mvpa", "MVPA", "MPC controller analysis", "MVPA"),
-      createAttribute("cluster", "Cluster", "Multi-loop grouping", "Cluster"),
+      createAttribute("sixsigma", "Six Sigma", "", "SixSigma", Sigma),
+      createAttribute("cpcpk", "CpCpk", "", "CpCpk", SquareSigma),
+      createAttribute("ppppk", "PpPpk", "", "PpPpk", SquareSigma),
+    ],
+  },
+
+  {
+    id: "statistics",
+    title: "Statistics",
+    items: [
       createAttribute(
-        "modelid",
-        "Model ID",
-        "System identification",
-        "ModelID",
+        "crossspectrum",
+        "Cross Spectrum",
+        "",
+        "CrossSpectrum",
+        ChartBar,
+      ),
+      createAttribute("coherency", "Coherency", "", "Coherency", TrendingUp),
+      createAttribute(
+        "crosscorrelation",
+        "Cross Correlation",
+        "",
+        "CrossCorrelation",
+        ChartSpline,
       ),
     ],
   },
+
   {
-    id: "advanced",
-    title: "Advanced",
-    items: [
-      createAttribute(
-        "rca",
-        "Root Cause Analysis",
-        "Root cause analysis",
-        "RCA",
-      ),
-      createAttribute("custom", "Custom", "User defined block", "Custom"),
-    ],
+    id: "custom",
+    title: "Custom Elements",
+    items: [createAttribute("python", "Python", "", "Python", FileCode2)],
   },
 ];

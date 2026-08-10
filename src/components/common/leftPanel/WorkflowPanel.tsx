@@ -125,6 +125,7 @@ export default function WorkflowPanel() {
               <TemplateCard
                 key={item.id}
                 title={item.title}
+                icon={item.icon}
                 draggable
                 onClick={() => handleTabletClick(item)}
                 onDragStart={(event) => handleDragStart(event, item)}
