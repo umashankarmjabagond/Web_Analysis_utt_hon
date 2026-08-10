@@ -236,18 +236,21 @@ const Properties: React.FC<PropertiesProps> = ({ onCancel }) => {
               </div>
 
               <RotateCw
+                aria-label="Refresh bad data expression"
+                role="button"
+                tabIndex={0}
                 strokeWidth={2}
                 onClick={handleBadExpressionRefresh}
                 className={`
-                  mt-7
-                  cursor-pointer
-                  transition-transform
-                  ${
-                    badExpressionLoading
-                      ? "animate-spin pointer-events-none"
-                      : "hover:rotate-90"
-                  }
-                `}
+    mt-7
+    cursor-pointer
+    transition-transform
+    ${
+      badExpressionLoading
+        ? "animate-spin pointer-events-none"
+        : "hover:rotate-90"
+    }
+  `}
               />
             </div>
 
@@ -262,18 +265,21 @@ const Properties: React.FC<PropertiesProps> = ({ onCancel }) => {
               </div>
 
               <RotateCw
+                aria-label="Refresh replacement expression"
+                role="button"
+                tabIndex={0}
                 strokeWidth={2}
                 onClick={handleReplacementRefresh}
                 className={`
-                  mt-7
-                  cursor-pointer
-                  transition-transform
-                  ${
-                    replacementExpressionLoading
-                      ? "animate-spin pointer-events-none"
-                      : "hover:rotate-90"
-                  }
-                `}
+    mt-7
+    cursor-pointer
+    transition-transform
+    ${
+      replacementExpressionLoading
+        ? "animate-spin pointer-events-none"
+        : "hover:rotate-90"
+    }
+  `}
               />
             </div>
           </div>
