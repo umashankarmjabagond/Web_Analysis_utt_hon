@@ -1,9 +1,9 @@
-import { Boxes } from "lucide-react";
 import type { TemplateCardProps } from "../../../types/commonTypes";
 
 export default function TemplateCard({
   title,
   draggable = false,
+  icon: Icon,
   onClick,
   onDragStart,
 }: TemplateCardProps) {
@@ -16,7 +16,9 @@ export default function TemplateCard({
         draggable ? "cursor-grab active:cursor-grabbing" : "cursor-pointer"
       }`}
     >
-      <Boxes size={14} strokeWidth={1.8} className="mb-2 text-gray-200" />
+      {Icon && (
+        <Icon className="mb-2 text-gray-200" size={18} strokeWidth={1.8} />
+      )}
 
       <span className="break-words text-[12px] leading-4 text-gray-100">
         {title}
