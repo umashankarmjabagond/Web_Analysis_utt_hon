@@ -1,5 +1,6 @@
 import { ChevronRight } from "lucide-react";
 import type { TreeNodeProps } from "../../../types/commonTypes";
+import { cn } from "../../../utils/utils";
 
 export default function TreeNode({
   node,
@@ -15,14 +16,15 @@ export default function TreeNode({
   // const isLeaf = !hasChildren;
 
   return (
-    <div className="my-2 text-white">
+    <div className="my-2">
       <button
         type="button"
-        className={`flex h-10 w-full items-center gap-2  cursor-pointer transition-colors ${
+        className={cn(
+          "flex h-10 w-full cursor-pointer items-center gap-2 border-l-4 bg-tree-node-background transition-colors",
           isSelected
-            ? "border-l-4 border-l-[#64C3FF] bg-[#0B4872] text-white"
-            : "border-l-4 border-l-transparent hover:bg-[#353535]"
-        }`}
+            ? "border-l-tree-node-selected-border bg-tree-node-selected-background text-tree-node-selected-foreground"
+            : "border-l-tree-node-border hover:bg-tree-node-hover-background",
+        )}
         // onClick={isLeaf ? () => onSelect(node.id) : undefined}
         onClick={() => onSelect(node.id)}
       >
@@ -33,11 +35,11 @@ export default function TreeNode({
           <span>
             {hasChildren && (
               <ChevronRight
-                color="#64C3FF"
                 size={16}
-                className={`transition-transform duration-200 ${
-                  isExpanded ? "rotate-90" : ""
-                }`}
+                className={cn(
+                  "text-tree-expander transition-transform duration-200 hover:tree-expander-hover",
+                  isExpanded && "rotate-90",
+                )}
                 onClick={(e) => {
                   e.stopPropagation();
                   onToggle(node.id);
@@ -48,7 +50,9 @@ export default function TreeNode({
 
           {node.image}
 
-          <span className="truncate text-sm">{node.label}</span>
+          <span className="truncate text-sm text-tree-node-foreground">
+            {node.label}
+          </span>
         </div>
       </button>
 
