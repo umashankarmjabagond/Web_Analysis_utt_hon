@@ -307,8 +307,8 @@
   --button-success-outline-active-background: #68d56033;
 
   /* Warning - Solid */
-  --button-warning-solid-background: var(----warning);
-  --button-warning-solid-border: var(----warning);
+  --button-warning-solid-background: var(--warning);
+  --button-warning-solid-border: var(--warning);
   --button-warning-solid-foreground: var(--foreground-inverse-secondary);
 
   --button-warning-solid-hover-background: var(--yellow-200);
@@ -319,8 +319,8 @@
 
   /* Warning - Outline */
   --button-warning-outline-background: var(--surface-elevated);
-  --button-warning-outline-border: var(----warning);
-  --button-warning-outline-foreground: var(----warning);
+  --button-warning-outline-border: var(--warning);
+  --button-warning-outline-foreground: var(--warning);
 
   --button-warning-outline-hover-background: #ffdb421a;
   --button-warning-outline-active-background: #ffdb4233;
@@ -472,13 +472,13 @@
   --badge-success-outline-foreground: var(--success);
 
   /* Warning */
-  --badge-warning-solid-background: var(----warning);
-  --badge-warning-solid-border: var(----warning);
+  --badge-warning-solid-background: var(--warning);
+  --badge-warning-solid-border: var(--warning);
   --badge-warning-solid-foreground: var(--foreground-inverse-secondary);
 
   --badge-warning-outline-background: transparent;
-  --badge-warning-outline-border: var(----warning);
-  --badge-warning-outline-foreground: var(----warning);
+  --badge-warning-outline-border: var(--warning);
+  --badge-warning-outline-foreground: var(--warning);
 
   /* Danger */
   --badge-danger-solid-background: var(--danger);
@@ -557,7 +557,7 @@
   --toast-border: var(--border-default);
   --toast-foreground: var(--foreground);
 
-  --toast-shadow: var(--black-100);
+  --toast-shadow: var(--shadow-600);
 
   /* Info */
   --toast-info-background: var(--surface-card);
@@ -571,7 +571,7 @@
 
   /* Warning */
   --toast-warning-background: var(--surface-card);
-  --toast-warning-border: var(----warning);
+  --toast-warning-border: var(--warning);
   --toast-warning-foreground: var(--foreground);
 
   /* Danger */
@@ -669,7 +669,7 @@
 
   /* Chart */
   --chart-success: var(--success);
-  --chart-warning: var(----warning);
+  --chart-warning: var(--warning);
   --chart-danger: var(--danger);
   --chart-info: var(--info);
 
