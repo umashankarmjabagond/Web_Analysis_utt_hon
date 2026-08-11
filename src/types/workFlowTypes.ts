@@ -100,7 +100,7 @@ export interface WorkflowSection {
 export interface WorkflowNodeData extends Record<string, unknown> {
   label: string;
   element: BackendElement;
-  icon?: LucideIcon;
+  catalogId?: string;
 }
 
 export type WorkflowNode = Node<WorkflowNodeData>;
