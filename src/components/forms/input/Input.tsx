@@ -75,6 +75,7 @@ const Input: React.FC<InputProps> = ({
             ${error ? variants.error : variants.default}
             ${className}
           `}
+          style={{ background: "#272727" }}
           {...props}
         />
 
