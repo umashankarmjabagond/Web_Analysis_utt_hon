@@ -76,7 +76,7 @@ const Table = <T extends object>({
     "flex h-8 w-8 items-center justify-center",
     "rounded-sm border",
     "border-table-grid-border",
-    "bg-table-row-odd-background",
+    "bg-table-background",
     "text-sm text-table-row-foreground",
     "transition-colors",
     "hover:bg-table-row-hover-background",
@@ -90,9 +90,9 @@ const Table = <T extends object>({
   return (
     <div
       className={cn(
-        "w-full overflow-auto rounded-sm border",
-        "border-table-grid-border",
-        "bg-table-row-odd-background",
+        "w-full overflow-auto rounded-lg border",
+        "border-table-border",
+        "bg-table-background",
         className,
       )}
     >
@@ -130,7 +130,7 @@ const Table = <T extends object>({
       <table
         className={cn("w-full table-fixed border-collapse", tableClassName)}
       >
-        <thead className="bg-[var(--color-table-header)]">
+        <thead>
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
@@ -237,7 +237,7 @@ const Table = <T extends object>({
                 className={cn(
                   "border px-4 py-6 text-center",
                   "border-table-grid-border",
-                  "bg-table-row-odd-background",
+                  "bg-table-background",
                   "text-table-row-foreground",
                 )}
               >
@@ -250,11 +250,6 @@ const Table = <T extends object>({
                 key={row.id}
                 className={cn(
                   "transition-colors",
-                  zebraStripes
-                    ? rowIndex % 2 === 0
-                      ? "bg-table-row-odd-background"
-                      : "bg-table-row-even-background"
-                    : "bg-table-row-odd-background",
                   "hover:bg-table-row-hover-background",
                 )}
               >
@@ -278,14 +273,7 @@ const Table = <T extends object>({
 
       {/* ---------------- Pagination ---------------- */}
       {pagination && (
-        <div
-          className="
-            flex items-center justify-between
-            border-t px-3 py-3
-            border-table-header-border
-            bg-table-header-background
-          "
-        >
+        <div className="flex items-center justify-between border-t px-3 py-3 border-table-header-border bg-table-background">
           {/* Left */}
           <div className="flex items-center gap-2">
             {/* <select

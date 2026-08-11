@@ -105,7 +105,6 @@
   --info: var(--blue-200);
 
   /* Shadow */
-
   --shadow-100: 0 1px 2px rgb(0 0 0 / 0.05); /* Extra Small */
   --shadow-200:
     0 1px 3px rgb(0 0 0 / 0.1), 0 1px 2px rgb(0 0 0 / 0.06); /* Small */
@@ -446,10 +445,14 @@
 
   /* Table */
 
+  /* Table */
+  --table-background: var(--background);
+  --table-border: var(--border-default);
+
   /* Header */
-  --table-header-background: var(--surface-secondary);
-  --table-header-border: var(--border-default);
-  --table-header-foreground: var(--foreground);
+  --table-header-background: transparent;
+  --table-header-border: var(--border-separator);
+  --table-header-foreground: var(--foreground-tertiary);
 
   /* Rows */
   --table-row-odd-background: var(--surface);
@@ -508,7 +511,7 @@
   --badge-info-solid-border: var(--info);
   --badge-info-solid-foreground: var(--foreground-inverse-secondary);
 
-  --badge-info-outline-background: transparent;
+  --badge-info-outline-background: var(--surface-elevated);
   --badge-info-outline-border: var(--info);
   --badge-info-outline-foreground: var(--info);
 
@@ -517,7 +520,7 @@
   --badge-success-solid-border: var(--success);
   --badge-success-solid-foreground: var(--foreground-inverse);
 
-  --badge-success-outline-background: transparent;
+  --badge-success-outline-background: var(--surface-elevated);
   --badge-success-outline-border: var(--success);
   --badge-success-outline-foreground: var(--success);
 
@@ -526,7 +529,7 @@
   --badge-warning-solid-border: var(--warning);
   --badge-warning-solid-foreground: var(--foreground-inverse-secondary);
 
-  --badge-warning-outline-background: transparent;
+  --badge-warning-outline-background: var(--surface-elevated);
   --badge-warning-outline-border: var(--warning);
   --badge-warning-outline-foreground: var(--warning);
 
@@ -535,7 +538,7 @@
   --badge-danger-solid-border: var(--danger);
   --badge-danger-solid-foreground: var(--foreground-inverse);
 
-  --badge-danger-outline-background: transparent;
+  --badge-danger-outline-background: var(--surface-elevated);
   --badge-danger-outline-border: var(--danger);
   --badge-danger-outline-foreground: var(--danger);
 
@@ -706,7 +709,6 @@
   --breadcrumb-focus-ring: var(--focus-ring);
 
   /* Card */
-
   --card-background: var(--surface-card);
   --card-border: var(--border-default);
 
@@ -719,6 +721,12 @@
   --card-focus-ring: var(--focus-ring);
 
   --card-disabled-foreground: var(--foreground-disabled);
+
+  /* Stat Card */
+  --stat-card-background: var(--surface-elevated);
+  --stat-card-border: var(--border-surface);
+  --stat-card-foreground: var(--foreground);
+  --stat-card-foreground-secondary: var(--foreground-secondary);
 
   /* Drawer */
 
@@ -752,8 +760,8 @@
   --scrollbar-default-thumb-hover: var(--gray-250); /* #bdbdbd */
 
   /* Table Scrollbar */
-
   --scrollbar-table-track: #00000005;
+  --scrollbar-table-border: #00000012;
   --scrollbar-table-thumb: var(--gray-700); /* #606060 */
   --scrollbar-table-thumb-hover: var(--gray-900); /* #4a4a4a */
 }
@@ -1180,14 +1188,13 @@
   --color-dropdown-icon-selected: var(--dropdown-icon-selected);
   --color-dropdown-icon-disabled: var(--dropdown-icon-disabled);
 
-  /* Table */
+  --color-table-background: var(--table-background);
+  --color-table-border: var(--table-border);
 
-  /* Header */
   --color-table-header-background: var(--table-header-background);
   --color-table-header-border: var(--table-header-border);
   --color-table-header-foreground: var(--table-header-foreground);
 
-  /* Rows */
   --color-table-row-odd-background: var(--table-row-odd-background);
   --color-table-row-even-background: var(--table-row-even-background);
   --color-table-row-hover-background: var(--table-row-hover-background);
@@ -1196,16 +1203,12 @@
   --color-table-row-foreground: var(--table-row-foreground);
   --color-table-row-selected-foreground: var(--table-row-selected-foreground);
 
-  /* Grid */
   --color-table-grid-border: var(--table-grid-border);
 
-  /* Focus */
   --color-table-focus-ring: var(--table-focus-ring);
 
-  /* Sticky Header */
   --color-table-sticky-background: var(--table-sticky-background);
 
-  /* Sort */
   --color-table-sort-icon: var(--table-sort-icon);
   --color-table-sort-icon-active: var(--table-sort-icon-active);
 
@@ -1479,7 +1482,6 @@
   --color-breadcrumb-focus-ring: var(--breadcrumb-focus-ring);
 
   /* Card */
-
   --color-card-background: var(--card-background);
   --color-card-border: var(--card-border);
 
@@ -1492,6 +1494,12 @@
   --color-card-focus-ring: var(--card-focus-ring);
 
   --color-card-disabled-foreground: var(--card-disabled-foreground);
+
+  /* Stat Card */
+  --color-stat-card-background: var(--stat-card-background);
+  --color-stat-card-border: var(--stat-card-border);
+  --color-stat-card-foreground: var(--stat-card-foreground);
+  --color-stat-card-foreground-secondary: var(--stat-card-foreground-secondary);
 
   /* Drawer */
 
@@ -1518,12 +1526,12 @@
   --color-chart-info: var(--chart-info);
 
   /* Scrollbar */
-
   --color-scrollbar-default-track: var(--scrollbar-default-track);
   --color-scrollbar-default-thumb: var(--scrollbar-default-thumb);
   --color-scrollbar-default-thumb-hover: var(--scrollbar-default-thumb-hover);
 
   --color-scrollbar-table-track: var(--scrollbar-table-track);
+  --color-scrollbar-table-border: var(--scrollbar-table-border);
   --color-scrollbar-table-thumb: var(--scrollbar-table-thumb);
   --color-scrollbar-table-thumb-hover: var(--scrollbar-table-thumb-hover);
 }

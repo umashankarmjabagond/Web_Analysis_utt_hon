@@ -1,3 +1,5 @@
+import Badge from "../../components/common/badge/Badge";
+import Select from "../../components/forms/select/Select";
 import TableCard from "../../components/tables/TableCard";
 import type {
   StatCardData,
@@ -5,9 +7,9 @@ import type {
   WarningRow,
 } from "../../types/dashboardTypes";
 import StatCard from "./components/StatCard";
-
 import { createColumnHelper } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
+
 const statCards: StatCardData[] = [
   {
     title: "TOTAL UNITS",
@@ -294,22 +296,25 @@ const statusColumns = [
     header: "Good",
 
     cell: ({ getValue }) => (
-      <div className="flex justify-center">
-        <span
-          className="
-            rounded-full
-            border
-            border-[var(--color-success)]
-            px-3
-            py-1
-            text-xs
-            font-semibold
-            text-[var(--color-success)]
-          "
-        >
-          {getValue()}
-        </span>
-      </div>
+      <Badge
+        variant="success"
+        fill="outline"
+        className="bg-transparent px-3 py-1"
+      >
+        {getValue()}
+      </Badge>
+      // <div className="flex justify-center">
+      //   <span
+      //     className={cn(
+      //       "rounded-full border",
+      //       "border-success text-success",
+      //       "px-3 py-1",
+      //       "text-xs font-semibold",
+      //     )}
+      //   >
+      //     {getValue()}
+      //   </span>
+      // </div>
     ),
   }),
 
@@ -317,22 +322,25 @@ const statusColumns = [
     header: "Warnings",
 
     cell: ({ getValue }) => (
-      <div className="flex justify-center">
-        <span
-          className="
-            rounded-full
-            border
-            border-[var(--color-warning)]
-            px-3
-            py-1
-            text-xs
-            font-semibold
-            text-[var(--color-warning)]
-          "
-        >
-          {getValue()}
-        </span>
-      </div>
+      <Badge
+        variant="warning"
+        fill="outline"
+        className="bg-transparent px-3 py-1"
+      >
+        {getValue()}
+      </Badge>
+      // <div className="flex justify-center">
+      //   <span
+      //     className={cn(
+      //       "rounded-full border",
+      //       "border-warning text-warning",
+      //       "px-3 py-1",
+      //       "text-xs font-semibold",
+      //     )}
+      //   >
+      //     {getValue()}
+      //   </span>
+      // </div>
     ),
   }),
 
@@ -340,22 +348,25 @@ const statusColumns = [
     header: "Errors",
 
     cell: ({ getValue }) => (
-      <div className="flex justify-center">
-        <span
-          className="
-            rounded-full
-            border
-            border-[var(--color-danger)]
-            px-3
-            py-1
-            text-xs
-            font-semibold
-            text-[var(--color-danger)]
-          "
-        >
-          {getValue()}
-        </span>
-      </div>
+      <Badge
+        variant="danger"
+        fill="outline"
+        className="bg-transparent px-3 py-1"
+      >
+        {getValue()}
+      </Badge>
+      // <div className="flex justify-center">
+      //   <span
+      //     className={cn(
+      //       "rounded-full border",
+      //       "border-danger text-danger",
+      //       "px-3 py-1",
+      //       "text-xs font-semibold",
+      //     )}
+      //   >
+      //     {getValue()}
+      //   </span>
+      // </div>
     ),
   }),
 ];
@@ -379,13 +390,7 @@ const warningColumns = [
     header: "Controller Name",
 
     cell: ({ getValue }) => (
-      <span
-        className="
-          text-[var(--color-primary)]
-        "
-      >
-        {getValue()}
-      </span>
+      <span className="text-foreground-accent">{getValue()}</span>
     ),
   }),
 
@@ -401,27 +406,19 @@ const warningColumns = [
 export default function Dashboard() {
   const { t } = useTranslation();
   return (
-    <div
-      className="
-      h-full overflow-y-auto
-    mx-auto
-    w-full
-    min-h-[938px]
-    rounded-[2px]
-    bg-[#272727]
-    p-4
-    md:p-6
-    text-white
-  "
-    >
+    <div className="h-full overflow-y-auto mx-auto w-full min-h-[938px] rounded-xs bg-surface p-4 md:p-6">
       <div className="flex items-center gap-3 w-full">
-        <h1 className="text-lg font-semibold tracking-wide">
+        <h1 className="text-lg font-semibold tracking-wide text-foreground-secondary">
           {t("DASHBOARD_POWER_BOILER")}
         </h1>
 
-        <span className="rounded-full border border-sky-500 px-2 py-0.5 text-xs font-medium text-sky-400">
+        <Badge
+          variant="info"
+          fill="outline"
+          className="px-2 py-1 text-xs font-medium h-6 rounded-2xl"
+        >
           {t("DASHBOARD_AREA")}
-        </span>
+        </Badge>
       </div>
 
       <div className="mt-4 flex flex-col gap-4 xl:flex-row">
@@ -437,7 +434,7 @@ export default function Dashboard() {
             columns={statusColumns}
             data={statusData}
             height="h-[344px]"
-            border="border-[var(--color-button-text-primary)]"
+            border="border-surface"
             headerActions={<></>}
           />
         </div>
@@ -452,76 +449,40 @@ export default function Dashboard() {
           headerActions={
             <>
               {/* Attribute Filter */}
-              <div className="flex h-[28px] w-[270px] items-center gap-9">
-                <label
-                  className="
-          w-[37px]
-          text-[13px]
-          leading-[20px]
-          font-semibold
-          whitespace-nowrap
-          text-[var(--text-text-primary)]
-        "
-                >
+              <div className="flex h-7 w-[270px] items-center gap-4">
+                <label className="w-[77px] shrink-0 whitespace-nowrap text-[13px] font-semibold leading-5 text-foreground">
                   Attributes
                 </label>
 
-                <select
-                  className="
-          h-[28px]
-          w-[217px]
-          rounded-[4px]
-          border
-          border-[var(--component-card-border)]
-          bg-[var(--background-primary-container)]
-          px-2
-          text-[12px]
-          leading-[20px]
-          text-[var(--text-text-primary)]
-          outline-none
-        "
-                >
-                  <option>All</option>
-                  <option>Data Source</option>
-                  <option>Data Sink</option>
-                  <option>Valve Stiction</option>
-                </select>
+                <Select
+                  value="All"
+                  onChange={() => {}}
+                  options={[
+                    { value: "All", label: "All" },
+                    { value: "Data Source", label: "Data Source" },
+                    { value: "Data Sink", label: "Data Sink" },
+                    { value: "Valve Stiction", label: "Valve Stiction" },
+                  ]}
+                  className="h-7 w-[177px] text-xs"
+                />
               </div>
 
               {/* Type Filter */}
-
-              <div className="flex h-[28px] w-[270px] items-center gap-3">
-                <label
-                  className="
-          w-[37px]
-          text-[12px]
-          font-semibold
-          leading-[20px]
-          whitespace-nowrap
-          text-[var(--text-text-primary)]
-        "
-                >
+              <div className="flex h-7 w-[270px] items-center gap-4">
+                <label className="w-[37px] shrink-0 whitespace-nowrap text-xs font-semibold leading-5 text-foreground">
                   Type
                 </label>
 
-                <select
-                  className="
-          h-[28px]
-          w-[217px]
-          rounded-[4px]
-          border
-          border-[var(--component-card-border)]
-          bg-[var(--background-primary-container)]
-          px-2
-          text-[12px]
-          text-[var(--text-text-primary)]
-          outline-none
-        "
-                >
-                  <option>All</option>
-                  <option>Regulatory</option>
-                  <option>MPC</option>
-                </select>
+                <Select
+                  value="All"
+                  onChange={() => {}}
+                  options={[
+                    { value: "All", label: "All" },
+                    { value: "Regulatory", label: "Regulatory" },
+                    { value: "MPC", label: "MPC" },
+                  ]}
+                  className="h-7 w-[217px] text-xs"
+                />
               </div>
             </>
           }

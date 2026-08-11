@@ -47,7 +47,7 @@ function TableCard<T extends object>({
       </div>
 
       {/* Table */}
-      <div className="min-h-0 flex-1 overflow-y-auto">
+      <div className="min-h-0 flex-1 overflow-y-auto table-scrollbar">
         <Table<T> columns={columns} data={data} stickyHeader zebraStripes />
       </div>
     </div>

@@ -53,11 +53,11 @@ const sizes: Record<BadgeSize, string> = {
 
 const typeStyles: Record<BadgeType, string> = {
   categorical: "uppercase",
-  numeric: "h-5 min-w-5 px-1.5 text-[11px] font-bold text-[12px]",
+  numeric: "h-5 min-w-5 px-1.5 text-[11px] font-bold text-xs",
 };
 
 const baseStyles =
-  "inline-flex items-center justify-center gap-1 rounded-full font-medium whitespace-nowrap";
+  "inline-flex items-center justify-center gap-1 rounded-full border font-medium whitespace-nowrap";
 
 export default function Badge({
   type = "categorical",

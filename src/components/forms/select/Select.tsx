@@ -7,15 +7,15 @@ const selectVariants = {
   default: cn(
     "border-select-border",
     "hover:border-select-hover-border",
-    "focus:border-select-focus-border",
-    "focus:ring-1 focus:ring-select-focus-ring",
+    // "focus:border-select-focus-border",
+    // "focus:ring-1 focus:ring-select-focus-ring",
   ),
 
   error: cn(
     "border-select-error-border",
     "hover:border-select-error-border",
-    "focus:border-select-error-border",
-    "focus:ring-1 focus:ring-select-error-ring",
+    // "focus:border-select-error-border",
+    // "focus:ring-1 focus:ring-select-error-ring",
   ),
 
   disabled: cn(
@@ -41,13 +41,16 @@ const Select: React.FC<SelectProps> = ({
 
   return (
     <div
-      className={cn("relative flex flex-col gap-1.5", fullWidth && "w-full")}
+      className={cn(
+        "relative flex shrink-0 flex-col gap-1.5",
+        fullWidth && "w-full",
+      )}
     >
       {label && (
         <label className="text-sm font-medium text-foreground">{label}</label>
       )}
 
-      <div className="relative">
+      <div className="relative min-w-0">
         <select
           className={cn(
             "h-8 appearance-none rounded-sm border",
