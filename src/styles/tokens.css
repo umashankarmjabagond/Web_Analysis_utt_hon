@@ -452,30 +452,45 @@
   --table-header-foreground: var(--foreground);
 
   /* Rows */
-  --table-row-odd: var(--surface);
-  --table-row-even: var(--surface-card);
-
+  --table-row-odd-background: var(--surface);
+  --table-row-even-background: var(--surface-card);
   --table-row-hover-background: var(--surface-hover);
   --table-row-selected-background: var(--selection-background);
 
   --table-row-foreground: var(--foreground);
   --table-row-selected-foreground: var(--foreground-strong);
 
-  /* Cell */
-  --table-cell-border: var(--border-separator);
-
-  /* Resize / Grid */
-  --table-grid-border: var(--border-default);
+  /* Grid */
+  --table-grid-border: var(--border-separator);
 
   /* Focus */
   --table-focus-ring: var(--focus-ring);
 
-  /* Sticky */
+  /* Sticky Header */
   --table-sticky-background: var(--surface);
 
   /* Sort */
   --table-sort-icon: var(--foreground-disabled);
   --table-sort-icon-active: var(--foreground-accent);
+
+  /* Spreadsheet */
+  --spreadsheet-header-background: var(--surface);
+  --spreadsheet-header-border: var(--border-default);
+  --spreadsheet-header-foreground: var(--foreground-secondary);
+
+  --spreadsheet-cell-background: var(--surface-elevated);
+  --spreadsheet-cell-border: var(--border-default);
+  --spreadsheet-cell-foreground: var(--foreground-secondary);
+
+  --spreadsheet-row-background: var(--spreadsheet-cell-background);
+  --spreadsheet-row-hover-background: var(--surface-hover);
+
+  --spreadsheet-row-number-background: var(--surface);
+  --spreadsheet-row-number-border: var(--border-default);
+  --spreadsheet-row-number-foreground: var(--foreground-secondary);
+
+  --spreadsheet-cell-focus-background: var(--surface-hover);
+  --spreadsheet-cell-focus-border: var(--focus-ring);
 
   /* Badge */
 
@@ -1173,30 +1188,53 @@
   --color-table-header-foreground: var(--table-header-foreground);
 
   /* Rows */
-  --color-table-row-odd: var(--table-row-odd);
-  --color-table-row-even: var(--table-row-even);
-
+  --color-table-row-odd-background: var(--table-row-odd-background);
+  --color-table-row-even-background: var(--table-row-even-background);
   --color-table-row-hover-background: var(--table-row-hover-background);
   --color-table-row-selected-background: var(--table-row-selected-background);
 
   --color-table-row-foreground: var(--table-row-foreground);
   --color-table-row-selected-foreground: var(--table-row-selected-foreground);
 
-  /* Cell */
-  --color-table-cell-border: var(--table-cell-border);
-
-  /* Resize / Grid */
+  /* Grid */
   --color-table-grid-border: var(--table-grid-border);
 
   /* Focus */
   --color-table-focus-ring: var(--table-focus-ring);
 
-  /* Sticky */
+  /* Sticky Header */
   --color-table-sticky-background: var(--table-sticky-background);
 
   /* Sort */
   --color-table-sort-icon: var(--table-sort-icon);
   --color-table-sort-icon-active: var(--table-sort-icon-active);
+
+  /* Spreadsheet */
+  --color-spreadsheet-header-background: var(--spreadsheet-header-background);
+  --color-spreadsheet-header-border: var(--spreadsheet-header-border);
+  --color-spreadsheet-header-foreground: var(--spreadsheet-header-foreground);
+
+  --color-spreadsheet-cell-background: var(--spreadsheet-cell-background);
+  --color-spreadsheet-cell-border: var(--spreadsheet-cell-border);
+  --color-spreadsheet-cell-foreground: var(--spreadsheet-cell-foreground);
+
+  --color-spreadsheet-row-background: var(--spreadsheet-row-background);
+  --color-spreadsheet-row-hover-background: var(
+    --spreadsheet-row-hover-background
+  );
+
+  --color-spreadsheet-row-number-background: var(
+    --spreadsheet-row-number-background
+  );
+  --color-spreadsheet-row-number-border: var(--spreadsheet-row-number-border);
+  --color-spreadsheet-row-number-foreground: var(
+    --spreadsheet-row-number-foreground
+  );
+
+  --color-spreadsheet-cell-focus-background: var(
+    --spreadsheet-cell-focus-background
+  );
+  --color-spreadsheet-cell-focus-border: var(--spreadsheet-cell-focus-border);
 
   /* Badge */
 

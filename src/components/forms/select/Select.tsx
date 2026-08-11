@@ -40,14 +40,18 @@ const Select: React.FC<SelectProps> = ({
   const variant = props.disabled ? "disabled" : error ? "error" : "default";
 
   return (
-    <div className={cn("flex flex-col gap-1.5", fullWidth && "w-full")}>
+    <div
+      className={cn("relative flex flex-col gap-1.5", fullWidth && "w-full")}
+    >
       {label && (
         <label className="text-sm font-medium text-foreground">{label}</label>
       )}
+
       <div className="relative">
         <select
           className={cn(
-            "h-8 w-full appearance-none rounded-sm border",
+            "h-8 appearance-none rounded-sm border",
+            fullWidth ? "w-full" : "w-auto",
             "bg-select-background px-2.5 pr-8",
             "text-sm font-normal text-select-foreground",
             "outline-none transition-colors",
