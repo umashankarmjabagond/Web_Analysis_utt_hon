@@ -284,15 +284,26 @@
   --button-primary-outline-active-border: var(--border-accent);
 
   /* Secondary */
-  --button-secondary-background: var(--surface-secondary);
-  --button-secondary-border: var(--border-emphasis);
+  --button-secondary-background: var(--surface-elevated); /* #404040 */
+  --button-secondary-border: var(--border-accent); /* #64C3FF */
   --button-secondary-foreground: var(--foreground-tertiary);
 
   --button-secondary-hover-background: var(--surface-muted);
-  --button-secondary-hover-border: var(--border-strong);
+  --button-secondary-hover-border: var(--border-accent);
 
   --button-secondary-active-background: var(--surface-control);
-  --button-secondary-active-border: var(--border-strong);
+  --button-secondary-active-border: var(--border-accent);
+
+  /* Secondary - Outline */
+  --button-secondary-outline-background: transparent;
+  --button-secondary-outline-border: var(--border-accent);
+  --button-secondary-outline-foreground: var(--foreground-accent);
+
+  --button-secondary-outline-hover-background: var(--surface-hover);
+  --button-secondary-outline-hover-border: var(--border-accent);
+
+  --button-secondary-outline-active-background: var(--surface-secondary);
+  --button-secondary-outline-active-border: var(--border-accent);
 
   /* Success - Solid */
   --button-success-solid-background: var(--success);
@@ -910,7 +921,7 @@
     --button-primary-outline-active-border
   );
 
-  /* Secondary */
+  /* Secondary Solid*/
   --color-button-secondary-background: var(--button-secondary-background);
   --color-button-secondary-border: var(--button-secondary-border);
   --color-button-secondary-foreground: var(--button-secondary-foreground);
@@ -924,6 +935,31 @@
     --button-secondary-active-background
   );
   --color-button-secondary-active-border: var(--button-secondary-active-border);
+
+  /* Secondary - Outline */
+  --color-button-secondary-outline-background: var(
+    --button-secondary-outline-background
+  );
+  --color-button-secondary-outline-border: var(
+    --button-secondary-outline-border
+  );
+  --color-button-secondary-outline-foreground: var(
+    --button-secondary-outline-foreground
+  );
+
+  --color-button-secondary-outline-hover-background: var(
+    --button-secondary-outline-hover-background
+  );
+  --color-button-secondary-outline-hover-border: var(
+    --button-secondary-outline-hover-border
+  );
+
+  --color-button-secondary-outline-active-background: var(
+    --button-secondary-outline-active-background
+  );
+  --color-button-secondary-outline-active-border: var(
+    --button-secondary-outline-active-border
+  );
 
   /* Success - Solid */
   --color-button-success-solid-background: var(
