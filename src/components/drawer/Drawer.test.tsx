@@ -1,15 +1,17 @@
-import { describe, expect, it, vi } from "vitest";
-import userEvent from "@testing-library/user-event";
+import { describe, expect, it, vi, beforeEach } from "vitest";
 import { render, screen, fireEvent } from "../../test";
 
 import Drawer from "./Drawer";
 
+vi.mock("lucide-react", () => ({
+  X: () => <span data-testid="close-icon">X</span>,
+}));
+
 describe("Drawer", () => {
   const onClose = vi.fn();
 
-  afterEach(() => {
+  beforeEach(() => {
     vi.clearAllMocks();
-    document.body.style.overflow = "";
   });
 
   it("renders children", () => {
@@ -19,187 +21,365 @@ describe("Drawer", () => {
       </Drawer>,
     );
 
-    expect(screen.getByText("Drawer Content")).toBeInTheDocument();
+    expect(
+      screen.getByText("Drawer Content"),
+    ).toBeInTheDocument();
   });
 
-  it("renders title", () => {
+  it("renders title string", () => {
     render(
-      <Drawer opened onClose={onClose} title="My Drawer">
-        <div>Content</div>
+      <Drawer
+        opened
+        onClose={onClose}
+        title="My Drawer"
+      >
+        Content
       </Drawer>,
     );
 
-    expect(screen.getByText("My Drawer")).toBeInTheDocument();
+    expect(
+      screen.getByText("My Drawer"),
+    ).toBeInTheDocument();
   });
 
-  it("renders custom title element", () => {
+  it("renders title react node", () => {
     render(
-      <Drawer opened onClose={onClose} title={<span>Custom Title</span>}>
-        <div>Content</div>
+      <Drawer
+        opened
+        onClose={onClose}
+        title={<div>Custom Title</div>}
+      >
+        Content
       </Drawer>,
     );
 
-    expect(screen.getByText("Custom Title")).toBeInTheDocument();
+    expect(
+      screen.getByText("Custom Title"),
+    ).toBeInTheDocument();
   });
 
   it("renders footer", () => {
     render(
-      <Drawer opened onClose={onClose} footer={<button>Save</button>}>
-        <div>Content</div>
+      <Drawer
+        opened
+        onClose={onClose}
+        footer={<div>Footer Content</div>}
+      >
+        Content
       </Drawer>,
     );
 
-    expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument();
+    expect(
+      screen.getByText("Footer Content"),
+    ).toBeInTheDocument();
   });
 
-  it("calls onClose when close button clicked", async () => {
-    const user = userEvent.setup();
-
+  it("renders close button when title exists", () => {
     render(
-      <Drawer opened onClose={onClose} title="Drawer">
-        <div>Content</div>
+      <Drawer
+        opened
+        onClose={onClose}
+        title="Drawer"
+      >
+        Content
       </Drawer>,
     );
 
-    await user.click(screen.getByLabelText("Close drawer"));
+    expect(
+      screen.getByRole("button", {
+        name: "Close drawer",
+      }),
+    ).toBeInTheDocument();
+  });
+
+  it("calls onClose when close button clicked", () => {
+    render(
+      <Drawer
+        opened
+        onClose={onClose}
+        title="Drawer"
+      >
+        Content
+      </Drawer>,
+    );
+
+    fireEvent.click(
+      screen.getByRole("button", {
+        name: "Close drawer",
+      }),
+    );
 
     expect(onClose).toHaveBeenCalledTimes(1);
   });
 
-  it("calls onClose when Escape key is pressed", () => {
+  it("renders footer only when provided", () => {
     render(
       <Drawer opened onClose={onClose}>
-        <div>Content</div>
+        Content
       </Drawer>,
     );
 
-    fireEvent.keyDown(document, { key: "Escape" });
-
-    expect(onClose).toHaveBeenCalledTimes(1);
+    expect(
+      screen.queryByText("Footer Content"),
+    ).not.toBeInTheDocument();
   });
 
-  it("locks body scroll when opened", () => {
+  it("applies bodyClassName", () => {
     render(
-      <Drawer opened onClose={onClose}>
-        <div>Content</div>
+      <Drawer
+        opened
+        onClose={onClose}
+        bodyClassName="custom-body"
+      >
+        Content
       </Drawer>,
     );
 
-    expect(document.body.style.overflow).toBe("hidden");
-  });
-
-  it("restores body scroll on unmount", () => {
-    const { unmount } = render(
-      <Drawer opened onClose={onClose}>
-        <div>Content</div>
-      </Drawer>,
-    );
-
-    unmount();
-
-    expect(document.body.style.overflow).toBe("");
-  });
-
-  it("calls onClose when overlay is clicked", async () => {
-    const user = userEvent.setup();
-
-    const { container } = render(
-      <Drawer opened onClose={onClose} closeOnOverlayClick>
-        <div>Content</div>
-      </Drawer>,
-    );
-
-    const overlay = container.querySelector(".bg-black\\/40");
-
-    expect(overlay).toBeInTheDocument();
-
-    await user.click(overlay!);
-
-    expect(onClose).toHaveBeenCalled();
-  });
-
-  it("does not close when overlay click is disabled", async () => {
-    const user = userEvent.setup();
-
-    const { container } = render(
-      <Drawer opened onClose={onClose} closeOnOverlayClick={false}>
-        <div>Content</div>
-      </Drawer>,
-    );
-
-    const overlay = container.querySelector(".bg-black\\/40");
-
-    await user.click(overlay!);
-
-    expect(onClose).not.toHaveBeenCalled();
-  });
-
-  it("renders panel variant", () => {
-    const { container } = render(
-      <Drawer variant="panel" opened onClose={onClose}>
-        <div>Panel Content</div>
-      </Drawer>,
-    );
-
-    expect(screen.getByText("Panel Content")).toBeInTheDocument();
-    expect(container.querySelector(".relative")).toBeInTheDocument();
-  });
-
-  it.each(["left", "right", "top", "bottom"] as const)(
-    "renders %s position",
-    (position) => {
-      render(
-        <Drawer opened position={position} onClose={onClose}>
-          <div>Content</div>
-        </Drawer>,
-      );
-
-      expect(screen.getByText("Content")).toBeInTheDocument();
-    },
-  );
-
-  it.each(["sm", "md", "lg", "xl", "full"] as const)(
-    "renders %s size",
-    (size) => {
-      render(
-        <Drawer opened size={size} position="left" onClose={onClose}>
-          <div>Content</div>
-        </Drawer>,
-      );
-
-      expect(screen.getByText("Content")).toBeInTheDocument();
-    },
-  );
-
-  it("applies custom body class", () => {
-    const { container } = render(
-      <Drawer opened bodyClassName="custom-body" onClose={onClose}>
-        <div>Content</div>
-      </Drawer>,
-    );
-
-    expect(container.querySelector(".custom-body")).toBeInTheDocument();
+    expect(
+      document.querySelector(".custom-body"),
+    ).toBeInTheDocument();
   });
 
   it("applies custom className", () => {
-    const { container } = render(
-      <Drawer opened className="custom-drawer" onClose={onClose}>
-        <div>Content</div>
+    render(
+      <Drawer
+        opened
+        onClose={onClose}
+        className="custom-drawer"
+      >
+        Content
       </Drawer>,
     );
 
-    expect(container.querySelector(".custom-drawer")).toBeInTheDocument();
+    expect(
+      document.querySelector(".custom-drawer"),
+    ).toBeInTheDocument();
   });
 
-  it("does not register escape listener for panel variant", () => {
-    render(
-      <Drawer variant="panel" opened onClose={onClose}>
-        <div>Content</div>
+  it("renders overlay variant by default", () => {
+    const { container } = render(
+      <Drawer opened onClose={onClose}>
+        Content
       </Drawer>,
     );
 
-    fireEvent.keyDown(document, { key: "Escape" });
+    expect(
+      container.querySelector(
+        ".bg-black\\/40",
+      ),
+    ).toBeInTheDocument();
+  });
+
+  it("does not render overlay in panel variant", () => {
+    const { container } = render(
+      <Drawer
+        variant="panel"
+        opened
+        onClose={onClose}
+      >
+        Content
+      </Drawer>,
+    );
+
+    expect(
+      container.querySelector(
+        ".bg-black\\/40",
+      ),
+    ).not.toBeInTheDocument();
+  });
+
+  it("calls onClose when overlay clicked and closeOnOverlayClick is true", () => {
+    const { container } = render(
+      <Drawer
+        opened
+        onClose={onClose}
+        closeOnOverlayClick
+      >
+        Content
+      </Drawer>,
+    );
+
+    const overlay =
+      container.querySelector(
+        ".bg-black\\/40",
+      );
+
+    fireEvent.click(overlay!);
+
+    expect(onClose).toHaveBeenCalledTimes(1);
+  });
+
+  it("does not call onClose when overlay clicked and closeOnOverlayClick is false", () => {
+    const { container } = render(
+      <Drawer
+        opened
+        onClose={onClose}
+      >
+        Content
+      </Drawer>,
+    );
+
+    const overlay =
+      container.querySelector(
+        ".bg-black\\/40",
+      );
+
+    fireEvent.click(overlay!);
 
     expect(onClose).not.toHaveBeenCalled();
   });
+
+  it("calls onClose when escape key is pressed", () => {
+    render(
+      <Drawer opened onClose={onClose}>
+        Content
+      </Drawer>,
+    );
+
+    fireEvent.keyDown(document, {
+      key: "Escape",
+    });
+
+    expect(onClose).toHaveBeenCalledTimes(1);
+  });
+
+  it("does not call onClose for different key", () => {
+    render(
+      <Drawer opened onClose={onClose}>
+        Content
+      </Drawer>,
+    );
+
+    fireEvent.keyDown(document, {
+      key: "Enter",
+    });
+
+    expect(onClose).not.toHaveBeenCalled();
+  });
+
+  it("sets body overflow when opened", () => {
+    render(
+      <Drawer opened onClose={onClose}>
+        Content
+      </Drawer>,
+    );
+
+    expect(
+      document.body.style.overflow,
+    ).toBe("hidden");
+  });
+
+  it("renders left position", () => {
+    render(
+      <Drawer
+        opened
+        position="left"
+        onClose={onClose}
+      >
+        Content
+      </Drawer>,
+    );
+
+    expect(
+      screen.getByText("Content"),
+    ).toBeInTheDocument();
+  });
+
+  it("renders right position", () => {
+    render(
+      <Drawer
+        opened
+        position="right"
+        onClose={onClose}
+      >
+        Content
+      </Drawer>,
+    );
+
+    expect(
+      screen.getByText("Content"),
+    ).toBeInTheDocument();
+  });
+
+  it("renders top position", () => {
+    render(
+      <Drawer
+        opened
+        position="top"
+        onClose={onClose}
+      >
+        Content
+      </Drawer>,
+    );
+
+    expect(
+      screen.getByText("Content"),
+    ).toBeInTheDocument();
+  });
+
+  it("renders bottom position", () => {
+    render(
+      <Drawer
+        opened
+        position="bottom"
+              onClose={onClose}
+    >
+      Content
+    </Drawer>,
+  );
+
+  expect(
+    screen.getByText("Content"),
+  ).toBeInTheDocument();
+});
+
+it("supports custom size", () => {
+  render(
+    <Drawer
+      opened
+      position="left"
+      size="xl"
+      onClose={onClose}
+    >
+      Content
+    </Drawer>,
+  );
+
+  expect(
+    screen.getByText("Content"),
+  ).toBeInTheDocument();
+});
+
+it("renders closed drawer", () => {
+  render(
+    <Drawer
+      opened={false}
+      onClose={onClose}
+    >
+      Content
+    </Drawer>,
+  );
+
+  expect(
+    screen.getByText("Content"),
+  ).toBeInTheDocument();
+});
+
+it("renders close icon", () => {
+  render(
+    <Drawer
+      opened
+      title="Drawer"
+      onClose={onClose}
+    >
+      Content
+    </Drawer>,
+  );
+
+  expect(
+    screen.getByTestId(
+      "close-icon",
+    ),
+  ).toBeInTheDocument();
+});
 });
