@@ -8,6 +8,8 @@
   "COMMON_NO": "Nein",
   "COMMON_OK": "OK",
   "COMMON_CLOSE": "Schließen",
+  "COMMON_LOADING": "Wird geladen...",
+  "COMMON_SELECT": "Auswählen",
 
   "COMMON_GOOD": "Gut",
   "COMMON_WARNING": "Warnung",
@@ -38,6 +40,11 @@
   "TABLE_CONTROLLER_NAME": "Reglername",
   "TABLE_ATTRIBUTE_NAME": "Attributname",
   "TABLE_ERROR_MESSAGE": "Fehlermeldung",
+  "COMMON_FILTER": "Filtern",
+  "TABLE_SHOW": "Anzeigen",
+  "TABLE_PAGE": "Seite",
+  "TABLE_OF": "von",
+
 
   "FILTER_ATTRIBUTES": "Attribute",
   "FILTER_TYPE": "Typ",
@@ -55,5 +62,116 @@
   "DRAWER_TITLE": "Projektdetails",
 
   "DIALOG_DELETE_TITLE": "Projekt löschen",
-  "DIALOG_DELETE_MESSAGE": "Möchten Sie dieses Projekt wirklich löschen?"
+  "DIALOG_DELETE_MESSAGE": "Möchten Sie dieses Projekt wirklich löschen?",
+
+  "TAB_IMPORT_CONFIGURATION": "Konfigurationsdatei importieren",
+  "TAB_REGULATORY_CONFIGURATION": "Regulatorische Konfiguration",
+  "TAB_MPC_CONFIGURATION": "MPC-Konfiguration",
+  "TAB_PWO_CONFIGURATION": "PWO-Konfiguration",
+  "TAB_ANALYSIS_SCHEDULE": "Analysezeitplan",
+  "TAB_CUSTOM_KPI_CONFIGURATION": "Benutzerdefinierte KPI-Konfiguration",
+  "TAB_ANALYSIS_ENGINE": "Analyse-Engine",
+  "TAB_VIEW_DATA": "Daten anzeigen",
+  "TAB_CALCULATED_KPIS_ERRORS": "Berechnete KPIs und Fehler",
+  "TAB_PROPERTIES": "Eigenschaften",
+  "TAB_CONNECTIONS": "Verbindungen",
+
+  "WORKFLOW_JSON": "Workflow-JSON",
+  "SELECTED_ELEMENT": "Ausgewähltes Element",
+
+  "NEW_TEMPLATE": "Neue Vorlage",
+
+  "TOOLBAR_POINTER": "Zeiger",
+  "TOOLBAR_CONNECTOR_1": "Verbindung 1",
+  "TOOLBAR_CONNECTOR_2": "Verbindung 2",
+  "TOOLBAR_MORE": "Mehr",
+  "TOOLBAR_ACTIONS": "Aktionen",
+  "TOOLBAR_PENCIL": "Stift",
+  "TOOLBAR_GRID": "Raster",
+  "TOOLBAR_UNDO": "Rückgängig",
+  "TOOLBAR_REDO": "Wiederholen",
+  "TOOLBAR_RECTANGLE": "Rechteck",
+  "TOOLBAR_TEXT": "Text",
+  "TOOLBAR_IMPORT_TEMPLATE": "Vorlage importieren",
+  "TOOLBAR_EXPORT_TEMPLATE": "Vorlage exportieren",
+  "TOOLBAR_SAVE_AS": "Speichern unter",
+  "TOOLBAR_CUSTOM_REGULATORY_TEMPLATE": "Benutzerdefinierte Regelungsvorlage",
+  "TOOLBAR_CUSTOM_MPC_TEMPLATES": "Benutzerdefinierte MPC-Vorlagen",
+  "TOOLBAR_NOTHING_TO_SAVE": "Nichts zu speichern",
+  "TOOLBAR_CREATE_WORKFLOW_BEFORE_SAVE": "Bitte erstellen Sie einen Workflow, bevor Sie die Vorlage speichern.",
+  "TOOLBAR_SAVED_REGULATORY_TEMPLATE": "Als Regelungsvorlage gespeichert",
+  "TOOLBAR_SAVED_MPC_TEMPLATE": "Als MPC-Vorlage gespeichert",
+  "TOOLBAR_REGULATORY_TEMPLATE_LOCATION": "Sie finden diese Vorlage im Katalog unter Vorlagen > Regelungsvorlagen.",
+  "TOOLBAR_MPC_TEMPLATE_LOCATION": "Sie finden diese Vorlage im Katalog unter Vorlagen > MPC-Vorlagen.",
+  "TOOLBAR_REGULATORY_TEMPLATE": "Regelungsvorlage",
+  "TOOLBAR_MPC_TEMPLATE": "MPC-Vorlage",
+  "TOOLBAR_TEMPLATE_NAME": "Vorlagenname",
+  "TOOLBAR_ADD_TEMPLATE_NAME": "Vorlagennamen eingeben",
+
+  "VALIDATION_INVALID_PERCENTAGE": "Geben Sie einen gültigen Prozentsatz ein",
+  "VALIDATION_PERCENTAGE_RANGE": "Der Wert muss zwischen 0 und 100 liegen"  ,
+
+  "WORKFLOW_NODES": "Workflow-Knoten",
+  "PLANT_HIERARCHY": "Pflanzenhierarchie",
+
+  "WORKFLOW_CATALOG": "Katalog",
+  "WORKFLOW_TEMPLATES": "Vorlagen",
+  "WORKFLOW_ATTRIBUTES": "Attribute",
+
+  "COMMON_SELECT_OPTION": "Option auswählen",
+
+  "COMMON_NO_OPTIONS": "Keine Optionen verfügbar",
+
+  "NODE_WARNING_MESSAGE": "Hier wird die Warnmeldung angezeigt",
+  "NODE_ERROR_MESSAGE": "Es gibt zu viele fehlerhafte Datenpunkte",
+
+  "EXECUTION_EXECUTE": "Ausführen",
+  "EXECUTION_PAUSE": "Pausieren",
+  "EXECUTION_START_CONFIRMATION": "Ausführung starten?",
+  "EXECUTION_PAUSE_CONFIRMATION": "Ausführung pausieren?",
+  "EXECUTION_DELETE_CONFIRMATION": "Workflow löschen?",
+  "ANALYSIS_TEMPLATES": "Analysevorlagen",
+
+  "COMMON_HELP": "Hilfe",
+  "COMMON_APPLY_TO_ALL": "Auf alle anwenden",
+  "CONNECTIONS_ALL_COLUMNS": "Alle Spalten",
+  "CONNECTIONS_SELECTED_COLUMNS": "Ausgewählte Spalten",
+
+  "WORKFLOW_VIEW_DATA_TITLE": "Daten für {{tag}} Datenvorverarbeitung anzeigen",
+
+  "STATUS_RUNNING": "Läuft",
+  "COMMON_NONE": "Keine",
+
+  "PROPERTIES_DATA_PREPROCESSING_WIZARD": "Assistent zur Datenvorverarbeitung",
+"PROPERTIES_EDIT_COLUMNS_EXPRESSIONS": "Bearbeiten Sie die Ausdrücke der Spalten, die Sie vorverarbeiten möchten",
+"PROPERTIES_EDIT_EXPRESSIONS": "Bearbeiten Sie die Ausdrücke, die Sie vorverarbeiten möchten",
+"PROPERTIES_THRESHOLD": "Schwellenwert",
+"PROPERTIES_WARNING_THRESHOLD": "Warnschwellenwert %",
+"PROPERTIES_ABORT_THRESHOLD": "Abbruchschwellenwert %",
+"PROPERTIES_EXPRESSION": "Ausdruck",
+"PROPERTIES_REFERENCE_COLUMN": "Referenzspalte",
+"PROPERTIES_BAD_DATA_EXPRESSION": "Ausdruck für fehlerhafte Daten",
+"PROPERTIES_BAD_DATA_EXPRESSION_PLACEHOLDER": "Ausdruck für fehlerhafte Daten eingeben...",
+"PROPERTIES_REFRESH_BAD_DATA_EXPRESSION": "Ausdruck für fehlerhafte Daten aktualisieren",
+"PROPERTIES_REPLACEMENT_EXPRESSION": "Ersetzungsausdruck",
+"PROPERTIES_REPLACEMENT_EXPRESSION_PLACEHOLDER": "Ersetzungsausdruck eingeben...",
+"PROPERTIES_REFRESH_REPLACEMENT_EXPRESSION": "Ersetzungsausdruck aktualisieren",
+
+"PROJECT_ANALYSIS_TITLE": "Projekt und Analyse",
+"PROJECT_ANALYSIS_CHOOSE_PROJECT": "Projekt auswählen",
+"PROJECT_ANALYSIS_NEW": "Neu",
+"PROJECT_ANALYSIS_CLONE": "Klonen",
+"PROJECT_ANALYSIS_SERVER": "Server",
+"PROJECT_ANALYSIS_INPUT_TEXT": "Text eingeben",
+"PROJECT_ANALYSIS_CHECKOUT_ANALYSIS": "Diese Analyse auschecken",
+"PROJECT_ANALYSIS_DESCRIPTION": "Beschreibung",
+"PROJECT_ANALYSIS_DESCRIPTION_PLACEHOLDER": "Mehrere Textzeilen können hier eingegeben werden.",
+"PROJECT_ANALYSIS_CREATED_BY": "Erstellt von",
+"PROJECT_ANALYSIS_FINISH": "Fertig",
+
+"CANVAS_CREATE_NEW_TEMPLATE": "Neue Vorlage erstellen",
+"CANVAS_CREATE_TEMPLATE_DESCRIPTION": "Erstellen Sie eine Vorlage von Grund auf mit Attributen oder vordefinierten Vorlagen aus dem linken Bereich, passen Sie sie an Ihre Anforderungen an und speichern Sie sie als benutzerdefinierte Vorlage.",
+"CANVAS_ADD_ATTRIBUTE": "Attribut hinzufügen",
+"CANVAS_WORKFLOW": "Workflow"
+    
 }

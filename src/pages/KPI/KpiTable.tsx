@@ -1,6 +1,7 @@
 import SpreadsheetTable from "../../components/tables/SpreadsheetTable";
-
+import { useTranslation } from "react-i18next";
 export default function KpiTable() {
+  const { t } = useTranslation();
   // Dummy spreadsheet data
   const tableData = [
     {
@@ -310,12 +311,10 @@ export default function KpiTable() {
       {/* Header */}
       <div className="px-4 py-3 shrink-0 text-center border border-border-default">
         <h3 className="text-sm font-semibold text-foreground-secondary">
-          View Data for 56-FFC618 Data Preprocessing
+          {t("WORKFLOW_VIEW_DATA_TITLE", { tag: "56-FFC618" })}
         </h3>
       </div>
 
-      {/* Table */}
-      {/* <div className="flex-1 overflow-hidden p-4"> */}
       <SpreadsheetTable data={tableData} />
       {/* </div> */}
     </div>

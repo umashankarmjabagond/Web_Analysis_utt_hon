@@ -9,7 +9,7 @@ import {
   type ColumnFiltersState,
   type SortingState,
 } from "@tanstack/react-table";
-
+import { useTranslation } from "react-i18next";
 import type { TableProps } from "../../types/tableTypes";
 import { cn } from "../../utils/utils";
 import {
@@ -37,7 +37,7 @@ const Table = <T extends object>({
   className = "",
   tableClassName = "",
 
-  emptyMessage = "No records found",
+  emptyMessage,
 }: TableProps<T>) => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -71,6 +71,7 @@ const Table = <T extends object>({
       getPaginationRowModel: getPaginationRowModel(),
     }),
   });
+  const { t } = useTranslation();
 
   const paginationButtonClass = cn(
     "flex h-8 w-8 items-center justify-center",
@@ -90,8 +91,7 @@ const Table = <T extends object>({
   return (
     <div
       className={cn(
-        "w-full overflow-auto rounded-lg border",
-        "border-table-border",
+        "w-full overflow-auto rounded-lg ",
         "bg-table-background",
         className,
       )}
@@ -108,7 +108,7 @@ const Table = <T extends object>({
           <input
             type="text"
             value={globalFilter}
-            placeholder="Search..."
+            placeholder={t("COMMON_SEARCH")}
             onChange={(e) => setGlobalFilter(e.target.value)}
             className={cn(
               "w-[250px] rounded-sm border",
@@ -186,7 +186,7 @@ const Table = <T extends object>({
                       {/* Column Filter */}
                       {filterable && header.column.getCanFilter() && (
                         <input
-                          placeholder="Filter..."
+                          placeholder={t("COMMON_FILTER")}
                           value={
                             (header.column.getFilterValue() as string) ?? ""
                           }
@@ -227,7 +227,7 @@ const Table = <T extends object>({
                   "text-table-row-foreground",
                 )}
               >
-                Loading...
+                {t("COMMON_LOADING")}
               </td>
             </tr>
           ) : table.getRowModel().rows.length === 0 ? (
@@ -241,7 +241,7 @@ const Table = <T extends object>({
                   "text-table-row-foreground",
                 )}
               >
-                {emptyMessage}
+                {emptyMessage || t("TABLE_NO_RECORDS_FOUND")}
               </td>
             </tr>
           ) : (
@@ -293,7 +293,7 @@ const Table = <T extends object>({
             >
               {[10, 20, 30, 50].map((size) => (
                 <option key={size} value={size}>
-                  Show {size}
+                  {t("TABLE_SHOW")} {size}
                 </option>
               ))}
             </select> */}
@@ -329,8 +329,8 @@ const Table = <T extends object>({
             </button>
 
             <span className="px-2 text-sm text-table-row-foreground">
-              Page {table.getState().pagination.pageIndex + 1} of{" "}
-              {table.getPageCount()}
+              {t("TABLE_PAGE")} {table.getState().pagination.pageIndex + 1}{" "}
+              {t("TABLE_OF")} {table.getPageCount()}
             </span>
 
             <button

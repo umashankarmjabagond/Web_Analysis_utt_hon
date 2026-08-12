@@ -1,5 +1,6 @@
 import React from "react";
 import { XCircle, AlertTriangle, Info, X } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import Badge from "../badge/Badge";
 
 export type NotificationType = "success" | "danger" | "warning" | "info";
@@ -69,6 +70,7 @@ const Notification: React.FC<NotificationProps> = ({
   onClose,
   width = 400,
 }) => {
+  const { t } = useTranslation();
   const { label, icon: Icon } = TYPE_CONFIG[type];
 
   return (
@@ -86,7 +88,7 @@ const Notification: React.FC<NotificationProps> = ({
             fill="solid"
             icon={<Icon size={14} />}
           >
-            {label}
+            {t(`NOTIFICATION_${label.toUpperCase()}`)}
           </Badge>
           <X
             onClick={onClose}
@@ -99,7 +101,7 @@ const Notification: React.FC<NotificationProps> = ({
         {/* Body content */}
         <div className="flex flex-col w-full gap-3">
           <p className="text-[16px] leading-6 font-bold m-0 text-toast-title">
-            {title ?? label}
+            {title ?? t(`NOTIFICATION_${label.toUpperCase()}`)}
           </p>
           <p
             className={`text-[14px] leading-5 font-medium m-0 text-toast-description`}

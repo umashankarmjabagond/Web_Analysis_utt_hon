@@ -1,9 +1,9 @@
 import { useLocation } from "react-router-dom";
 import { panelConfig } from "./panelConfig";
-
+import { useTranslation } from "react-i18next";
 export default function LeftPanel() {
   const location = useLocation();
-
+  const { t } = useTranslation();
   const panel = panelConfig.find((item) =>
     location.pathname.startsWith(item.path),
   );

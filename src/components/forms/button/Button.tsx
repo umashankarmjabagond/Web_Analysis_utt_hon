@@ -1,4 +1,5 @@
 import React, { type ButtonHTMLAttributes } from "react";
+import { useTranslation } from "react-i18next";
 import { cn } from "../../../utils/utils";
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -133,6 +134,7 @@ const Button: React.FC<ButtonProps> = ({
   onClick,
   ...props
 }) => {
+  const { t } = useTranslation();
   const variantStyles = variants[variant][fill];
 
   return (
@@ -164,7 +166,7 @@ const Button: React.FC<ButtonProps> = ({
       {loading ? (
         <>
           <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-current border-r-transparent" />
-          <span>Loading...</span>
+          <span>{t("COMMON_LOADING")}</span>
         </>
       ) : (
         <>

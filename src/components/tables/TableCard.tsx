@@ -16,7 +16,7 @@ function TableCard<T extends object>({
     <div
       className={cn(
         "flex w-full min-w-0 flex-col gap-4 overflow-hidden",
-        "rounded-sm border",
+        "rounded-sm",
         "bg-surface-elevated",
         "px-6 py-4",
         "shadow-200",

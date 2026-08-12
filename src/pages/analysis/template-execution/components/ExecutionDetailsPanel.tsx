@@ -5,8 +5,10 @@ import KpiTable from "../../../KPI/KpiTable";
 import CalculatedKpisAndErrors from "../../../KPI/CalculatedKpisAndErrors";
 import Properties from "../../../KPI/Properties";
 import Connections from "../../../KPI/Connections";
-
+import { useTranslation } from "react-i18next";
 export default function ExecutionDetailsPanel() {
+  const { t } = useTranslation();
+
   const DetailsPanel = Drawer;
 
   const [activeTab, setActiveTab] = useState("table");
@@ -15,26 +17,26 @@ export default function ExecutionDetailsPanel() {
     () => [
       {
         id: "table",
-        label: "View Data",
+        label: t("TAB_VIEW_DATA"),
         component: KpiTable,
       },
       {
         id: "errors",
-        label: "Calculated KPIs and Errors",
+        label: t("TAB_CALCULATED_KPIS_ERRORS"),
         component: CalculatedKpisAndErrors,
       },
       {
         id: "properties",
-        label: "Properties",
+        label: t("TAB_PROPERTIES"),
         component: Properties,
       },
       {
         id: "connections",
-        label: "Connections",
+        label: t("TAB_CONNECTIONS"),
         component: Connections,
       },
     ],
-    [],
+    [t],
   );
 
   const activeTabItem = tabs.find((tab) => tab.id === activeTab);

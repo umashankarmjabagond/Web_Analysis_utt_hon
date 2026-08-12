@@ -1,5 +1,6 @@
 import { X } from "lucide-react";
 import { type ReactNode, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { cn } from "../../utils/utils";
 
 type DrawerVariant = "overlay" | "panel";
@@ -88,6 +89,7 @@ const Drawer = ({
     : undefined;
 
   const { panel, open, close } = positionClasses[position];
+  const { t } = useTranslation();
 
   return (
     <>
@@ -127,7 +129,7 @@ const Drawer = ({
             <button
               type="button"
               onClick={onClose}
-              aria-label="Close drawer"
+              aria-label={t("COMMON_CLOSE")}
               className={cn(
                 "flex h-[34px] w-8 shrink-0 cursor-pointer items-center justify-center p-2",
                 "text-drawer-close-foreground transition-colors",

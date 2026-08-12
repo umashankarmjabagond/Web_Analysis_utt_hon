@@ -1,5 +1,5 @@
 import { useState } from "react";
-
+import { useTranslation } from "react-i18next";
 import Button from "../../components/forms/button/Button";
 import Input from "../../components/forms/input/Input";
 import Select from "../../components/forms/select/Select";
@@ -36,6 +36,7 @@ const COLUMN_OPTIONS = [
 ];
 
 const Properties: React.FC<PropertiesProps> = ({ onCancel }) => {
+  const { t } = useTranslation();
   const [badExpressionLoading, setBadExpressionLoading] = useState(false);
 
   const [replacementExpressionLoading, setReplacementExpressionLoading] =
@@ -96,7 +97,7 @@ const Properties: React.FC<PropertiesProps> = ({ onCancel }) => {
       <div className="flex items-center justify-between px-6 py-3">
         <div className="flex flex-col">
           <span className="text-xl font-semibold text-text-accent">
-            Data Preprocessing Wizard
+            {t("PROPERTIES_DATA_PREPROCESSING_WIZARD")}
           </span>
         </div>
 
@@ -106,11 +107,11 @@ const Properties: React.FC<PropertiesProps> = ({ onCancel }) => {
             size="medium"
             icon={<CircleHelp size={13} strokeWidth={2.2} />}
           >
-            Help
+            {t("COMMON_HELP")}
           </Button>
 
           <Button variant="secondary" size="medium">
-            Apply To All
+            {t("COMMON_APPLY_TO_ALL")}
           </Button>
 
           <Button
@@ -118,7 +119,7 @@ const Properties: React.FC<PropertiesProps> = ({ onCancel }) => {
             size="medium"
             onClick={handleSubmit(handleSave)}
           >
-            Save
+            {t("COMMON_SAVE")}
           </Button>
         </div>
       </div>
@@ -131,7 +132,7 @@ const Properties: React.FC<PropertiesProps> = ({ onCancel }) => {
         <div className="flex w-[320px] flex-col border-r border-border-1">
           <div className="px-4 py-3">
             <span className="text-base font-semibold leading-8 text-text-accent">
-              Edit the expressions of columns you wish to preprocess
+              {t("PROPERTIES_EDIT_COLUMNS_EXPRESSIONS")}
             </span>
           </div>
 
@@ -180,25 +181,25 @@ const Properties: React.FC<PropertiesProps> = ({ onCancel }) => {
         <div className="flex flex-1 flex-col overflow-y-auto p-6">
           <div>
             <span className="text-s font-bold text-text-accent">
-              Edit the expressions you wish to preprocess
+              {t("PROPERTIES_EDIT_EXPRESSION")}
             </span>
           </div>
           {/* Threshold */}
 
           <div className="flex flex-col gap-3 py-3">
             <span className="text-m font-bold uppercase tracking-[2px] text-text-accent">
-              Threshold
+              {t("PROPERTIES_THRESHOLD")}
             </span>
 
             <div className="grid grid-cols-2 gap-6">
               <Input
-                label="Warning Threshold %"
+                label={t("PROPERTIES_WARNING_THRESHOLD")}
                 error={errors.warningThreshold?.message}
                 {...register("warningThreshold")}
               />
 
               <Input
-                label="Abort Threshold %"
+                label={t("PROPERTIES_ABORT_THRESHOLD")}
                 error={errors.abortThreshold?.message}
                 {...register("abortThreshold")}
               />
@@ -209,12 +210,12 @@ const Properties: React.FC<PropertiesProps> = ({ onCancel }) => {
 
           <div className="mt-8 flex flex-col gap-3">
             <span className="text-m font-bold uppercase tracking-[2px] text-text-accent">
-              Expression
+              {t("PROPERTIES_EXPRESSION")}
             </span>
 
             <div className="flex items-center gap-5">
               <span className="w-[170px] text-sm font-medium text-text-accent">
-                Reference Column
+                {t("PROPERTIES_REFERENCE_COLUMN")}
               </span>
 
               <div className="flex-1">
@@ -228,15 +229,15 @@ const Properties: React.FC<PropertiesProps> = ({ onCancel }) => {
             <div className="flex gap-3">
               <div className="flex-1">
                 <TextArea
-                  label="Bad Data Expression"
-                  placeholder="Enter bad data expression..."
+                  label={t("PROPERTIES_BAD_DATA_EXPRESSION")}
+                  placeholder={t("PROPERTIES_BAD_DATA_EXPRESSION_PLACEHOLDER")}
                   rows={5}
                   {...register("badDataExpression")}
                 />
               </div>
 
               <RotateCw
-                aria-label="Refresh bad data expression"
+                aria-label={t("PROPERTIES_REFRESH_BAD_DATA_EXPRESSION")}
                 role="button"
                 tabIndex={0}
                 strokeWidth={2}
@@ -257,15 +258,17 @@ const Properties: React.FC<PropertiesProps> = ({ onCancel }) => {
             <div className="flex gap-3">
               <div className="flex-1">
                 <TextArea
-                  label="Replacement Expression"
-                  placeholder="Enter replacement expression..."
+                  label={t("PROPERTIES_REPLACEMENT_EXPRESSION")}
+                  placeholder={t(
+                    "PROPERTIES_REPLACEMENT_EXPRESSION_PLACEHOLDER",
+                  )}
                   rows={5}
                   {...register("replacementExpression")}
                 />
               </div>
 
               <RotateCw
-                aria-label="Refresh replacement expression"
+                aria-label={t("PROPERTIES_REFRESH_REPLACEMENT_EXPRESSION")}
                 role="button"
                 tabIndex={0}
                 strokeWidth={2}
@@ -290,11 +293,11 @@ const Properties: React.FC<PropertiesProps> = ({ onCancel }) => {
 
       <div className="flex items-center justify-end gap-3 border-t border-border-1 px-6 py-4">
         <Button variant="secondary" onClick={onCancel}>
-          Cancel
+          {t("COMMON_CANCEL")}
         </Button>
 
         <Button variant="primary" onClick={handleSubmit(handleSave)}>
-          Save
+          {t("COMMON_SAVE")}
         </Button>
       </div>
     </div>

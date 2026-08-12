@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import Drawer from "../../../../components/drawer/Drawer";
 import KpiTable from "../../../KPI/KpiTable";
 import CalculatedKpisAndErrors from "../../../KPI/CalculatedKpisAndErrors";
@@ -8,6 +9,8 @@ import { useTemplateExecutionStore } from "../../../../store/templateExecutionSt
 import { Tabs } from "../../../../components/common/tabs/Tabs";
 
 export default function ExecutionNodeDrawer() {
+  const { t } = useTranslation();
+
   const isNodeDrawerOpen = useTemplateExecutionStore(
     (state) => state.isNodeDrawerOpen,
   );
@@ -20,29 +23,28 @@ export default function ExecutionNodeDrawer() {
     () => [
       {
         id: "table",
-        label: "View Data",
+        label: t("TAB_VIEW_DATA"),
         component: KpiTable,
       },
       {
         id: "errors",
-        label: "Calculated KPIs and Errors",
+        label: t("TAB_CALCULATED_KPIS_ERRORS"),
         component: CalculatedKpisAndErrors,
       },
       {
         id: "properties",
-        label: "Properties",
+        label: t("TAB_PROPERTIES"),
         component: () => (
-          <Properties 
-            onCancel={() => setNodeDrawerOpen(false)}/>
+          <Properties onCancel={() => setNodeDrawerOpen(false)} />
         ),
       },
       {
         id: "connections",
-        label: "Connections",
+        label: t("TAB_CONNECTIONS"),
         component: Connections,
       },
     ],
-    [],
+    [t],
   );
 
   const activeTabItem = tabs.find((tab) => tab.id === activeTab);

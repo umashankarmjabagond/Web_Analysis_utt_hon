@@ -14,7 +14,7 @@ import {
   MoveRight,
   ChevronDown,
 } from "lucide-react";
-
+import { useTranslation } from "react-i18next";
 import ToolbarButton from "./ToolbarButton";
 import { useWorkflowStore } from "../../../../store/workflowStore";
 import Dropdown from "../../../../components/forms/dropdown/Dropdown";
@@ -27,6 +27,7 @@ import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../../../constants/routes/routesConstant";
 
 export default function Toolbar() {
+  const { t } = useTranslation();
   const {
     nodes,
     activeTool,
@@ -84,14 +85,14 @@ export default function Toolbar() {
 
     setNotificationTitle(
       templateType === "regulatory"
-        ? "Saved as Regulatory Template"
-        : "Saved as MPC Template",
+        ? t("TOOLBAR_SAVED_REGULATORY")
+        : t("TOOLBAR_SAVED_MPC"),
     );
 
     setNotificationMessage(
       templateType === "regulatory"
-        ? "You can find this template in the Catalog under Templates > Regulatory Templates."
-        : "You can find this template in the Catalog under Templates > MPC Templates.",
+        ? t("TOOLBAR_FIND_REGULATORY")
+        : t("TOOLBAR_FIND_MPC"),
     );
 
     setShowNotification(true);
@@ -113,20 +114,20 @@ export default function Toolbar() {
             onClick={() => navigate(ROUTES.DASHBOARD)}
             size={16}
           />
-          <span>New Template</span>
+          <span>{t("NEW_TEMPLATE")}</span>
         </div>
 
         <ToolbarButton
-          title="Pointer"
+          title={t("TOOLBAR_POINTER")}
           active={activeTool === "pointer"}
           icon={MousePointer2}
           onClick={() => setActiveTool("pointer")}
         />
 
-        <ToolbarButton title="Connector 1" icon={MoveRight} />
+        <ToolbarButton title={t("TOOLBAR_CONNECTOR_1")} icon={MoveRight} />
 
         <ToolbarButton
-          title="Connector 2"
+          title={t("TOOLBAR_CONNECTOR_2")}
           active={activeTool === "connect"}
           icon={GitBranch}
           onClick={() => setActiveTool("connect")}
@@ -140,7 +141,7 @@ export default function Toolbar() {
             }}
             className="flex items-center gap-1 rounded border border-app-divider px-1 py-1 text-xs text-white"
           >
-            More
+            {t("TOOLBAR_MORE")}
             <ChevronDown size={14} />
           </button>
 
@@ -199,39 +200,39 @@ export default function Toolbar() {
             }}
             className="flex items-center gap-1 rounded border border-app-divider px-1 py-1 text-xs text-white"
           >
-            Actions
+            {t("TOOLBAR_ACTIONS")}
             <ChevronDown size={14} />
           </button>
 
           {showActionMenu && (
             <div className="absolute right-0 top-full z-50 mt-2 w-52 rounded-md border border-app-divider bg-component-toolbar-background shadow-xl">
               <button className="block w-full px-3 py-2 text-left text-sm text-white hover:bg-app-surface">
-                Import Template
+                {t("TOOLBAR_IMPORT_TEMPLATE")}
               </button>
 
               <button className="block w-full px-3 py-2 text-left text-sm text-white hover:bg-app-surface">
-                Export Template
+                {t("TOOLBAR_EXPORT_TEMPLATE")}
               </button>
 
               <div className="border-t border-app-divider p-2">
                 <Dropdown
-                  placeholder="Save As"
+                  placeholder={t("TOOLBAR_SAVE_AS")}
                   items={[
                     {
-                      label: "Custom Regulatory Template",
+                      label: t("TOOLBAR_CUSTOM_REGULATORY_TEMPLATE"),
                       value: "regulatory",
                     },
                     {
-                      label: "Custom MPC Templates",
+                      label: t("TOOLBAR_CUSTOM_MPC_TEMPLATES"),
                       value: "mpc",
                     },
                   ]}
                   onSelect={(item) => {
                     if (nodes.length === 0) {
                       setNotificationType("warning");
-                      setNotificationTitle("Nothing to Save");
+                      setNotificationTitle(t("TOOLBAR_NOTHING_TO_SAVE"));
                       setNotificationMessage(
-                        "Please create a workflow before saving the template.",
+                        t("TOOLBAR_CREATE_WORKFLOW_FIRST"),
                       );
 
                       setShowNotification(true);
@@ -260,16 +261,24 @@ export default function Toolbar() {
         </div>
 
         <div className="hidden xl:flex items-center gap-2">
-          <ToolbarButton title="Pencil" icon={Pencil} />
+          <ToolbarButton title={t("TOOLBAR_PENCIL")} icon={Pencil} />
 
-          <ToolbarButton title="Grid" icon={Grid2X2} />
-
-          <ToolbarButton title="Undo" icon={Undo2} onClick={undo} />
-
-          <ToolbarButton title="Redo" icon={Redo2} onClick={redo} />
+          <ToolbarButton title={t("TOOLBAR_GRID")} icon={Grid2X2} />
 
           <ToolbarButton
-            title="Delete"
+            title={t("TOOLBAR_UNDO")}
+            icon={Undo2}
+            onClick={undo}
+          />
+
+          <ToolbarButton
+            title={t("TOOLBAR_REDO")}
+            icon={Redo2}
+            onClick={redo}
+          />
+
+          <ToolbarButton
+            title={t("COMMON_DELETE")}
             icon={Circle}
             onClick={() => {
               deleteSelectedEdges();
@@ -277,9 +286,9 @@ export default function Toolbar() {
             }}
           />
 
-          <ToolbarButton title="Rectangle" icon={Square} />
+          <ToolbarButton title={t("TOOLBAR_RECTANGLE")} icon={Square} />
 
-          <ToolbarButton title="Text" icon={Type} />
+          <ToolbarButton title={t("TOOLBAR_TEXT")} icon={Type} />
         </div>
       </div>
 
@@ -290,33 +299,31 @@ export default function Toolbar() {
       <div className="hidden xl:flex items-center gap-6 text-sm">
         <button className="flex items-center gap-1 text-app-action-primary text-sm hover:text-white transition-colors">
           <Upload size={15} />
-          Import Template
+          {t("TOOLBAR_IMPORT_TEMPLATE")}
         </button>
 
         <button className="flex items-center gap-1 text-app-default-border text-sm hover:text-white transition-colors">
           <Download size={15} />
-          Export Template
+          {t("TOOLBAR_EXPORT_TEMPLATE")}
         </button>
 
         <Dropdown
-          placeholder="Save As"
+          placeholder={t("TOOLBAR_SAVE_AS")}
           items={[
             {
-              label: "Custom Regulatory Template",
+              label: t("TOOLBAR_CUSTOM_REGULATORY_TEMPLATE"),
               value: "regulatory",
             },
             {
-              label: "Custom MPC Templates",
+              label: t("TOOLBAR_CUSTOM_MPC_TEMPLATES"),
               value: "mpc",
             },
           ]}
           onSelect={(item) => {
             if (nodes.length === 0) {
               setNotificationType("warning");
-              setNotificationTitle("Nothing to Save");
-              setNotificationMessage(
-                "Please create a workflow before saving the template.",
-              );
+              setNotificationTitle(t("TOOLBAR_NOTHING_TO_SAVE"));
+              setNotificationMessage(t("TOOLBAR_CREATE_WORKFLOW_BEFORE_SAVE"));
 
               setShowNotification(true);
 
@@ -342,19 +349,21 @@ export default function Toolbar() {
 
       <Dialog
         isOpen={isSaveDialogOpen}
-        subtitle="SAVE AS"
+        subtitle={t("TOOLBAR_SAVE_AS")}
         title={
-          templateType === "regulatory" ? "Regulatory Template" : "MPC Template"
+          templateType === "regulatory"
+            ? t("TOOLBAR_REGULATORY_TEMPLATE")
+            : t("TOOLBAR_MPC_TEMPLATE")
         }
         onClose={() => setIsSaveDialogOpen(false)}
       >
         <div className="flex flex-col gap-6 text-sm">
           <Input
             className="w-[288px] h-8 rounded bg-app-surface border border-search-border text-[14px] text-white"
-            label="Template Name"
+            label={t("TOOLBAR_TEMPLATE_NAME")}
             value={templateName}
             onChange={(e) => setTemplateName(e.target.value)}
-            placeholder="add template name"
+            placeholder={t("TOOLBAR_ADD_TEMPLATE_NAME")}
           />
 
           <div className="flex justify-end gap-4">
@@ -362,11 +371,11 @@ export default function Toolbar() {
               variant="secondary"
               onClick={() => setIsSaveDialogOpen(false)}
             >
-              Cancel
+              {t("COMMON_CANCEL")}
             </Button>
 
             <Button variant="primary" onClick={handleSave}>
-              Save
+              {t("COMMON_SAVE")}
             </Button>
           </div>
         </div>

@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import type { SpreadsheetProps } from "../../types/commonTypes";
+import { useTranslation } from "react-i18next";
 import { cn } from "../../utils/utils";
 
 type CellValue = string | number | boolean | null | undefined | object;
@@ -40,10 +41,11 @@ const renderCellValue = (value: CellValue): ReactNode => {
 };
 
 const SpreadsheetTable = ({ data }: SpreadsheetProps) => {
+  const { t } = useTranslation();
   if (!data || data.length === 0) {
     return (
       <div className="flex items-center justify-center p-6 text-spreadsheet-cell-foreground">
-        No data available
+        {t("COMMON_NO_DATA_AVAILABLE")}
       </div>
     );
   }

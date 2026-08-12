@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, type ReactNode } from "react";
 import { ChevronDown } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { cn } from "../../../utils/utils";
 
 export interface DropdownItem {
@@ -18,11 +19,12 @@ interface DropdownProps {
 export default function Dropdown({
   items,
   onSelect,
-  placeholder = "Select",
+  placeholder,
   className = "",
 }: DropdownProps) {
-  const wrapperRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
+  const { t } = useTranslation();
+  const wrapperRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -60,7 +62,7 @@ export default function Dropdown({
           "hover:text-dropdown-trigger-hover-foreground",
         )}
       >
-        <span>{placeholder}</span>
+        <span>{placeholder ?? t("COMMON_SELECT")}</span>
 
         <ChevronDown
           size={15}

@@ -4,10 +4,11 @@ import type {
   GroupedSelectorItem,
   GroupedSelectorProps,
 } from "../../../types/commonTypes";
+import { useTranslation } from "react-i18next";
 import { cn } from "../../../utils/utils";
 
 const GroupedSelector: FC<GroupedSelectorProps> = ({
-  placeholder = "Select an option",
+  placeholder,
   sections,
   onSelect,
   disabled = false,
@@ -22,7 +23,7 @@ const GroupedSelector: FC<GroupedSelectorProps> = ({
   };
 
   const hasItems = sections.some((section) => section.items.length > 0);
-
+  const { t } = useTranslation();
   return (
     <div ref={containerRef} className={cn("w-full", className)}>
       <div className="rounded-md bg-component-toolbar-divider">
@@ -46,7 +47,7 @@ const GroupedSelector: FC<GroupedSelectorProps> = ({
             ],
           )}
         >
-          <span>{placeholder}</span>
+          <span>{placeholder ?? t("COMMON_SELECT_OPTION")}</span>
 
           <ChevronDown
             size={18}
@@ -63,7 +64,7 @@ const GroupedSelector: FC<GroupedSelectorProps> = ({
           <div className="mt-4 p-4 bg-select-option-background">
             {!hasItems ? (
               <div className="px-4 py-3 text-sm text-select-option-disabled-foreground">
-                No options available
+                {t("COMMON_NO_OPTIONS")}
               </div>
             ) : (
               sections.map((section) => (
