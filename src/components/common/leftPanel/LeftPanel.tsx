@@ -14,7 +14,6 @@ export default function LeftPanel() {
 
   return (
     <aside className="w-[320px]  p-4 overflow-y-auto rounded-md bg-[#2b2b2b] flex flex-col gap-2">
-      <h3>{t(panel.header)}</h3>
       {panel.component}
     </aside>
   );
