@@ -1,5 +1,6 @@
 import React from "react";
 import { XCircle, AlertTriangle, Info, X } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 export type NotificationType = "success" | "failure" | "warning" | "info";
 
@@ -80,6 +81,7 @@ const Notification: React.FC<NotificationProps> = ({
   onClose,
   width = 400,
 }) => {
+  const { t } = useTranslation();
   const {
     label,
     icon: Icon,
@@ -104,7 +106,7 @@ const Notification: React.FC<NotificationProps> = ({
             <span
               className={`text-[12px] leading-4 font-bold uppercase ${contentClass}`}
             >
-              {label}
+              {t(`NOTIFICATION_${label.toUpperCase()}`)}
             </span>
           </div>
 
@@ -119,7 +121,7 @@ const Notification: React.FC<NotificationProps> = ({
         {/* Body content */}
         <div className="flex flex-col w-full gap-3">
           <p className="text-[16px] leading-6 font-bold m-0 text-toast-title">
-            {title ?? label}
+            {title ?? t(`NOTIFICATION_${label.toUpperCase()}`)}
           </p>
           <p
             className={`text-[14px] leading-5 font-medium m-0 ${messageClass}`}

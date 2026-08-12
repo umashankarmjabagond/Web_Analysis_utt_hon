@@ -1,4 +1,5 @@
 import { Handle, Position, type NodeProps } from "@xyflow/react";
+import { useTranslation } from "react-i18next";
 import { NODE_TYPES } from "./nodeConfig";
 import { useTemplateExecutionStore } from "../../../../../store/templateExecutionStore";
 import { Check } from "lucide-react";
@@ -14,6 +15,7 @@ import Tooltip from "../../../../../components/common/tooltip/Tooltip";
 import Checkbox from "../../../../../components/forms/checkbox/CheckBox";
 
 export default function BaseNode({ id, data, type }: NodeProps<BaseFlowNode>) {
+  const { t } = useTranslation();
   const checked = useTemplateExecutionStore((state) =>
     state.selectedNodeIds.includes(id),
   );
@@ -91,9 +93,9 @@ export default function BaseNode({ id, data, type }: NodeProps<BaseFlowNode>) {
 
   const nodeStatusMsg =
     data.status === "warning"
-      ? "Warning message will be shown here"
+      ? t("NODE_WARNING_MESSAGE")
       : data.status === "error"
-        ? "There are too many bad data points"
+        ? t("NODE_ERROR_MESSAGE")
         : null;
 
   return (
@@ -123,7 +125,7 @@ export default function BaseNode({ id, data, type }: NodeProps<BaseFlowNode>) {
         <div className="relative z-10 flex h-full flex-col items-center justify-center gap-2">
           <Icon size={16} className="shrink-0 text-app-text-secondary" />
           <span className="w-full h-10 line-clamp-2 text-center text-sm text-app-action-secondary leading-5">
-            {data.label}
+            {t(data.label)}
           </span>
         </div>
 

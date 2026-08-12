@@ -1,8 +1,9 @@
 import DonutChart from "../../../components/charts/DonutChart";
 import { STATUS_COLORS } from "../../../constants/constants";
 import type { StatCardProps } from "../../../types/dashboardTypes";
-
+import { useTranslation } from "react-i18next";
 export default function StatCard({ data }: StatCardProps) {
+  const { t } = useTranslation();
   const total = data.chartData.reduce((sum, item) => sum + item.value, 0);
 
   return (
@@ -31,7 +32,7 @@ export default function StatCard({ data }: StatCardProps) {
             leading-4
           "
         >
-          {data.title}
+          {t(data.title)}
         </h2>
 
         <span
@@ -106,7 +107,7 @@ export default function StatCard({ data }: StatCardProps) {
                     text-gray-200
                   "
                 >
-                  {item.name}
+                  {t(`COMMON_${item.name.toUpperCase()}`)}
                 </span>
               </div>
 

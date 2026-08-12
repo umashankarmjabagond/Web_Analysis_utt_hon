@@ -1,11 +1,12 @@
 import { useMemo } from "react";
-
+import { useTranslation } from "react-i18next";
 import { useWorkflowStore } from "../../../store/workflowStore";
 import { flowToBackend } from "../../../utils/utils";
 
 import type { WorkflowNode } from "../../../types/workFlowTypes";
 
 export default function JsonViewer() {
+  const { t } = useTranslation();
   const { nodes, edges, selectedNode } = useWorkflowStore();
 
   const backendJson = useMemo(() => {
@@ -16,7 +17,9 @@ export default function JsonViewer() {
     <div className="flex h-full w-96 flex-col border-l border-component-toolbar-divider bg-app-background">
       {/* Header */}
       <div className="border-b border-component-toolbar-divider p-4">
-        <h2 className="text-lg font-semibold text-white">Workflow JSON</h2>
+        <h2 className="text-lg font-semibold text-white">
+          {t("WORKFLOW_JSON")}
+        </h2>
       </div>
 
       {/* Content */}
@@ -26,7 +29,7 @@ export default function JsonViewer() {
         </pre>
 
         <h2 className="mt-6 mb-3 text-lg font-semibold text-white">
-          Selected Element
+          {t("SELECTED_ELEMENT")}
         </h2>
 
         <pre className="rounded bg-app-code-background p-3 text-xs text-blue-300">

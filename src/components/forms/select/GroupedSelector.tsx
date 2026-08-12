@@ -5,9 +5,9 @@ import type {
   GroupedSelectorItem,
   GroupedSelectorProps,
 } from "../../../types/commonTypes";
-
+import { useTranslation } from "react-i18next";
 const GroupedSelector: FC<GroupedSelectorProps> = ({
-  placeholder = "Select an option",
+  placeholder,
   sections,
   onSelect,
   disabled = false,
@@ -22,7 +22,7 @@ const GroupedSelector: FC<GroupedSelectorProps> = ({
   };
 
   const hasItems = sections.some((section) => section.items.length > 0);
-
+  const { t } = useTranslation();
   return (
     <div ref={containerRef} className={clsx("w-full", className)}>
       <div className="rounded-md bg-component-toolbar-divider">
@@ -36,7 +36,7 @@ const GroupedSelector: FC<GroupedSelectorProps> = ({
             disabled && "cursor-not-allowed opacity-50",
           )}
         >
-          <span>{placeholder}</span>
+          <span>{placeholder ?? t("COMMON_SELECT_OPTION")}</span>
 
           {isOpen ? (
             <ChevronUp size={18} className="text-white" />
@@ -50,7 +50,7 @@ const GroupedSelector: FC<GroupedSelectorProps> = ({
           <div className="mt-4 p-4">
             {!hasItems ? (
               <div className="px-4 py-3 text-sm text-gray-300">
-                No options available
+                {t("COMMON_NO_OPTIONS")}
               </div>
             ) : (
               sections.map((section) => (

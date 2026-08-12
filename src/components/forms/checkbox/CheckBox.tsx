@@ -7,7 +7,7 @@ const Checkbox: React.FC<CheckboxProps> = ({
   disabled = false,
   label,
   className = "",
-  size=16,
+  size = 16,
   ...props
 }) => {
   return (
@@ -15,17 +15,17 @@ const Checkbox: React.FC<CheckboxProps> = ({
       <div
         className="relative flex items-center justify-center shrink-0"
         style={{
-          width : size,
-          height : size,
+          width: size,
+          height: size,
         }}
       >
         <input
           type="checkbox"
           checked={checked}
           style={{
-          width : size,
-          height : size,
-        }}
+            width: size,
+            height: size,
+          }}
           className={`
           peer
           appearance-none

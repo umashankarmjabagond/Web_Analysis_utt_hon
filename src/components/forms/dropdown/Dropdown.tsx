@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, type ReactNode } from "react";
 import { ChevronDown } from "lucide-react";
-
+import { useTranslation } from "react-i18next";
 export interface DropdownItem {
   label: string;
   value: string;
@@ -17,11 +17,11 @@ interface DropdownProps {
 export default function Dropdown({
   items,
   onSelect,
-  placeholder = "Select",
+  placeholder,
   className = "",
 }: DropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
-
+  const { t } = useTranslation();
   const wrapperRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -56,7 +56,7 @@ export default function Dropdown({
         onClick={() => setIsOpen((prev) => !prev)}
         className="cursor-pointer flex items-center gap-1 text-sm text-app-default-border hover:text-white transition-colors"
       >
-        <span>{placeholder}</span>
+        <span>{placeholder ?? t("COMMON_SELECT")}</span>
 
         <ChevronDown
           size={15}

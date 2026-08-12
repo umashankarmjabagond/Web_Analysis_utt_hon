@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Search } from "lucide-react";
 
 import Accordion from "../../forms/accordion/Accordion";
@@ -21,6 +22,8 @@ type CatalogTab = "templates" | "attributes";
 export default function WorkflowPanel() {
   const [activeTab, setActiveTab] = useState<CatalogTab>("templates");
   const [search, setSearch] = useState("");
+
+  const { t } = useTranslation();
 
   const { setPendingCatalogItem } = useWorkflowStore();
 
@@ -73,7 +76,7 @@ export default function WorkflowPanel() {
       {/* Header */}
       <div>
         <h3 className="mb-4 text-[12px] font-semibold uppercase tracking-[2.5px] text-button-secondary">
-          Catalog
+          {t("WORKFLOW_CATALOG")}
         </h3>
 
         {/* Tabs */}
@@ -86,7 +89,7 @@ export default function WorkflowPanel() {
                 : "text-app-text-secondary border-transparent"
             }`}
           >
-            Templates
+            {t("WORKFLOW_TEMPLATES")}
           </button>
 
           <button
@@ -97,7 +100,7 @@ export default function WorkflowPanel() {
                 : "text-app-text-secondary border-transparent"
             }`}
           >
-            Attributes
+            {t("WORKFLOW_ATTRIBUTES")}
           </button>
         </div>
       </div>
@@ -108,7 +111,7 @@ export default function WorkflowPanel() {
           className="w-[288px] h-8 rounded px-8 bg-app-surface border border-search-border text-[14px] text-text-secondary"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search..."
+          placeholder={t("COMMON_SEARCH")}
           startAdornment={<Search size={16} strokeWidth={2.5} />}
         />
       </div>

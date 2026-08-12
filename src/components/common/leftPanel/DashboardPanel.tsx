@@ -7,6 +7,7 @@ import { ROUTES } from "../../../constants/routes/routesConstant";
 import Input from "../../forms/input/Input";
 import { useDebounce } from "../../../hooks/useDebounce";
 import { filterTree } from "../../../utils/utils";
+import { useTranslation } from "react-i18next";
 
 const TREE_DATA: TreeNodeData[] = [
   {
@@ -115,6 +116,7 @@ const TREE_DATA: TreeNodeData[] = [
 ];
 
 export default function DashboardPanel() {
+  const { t } = useTranslation();
   const { plant, template, itemId } = useParams();
   const selectedId = itemId ?? template ?? plant ?? null;
 
@@ -156,7 +158,7 @@ export default function DashboardPanel() {
         className="w-[288px] h-8 rounded-[4px] px-8 bg-app-surface border border-app-default-border-strong text-[14px] text-text-secondary"
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-        placeholder="Search..."
+        placeholder={t("COMMON_SEARCH")}
         startAdornment={<Search size={16} strokeWidth={2.5} color="#D0D0D0" />}
       />
       <Tree

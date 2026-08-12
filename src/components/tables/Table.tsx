@@ -9,7 +9,7 @@ import {
   type ColumnFiltersState,
   type SortingState,
 } from "@tanstack/react-table";
-
+import { useTranslation } from "react-i18next";
 import type { TableProps } from "../../types/tableTypes";
 
 const Table = <T extends object>({
@@ -27,7 +27,7 @@ const Table = <T extends object>({
   className = "",
   tableClassName = "",
 
-  emptyMessage = "No records found",
+  emptyMessage,
 }: TableProps<T>) => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -61,7 +61,7 @@ const Table = <T extends object>({
       getPaginationRowModel: getPaginationRowModel(),
     }),
   });
-
+  const { t } = useTranslation();
   return (
     <div
       className={`dark
@@ -81,7 +81,7 @@ const Table = <T extends object>({
           <input
             type="text"
             value={globalFilter}
-            placeholder="Search..."
+            placeholder={t("COMMON_SEARCH")}
             onChange={(e) => setGlobalFilter(e.target.value)}
             className="
               w-[250px]
@@ -167,7 +167,7 @@ const Table = <T extends object>({
 
                       {filterable && header.column.getCanFilter() && (
                         <input
-                          placeholder="Filter..."
+                          placeholder={t("COMMON_FILTER")}
                           value={
                             (header.column.getFilterValue() as string) ?? ""
                           }
@@ -215,7 +215,7 @@ const Table = <T extends object>({
                   text-[var(--color-text-primary)]
                 "
               >
-                Loading...
+                {t("COMMON_LOADING")}
               </td>
             </tr>
           ) : table.getRowModel().rows.length === 0 ? (
@@ -232,7 +232,7 @@ const Table = <T extends object>({
                   text-[var(--color-text-primary)]
                 "
               >
-                {emptyMessage}
+                {emptyMessage || t("TABLE_NO_RECORDS_FOUND")}
               </td>
             </tr>
           ) : (
@@ -307,7 +307,7 @@ const Table = <T extends object>({
             >
               {[10, 20, 30, 50].map((size) => (
                 <option key={size} value={size}>
-                  Show {size}
+                  {t("TABLE_SHOW")} {size}
                 </option>
               ))}
             </select>
@@ -365,8 +365,8 @@ const Table = <T extends object>({
             </button>
 
             <span className="px-2 text-[var(--text-sm)] !text-[var(--color-text-primary)]">
-              Page {table.getState().pagination.pageIndex + 1} of{" "}
-              {table.getPageCount()}
+              {t("TABLE_PAGE")} {table.getState().pagination.pageIndex + 1}{" "}
+              {t("TABLE_OF")} {table.getPageCount()}
             </span>
 
             <button

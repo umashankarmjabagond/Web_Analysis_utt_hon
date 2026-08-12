@@ -10,7 +10,7 @@ import { createColumnHelper } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
 const statCards: StatCardData[] = [
   {
-    title: "TOTAL UNITS",
+    title: "DASHBOARD_TOTAL_UNITS",
     chartData: [
       {
         name: "Good",
@@ -27,7 +27,7 @@ const statCards: StatCardData[] = [
     ],
   },
   {
-    title: "MPC ASSETS",
+    title: "DASHBOARD_MPC_ASSETS",
     chartData: [
       {
         name: "Good",
@@ -44,7 +44,7 @@ const statCards: StatCardData[] = [
     ],
   },
   {
-    title: "TOTAL CONTROLLERS",
+    title: "DASHBOARD_TOTAL_CONTROLLERS",
     chartData: [
       {
         name: "Good",
@@ -61,7 +61,7 @@ const statCards: StatCardData[] = [
     ],
   },
   {
-    title: "REGULATORY ASSETS",
+    title: "DASHBOARD_REGULATORY_ASSETS",
     chartData: [
       {
         name: "Good",
@@ -277,129 +277,61 @@ const warningData: WarningRow[] = [
 
 const statusColumnHelper = createColumnHelper<StatusSummaryRow>();
 
-const statusColumns = [
-  statusColumnHelper.accessor("unitName", {
-    header: "Unit Name",
-  }),
-
-  statusColumnHelper.accessor("totalControllers", {
-    header: "Total Controllers",
-
-    cell: ({ getValue }) => (
-      <div className="text-center font-medium">{getValue()}</div>
-    ),
-  }),
-
-  statusColumnHelper.accessor("good", {
-    header: "Good",
-
-    cell: ({ getValue }) => (
-      <div className="flex justify-center">
-        <span
-          className="
-            rounded-full
-            border
-            border-[var(--color-success)]
-            px-3
-            py-1
-            text-xs
-            font-semibold
-            text-[var(--color-success)]
-          "
-        >
-          {getValue()}
-        </span>
-      </div>
-    ),
-  }),
-
-  statusColumnHelper.accessor("warning", {
-    header: "Warnings",
-
-    cell: ({ getValue }) => (
-      <div className="flex justify-center">
-        <span
-          className="
-            rounded-full
-            border
-            border-[var(--color-warning)]
-            px-3
-            py-1
-            text-xs
-            font-semibold
-            text-[var(--color-warning)]
-          "
-        >
-          {getValue()}
-        </span>
-      </div>
-    ),
-  }),
-
-  statusColumnHelper.accessor("error", {
-    header: "Errors",
-
-    cell: ({ getValue }) => (
-      <div className="flex justify-center">
-        <span
-          className="
-            rounded-full
-            border
-            border-[var(--color-danger)]
-            px-3
-            py-1
-            text-xs
-            font-semibold
-            text-[var(--color-danger)]
-          "
-        >
-          {getValue()}
-        </span>
-      </div>
-    ),
-  }),
-];
-
 /* =====================================================
                    WARNING COLUMNS
 ===================================================== */
 
 const warningColumnHelper = createColumnHelper<WarningRow>();
 
-const warningColumns = [
-  warningColumnHelper.accessor("unitName", {
-    header: "Unit Name",
-  }),
-
-  warningColumnHelper.accessor("type", {
-    header: "Type",
-  }),
-
-  warningColumnHelper.accessor("controllerName", {
-    header: "Controller Name",
-
-    cell: ({ getValue }) => (
-      <span
-        className="
-          text-[var(--color-primary)]
-        "
-      >
-        {getValue()}
-      </span>
-    ),
-  }),
-
-  warningColumnHelper.accessor("attributeName", {
-    header: "Attribute Name",
-  }),
-
-  warningColumnHelper.accessor("errorMessage", {
-    header: "Error Message",
-  }),
-];
-
 export default function Dashboard() {
   const { t } = useTranslation();
+
+  const statusColumns = [
+    statusColumnHelper.accessor("unitName", {
+      header: t("TABLE_UNIT_NAME"),
+    }),
+
+    statusColumnHelper.accessor("totalControllers", {
+      header: t("TABLE_TOTAL_CONTROLLERS"),
+    }),
+
+    statusColumnHelper.accessor("good", {
+      header: t("TABLE_GOOD"),
+    }),
+
+    statusColumnHelper.accessor("warning", {
+      header: t("TABLE_WARNINGS"),
+    }),
+
+    statusColumnHelper.accessor("error", {
+      header: t("TABLE_ERRORS"),
+    }),
+  ];
+
+  const warningColumns = [
+    warningColumnHelper.accessor("unitName", {
+      header: t("TABLE_UNIT_NAME"),
+    }),
+
+    warningColumnHelper.accessor("type", {
+      header: t("FILTER_TYPE"),
+    }),
+
+    warningColumnHelper.accessor("controllerName", {
+      header: t("TABLE_CONTROLLER_NAME"),
+      cell: ({ getValue }) => (
+        <span className="text-[var(--color-primary)]">{getValue()}</span>
+      ),
+    }),
+
+    warningColumnHelper.accessor("attributeName", {
+      header: t("TABLE_ATTRIBUTE_NAME"),
+    }),
+
+    warningColumnHelper.accessor("errorMessage", {
+      header: t("TABLE_ERROR_MESSAGE"),
+    }),
+  ];
   return (
     <div
       className="
@@ -433,7 +365,7 @@ export default function Dashboard() {
 
         <div className="flex-[804]  min-w-0">
           <TableCard
-            title="Unit Wise Status Summary"
+            title={t("DASHBOARD_UNIT_WISE_STATUS_SUMMARY")}
             columns={statusColumns}
             data={statusData}
             height="h-[344px]"
@@ -445,7 +377,7 @@ export default function Dashboard() {
 
       <div className="mt-4 h-full">
         <TableCard
-          title="Warning And Error Summary"
+          title={t("DASHBOARD_WARNING_ERROR_SUMMARY")}
           badge={11}
           columns={warningColumns}
           data={warningData}
@@ -463,7 +395,7 @@ export default function Dashboard() {
           text-[var(--text-text-primary)]
         "
                 >
-                  Attributes
+                  {t("FILTER_ATTRIBUTES")}
                 </label>
 
                 <select
@@ -481,15 +413,14 @@ export default function Dashboard() {
           outline-none
         "
                 >
-                  <option>All</option>
-                  <option>Data Source</option>
-                  <option>Data Sink</option>
-                  <option>Valve Stiction</option>
+                  <option>{t("FILTER_ALL")}</option>
+                  <option>{t("FILTER_DATA_SOURCE")}</option>
+                  <option>{t("FILTER_DATA_SINK")}</option>
+                  <option>{t("FILTER_VALVE_STICTION")}</option>
                 </select>
               </div>
 
               {/* Type Filter */}
-
               <div className="flex h-[28px] w-[270px] items-center gap-3">
                 <label
                   className="
@@ -501,7 +432,7 @@ export default function Dashboard() {
           text-[var(--text-text-primary)]
         "
                 >
-                  Type
+                  {t("FILTER_TYPE")}
                 </label>
 
                 <select
@@ -518,9 +449,9 @@ export default function Dashboard() {
           outline-none
         "
                 >
-                  <option>All</option>
-                  <option>Regulatory</option>
-                  <option>MPC</option>
+                  <option>{t("FILTER_ALL")}</option>
+                  <option>{t("FILTER_REGULATORY")}</option>
+                  <option>{t("FILTER_MPC")}</option>
                 </select>
               </div>
             </>
