@@ -385,7 +385,7 @@
 //   );
 // }
 
-import { ArrowLeft, Copy, Download, Trash2, Upload } from "lucide-react";
+import { ChevronLeft, Copy, Download, Trash2, Upload } from "lucide-react";
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -405,22 +405,11 @@ import { useTranslation } from "react-i18next";
 
 export default function Toolbar() {
   const { t } = useTranslation();
-  // ============================================================================
-  // WORKFLOW STORE
-  // ============================================================================
 
   const { nodes, deleteSelectedNodes, deleteSelectedEdges, clearWorkflow } =
     useWorkflowStore();
 
-  // ============================================================================
-  // NAVIGATION
-  // ============================================================================
-
   const navigate = useNavigate();
-
-  // ============================================================================
-  // SAVE DIALOG STATE
-  // ============================================================================
 
   const [isSaveDialogOpen, setIsSaveDialogOpen] = useState(false);
 
@@ -429,10 +418,6 @@ export default function Toolbar() {
   );
 
   const [templateName, setTemplateName] = useState("");
-
-  // ============================================================================
-  // NOTIFICATION STATE
-  // ============================================================================
 
   const [showNotification, setShowNotification] = useState(false);
 
@@ -444,18 +429,10 @@ export default function Toolbar() {
 
   const [notificationMessage, setNotificationMessage] = useState("");
 
-  // ============================================================================
-  // DELETE SELECTED
-  // ============================================================================
-
   const handleDelete = () => {
     deleteSelectedEdges();
     deleteSelectedNodes();
   };
-
-  // ============================================================================
-  // SAVE TEMPLATE
-  // ============================================================================
 
   const handleSave = () => {
     const existingTemplates = JSON.parse(
@@ -505,15 +482,7 @@ export default function Toolbar() {
     }, 3000);
   };
 
-  // ============================================================================
-  // SAVE AS CLICK
-  // ============================================================================
-
   const handleSaveAs = (item: { value: string; label: string }) => {
-    // ----------------------------------------------------------
-    // No nodes
-    // ----------------------------------------------------------
-
     if (nodes.length === 0) {
       setNotificationType("warning");
 
@@ -532,15 +501,7 @@ export default function Toolbar() {
       return;
     }
 
-    // ----------------------------------------------------------
-    // Template type
-    // ----------------------------------------------------------
-
     setTemplateType(item.value as "regulatory" | "mpc");
-
-    // ----------------------------------------------------------
-    // Generate template name
-    // ----------------------------------------------------------
 
     const templates = JSON.parse(
       localStorage.getItem("workflowTemplates") || "[]",
@@ -548,54 +509,19 @@ export default function Toolbar() {
 
     setTemplateName(`Custom_${templates.length + 1}`);
 
-    // ----------------------------------------------------------
-    // Open dialog
-    // ----------------------------------------------------------
-
     setIsSaveDialogOpen(true);
   };
 
-  // ============================================================================
-  // RENDER
-  // ============================================================================
-
   return (
     <>
-      {/* ========================================================================
-          TOOLBAR
-          ======================================================================== */}
-
-      <div
-        className="
-          flex
-          h-9
-          min-h-9
-          w-full
-          items-center
-          justify-between
-          border-b
-          border-[#303030]
-          bg-[#181818]
-          px-2
-        "
-      >
-        {/* ======================================================================
-            LEFT SIDE
-            ====================================================================== */}
-
-        <div className="flex h-full items-center">
-          {/* ====================================================================
-              BACK + NEW TEMPLATE
-              ==================================================================== */}
-
+      <div className=" flex h-12 min-h-9 w-full items-center justify-between border-b border-[#303030] bg-[#1b1b1b] px-2        ">
+        <div className="flex h-full items-center px-4">
           <div
             className="
               flex
               h-full
               items-center
               gap-1.5
-              border-r
-              border-[#303030]
               pr-3
               text-[12px]
               text-white
@@ -610,21 +536,19 @@ export default function Toolbar() {
                 flex
                 items-center
                 justify-center
-                text-[#A5A5A5]
-                transition-colors
+                transition-colors cursor-pointer
                 hover:text-white
               "
             >
-              <ArrowLeft size={14} strokeWidth={1.8} />
+              <ChevronLeft size={14} strokeWidth={1.8} />
             </button>
 
-            <span className="whitespace-nowrap font-medium">New Template</span>
+            <span className="whitespace-nowrap text-[18px]">
+              {t("NEW_TEMPLATE")}
+            </span>
+            <span className="mx-4 h-5 w-[1px] bg-[#454545]" />
           </div>
         </div>
-
-        {/* ======================================================================
-            RIGHT SIDE
-            ====================================================================== */}
 
         <div
           className="
@@ -634,33 +558,13 @@ export default function Toolbar() {
             gap-1
           "
         >
-          {/* ====================================================================
-              DELETE
-              ==================================================================== */}
-
           <ToolbarButton title="Delete" icon={Trash2} onClick={handleDelete} />
-
-          {/* ====================================================================
-              COPY / DUPLICATE
-              ==================================================================== */}
 
           <ToolbarButton title="Duplicate" icon={Copy} />
 
-          {/* ====================================================================
-              EXPORT
-              ==================================================================== */}
-
           <ToolbarButton title="Export Template" icon={Download} />
 
-          {/* ====================================================================
-              IMPORT
-              ==================================================================== */}
-
           <ToolbarButton title="Import Template" icon={Upload} />
-
-          {/* ====================================================================
-              SAVE AS
-              ==================================================================== */}
 
           <div className="ml-1">
             <Dropdown
@@ -681,10 +585,6 @@ export default function Toolbar() {
         </div>
       </div>
 
-      {/* ========================================================================
-          SAVE AS DIALOG
-          ======================================================================== */}
-
       <Dialog
         isOpen={isSaveDialogOpen}
         subtitle={t("TOOLBAR_SAVE_AS")}
@@ -703,10 +603,6 @@ export default function Toolbar() {
             text-sm
           "
         >
-          {/* ====================================================================
-              TEMPLATE NAME
-              ==================================================================== */}
-
           <Input
             className="
               h-8
@@ -723,10 +619,6 @@ export default function Toolbar() {
             onChange={(event) => setTemplateName(event.target.value)}
             placeholder="add template name"
           />
-
-          {/* ====================================================================
-              BUTTONS
-              ==================================================================== */}
 
           <div
             className="
@@ -749,10 +641,6 @@ export default function Toolbar() {
           </div>
         </div>
       </Dialog>
-
-      {/* ========================================================================
-          NOTIFICATION
-          ======================================================================== */}
 
       {showNotification && (
         <div

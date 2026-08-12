@@ -2,7 +2,7 @@ import { CircleQuestionMark, Menu, Settings, User } from "lucide-react";
 
 export default function Header() {
   return (
-    <header className="h-12 bg-component-header-background flex items-center justify-between px-4">
+    <header className="h-12 bg-[#1b1b1b] flex items-center justify-between px-4 border-b border-[#454545]">
       <div className="flex items-center gap-3">
         <button className="text-foreground-secondary hover:text-color-foreground cursor-pointer">
           <Menu size={20} />

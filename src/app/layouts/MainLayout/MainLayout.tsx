@@ -6,7 +6,7 @@ export default function MainLayout() {
   return (
     <div className="flex h-screen flex-col bg-app-background">
       <Header />
-      <div className="flex min-h-0 flex-1 overflow-hidden p-2">
+      <div className="flex min-h-0 flex-1 overflow-hidden">
         <Sidebar />
         <Workspace />
       </div>

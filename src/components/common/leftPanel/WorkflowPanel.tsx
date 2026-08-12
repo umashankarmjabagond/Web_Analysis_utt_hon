@@ -78,7 +78,7 @@ export default function WorkflowPanel() {
   };
 
   return (
-    <div className="flex h-full flex-col bg-[#272727]">
+    <div className="flex h-full flex-col">
       {/* Header */}
       <div>
         <h3 className="mb-4 text-[12px] font-semibold uppercase tracking-[2.5px] text-foreground-secondary">
@@ -86,7 +86,7 @@ export default function WorkflowPanel() {
         </h3>
 
         {/* Tabs */}
-        <div className="flex h-7 w-[193px] gap-1 rounded-[4px] bg-segmented-tab-container-background p-[2px] shadow-segmented-tab-container">
+        <div className="flex h-7 w-full gap-1 rounded-[4px] bg-segmented-tab-container-background p-[2px] shadow-segmented-tab-container">
           {TABS.map((tab) => (
             <button
               key={tab.id}

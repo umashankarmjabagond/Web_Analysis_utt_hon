@@ -5,26 +5,17 @@ export default function WorkspaceHeader() {
     <div
       className="
         flex
-        h-14
+        h-11
         w-full
         shrink-0
         items-center
-        border-b
-        border-[#333333]
+        border-b-1
+        border-[#454545]
         bg-[#1b1b1b]
+        overflow-x-auto
       "
     >
-      <div
-        className="
-          flex
-          min-w-0
-          flex-1
-          items-center
-          overflow-x-auto
-        "
-      >
-        <TopTabs />
-      </div>
+      <TopTabs />
     </div>
   );
 }
