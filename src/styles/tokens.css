@@ -177,7 +177,7 @@
   --node-default-background: var(--gray-1150);
   --node-default-border: var(--border-default);
 
-  /* Hover */
+  /* Node Hover */
   --node-hover-background: #335d774d;
   --node-hover-border: var(--border-accent);
 
@@ -185,22 +185,28 @@
   --node-status-background: var(--black-100);
 
   /* Success */
-  --node-success-tint: #68d5601a;
   --node-success-border: #68d56080;
-  --node-success-selected-tint: #68d5604d;
-  --node-success-selected-border: var(--success);
+  --node-success-tint: #68d5601a;
 
   /* Warning */
-  --node-warning-tint: #ffdb4266;
   --node-warning-border: var(--warning);
+  --node-warning-tint: #ffdb4266;
 
   /* Error */
-  --node-error-tint: #ff644c4d;
   --node-error-border: var(--danger);
+  --node-error-tint: #ff644c4d;
 
   /* Selection */
-  --node-selection-tint: #afddf533;
+  --node-success-selected-border: var(--success);
+  --node-success-selected-tint: #68d5604d;
+
   --node-selection-border: var(--border-accent);
+  --node-selection-tint: #afddf533;
+
+  /* Workflow Node Insert Action */
+  --node-insert-background: var(--surface-accent);
+  --node-insert-border: var(--black-100);
+  --node-insert-foreground: var(--black-100);
 
   /* Workflow Edge */
   --edge-default: var(--gray-500);
@@ -294,7 +300,7 @@
   --button-secondary-active-border: var(--border-accent);
 
   /* Secondary - Outline */
-  --button-secondary-outline-background: transparent;
+  --button-secondary-outline-background: var(--surface-elevated);
   --button-secondary-outline-border: var(--border-accent);
   --button-secondary-outline-foreground: var(--foreground-accent);
 
@@ -769,6 +775,8 @@
 @theme {
   --font-sans: "Honeywell Sans Web", sans-serif;
 
+  --color-background: var(--background);
+
   --color-surface: var(--surface);
   --color-surface-secondary: var(--surface-secondary);
   --color-surface-card: var(--surface-card);
@@ -834,6 +842,11 @@
 
   --color-node-error-tint: var(--node-error-tint);
   --color-node-error-border: var(--node-error-border);
+
+  /* Workflow Node Insert Action */
+  --color-node-insert-background: var(--node-insert-background);
+  --color-node-insert-border: var(--node-insert-border);
+  --color-node-insert-foreground: var(--node-insert-foreground);
 
   /* Workflow Edge */
   --color-edge-default: var(--edge-default);

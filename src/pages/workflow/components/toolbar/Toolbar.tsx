@@ -737,6 +737,7 @@ export default function Toolbar() {
           >
             <Button
               variant="secondary"
+              fill="outline"
               onClick={() => setIsSaveDialogOpen(false)}
             >
               {t("COMMON_CANCEL")}

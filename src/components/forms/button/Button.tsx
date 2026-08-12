@@ -8,6 +8,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   size?: "small" | "medium" | "large";
   loading?: boolean;
   fullWidth?: boolean;
+  iconOnly?: boolean;
   icon?: React.ReactNode;
   iconPosition?: "left" | "right";
 }
@@ -114,9 +115,15 @@ const variants = {
 };
 
 const sizes = {
-  small: "min-w-[72px] h-[26px] px-[10px] text-xs",
-  medium: "min-w-[88px] h-[30px] px-[14px] text-sm",
-  large: "min-w-[110px] h-[36px] px-[18px] text-base",
+  small: "h-[26px] px-[10px] text-xs",
+  medium: "h-[30px] px-[14px] text-sm",
+  large: "h-[36px] px-[18px] text-base",
+};
+
+const iconOnlySizes = {
+  small: "h-7 w-7 p-1.5",
+  medium: "h-8 w-8 p-2",
+  large: "h-9 w-9 p-2",
 };
 
 const Button: React.FC<ButtonProps> = ({
@@ -124,6 +131,7 @@ const Button: React.FC<ButtonProps> = ({
   loading = false,
   disabled = false,
   fullWidth = false,
+  iconOnly = false,
   variant = "secondary",
   fill = "solid",
   size = "medium",
@@ -144,7 +152,7 @@ const Button: React.FC<ButtonProps> = ({
       onClick={onClick}
       className={cn(
         "inline-flex items-center justify-center gap-1.5",
-        "box-border rounded-sm",
+        "box-border rounded-sm border",
         "font-medium",
         "transition-colors duration-200",
         "cursor-pointer",
@@ -156,8 +164,8 @@ const Button: React.FC<ButtonProps> = ({
         "disabled:bg-button-disabled-background",
         "disabled:border-button-disabled-border",
         "disabled:text-button-disabled-foreground",
-        fullWidth && "w-full",
-        sizes[size],
+        fullWidth && !iconOnly && "w-full",
+        iconOnly ? iconOnlySizes[size] : cn("gap-1.5", sizes[size]),
         variantStyles,
         className,
       )}
@@ -172,7 +180,7 @@ const Button: React.FC<ButtonProps> = ({
         <>
           {icon && iconPosition === "left" && <span>{icon}</span>}
 
-          <span>{children}</span>
+          {!iconOnly && <span>{children}</span>}
 
           {icon && iconPosition === "right" && <span>{icon}</span>}
         </>

@@ -9,8 +9,8 @@ export default function ToolbarExecutionButton({
   return (
     <button
       onClick={onClick}
-      className={`flex h-8 w-[102px] items-center gap-2 rounded-[4px] px-2 py-1.5 text-[14px] cursor-pointer hover:text-app-text-primary hover:bg-[#353535] ${
-        active ? "text-app-action-primary" : "text-app-action-secondary"
+      className={`flex h-8 w-[102px] items-center gap-2 rounded-[4px] px-2 py-1.5 text-[14px] cursor-pointer hover:text-app-text-primary hover:bg-surface-hover ${
+        active ? "text-foreground-accent" : "text-foreground-muted"
       }`}
     >
       <Icon size={16} />

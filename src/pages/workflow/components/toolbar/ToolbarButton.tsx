@@ -32,7 +32,6 @@
 // }
 
 import type { ToolbarButtonProps } from "../../../../types/workFlowTypes";
-
 export default function ToolbarButton({
   icon: Icon,
   active = false,
