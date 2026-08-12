@@ -1,5 +1,6 @@
 import { X } from "lucide-react";
 import type { DialogProps } from "../../../types/commonTypes";
+import { cn } from "../../../utils/utils";
 
 const Dialog = ({
   isOpen,
@@ -12,26 +13,34 @@ const Dialog = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-dialog-overlay p-4">
       <div
-        className="relative flex max-h-[80vh] flex-col overflow-hidden rounded-xl bg-[#272727] shadow-2xl"
+        className={cn(
+          "relative flex max-h-[80vh] flex-col overflow-hidden rounded-xl",
+          "border border-dialog-border",
+          "bg-dialog-background text-dialog-foreground",
+          "shadow-dialog-shadow",
+        )}
         style={{ width }}
       >
         {/* Header */}
         <div className="flex items-start justify-between p-8 pb-6">
           <div>
             {subtitle && (
-              <p className="mb-2 text-xs font-semibold uppercase tracking-[0.25em] text-gray-300">
+              <p className="mb-2 text-xs font-semibold uppercase tracking-[0.25em] text-dialog-description">
                 {subtitle}
               </p>
             )}
 
-            <h2 className="text-4xl font-semibold text-white">{title}</h2>
+            <h2 className="text-4xl font-semibold text-dialog-title">
+              {title}
+            </h2>
           </div>
 
           <button
+            type="button"
             onClick={onClose}
-            className="rounded-md p-2 text-gray-300 transition hover:bg-white/10 hover:text-white"
+            className="flex items-center justify-center rounded-md p-2 text-foreground-secondary cursor-pointer transition-colors hover:bg-surface-hover hover:text-foreground-strong"
           >
             <X size={22} />
           </button>
