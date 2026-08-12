@@ -1,7 +1,9 @@
 import React from "react";
 import { XCircle, AlertTriangle, Info, X } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import Badge from "../badge/Badge";
 
-export type NotificationType = "success" | "failure" | "warning" | "info";
+export type NotificationType = "success" | "danger" | "warning" | "info";
 
 interface NotificationProps {
   type: NotificationType;
@@ -38,38 +40,26 @@ const TYPE_CONFIG: Record<
   {
     label: string;
     icon: React.ElementType;
-    badgeBgClass: string;
-    contentClass: string;
-    messageClass: string;
   }
 > = {
   success: {
     label: "Success",
     icon: SuccessIcon,
-    badgeBgClass: "bg-badge-success-bg",
-    contentClass: "text-badge-icon",
-    messageClass: "text-text-accent",
   },
-  failure: {
+
+  danger: {
     label: "Failure",
     icon: XCircle,
-    badgeBgClass: "bg-danger",
-    contentClass: "text-white",
-    messageClass: "text-danger",
   },
+
   warning: {
     label: "Warning",
     icon: AlertTriangle,
-    badgeBgClass: "bg-warning",
-    contentClass: "text-white",
-    messageClass: "text-warning",
   },
+
   info: {
     label: "Info",
     icon: Info,
-    badgeBgClass: "bg-info",
-    contentClass: "text-white",
-    messageClass: "text-text-accent",
   },
 };
 
@@ -80,37 +70,29 @@ const Notification: React.FC<NotificationProps> = ({
   onClose,
   width = 400,
 }) => {
-  const {
-    label,
-    icon: Icon,
-    badgeBgClass,
-    contentClass,
-    messageClass,
-  } = TYPE_CONFIG[type];
+  const { t } = useTranslation();
+  const { label, icon: Icon } = TYPE_CONFIG[type];
 
   return (
     <div
       style={{ width: typeof width === "number" ? `${width}px` : width }}
-      className="flex flex-col h-auto rounded-[10px] p-6 gap-6 bg-toast-bg"
+      className="flex flex-col h-auto rounded-[10px] p-6 gap-6 bg-toast-background shadow-toast"
     >
       <div className="flex flex-col w-full gap-4">
         {/* Badge & Close */}
         <div className="flex flex-row w-full items-center justify-between h-8">
           {/* Badge/Categorical */}
-          <div
-            className={`flex flex-row items-center gap-1 h-6 rounded-2xl px-2 py-1 ${badgeBgClass}`}
+          <Badge
+            variant={type}
+            size="md"
+            fill="solid"
+            icon={<Icon size={14} />}
           >
-            <Icon size={12} strokeWidth={1.5} className={contentClass} />
-            <span
-              className={`text-[12px] leading-4 font-bold uppercase ${contentClass}`}
-            >
-              {label}
-            </span>
-          </div>
-
+            {t(`NOTIFICATION_${label.toUpperCase()}`)}
+          </Badge>
           <X
             onClick={onClose}
-            size={12}
+            size={16}
             strokeWidth={1.5}
             className="text-text-accent cursor-pointer"
           />
@@ -119,10 +101,10 @@ const Notification: React.FC<NotificationProps> = ({
         {/* Body content */}
         <div className="flex flex-col w-full gap-3">
           <p className="text-[16px] leading-6 font-bold m-0 text-toast-title">
-            {title ?? label}
+            {title ?? t(`NOTIFICATION_${label.toUpperCase()}`)}
           </p>
           <p
-            className={`text-[14px] leading-5 font-medium m-0 ${messageClass}`}
+            className={`text-[14px] leading-5 font-medium m-0 text-toast-description`}
           >
             {message}
           </p>

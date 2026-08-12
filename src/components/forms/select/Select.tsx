@@ -1,19 +1,30 @@
 import React from "react";
 import { ChevronDown } from "lucide-react";
 import type { SelectProps } from "../../../types/commonTypes";
+import { cn } from "../../../utils/utils";
 
+const selectVariants = {
+  default: cn(
+    "border-select-border",
+    "hover:border-select-hover-border",
+    // "focus:border-select-focus-border",
+    // "focus:ring-1 focus:ring-select-focus-ring",
+  ),
 
-const variants = {
-  default: `
-    border-[var(--color-border-1)]
-    hover:border-[var(--color-text-secondary)]
-    focus:border-[var(--color-primary)]
-  `,
-  error: `
-    border-[var(--color-danger)]
-    hover:border-[var(--color-danger)]
-    focus:border-[var(--color-danger)]
-  `,
+  error: cn(
+    "border-select-error-border",
+    "hover:border-select-error-border",
+    // "focus:border-select-error-border",
+    // "focus:ring-1 focus:ring-select-error-ring",
+  ),
+
+  disabled: cn(
+    "border-select-disabled-border",
+    "bg-select-disabled-background",
+    "text-select-disabled-foreground",
+    "cursor-not-allowed",
+    "hover:border-select-disabled-border",
+  ),
 };
 
 const Select: React.FC<SelectProps> = ({
@@ -26,32 +37,30 @@ const Select: React.FC<SelectProps> = ({
   className = "",
   ...props
 }) => {
+  const variant = props.disabled ? "disabled" : error ? "error" : "default";
+
   return (
-    <div className={`flex flex-col gap-1.5 ${fullWidth ? "w-full" : ""}`}>
-      {label && (
-        <label className="text-[var(--text-sm)] font-[var(--font-medium)] text-[var(--color-text-primary)]">
-          {label}
-        </label>
+    <div
+      className={cn(
+        "relative flex shrink-0 flex-col gap-1.5",
+        fullWidth && "w-full",
       )}
-      <div className="relative">
+    >
+      {label && (
+        <label className="text-sm font-medium text-foreground">{label}</label>
+      )}
+
+      <div className="relative min-w-0">
         <select
-          className={`
-                        w-full
-                        h-8
-                        appearance-none
-                        rounded-[var(--radius-sm)]
-                        border
-                        px-2.5
-                        pr-8
-                        text-[var(--text-sm)]
-                        font-normal
-                        bg-[var(--color-panel-bg)]
-                        text-[var(--color-text-primary)]
-                        outline-none
-                        transition-colors
-                        ${error ? variants.error : variants.default}
-                        ${className}
-                    `}
+          className={cn(
+            "h-8 appearance-none rounded-sm border",
+            fullWidth ? "w-full" : "w-auto",
+            "bg-select-background px-2.5 pr-8",
+            "text-sm font-normal text-select-foreground",
+            "outline-none transition-colors",
+            selectVariants[variant],
+            className,
+          )}
           {...props}
         >
           {placeHolder && (
@@ -69,21 +78,18 @@ const Select: React.FC<SelectProps> = ({
 
         <ChevronDown
           size={16}
-          className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-[var(--color-text-secondary)]"
+          className={cn(
+            "pointer-events-none absolute right-2 top-1/2 -translate-y-1/2",
+            props.disabled ? "text-select-icon-disabled" : "text-select-icon",
+          )}
         />
       </div>
 
       {!error && helperText && (
-        <p className="text-[var(--text-xs)] text-[var--color-text-secondary)]">
-          {helperText}
-        </p>
+        <p className="text-xs text-foreground-secondary">{helperText}</p>
       )}
 
-      {error && (
-        <p className="text-[var(--text-xs)] text-[var(--color-danger)]">
-          {error}
-        </p>
-      )}
+      {error && <p className="text-xs text-select-error-foreground">{error}</p>}
     </div>
   );
 };

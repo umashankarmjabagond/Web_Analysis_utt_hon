@@ -1,4 +1,5 @@
 import { CirclePause, CirclePlay, Trash } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import ToolbarExecutionButton from "./ToolbarExecutionButton";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../../../constants/routes/routesConstant";
@@ -7,6 +8,8 @@ import Badge from "../../../../components/common/badge/Badge";
 import { EXECUTION_ACTION } from "../../../../types/templateExecution";
 
 export default function ExecutionToolbar() {
+  const { t } = useTranslation();
+
   const navigate = useNavigate();
   const selectedExecutionItem = useTemplateExecutionStore(
     (state) => state.selectedExecutionItem,
@@ -24,19 +27,19 @@ export default function ExecutionToolbar() {
   const handleExecute = () => {
     // To do API integration
     setExecutionAction(EXECUTION_ACTION.EXECUTE);
-    confirm("Start Executing ?");
+    confirm(t("EXECUTION_START_CONFIRMATION"));
   };
 
   const handlePause = () => {
     // To do API integration
     setExecutionAction(EXECUTION_ACTION.PAUSE);
-    confirm("Pause execution ?");
+    confirm(t("EXECUTION_PAUSE_CONFIRMATION"));
   };
 
   const handleDelete = () => {
     // To do API integration
     setExecutionAction(EXECUTION_ACTION.DELETE);
-    confirm("Delete Workflow ?");
+    confirm(t("EXECUTION_DELETE_CONFIRMATION"));
     setTimeout(() => {
       setExecutionAction(EXECUTION_ACTION.IDLE);
     }, 1000);
@@ -63,19 +66,19 @@ export default function ExecutionToolbar() {
       <div className="flex h-8 w-[300px] items-center gap-2">
         <ToolbarExecutionButton
           icon={CirclePlay}
-          label="Execute"
+          label={t("EXECUTION_EXECUTE")}
           active={executionAction === EXECUTION_ACTION.EXECUTE}
           onClick={handleExecute}
         />
         <ToolbarExecutionButton
           icon={CirclePause}
-          label="Pause"
+          label={t("EXECUTION_PAUSE")}
           active={executionAction === EXECUTION_ACTION.PAUSE}
           onClick={handlePause}
         />
         <ToolbarExecutionButton
           icon={Trash}
-          label="Delete"
+          label={t("COMMON_DELETE")}
           active={executionAction === EXECUTION_ACTION.DELETE}
           onClick={handleDelete}
         />
@@ -86,7 +89,7 @@ export default function ExecutionToolbar() {
           className="h-8 w-[161px] rounded-[4px] px-4 py-1.5 text-[14px] text-app-action-primary cursor-pointer"
           onClick={() => navigate(ROUTES.WORKFLOW)}
         >
-          Analysis Templates
+          {t("ANALYSIS_TEMPLATES")}
         </button>
       </div>
     </div>

@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import type {
   CalculatedKpisAndErrorsProps,
   KpiItem,
@@ -21,21 +22,22 @@ const CalculatedKpisAndErrors: React.FC<CalculatedKpisAndErrorsProps> = ({
   kpis = MOCK_KPIS,
   errors = MOCK_ERRORS,
 }) => {
+  const { t } = useTranslation();
   return (
     <div className="flex flex-col w-full h-full bg-panel-bg border border-border-1">
       <div className="flex flex-row w-full border-b border-border-1">
         <div className="w-1/2 py-2 text-center text-[13px] text-text-accent border-r border-border-1">
-          Calculated KPIs
+          {t("CALCULATED_KPIS_TITLE")}
         </div>
         <div className="w-1/2 py-2 text-center text-[13px] text-text-accent">
-          Errors
+          {t("CALCULATED_KPIS_ERRORS_TITLE")}
         </div>
       </div>
 
       <div className="flex flex-row w-full h-full">
         <div className="flex flex-col w-1/2 !h-full px-6 py-4 gap-3 border-r border-border-1 box-border">
           <span className="font-extrabold text-[12px] leading-4 tracking-[2px] uppercase text-text-accent">
-            Calculated KPIs
+            {t("CALCULATED_KPIS_TITLE")}
           </span>
           <div className="flex flex-col w-1/2 gap-1">
             {kpis.map((kpi, idx) => (
@@ -55,7 +57,7 @@ const CalculatedKpisAndErrors: React.FC<CalculatedKpisAndErrorsProps> = ({
         <div className="flex flex-col w-1/2 px-6 py-4 gap-3">
           {errors.length === 0 ? (
             <p className="text-[12px] italic text-text-disabled m-0">
-              No errors found
+              {t("CALCULATED_KPIS_NO_ERRORS")}
             </p>
           ) : (
             <div className="flex flex-col gap-2">

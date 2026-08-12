@@ -373,6 +373,16 @@
 import { useCallback, useEffect, useState } from "react";
 
 import { MarkerType, ReactFlow, useReactFlow, type Edge } from "@xyflow/react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
+import {
+  Background,
+  BackgroundVariant,
+  MarkerType,
+  ReactFlow,
+  useReactFlow,
+  type Edge,
+} from "@xyflow/react";
 
 import {
   edgeTypes,
@@ -446,6 +456,8 @@ const addCatalogIdsToNodes = (nodes: WorkflowNode[]): WorkflowNode[] => {
 };
 
 export default function Canvas() {
+  const { t } = useTranslation();
+
   const {
     nodes,
     edges,
@@ -730,13 +742,11 @@ export default function Canvas() {
           <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
             <div className="max-w-md text-center">
               <h2 className="text-4xl font-medium text-app-default-border">
-                Create New Template
+                {t("CANVAS_CREATE_NEW_TEMPLATE")}
               </h2>
 
               <p className="mt-4 text-base leading-6 text-app-default-border">
-                Create a template from scratch using attributes or predefined
-                templates as base from the left pane, customize it to your
-                requirements, and save it as a custom template.
+                {t("CANVAS_CREATE_TEMPLATE_DESCRIPTION")}
               </p>
             </div>
           </div>
@@ -745,8 +755,8 @@ export default function Canvas() {
 
       <Dialog
         isOpen={isDialogOpen}
-        title="Add Attribute"
-        subtitle="Workflow"
+        title={t("CANVAS_ADD_ATTRIBUTE")}
+        subtitle={t("CANVAS_WORKFLOW")}
         onClose={() => {
           setIsDialogOpen(false);
           setSelectedEdge(null);
@@ -754,7 +764,7 @@ export default function Canvas() {
         width={620}
       >
         <GroupedSelector
-          placeholder="Select an option"
+          placeholder={t("COMMON_SELECT_OPTION")}
           sections={attributeCatalogSections.map((section) => ({
             id: section.id ?? section.title,
             title: section.title,

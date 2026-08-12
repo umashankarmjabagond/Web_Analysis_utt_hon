@@ -5,12 +5,12 @@ import { ROUTES } from "../../../constants/routes/routesConstant";
 export const panelConfig = [
   {
     path: ROUTES.WORKFLOW,
-    header: "Workflow Nodes",
+    header: "WORKFLOW_NODES",
     component: <WorkflowPanel />,
   },
   {
     path: ROUTES.DASHBOARD,
-    header: "Plant Hierarchy",
+    header: "PLANT_HIERARCHY",
     component: <DashboardPanel />,
   },
 ];
