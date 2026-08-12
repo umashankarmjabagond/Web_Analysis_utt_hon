@@ -372,17 +372,8 @@
 
 import { useCallback, useEffect, useState } from "react";
 
-import { MarkerType, ReactFlow, useReactFlow, type Edge } from "@xyflow/react";
-import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import {
-  Background,
-  BackgroundVariant,
-  MarkerType,
-  ReactFlow,
-  useReactFlow,
-  type Edge,
-} from "@xyflow/react";
+import { MarkerType, ReactFlow, useReactFlow, type Edge } from "@xyflow/react";
 
 import {
   edgeTypes,
@@ -392,7 +383,6 @@ import {
   type WorkflowNode,
 } from "../../../types/workFlowTypes";
 
-import Toolbar from "./toolbar/Toolbar";
 import { useWorkflowStore } from "../../../store/workflowStore";
 
 import { backendToFlow } from "../../../utils/utils";
@@ -710,10 +700,6 @@ export default function Canvas() {
 
   return (
     <div className="relative h-full w-full">
-      <div className="absolute left-4 right-3 top-5 z-10">
-        <Toolbar />
-      </div>
-
       <ReactFlow<WorkflowNode, Edge>
         className="!bg-[#111111]"
         nodes={nodes as WorkflowNode[]}

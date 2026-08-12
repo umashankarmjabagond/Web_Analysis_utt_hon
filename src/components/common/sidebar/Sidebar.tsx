@@ -20,10 +20,7 @@ const MENUS = [
 export default function Sidebar() {
   const { t } = useTranslation();
   return (
-    <aside
-      className="w-16 rounded-md bg-surface"
-      style={{ background: "#272727" }}
-    >
+    <aside className="w-16 bg-surface" style={{ background: "#272727" }}>
       <nav className="flex flex-col items-center gap-1 p-2">
         {MENUS.map(({ name, path, icon: Icon }) => (
           <NavLink

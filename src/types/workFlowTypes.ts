@@ -1,4 +1,4 @@
-import type { MouseEventHandler } from "react";
+import type { MouseEventHandler, ReactNode } from "react";
 import WorkflowEdge from "../pages/workflow/edges/BaseEdge";
 import BaseNode from "../pages/workflow/nodes/BaseNode";
 
@@ -123,4 +123,13 @@ export interface ToolbarButtonProps {
 
 export interface PropertiesProps {
   onCancel?: () => void;
+}
+
+export type PanelLayout = "workflow" | "default";
+
+export interface PanelConfig {
+  path: string;
+  header: string;
+  component: ReactNode;
+  layout: PanelLayout;
 }
