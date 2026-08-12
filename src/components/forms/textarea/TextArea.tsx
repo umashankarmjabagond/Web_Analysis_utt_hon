@@ -1,18 +1,16 @@
 import React from "react";
 import type { TextAreaProps } from "../../../types/commonTypes";
-
+import { cn } from "../../../utils/utils";
 
 const variants = {
-  default: `
-    border-[var(--color-border-1)]
-    hover:border-[var(--color-text-secondary)]
-    focus:border-[var(--color-primary)]
-  `,
-  error: `
-    border-[var(--color-danger)]
-    hover:border-[var(--color-danger)]
-    focus:border-[var(--color-danger)]
-  `,
+  default:
+    "border-textarea-border hover:border-textarea-hover-border focus:border-textarea-focus-border focus:ring-1 focus:ring-textarea-focus-ring",
+
+  error:
+    "border-textarea-error-border hover:border-textarea-error-border focus:border-textarea-error-border focus:ring-1 focus:ring-textarea-error-ring",
+
+  disabled:
+    "border-textarea-disabled-border bg-textarea-disabled-background text-textarea-disabled-foreground hover:border-textarea-disabled-border cursor-not-allowed",
 };
 
 const TextArea: React.FC<TextAreaProps> = ({
@@ -27,42 +25,28 @@ const TextArea: React.FC<TextAreaProps> = ({
   return (
     <div className={`flex flex-col gap-1.5 ${fullWidth ? "w-full" : ""}`}>
       {label && (
-        <label className="text-[var(--text-sm)] font-[var(--font-medium)] text-[var(--color-text-primary)]">
-          {label}
-        </label>
+        <label className="text-sm font-medium text-foreground">{label}</label>
       )}
 
       <textarea
         rows={rows}
-        className={`
-          w-full
-          rounded-[var(--radius-sm)]
-          border
-          px-2.5
-          py-2
-          text-[var(--text-sm)]
-          font-normal
-          text-[var(--color-text-primary)]
-          placeholder:text-[var(--color-text-disabled)]
-          outline-none
-          resize-none
-          transition-colors
-          ${error ? variants.error : variants.default}
-          ${className}
-        `}
+        className={cn(
+          "w-full rounded-sm border px-2.5 py-2",
+          "bg-textarea-background text-sm font-normal text-textarea-foreground",
+          "placeholder:text-textarea-placeholder",
+          "outline-none transition-colors resize-none",
+          variants[props.disabled ? "disabled" : error ? "error" : "default"],
+          className,
+        )}
         {...props}
       />
 
       {!error && helperText && (
-        <p className="text-[var(--text-xs)] text-[var(--color-text-secondary)]">
-          {helperText}
-        </p>
+        <p className="text-xs text-foreground-secondary">{helperText}</p>
       )}
 
       {error && (
-        <p className="text-[var(--text-xs)] text-[var(--color-danger)]">
-          {error}
-        </p>
+        <p className="text-xs text-textarea-error-foreground">{error}</p>
       )}
     </div>
   );

@@ -16,6 +16,7 @@ import {
 import Input from "../../forms/input/Input";
 
 import { useWorkflowStore } from "../../../store/workflowStore";
+import { cn } from "../../../utils/utils";
 
 type CatalogTab = "templates" | "attributes";
 
@@ -24,6 +25,11 @@ export default function WorkflowPanel() {
   const [search, setSearch] = useState("");
 
   const { t } = useTranslation();
+
+  const TABS = [
+    { id: "templates", label: t("WORKFLOW_TEMPLATES") },
+    { id: "attributes", label: t("WORKFLOW_ATTRIBUTES") },
+  ] as const;
 
   const { setPendingCatalogItem } = useWorkflowStore();
 
@@ -72,43 +78,36 @@ export default function WorkflowPanel() {
   };
 
   return (
-    <div className="flex h-full flex-col bg-app-code-background">
+    <div className="flex h-full flex-col bg-[#272727]">
       {/* Header */}
       <div>
-        <h3 className="mb-4 text-[12px] font-semibold uppercase tracking-[2.5px] text-button-secondary">
+        <h3 className="mb-4 text-[12px] font-semibold uppercase tracking-[2.5px] text-foreground-secondary">
           {t("WORKFLOW_CATALOG")}
         </h3>
 
         {/* Tabs */}
-        <div className="flex w-[193px] h-7 rounded-[4px] p-[2px] gap-1 bg-[#505050] shadow-[inset_1px_1px_1px_0px_rgba(0,0,0,0.15)]">
-          <button
-            onClick={() => setActiveTab("templates")}
-            className={`flex-1 w-[94px] h-6 rounded-[3px]  border px-3 py-[2px] gap-[10px] text-[13px] font-medium transition ${
-              activeTab === "templates"
-                ? "bg-button-text-primary border-component-segmented-control-selected-border box-shadow: 1px 1px 1px 0px #00000026 text-white shadow"
-                : "text-app-text-secondary border-transparent"
-            }`}
-          >
-            {t("WORKFLOW_TEMPLATES")}
-          </button>
-
-          <button
-            onClick={() => setActiveTab("attributes")}
-            className={`flex-1 w-[94px] h-6 rounded-[3px] border rounded px-3 py-[2px] gap-[10px] text-[13px] font-medium transition ${
-              activeTab === "attributes"
-                ? "bg-button-text-primary border-component-segmented-control-selected-border box-shadow: 1px 1px 1px 0px #00000026 text-white shadow"
-                : "text-app-text-secondary border-transparent"
-            }`}
-          >
-            {t("WORKFLOW_ATTRIBUTES")}
-          </button>
+        <div className="flex h-7 w-[193px] gap-1 rounded-[4px] bg-segmented-tab-container-background p-[2px] shadow-segmented-tab-container">
+          {TABS.map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={cn(
+                "h-6 flex-1 rounded-[3px] border px-3 py-[2px] text-[13px] font-medium transition-colors cursor-pointer",
+                activeTab === tab.id
+                  ? "border-segmented-tab-active-border bg-segmented-tab-active-background text-segmented-tab-active-foreground"
+                  : "border-segmented-tab-border bg-segmented-tab-background text-segmented-tab-foreground hover:border-segmented-tab-hover-border hover:bg-segmented-tab-hover-background hover:text-segmented-tab-hover-foreground",
+              )}
+            >
+              {tab.label}
+            </button>
+          ))}
         </div>
       </div>
 
       {/* Search */}
       <div className="mt-4">
         <Input
-          className="w-[288px] h-8 rounded px-8 bg-app-surface border border-search-border text-[14px] text-text-secondary"
+          className="w-[288px] px-8"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder={t("COMMON_SEARCH")}

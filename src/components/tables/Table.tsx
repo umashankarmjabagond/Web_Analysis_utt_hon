@@ -11,6 +11,16 @@ import {
 } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
 import type { TableProps } from "../../types/tableTypes";
+import { cn } from "../../utils/utils";
+import {
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  ChevronsLeft,
+  ChevronsRight,
+  ChevronUp,
+} from "lucide-react";
+import Select from "../forms/select/Select";
 
 const Table = <T extends object>({
   data,
@@ -62,89 +72,92 @@ const Table = <T extends object>({
     }),
   });
   const { t } = useTranslation();
+
+  const paginationButtonClass = cn(
+    "flex h-8 w-8 items-center justify-center",
+    "rounded-sm border",
+    "border-table-grid-border",
+    "bg-table-background",
+    "text-sm text-table-row-foreground",
+    "transition-colors",
+    "hover:bg-table-row-hover-background",
+    "hover:text-table-row-selected-foreground",
+    "focus:outline-none",
+    "focus:ring-1 focus:ring-table-focus-ring",
+    "disabled:cursor-not-allowed",
+    "disabled:opacity-50",
+  );
+
   return (
     <div
-      className={`dark
-        w-full
-        overflow-auto
-        rounded-[var(--radius-sm)]
-        border
-        border-[var(--color-table-border)]
-        bg-[var(--color-background)]
-        ${className}
-      `}
+      className={cn(
+        "w-full overflow-auto rounded-lg border",
+        "border-table-border",
+        "bg-table-background",
+        className,
+      )}
     >
       {/* ---------------- Toolbar ---------------- */}
-
       {filterable && (
-        <div className="flex items-center justify-end bg-[var(--color-table-header)] px-3 py-2.5">
+        <div
+          className={cn(
+            "flex items-center justify-end px-3 py-2.5",
+            "bg-table-header-background",
+            "border-b border-table-header-border",
+          )}
+        >
           <input
             type="text"
             value={globalFilter}
             placeholder={t("COMMON_SEARCH")}
             onChange={(e) => setGlobalFilter(e.target.value)}
-            className="
-              w-[250px]
-              rounded-[var(--radius-sm)]
-              border
-              border-[var(--color-table-border)]
-              bg-[var(--color-table-row-odd)]
-              px-3
-              py-2
-              text-[var(--text-sm)]
-              text-[var(--color-text-primary)]
-              outline-none
-              transition-colors
-              placeholder:text-[var(--color-text-secondary)]
-              hover:border-[var(--color-primary)]
-              focus:border-[var(--color-primary)]
-            "
+            className={cn(
+              "w-[250px] rounded-sm border",
+              "border-table-grid-border",
+              "bg-table-row-odd-background",
+              "px-3 py-2",
+              "text-sm text-table-row-foreground",
+              "placeholder:text-foreground-placeholder",
+              "outline-none transition-colors",
+              "hover:border-border-default",
+              "focus:border-border-accent",
+              "focus:ring-1 focus:ring-table-focus-ring",
+            )}
           />
         </div>
       )}
 
       {/*---------------- Table ----------------*/}
-
       <table
-        className={`
-          w-full
-          table-fixed
-          border-collapse
-          ${tableClassName}
-        `}
+        className={cn("w-full table-fixed border-collapse", tableClassName)}
       >
-        <thead className="bg-[var(--color-table-header)]">
+        <thead>
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
                 <th
                   key={header.id}
-                  className={`
-                    border
-                    border-[var(--color-table-border)]
-                    px-3
-                    py-2.5
-                    text-left
-                    whitespace-nowrap
-                    font-[var(--font-semibold)]
-                    text-[var(--color-text-primary)]
-                    ${
-                      stickyHeader
-                        ? "sticky top-0 z-10 bg-[var(--color-table-header)]"
-                        : ""
-                    }
-                  `}
+                  className={cn(
+                    "border px-3 py-2.5",
+                    "border-table-header-border",
+                    "bg-table-header-background",
+                    "text-left text-sm font-semibold",
+                    "text-table-header-foreground",
+                    "whitespace-nowrap",
+                    stickyHeader &&
+                      "sticky top-0 z-10 bg-table-sticky-background",
+                  )}
                 >
                   {header.isPlaceholder ? null : (
                     <div className="flex flex-col gap-1.5">
                       {/* Header */}
 
                       <div
-                        className={`${
-                          sortable && header.column.getCanSort()
-                            ? "cursor-pointer select-none hover:text-[var(--color-primary)]"
-                            : ""
-                        }`}
+                        className={cn(
+                          sortable &&
+                            header.column.getCanSort() &&
+                            "cursor-pointer select-none hover:text-foreground-accent",
+                        )}
                         onClick={
                           sortable
                             ? header.column.getToggleSortingHandler()
@@ -156,15 +169,22 @@ const Table = <T extends object>({
                           header.getContext(),
                         )}
 
-                        {sortable && header.column.getIsSorted() && (
-                          <span className="ml-1 text-xs">
-                            {header.column.getIsSorted() === "asc" ? "▲" : "▼"}
-                          </span>
-                        )}
+                        {sortable &&
+                          header.column.getIsSorted() &&
+                          (header.column.getIsSorted() === "asc" ? (
+                            <ChevronUp
+                              size={14}
+                              className="ml-1 inline text-table-sort-icon-active"
+                            />
+                          ) : (
+                            <ChevronDown
+                              size={14}
+                              className="ml-1 inline text-table-sort-icon-active"
+                            />
+                          ))}
                       </div>
 
                       {/* Column Filter */}
-
                       {filterable && header.column.getCanFilter() && (
                         <input
                           placeholder={t("COMMON_FILTER")}
@@ -174,22 +194,18 @@ const Table = <T extends object>({
                           onChange={(e) =>
                             header.column.setFilterValue(e.target.value)
                           }
-                          className="
-                              w-full
-                              rounded-[var(--radius-sm)]
-                              border
-                              border-[var(--color-table-border)]
-                              bg-[var(--color-table-row-odd)]
-                              px-2
-                              py-1.5
-                              text-[var(--text-xs)]
-                              text-[var(--color-text-primary)]
-                              outline-none
-                              transition-colors
-                              placeholder:text-[var(--color-text-secondary)]
-                              hover:border-[var(--color-primary)]
-                              focus:border-[var(--color-primary)]
-                            "
+                          className={cn(
+                            "w-full rounded-sm border",
+                            "border-table-grid-border",
+                            "bg-table-row-odd-background",
+                            "px-2 py-1.5",
+                            "text-xs text-table-row-foreground",
+                            "placeholder:text-foreground-placeholder",
+                            "outline-none transition-colors",
+                            "hover:border-border-default",
+                            "focus:border-border-accent",
+                            "focus:ring-1 focus:ring-table-focus-ring",
+                          )}
                         />
                       )}
                     </div>
@@ -205,15 +221,12 @@ const Table = <T extends object>({
             <tr>
               <td
                 colSpan={columns.length}
-                className="
-                  border
-                  border-[var(--color-table-border)]
-                  bg-[var(--color-table-row-odd)]
-                  px-4
-                  py-6
-                  text-center
-                  text-[var(--color-text-primary)]
-                "
+                className={cn(
+                  "border px-4 py-6 text-center",
+                  "border-table-grid-border",
+                  "bg-table-row-odd-background",
+                  "text-table-row-foreground",
+                )}
               >
                 {t("COMMON_LOADING")}
               </td>
@@ -222,15 +235,12 @@ const Table = <T extends object>({
             <tr>
               <td
                 colSpan={columns.length}
-                className="
-                  border
-                  border-[var(--color-table-border)]
-                  bg-[var(--color-table-row-odd)]
-                  px-4
-                  py-6
-                  text-center
-                  text-[var(--color-text-primary)]
-                "
+                className={cn(
+                  "border px-4 py-6 text-center",
+                  "border-table-grid-border",
+                  "bg-table-background",
+                  "text-table-row-foreground",
+                )}
               >
                 {emptyMessage || t("TABLE_NO_RECORDS_FOUND")}
               </td>
@@ -239,29 +249,19 @@ const Table = <T extends object>({
             table.getRowModel().rows.map((row, rowIndex) => (
               <tr
                 key={row.id}
-                className={`
-                  transition-colors
-                  ${
-                    zebraStripes
-                      ? rowIndex % 2 === 0
-                        ? "bg-[var(--color-table-row-odd)]"
-                        : "bg-[var(--color-table-row-even)]"
-                      : "bg-[var(--color-table-row-odd)]"
-                  }
-                  hover:bg-[var(--color-table-row-hover)]
-                `}
+                className={cn(
+                  "transition-colors",
+                  "hover:bg-table-row-hover-background",
+                )}
               >
                 {row.getVisibleCells().map((cell) => (
                   <td
                     key={cell.id}
-                    className="
-                      whitespace-nowrap
-                      border
-                      border-[var(--color-table-border)]
-                      px-3
-                      py-2.5
-                      text-[var(--color-text-primary)]
-                    "
+                    className={cn(
+                      "whitespace-nowrap border px-3 py-2.5 text-sm",
+                      "border-table-grid-border",
+                      "text-table-row-foreground",
+                    )}
                   >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </td>
@@ -274,97 +274,62 @@ const Table = <T extends object>({
 
       {/* ---------------- Pagination ---------------- */}
       {pagination && (
-        <div
-          className="
-            flex items-center justify-between
-            border-t
-            border-[var(--color-table-border)]
-            bg-[var(--color-table-header)]
-            px-3
-            py-3
-          "
-        >
+        <div className="flex items-center justify-between border-t px-3 py-3 border-table-header-border bg-table-background">
           {/* Left */}
-
           <div className="flex items-center gap-2">
-            <select
+            {/* <select
               value={table.getState().pagination.pageSize}
               onChange={(e) => table.setPageSize(Number(e.target.value))}
-              className="
-                h-8
-                rounded-[var(--radius-sm)]
-                border
-                border-[var(--color-table-border)]
-                bg-[var(--color-table-row-odd)]
-                px-3
-                text-[var(--text-sm)]
-                !text-[var(--color-text-primary)]
-                outline-none
-                transition-colors
-                hover:border-[var(--color-primary)]
-                focus:border-[var(--color-primary)]
-              "
+              className={cn(
+                "h-8 rounded-sm border",
+                "border-table-grid-border",
+                "bg-table-row-odd-background",
+                "px-3",
+                "text-sm text-table-row-foreground",
+                "outline-none transition-colors",
+                "hover:border-border-default",
+                "focus:border-border-accent",
+                "focus:ring-1 focus:ring-table-focus-ring",
+              )}
             >
               {[10, 20, 30, 50].map((size) => (
                 <option key={size} value={size}>
                   {t("TABLE_SHOW")} {size}
                 </option>
               ))}
-            </select>
+            </select> */}
+
+            {/* reused componnet */}
+            <Select
+              value={String(table.getState().pagination.pageSize)}
+              onChange={(e) => table.setPageSize(Number(e.target.value))}
+              options={[10, 20, 30, 50].map((size) => ({
+                value: String(size),
+                label: `Show ${size}`,
+              }))}
+              fullWidth={false}
+            />
           </div>
 
           {/* Right */}
-
           <div className="flex items-center gap-2">
             <button
               onClick={() => table.setPageIndex(0)}
               disabled={!table.getCanPreviousPage()}
-              className="
-                flex
-                h-8
-                w-8
-                items-center
-                justify-center
-                rounded-[var(--radius-sm)]
-                border
-                border-[var(--color-table-border)]
-                bg-[var(--color-table-row-odd)]
-                text-[var(--color-text-primary)]
-                transition-colors
-                hover:bg-[var(--color-primary)]
-                hover:text-white
-                disabled:cursor-not-allowed
-                disabled:opacity-50
-              "
+              className={paginationButtonClass}
             >
-              {"<<"}
+              <ChevronsLeft size={16} />
             </button>
 
             <button
               onClick={() => table.previousPage()}
               disabled={!table.getCanPreviousPage()}
-              className="
-                flex
-                h-8
-                w-8
-                items-center
-                justify-center
-                rounded-[var(--radius-sm)]
-                border
-                border-[var(--color-table-border)]
-                bg-[var(--color-table-row-odd)]
-                text-[var(--color-text-primary)]
-                transition-colors
-                hover:bg-[var(--color-primary)]
-                hover:text-white
-                disabled:cursor-not-allowed
-                disabled:opacity-50
-              "
+              className={paginationButtonClass}
             >
-              {"<"}
+              <ChevronLeft size={16} />
             </button>
 
-            <span className="px-2 text-[var(--text-sm)] !text-[var(--color-text-primary)]">
+            <span className="px-2 text-sm text-table-row-foreground">
               {t("TABLE_PAGE")} {table.getState().pagination.pageIndex + 1}{" "}
               {t("TABLE_OF")} {table.getPageCount()}
             </span>
@@ -372,49 +337,17 @@ const Table = <T extends object>({
             <button
               onClick={() => table.nextPage()}
               disabled={!table.getCanNextPage()}
-              className="
-                flex
-                h-8
-                w-8
-                items-center
-                justify-center
-                rounded-[var(--radius-sm)]
-                border
-                border-[var(--color-table-border)]
-                bg-[var(--color-table-row-odd)]
-                text-[var(--color-text-primary)]
-                transition-colors
-                hover:bg-[var(--color-primary)]
-                hover:text-white
-                disabled:cursor-not-allowed
-                disabled:opacity-50
-              "
+              className={paginationButtonClass}
             >
-              {">"}
+              <ChevronRight size={16} />
             </button>
 
             <button
               onClick={() => table.setPageIndex(table.getPageCount() - 1)}
               disabled={!table.getCanNextPage()}
-              className="
-                flex
-                h-8
-                w-8
-                items-center
-                justify-center
-                rounded-[var(--radius-sm)]
-                border
-                border-[var(--color-table-border)]
-                bg-[var(--color-table-row-odd)]
-                text-[var(--color-text-primary)]
-                transition-colors
-                hover:bg-[var(--color-primary)]
-                hover:text-white
-                disabled:cursor-not-allowed
-                disabled:opacity-50
-              "
+              className={paginationButtonClass}
             >
-              {">>"}
+              <ChevronsRight size={16} />
             </button>
           </div>
         </div>

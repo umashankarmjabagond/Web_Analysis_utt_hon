@@ -2,10 +2,9 @@ import { NavLink } from "react-router-dom";
 import { Home, LayoutGrid } from "lucide-react";
 import { ROUTES } from "../../../constants/routes/routesConstant";
 import { cn } from "../../../utils/utils";
-
 import { useTranslation } from "react-i18next";
 
-const menus = [
+const MENUS = [
   {
     name: "SIDEBAR_WORKFLOW",
     path: ROUTES.WORKFLOW,
@@ -26,7 +25,7 @@ export default function Sidebar() {
       style={{ background: "#272727" }}
     >
       <nav className="flex flex-col items-center gap-1 p-2">
-        {menus.map(({ name, path, icon: Icon }) => (
+        {MENUS.map(({ name, path, icon: Icon }) => (
           <NavLink
             key={path}
             to={path}

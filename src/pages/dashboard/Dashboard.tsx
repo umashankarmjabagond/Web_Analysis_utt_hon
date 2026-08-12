@@ -1,3 +1,5 @@
+import Badge from "../../components/common/badge/Badge";
+import Select from "../../components/forms/select/Select";
 import TableCard from "../../components/tables/TableCard";
 import type {
   StatCardData,
@@ -5,9 +7,9 @@ import type {
   WarningRow,
 } from "../../types/dashboardTypes";
 import StatCard from "./components/StatCard";
-
 import { createColumnHelper } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
+
 const statCards: StatCardData[] = [
   {
     title: "DASHBOARD_TOTAL_UNITS",
@@ -116,10 +118,6 @@ const statusData: StatusSummaryRow[] = [
     error: 1,
   },
 ];
-
-/* =====================================================
-                     WARNING DATA
-===================================================== */
 
 const warningData: WarningRow[] = [
   {
@@ -271,15 +269,7 @@ const warningData: WarningRow[] = [
   },
 ];
 
-/* =====================================================
-                    STATUS COLUMNS
-===================================================== */
-
 const statusColumnHelper = createColumnHelper<StatusSummaryRow>();
-
-/* =====================================================
-                   WARNING COLUMNS
-===================================================== */
 
 const warningColumnHelper = createColumnHelper<WarningRow>();
 
@@ -333,27 +323,19 @@ export default function Dashboard() {
     }),
   ];
   return (
-    <div
-      className="
-      h-full overflow-y-auto
-    mx-auto
-    w-full
-    min-h-[938px]
-    rounded-[2px]
-    bg-[#272727]
-    p-4
-    md:p-6
-    text-white
-  "
-    >
+    <div className="h-full overflow-y-auto mx-auto w-full min-h-[938px] rounded-xs bg-surface p-4 md:p-6">
       <div className="flex items-center gap-3 w-full">
-        <h1 className="text-lg font-semibold tracking-wide">
+        <h1 className="text-lg font-semibold tracking-wide text-foreground-secondary">
           {t("DASHBOARD_POWER_BOILER")}
         </h1>
 
-        <span className="rounded-full border border-sky-500 px-2 py-0.5 text-xs font-medium text-sky-400">
+        <Badge
+          variant="info"
+          fill="outline"
+          className="px-2 py-1 text-xs font-medium h-6 rounded-2xl"
+        >
           {t("DASHBOARD_AREA")}
-        </span>
+        </Badge>
       </div>
 
       <div className="mt-4 flex flex-col gap-4 xl:flex-row">
@@ -369,7 +351,7 @@ export default function Dashboard() {
             columns={statusColumns}
             data={statusData}
             height="h-[344px]"
-            border="border-[var(--color-button-text-primary)]"
+            border="border-surface"
             headerActions={<></>}
           />
         </div>
@@ -384,75 +366,43 @@ export default function Dashboard() {
           headerActions={
             <>
               {/* Attribute Filter */}
-              <div className="flex h-[28px] w-[270px] items-center gap-9">
-                <label
-                  className="
-          w-[37px]
-          text-[13px]
-          leading-[20px]
-          font-semibold
-          whitespace-nowrap
-          text-[var(--text-text-primary)]
-        "
-                >
+              <div className="flex h-7 w-[270px] items-center gap-4">
+                <label className="w-[77px] shrink-0 whitespace-nowrap text-[13px] font-semibold leading-5 text-foreground">
                   {t("FILTER_ATTRIBUTES")}
                 </label>
 
-                <select
-                  className="
-          h-[28px]
-          w-[217px]
-          rounded-[4px]
-          border
-          border-[var(--component-card-border)]
-          bg-[var(--background-primary-container)]
-          px-2
-          text-[12px]
-          leading-[20px]
-          text-[var(--text-text-primary)]
-          outline-none
-        "
-                >
-                  <option>{t("FILTER_ALL")}</option>
-                  <option>{t("FILTER_DATA_SOURCE")}</option>
-                  <option>{t("FILTER_DATA_SINK")}</option>
-                  <option>{t("FILTER_VALVE_STICTION")}</option>
-                </select>
+                <Select
+                  value="All"
+                  onChange={() => {}}
+                  options={[
+                    { value: "All", label: t("FILTER_ALL") },
+                    { value: "Data Source", label: t("FILTER_DATA_SOURCE") },
+                    { value: "Data Sink", label: t("FILTER_DATA_SINK") },
+                    {
+                      value: "Valve Stiction",
+                      label: t("FILTER_VALVE_STICTION"),
+                    },
+                  ]}
+                  className="h-7 w-[177px] text-xs"
+                />
               </div>
 
               {/* Type Filter */}
-              <div className="flex h-[28px] w-[270px] items-center gap-3">
-                <label
-                  className="
-          w-[37px]
-          text-[12px]
-          font-semibold
-          leading-[20px]
-          whitespace-nowrap
-          text-[var(--text-text-primary)]
-        "
-                >
+              <div className="flex h-7 w-[270px] items-center gap-4">
+                <label className="w-[37px] shrink-0 whitespace-nowrap text-xs font-semibold leading-5 text-foreground">
                   {t("FILTER_TYPE")}
                 </label>
 
-                <select
-                  className="
-          h-[28px]
-          w-[217px]
-          rounded-[4px]
-          border
-          border-[var(--component-card-border)]
-          bg-[var(--background-primary-container)]
-          px-2
-          text-[12px]
-          text-[var(--text-text-primary)]
-          outline-none
-        "
-                >
-                  <option>{t("FILTER_ALL")}</option>
-                  <option>{t("FILTER_REGULATORY")}</option>
-                  <option>{t("FILTER_MPC")}</option>
-                </select>
+                <Select
+                  value="All"
+                  onChange={() => {}}
+                  options={[
+                    { value: "All", label: t("FILTER_ALL") },
+                    { value: "Regulatory", label: t("FILTER_REGULATORY") },
+                    { value: "MPC", label: t("FILTER_MPC") },
+                  ]}
+                  className="h-7 w-[217px] text-xs"
+                />
               </div>
             </>
           }

@@ -1,6 +1,8 @@
 import type { ReactNode } from "react";
 import type { SpreadsheetProps } from "../../types/commonTypes";
 import { useTranslation } from "react-i18next";
+import { cn } from "../../utils/utils";
+
 type CellValue = string | number | boolean | null | undefined | object;
 
 const getExcelColumn = (index: number): string => {
@@ -42,7 +44,7 @@ const SpreadsheetTable = ({ data }: SpreadsheetProps) => {
   const { t } = useTranslation();
   if (!data || data.length === 0) {
     return (
-      <div className="flex items-center justify-center p-6 text-[var(--color-text-primary)]">
+      <div className="flex items-center justify-center p-6 text-spreadsheet-cell-foreground">
         {t("COMMON_NO_DATA_AVAILABLE")}
       </div>
     );
@@ -56,60 +58,41 @@ const SpreadsheetTable = ({ data }: SpreadsheetProps) => {
 
   return (
     <div
-      className="
-        dark
-        h-full
-        w-full
-        overflow-auto
-        rounded-[var(--radius-sm)]
-        border
-        border-[var(--color-border-1)]
-        bg-[var(--color-table-row-odd)]
-      "
+      className={cn(
+        "w-full overflow-auto",
+        "rounded-sm border",
+        "border-table-grid-border",
+        "bg-surface",
+      )}
     >
-      <table
-        className="
-          min-w-max
-          border-collapse
-          bg-[var(--color-table-row-odd)]
-        "
-      >
+      <table className="w-full border-collapse">
         <thead>
           <tr>
             {/* Top Left Corner */}
             <th
-              className="
-                sticky
-                top-0
-                left-0
-                z-30
-                h-8
-                w-12
-                min-w-[48px]
-                border
-                border-[var(--color-border-1)]
-                bg-[var(--color-table-header)]
-              "
+              className={cn(
+                "sticky left-0 top-0 z-30",
+                "h-8 min-w-12",
+                "border",
+                "border-spreadsheet-header-border",
+                "bg-spreadsheet-header-background",
+              )}
             />
 
             {/* Excel Columns */}
             {Array.from({ length: totalColumns }).map((_, index) => (
               <th
                 key={index}
-                className="
-                  sticky
-                  top-0
-                  z-20
-                  h-8
-                  min-w-[120px]
-                  border
-                  border-[var(--color-border-1)]
-                  bg-[var(--color-table-header)]
-                  text-center
-                  text-[13px]
-                  font-semibold
-                  text-[var(--color-text-primary)]
-                "
+                className={cn(
+                  "sticky top-0 z-20",
+                  "h-8 min-w-[120px]",
+                  "border",
+                  "border-spreadsheet-header-border",
+                  "bg-spreadsheet-header-background",
+                  "px-2",
+                  "text-center text-[13px]",
+                  "font-semibold text-spreadsheet-header-foreground",
+                )}
               >
                 {getExcelColumn(index)}
               </th>
@@ -121,28 +104,23 @@ const SpreadsheetTable = ({ data }: SpreadsheetProps) => {
           {rows.map((row, rowIndex) => (
             <tr
               key={rowIndex}
-              className="
-                bg-[var(--color-table-row-odd)]
-                transition-colors
-                hover:bg-[var(--color-table-row-hover)]
-              "
+              className={cn(
+                "transition-colors",
+                "bg-spreadsheet-row-background",
+                "hover:bg-spreadsheet-row-hover-background",
+              )}
             >
               {/* Row Number */}
               <th
-                className="
-                  sticky
-                  left-0
-                  z-10
-                  h-8
-                  min-w-[48px]
-                  border
-                  border-[var(--color-border-1)]
-                  bg-[var(--color-table-header)]
-                  text-center
-                  text-[13px]
-                  font-medium
-                  text-[var(--color-text-primary)]
-                "
+                className={cn(
+                  "sticky left-0 z-10",
+                  "h-8 min-w-12",
+                  "border",
+                  "border-spreadsheet-row-number-border",
+                  "bg-spreadsheet-row-number-background",
+                  "text-center text-[13px]",
+                  "font-medium text-spreadsheet-row-number-foreground",
+                )}
               >
                 {rowIndex + 1}
               </th>
@@ -153,22 +131,19 @@ const SpreadsheetTable = ({ data }: SpreadsheetProps) => {
                   key={`${rowIndex}-${colIndex}`}
                   contentEditable
                   suppressContentEditableWarning
-                  className="
-                    h-8
-                    min-w-[120px]
-                    border
-                    border-[var(--color-border-1)]
-                    bg-[var(--background-primary-container)]
-                    px-2
-                    py-1
-                    text-[13px]
-                    text-[var(--color-text-primary)]
-                    outline-none
-                    transition-colors
-                    focus:bg-[var(--color-table-row-hover)]
-                    focus:ring-1
-                    focus:ring-[var(--color-primary)]
-                  "
+                  className={cn(
+                    "h-8 min-w-[120px]",
+                    "border",
+                    "border-spreadsheet-cell-border",
+                    "bg-spreadsheet-cell-background",
+                    "px-2 py-1",
+                    "text-[13px] text-spreadsheet-cell-foreground",
+                    "outline-none",
+                    "transition-colors",
+                    "focus:bg-spreadsheet-cell-focus-background",
+                    "focus:ring-1 focus:ring-spreadsheet-focus-ring",
+                    "focus:border-spreadsheet-cell-focus-border",
+                  )}
                 >
                   {renderCellValue(row[colIndex])}
                 </td>
