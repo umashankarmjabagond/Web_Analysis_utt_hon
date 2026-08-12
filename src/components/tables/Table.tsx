@@ -91,8 +91,7 @@ const Table = <T extends object>({
   return (
     <div
       className={cn(
-        "w-full overflow-auto rounded-lg border",
-        "border-table-border",
+        "w-full overflow-auto rounded-lg ",
         "bg-table-background",
         className,
       )}

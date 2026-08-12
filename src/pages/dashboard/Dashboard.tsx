@@ -287,14 +287,41 @@ export default function Dashboard() {
 
     statusColumnHelper.accessor("good", {
       header: t("TABLE_GOOD"),
+      cell: ({ getValue }) => (
+        <Badge
+          variant="success"
+          fill="outline"
+          className="bg-transparent px-3 py-1"
+        >
+          {getValue()}
+        </Badge>
+      ),
     }),
 
     statusColumnHelper.accessor("warning", {
       header: t("TABLE_WARNINGS"),
+      cell: ({ getValue }) => (
+        <Badge
+          variant="warning"
+          fill="outline"
+          className="bg-transparent px-3 py-1"
+        >
+          {getValue()}
+        </Badge>
+      ),
     }),
 
     statusColumnHelper.accessor("error", {
       header: t("TABLE_ERRORS"),
+      cell: ({ getValue }) => (
+        <Badge
+          variant="danger"
+          fill="outline"
+          className="bg-transparent px-3 py-1"
+        >
+          {getValue()}
+        </Badge>
+      ),
     }),
   ];
 
@@ -323,7 +350,7 @@ export default function Dashboard() {
     }),
   ];
   return (
-    <div className="h-full overflow-y-auto mx-auto w-full min-h-[938px] rounded-xs bg-surface p-4 md:p-6">
+    <div className="h-full overflow-y-auto mx-auto w-full min-h-[938px] rounded-xs bg-[#272727] p-4 md:p-6">
       <div className="flex items-center gap-3 w-full">
         <h1 className="text-lg font-semibold tracking-wide text-foreground-secondary">
           {t("DASHBOARD_POWER_BOILER")}
@@ -351,7 +378,6 @@ export default function Dashboard() {
             columns={statusColumns}
             data={statusData}
             height="h-[344px]"
-            border="border-surface"
             headerActions={<></>}
           />
         </div>
