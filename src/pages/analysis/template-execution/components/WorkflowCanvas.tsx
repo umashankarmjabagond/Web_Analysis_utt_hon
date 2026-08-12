@@ -47,7 +47,7 @@ export default function WorkflowCanvas({
   return (
     <>
       <div
-        className={`h-full bg-app-surface ${showDetailsPanel ? "flex flex-col" : ""} `}
+        className={`h-full bg-surface ${showDetailsPanel ? "flex flex-col" : ""} `}
       >
         <div
           className={`overflow-auto ${showDetailsPanel ? "flex-1 min-h-0" : "h-full"}`}
@@ -75,7 +75,7 @@ export default function WorkflowCanvas({
               proOptions={{ hideAttribution: true }}
             >
               <Background
-                color="var(--app-surface-elevated)"
+                color="var(--surface-elevated)"
                 size={3}
                 variant={BackgroundVariant.Dots}
                 gap={25}
