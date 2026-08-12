@@ -1,6 +1,5 @@
 import type { NodeProps } from "@xyflow/react";
 import { useTemplateExecutionStore } from "../../../../../store/templateExecutionStore";
-import { Check } from "lucide-react";
 import type { ExecutionHeaderFlowNode } from "../../../../../types/templateExecution";
 import Checkbox from "../../../../../components/forms/checkbox/CheckBox";
 
@@ -23,7 +22,7 @@ export default function ExecutionHeaderNode({
         onClick={(e) => e.stopPropagation()}
         onChange={() => toggleSelectedRow(data.itemId)}
       />
-      <span className="text-app-text-primary">{data.itemId}</span>
+      <span className="text-foreground">{data.itemId}</span>
     </div>
   );
 }

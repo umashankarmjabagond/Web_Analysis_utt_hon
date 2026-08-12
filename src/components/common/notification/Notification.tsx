@@ -99,7 +99,7 @@ const Notification: React.FC<NotificationProps> = ({
         </div>
 
         {/* Body content */}
-        <div className="flex flex-col w-full gap-3">
+        <div className="flex flex-col w-full gap-0.5">
           <p className="text-[16px] leading-6 font-bold m-0 text-toast-title">
             {title ?? t(`NOTIFICATION_${label.toUpperCase()}`)}
           </p>

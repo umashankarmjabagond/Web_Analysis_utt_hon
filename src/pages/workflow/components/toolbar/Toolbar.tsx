@@ -104,17 +104,17 @@ export default function Toolbar() {
   };
 
   return (
-    <div className="flex min-h-12 items-center rounded-[6px] border border-app-divider bg-component-toolbar-background px-1 xl: justify-between">
+    <div className="flex min-h-12 items-center rounded-[6px] border border-border-default bg-background px-1 xl: justify-between">
       {/* LEFT */}
 
       <div className="flex items-center gap-1">
-        <div className="flex items-center gap-1[141px pr-1 text-xs text-white md:px] md:text-sm md:pr-4">
+        <div className="flex items-center gap-1 w-[141px] pr-1 text-xs md:text-sm md:pr-4">
           <ArrowLeft
-            className="cursor-pointer"
+            className="cursor-pointer text-foreground"
             onClick={() => navigate(ROUTES.DASHBOARD)}
             size={16}
           />
-          <span>{t("NEW_TEMPLATE")}</span>
+          <span className="text-foreground text-base">{t("NEW_TEMPLATE")}</span>
         </div>
 
         <ToolbarButton
@@ -139,32 +139,32 @@ export default function Toolbar() {
               setShowMoreMenu((prev) => !prev);
               setShowActionMenu(false);
             }}
-            className="flex items-center gap-1 rounded border border-app-divider px-1 py-1 text-xs text-white"
+            className="flex items-center gap-1 rounded border border-border-default px-1 py-1 text-xs text-foreground-secondary"
           >
             {t("TOOLBAR_MORE")}
             <ChevronDown size={14} />
           </button>
 
           {showMoreMenu && (
-            <div className="absolute right-0 top-full z-50 mt-2 flex flex-col rounded-md border border-app-divider bg-component-toolbar-background shadow-xl">
-              <button className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-white">
+            <div className="absolute right-0 top-full z-50 mt-2 flex flex-col rounded-md border border-border-default bg-background shadow-xl">
+              <button className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-foreground">
                 <Pencil size={14} />
               </button>
 
-              <button className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-white">
+              <button className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-foreground">
                 <Grid2X2 size={14} />
               </button>
 
               <button
                 onClick={undo}
-                className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-white"
+                className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-foreground"
               >
                 <Undo2 size={14} />
               </button>
 
               <button
                 onClick={redo}
-                className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-white"
+                className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-foreground"
               >
                 <Redo2 size={14} />
               </button>
@@ -174,16 +174,16 @@ export default function Toolbar() {
                   deleteSelectedEdges();
                   deleteSelectedNodes();
                 }}
-                className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-white"
+                className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-foreground"
               >
                 <Circle size={14} />
               </button>
 
-              <button className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-white">
+              <button className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-foreground">
                 <Square size={14} />
               </button>
 
-              <button className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-white">
+              <button className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-foreground">
                 <Type size={14} />
               </button>
             </div>
@@ -191,30 +191,29 @@ export default function Toolbar() {
         </div>
 
         {/* RIGHT TABLET */}
-
         <div className="relative xl:hidden">
           <button
             onClick={() => {
               setShowActionMenu((prev) => !prev);
               setShowMoreMenu(false);
             }}
-            className="flex items-center gap-1 rounded border border-app-divider px-1 py-1 text-xs text-white"
+            className="flex items-center gap-1 rounded border border-border-default px-1 py-1 text-xs text-foreground"
           >
             {t("TOOLBAR_ACTIONS")}
             <ChevronDown size={14} />
           </button>
 
           {showActionMenu && (
-            <div className="absolute right-0 top-full z-50 mt-2 w-52 rounded-md border border-app-divider bg-component-toolbar-background shadow-xl">
-              <button className="block w-full px-3 py-2 text-left text-sm text-white hover:bg-app-surface">
+            <div className="absolute right-0 top-full z-50 mt-2 w-52 rounded-md border border-border-default bg-background shadow-xl">
+              <button className="block w-full px-3 py-2 text-left text-sm text-foreground-accent hover:bg-surface-hover">
                 {t("TOOLBAR_IMPORT_TEMPLATE")}
               </button>
 
-              <button className="block w-full px-3 py-2 text-left text-sm text-white hover:bg-app-surface">
+              <button className="block w-full px-3 py-2 text-left text-sm text-foreground-tertiary hover:bg-surface-hover">
                 {t("TOOLBAR_EXPORT_TEMPLATE")}
               </button>
 
-              <div className="border-t border-app-divider p-2">
+              <div className="border-t border-border-default p-2">
                 <Dropdown
                   placeholder={t("TOOLBAR_SAVE_AS")}
                   items={[
@@ -295,14 +294,13 @@ export default function Toolbar() {
       {/* RIGHT */}
 
       {/* RIGHT DESKTOP */}
-
-      <div className="hidden xl:flex items-center gap-6 text-sm">
-        <button className="flex items-center gap-1 text-app-action-primary text-sm hover:text-white transition-colors">
+      <div className="hidden xl:flex items-center gap-6 text-sm pr-4">
+        <button className="flex items-center gap-1 text-foreground-accent text-sm hover:text-foreground transition-colors cursor-pointer">
           <Upload size={15} />
           {t("TOOLBAR_IMPORT_TEMPLATE")}
         </button>
 
-        <button className="flex items-center gap-1 text-app-default-border text-sm hover:text-white transition-colors">
+        <button className="flex items-center gap-1 text-foreground-tertiary text-sm hover:text-foreground transition-colors cursor-pointer">
           <Download size={15} />
           {t("TOOLBAR_EXPORT_TEMPLATE")}
         </button>
@@ -359,7 +357,7 @@ export default function Toolbar() {
       >
         <div className="flex flex-col gap-6 text-sm">
           <Input
-            className="w-[288px] h-8 rounded bg-app-surface border border-search-border text-[14px] text-white"
+            className="w-[288px] h-8 rounded text-[14px]"
             label={t("TOOLBAR_TEMPLATE_NAME")}
             value={templateName}
             onChange={(e) => setTemplateName(e.target.value)}
@@ -369,6 +367,7 @@ export default function Toolbar() {
           <div className="flex justify-end gap-4">
             <Button
               variant="secondary"
+              fill="outline"
               onClick={() => setIsSaveDialogOpen(false)}
             >
               {t("COMMON_CANCEL")}
