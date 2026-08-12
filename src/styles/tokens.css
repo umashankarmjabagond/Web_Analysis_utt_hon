@@ -203,6 +203,11 @@
   --node-selection-border: var(--border-accent);
   --node-selection-tint: #afddf533;
 
+  /* Workflow Node Insert Action */
+  --node-insert-background: var(--surface-accent);
+  --node-insert-border: var(--black-100);
+  --node-insert-foreground: var(--black-100);
+
   /* Workflow Edge */
   --edge-default: var(--gray-500);
   --edge-selected: var(--border-accent);
@@ -837,6 +842,11 @@
 
   --color-node-error-tint: var(--node-error-tint);
   --color-node-error-border: var(--node-error-border);
+
+  /* Workflow Node Insert Action */
+  --color-node-insert-background: var(--node-insert-background);
+  --color-node-insert-border: var(--node-insert-border);
+  --color-node-insert-foreground: var(--node-insert-foreground);
 
   /* Workflow Edge */
   --color-edge-default: var(--edge-default);

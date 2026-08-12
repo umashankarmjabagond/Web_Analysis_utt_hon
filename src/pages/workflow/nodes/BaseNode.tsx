@@ -11,7 +11,8 @@ function BaseNode({ data }: BaseNodeProps) {
   const { label, element } = data;
 
   return (
-    <div className="relative min-w-[120px] rounded-md border border-app-surface-background bg-app-code-background shadow-md transition-all duration-200 hover:border-component-hover-border">
+    <div className="group relative min-w-[120px] rounded-md border border-node-default-border bg-node-default-background shadow-md transition-all duration-200  hover:border-node-hover-border">
+      <div className="pointer-events-none absolute inset-0 bg-node-hover-background opacity-0 transition-opacity duration-200 group-hover:opacity-100" />
       {/* Target Handle */}
       <Handle
         type="target"
@@ -27,13 +28,13 @@ function BaseNode({ data }: BaseNodeProps) {
       />
 
       <div className="flex flex-col items-center px-3 py-2">
-        <div className="text-sm">📄</div>
+        <div className="text-sm text-foreground">📄</div>
 
-        <div className="mt-1 text-center text-sm font-medium text-white">
+        <div className="mt-1 text-center text-sm font-medium text-foreground">
           {label}
         </div>
 
-        <div className="mt-1 text-[10px] uppercase tracking-wider text-gray-400">
+        <div className="mt-1 text-[10px] uppercase tracking-wider text-foreground-secondary">
           {element.elementType}
         </div>
       </div>
@@ -45,8 +46,8 @@ function BaseNode({ data }: BaseNodeProps) {
         style={{
           width: 12,
           height: 12,
-          background: "var(--app-background-light)",
-          border: "2px solid var(--app-surface-background)",
+          background: "var(--handle-background)",
+          border: "3px solid var(--handle-border)",
         }}
       />
     </div>

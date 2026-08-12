@@ -68,7 +68,7 @@ export default function WorkflowEdge({
         path={path}
         markerEnd={markerEnd}
         style={{
-          stroke: selected ? "var(--component-accent-primary)" : "var(--color-text-muted-secondary)",
+          stroke: selected ? "var(--edge-selected)" : "var(--edge-default)",
           strokeWidth: 2,
         }}
       />
@@ -76,7 +76,7 @@ export default function WorkflowEdge({
       <path d={path} fill="none" stroke="transparent" strokeWidth={20} />
 
       {hovered && (
-        <foreignObject x={bezierX - 14} y={bezierY - 14} width={28} height={28}>
+        <foreignObject x={bezierX - 10} y={bezierY - 10} width={24} height={24}>
           <button
             onClick={(e) => {
               e.stopPropagation();
@@ -87,7 +87,7 @@ export default function WorkflowEdge({
                 target,
               });
             }}
-            className="flex h-7 w-7 items-center justify-center rounded-md border border-component-border bg-component-toolbar-background text-component-border shadow-lg transition-all"
+            className="flex h-5 w-5 t-0.5 l-0.5 items-center justify-center rounded-full border-2 border-node-insert-border text-node-insert-foreground shadow-lg transition-all bg-node-insert-background cursor-pointer"
           >
             <Plus size={14} strokeWidth={2.5} />
           </button>
