@@ -5,7 +5,7 @@ import type {
   TextareaHTMLAttributes,
   ButtonHTMLAttributes,
 } from "react";
-import type { DonutChartItem } from "./dashboardTypes";
+// import type { DonutChartItem } from "./dashboardTypes";
 
 export interface BreadcrumbItem {
   id: string;
@@ -96,10 +96,24 @@ export interface TabsProps {
   renderContent?: boolean;
 }
 
+// commonTypes.ts
+
+export interface DonutChartItem {
+  name: string;
+  value: number;
+}
+
 export interface DonutChartProps {
-  data: DonutChartItem[];
-  size?: number | undefined;
+  data: {
+    name: string;
+    value: number;
+  }[];
+  size?: number;
   colors: Record<string, string>;
+  className?: string;
+  innerRadius?: number;
+  outerRadius?: number;
+  legendPosition?: "left" | "right" | "top" | "bottom";
 }
 
 export interface SelectOption {

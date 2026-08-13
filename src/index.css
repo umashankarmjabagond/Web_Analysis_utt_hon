@@ -119,6 +119,7 @@
   --color-border: #e5e7eb;
   --color-border-1: #707070;
   --component-card-border: #303030;
+  
   --app-border-muted: #9CA3AF;
 
   /* Fixed panel background */
@@ -515,3 +516,23 @@ body {
   );
   background-size: 25px 25px;
 }
+
+
+/* Scrollable - no visible scrollbar */
+.scrollbar-hidden {
+  scrollbar-width: none; 
+  -ms-overflow-style: none; 
+}
+
+.scrollbar-hidden::-webkit-scrollbar {
+  display: none; 
+}
+
+
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+
