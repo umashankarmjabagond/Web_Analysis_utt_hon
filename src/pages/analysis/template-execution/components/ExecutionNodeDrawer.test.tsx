@@ -1,25 +1,36 @@
-import { render, screen, fireEvent } from "@testing-library/react";
-import { describe, expect, it, vi, beforeEach } from "vitest";
+import {
+  render,
+  screen,
+  fireEvent,
+} from "@testing-library/react";
+import {
+  describe,
+  expect,
+  it,
+  vi,
+  beforeEach,
+} from "vitest";
 import type { ReactNode } from "react";
 
 import ExecutionNodeDrawer from "./ExecutionNodeDrawer";
 
-const mockSetNodeDrawerOpen = vi.fn();
+const mockSetNodeDrawerOpen =
+  vi.fn();
 
 let mockIsNodeDrawerOpen = true;
 
 vi.mock(
   "../../../../store/templateExecutionStore",
   () => ({
-    useTemplateExecutionStore: vi.fn(
-      (selector) =>
+    useTemplateExecutionStore:
+      vi.fn((selector) =>
         selector({
           isNodeDrawerOpen:
             mockIsNodeDrawerOpen,
           setNodeDrawerOpen:
             mockSetNodeDrawerOpen,
         }),
-    ),
+      ),
   }),
 );
 
@@ -112,7 +123,9 @@ vi.mock(
   "../../../KPI/Connections",
   () => ({
     default: () => (
-      <div data-testid="connections">
+      <div
+        data-testid="connections"
+      >
         Connections
       </div>
     ),
@@ -196,7 +209,8 @@ describe(
         screen.getByRole(
           "button",
           {
-            name: /calculated kpis and errors/i,
+            name:
+              "TAB_CALCULATED_KPIS_ERRORS",
           },
         ),
       );
@@ -217,7 +231,8 @@ describe(
         screen.getByRole(
           "button",
           {
-            name: /properties/i,
+            name:
+              "TAB_PROPERTIES",
           },
         ),
       );
@@ -238,7 +253,8 @@ describe(
         screen.getByRole(
           "button",
           {
-            name: /connections/i,
+            name:
+              "TAB_CONNECTIONS",
           },
         ),
       );
@@ -277,7 +293,8 @@ describe(
         screen.getByRole(
           "button",
           {
-            name: /properties/i,
+            name:
+              "TAB_PROPERTIES",
           },
         ),
       );

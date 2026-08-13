@@ -1,6 +1,10 @@
 import { fireEvent, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { ReactNode } from "react";
+import type {
+  ReactNode,
+  DragEvent,
+  MouseEvent,
+} from "react";
 
 import { render } from "../../../test";
 import type {
@@ -9,6 +13,8 @@ import type {
 } from "../../../types/workFlowTypes";
 
 import Canvas from "./Canvas";
+
+import { Calculator } from "lucide-react";
 
 type MockStore = {
   nodes: WorkflowNode[];
@@ -71,9 +77,18 @@ vi.mock("@xyflow/react", () => ({
   }: {
     children?: ReactNode;
     nodes: WorkflowNode[];
-    onDrop?: (event: React.DragEvent) => void;
-    onDragOver?: (event: React.DragEvent) => void;
-    onNodeClick?: (event: React.MouseEvent, node: WorkflowNode) => void;
+    onDrop?: (
+  event: DragEvent<HTMLDivElement>,
+) => void;
+
+onDragOver?: (
+  event: DragEvent<HTMLDivElement>,
+) => void;
+
+onNodeClick?: (
+  event: MouseEvent<HTMLButtonElement>,
+  node: WorkflowNode,
+) => void;
     onPaneClick?: () => void;
   }) => (
     <div data-testid="react-flow" onDrop={onDrop} onDragOver={onDragOver}>
@@ -127,7 +142,7 @@ vi.mock("../../../types/workFlowTypes", async () => {
   return actual;
 });
 
-vi.mock("../workflowPanelData ", () => ({
+vi.mock("../workflowPanelData", () => ({
   attributeCatalogSections: [],
   dummyWorkflows: {},
 }));
@@ -164,35 +179,44 @@ describe("Canvas", () => {
   });
 
   it("renders empty canvas message when there are no nodes", () => {
-    render(<Canvas />);
+  render(<Canvas />);
 
-    expect(screen.getByText("Create New Template")).toBeInTheDocument();
-  });
+  expect(
+    screen.getByText(
+      "CANVAS_CREATE_NEW_TEMPLATE",
+    ),
+  ).toBeInTheDocument();
+});
 
-  it("does not render empty canvas message when nodes exist", () => {
-    mockStore.nodes = [
-      {
-        id: "node-1",
-        type: "baseNode",
-        position: {
-          x: 0,
-          y: 0,
-        },
-        data: {
-          label: "Test Node",
-          element: {
-            Name: "TestNode1",
-            elementType: "Math",
-          },
-          catalogId: "math",
-        },
+it("does not render empty canvas message when nodes exist", () => {
+  mockStore.nodes = [
+    {
+      id: "node-1",
+      type: "baseNode",
+      position: {
+        x: 0,
+        y: 0,
       },
-    ];
+      data: {
+        label: "Test Node",
+        element: {
+  Name: "TestNode1",
+  ParentNames: [],
+  elementType: "Math",
+},
+        catalogId: "math",
+      },
+    },
+  ];
 
-    render(<Canvas />);
+  render(<Canvas />);
 
-    expect(screen.queryByText("Create New Template")).not.toBeInTheDocument();
-  });
+  expect(
+    screen.queryByText(
+      "CANVAS_CREATE_NEW_TEMPLATE",
+    ),
+  ).not.toBeInTheDocument();
+});
 
   it("clears workflow when component mounts", () => {
     render(<Canvas />);
@@ -212,9 +236,10 @@ describe("Canvas", () => {
         data: {
           label: "Test Node",
           element: {
-            Name: "TestNode1",
-            elementType: "Math",
-          },
+  Name: "TestNode1",
+  ParentNames: [],
+  elementType: "Math",
+},
           catalogId: "math",
         },
       },
@@ -272,14 +297,15 @@ describe("Canvas", () => {
     const dragItem: WorkflowDragItem = {
       type: "attribute",
       item: {
-        id: "math",
-        title: "Math",
-        icon: "math",
-        element: {
-          Name: "Math",
-          elementType: "Math",
-        },
-      },
+  id: "math",
+  title: "Math",
+  icon: Calculator,
+  element: {
+    Name: "TestNode1",
+    ParentNames: [],
+    elementType: "Math",
+  },
+},
     };
 
     render(<Canvas />);

@@ -67,7 +67,7 @@ describe("Button", () => {
     );
 
     expect(
-      screen.getByText("Loading..."),
+      screen.getByText("COMMON_LOADING"),
     ).toBeInTheDocument();
   });
 
@@ -134,7 +134,7 @@ describe("Button", () => {
     expect(
       screen.getByRole("button"),
     ).toHaveClass(
-      "border-[var(--color-button-primary)]",
+      "border-button-primary-solid-border",
     );
   });
 
@@ -148,7 +148,7 @@ describe("Button", () => {
     expect(
       screen.getByRole("button"),
     ).toHaveClass(
-      "border-[var(--color-button-focus)]",
+      "border-button-secondary-border",
     );
   });
 
@@ -162,7 +162,7 @@ describe("Button", () => {
     expect(
       screen.getByRole("button"),
     ).toHaveClass(
-      "border-[var(--color-danger)]",
+      "border-button-danger-solid-border",
     );
   });
 
@@ -176,7 +176,7 @@ describe("Button", () => {
     expect(
       screen.getByRole("button"),
     ).toHaveClass(
-      "border-[var(--color-success)]",
+      "border-button-success-solid-border",
     );
   });
 
@@ -189,7 +189,11 @@ describe("Button", () => {
 
     expect(
       screen.getByRole("button"),
-    ).toHaveClass("min-w-[72px]");
+    ).toHaveClass(
+      "h-[26px]",
+      "px-[10px]",
+      "text-xs",
+    );
   });
 
   it("renders medium size", () => {
@@ -201,7 +205,11 @@ describe("Button", () => {
 
     expect(
       screen.getByRole("button"),
-    ).toHaveClass("min-w-[88px]");
+    ).toHaveClass(
+      "h-[30px]",
+      "px-[14px]",
+      "text-sm",
+    );
   });
 
   it("renders large size", () => {
@@ -213,7 +221,11 @@ describe("Button", () => {
 
     expect(
       screen.getByRole("button"),
-    ).toHaveClass("min-w-[110px]");
+    ).toHaveClass(
+      "h-[36px]",
+      "px-[18px]",
+      "text-base",
+    );
   });
 
   it("renders full width button", () => {
