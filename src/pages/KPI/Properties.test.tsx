@@ -1,25 +1,65 @@
-import { describe, expect, it, vi } from "vitest";
-import userEvent from "@testing-library/user-event";
-import { fireEvent, render, screen } from "@testing-library/react";
-import { act } from "react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
 
 import Properties from "./Properties";
 
-/* -------------------------------------------------------------------------- */
-/*                              Component Mocks                               */
-/* -------------------------------------------------------------------------- */
+// -----------------------------------------------------------------------------
+// Mocks
+// -----------------------------------------------------------------------------
+
+vi.mock("react-i18next", () => ({
+  useTranslation: () => ({
+    t: (key: string) => {
+      const translations: Record<string, string> = {
+        PROPERTIES_DATA_PREPROCESSING_WIZARD: "Data Preprocessing Wizard",
+        COMMON_HELP: "Help",
+        COMMON_APPLY_TO_ALL: "Apply to All",
+        COMMON_SAVE: "Save",
+        COMMON_CANCEL: "Cancel",
+
+        PROPERTIES_EDIT_COLUMNS_EXPRESSIONS: "Edit Columns / Expressions",
+        PROPERTIES_EDIT_EXPRESSION: "Edit Expression",
+        PROPERTIES_THRESHOLD: "Threshold",
+        PROPERTIES_WARNING_THRESHOLD: "Warning Threshold",
+        PROPERTIES_ABORT_THRESHOLD: "Abort Threshold",
+        PROPERTIES_EXPRESSION: "Expression",
+        PROPERTIES_REFERENCE_COLUMN: "Reference Column",
+        PROPERTIES_BAD_DATA_EXPRESSION: "Bad Data Expression",
+        PROPERTIES_BAD_DATA_EXPRESSION_PLACEHOLDER: "Enter bad data expression",
+        PROPERTIES_REPLACEMENT_EXPRESSION: "Replacement Expression",
+        PROPERTIES_REPLACEMENT_EXPRESSION_PLACEHOLDER:
+          "Enter replacement expression",
+        PROPERTIES_REFRESH_BAD_DATA_EXPRESSION: "Refresh bad data expression",
+        PROPERTIES_REFRESH_REPLACEMENT_EXPRESSION:
+          "Refresh replacement expression",
+      };
+
+      return translations[key] ?? key;
+    },
+  }),
+}));
 
 vi.mock("../../components/forms/button/Button", () => ({
   default: ({
     children,
     onClick,
-    type = "button",
+    icon,
+    "aria-label": ariaLabel,
+    ...props
   }: {
-    children: React.ReactNode;
-    onClick?: React.MouseEventHandler<HTMLButtonElement>;
-    type?: "button" | "submit" | "reset";
+    children?: React.ReactNode;
+    onClick?: () => void;
+    icon?: React.ReactNode;
+    "aria-label"?: string;
   }) => (
-    <button type={type} onClick={onClick}>
+    <button
+      type="button"
+      onClick={onClick}
+      aria-label={ariaLabel}
+      data-testid="mock-button"
+      {...props}
+    >
+      {icon}
       {children}
     </button>
   ),
@@ -34,38 +74,38 @@ vi.mock("../../components/forms/input/Input", () => ({
     label?: string;
     error?: string;
     [key: string]: unknown;
-  }) => {
-    const inputId =
-      typeof props.id === "string"
-        ? props.id
-        : typeof props.name === "string"
-          ? props.name
-          : label;
+  }) => (
+    <div>
+      {label && <label>{label}</label>}
 
-    return (
-      <div>
-        {label && <label htmlFor={inputId}>{label}</label>}
+      <input aria-label={label} {...props} />
 
-        <input id={inputId} {...props} />
-
-        {error && <span role="alert">{error}</span>}
-      </div>
-    );
-  },
+      {error && <span data-testid={`${label}-error`}>{error}</span>}
+    </div>
+  ),
 }));
 
 vi.mock("../../components/forms/select/Select", () => ({
   default: ({
-    options = [],
+    options,
+    value,
+    onChange,
     ...props
   }: {
-    options?: {
+    options: {
       label: string;
       value: string;
     }[];
+    value?: string;
+    onChange?: (event: React.ChangeEvent<HTMLSelectElement>) => void;
     [key: string]: unknown;
   }) => (
-    <select aria-label="Reference Column" {...props}>
+    <select
+      aria-label="Reference Column"
+      value={value}
+      onChange={onChange}
+      {...props}
+    >
       {options.map((option) => (
         <option key={option.value} value={option.value}>
           {option.label}
@@ -78,510 +118,359 @@ vi.mock("../../components/forms/select/Select", () => ({
 vi.mock("../../components/forms/textarea/TextArea", () => ({
   default: ({
     label,
+    placeholder,
     ...props
   }: {
     label?: string;
+    placeholder?: string;
     [key: string]: unknown;
-  }) => {
-    const textareaId =
-      typeof props.id === "string"
-        ? props.id
-        : typeof props.name === "string"
-          ? props.name
-          : label;
+  }) => (
+    <div>
+      {label && <label>{label}</label>}
 
-    return (
-      <div>
-        {label && <label htmlFor={textareaId}>{label}</label>}
-
-        <textarea id={textareaId} {...props} />
-      </div>
-    );
-  },
+      <textarea aria-label={label} placeholder={placeholder} {...props} />
+    </div>
+  ),
 }));
 
-/* -------------------------------------------------------------------------- */
-/*                              Properties Tests                              */
-/* -------------------------------------------------------------------------- */
+vi.mock("../../utils/utils", () => ({
+  cn: (...classes: unknown[]) => classes.filter(Boolean).join(" "),
+}));
+
+// -----------------------------------------------------------------------------
+// Tests
+// -----------------------------------------------------------------------------
 
 describe("Properties", () => {
-  /* ------------------------------------------------------------------------ */
-  /*                              Rendering                                   */
-  /* ------------------------------------------------------------------------ */
+  const mockOnCancel = vi.fn();
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
 
   it("renders page title", () => {
-    render(<Properties />);
+    render(<Properties onCancel={mockOnCancel} />);
 
     expect(screen.getByText("Data Preprocessing Wizard")).toBeInTheDocument();
   });
 
-  it("renders header buttons", () => {
-    render(<Properties />);
+  it("renders header action buttons", () => {
+    render(<Properties onCancel={mockOnCancel} />);
 
-    expect(
-      screen.getByRole("button", {
-        name: "Help",
-      }),
-    ).toBeInTheDocument();
+    expect(screen.getByText("Help")).toBeInTheDocument();
 
-    expect(
-      screen.getByRole("button", {
-        name: "Apply To All",
-      }),
-    ).toBeInTheDocument();
+    expect(screen.getByText("Apply to All")).toBeInTheDocument();
 
-    expect(
-      screen.getAllByRole("button", {
-        name: "Save",
-      }),
-    ).toHaveLength(2);
+    expect(screen.getAllByText("Save")).toHaveLength(2);
   });
 
-  it("renders section headings", () => {
-    render(<Properties />);
+  it("renders edit columns section", () => {
+    render(<Properties onCancel={mockOnCancel} />);
 
-    expect(screen.getByText("Threshold")).toBeInTheDocument();
-
-    expect(screen.getByText("Expression")).toBeInTheDocument();
+    expect(screen.getByText("Edit Columns / Expressions")).toBeInTheDocument();
   });
 
   it("renders all column options", () => {
-    render(<Properties />);
+    render(<Properties onCancel={mockOnCancel} />);
 
-    expect(screen.getAllByText("01-LC0524.MODE").length).toBeGreaterThan(0);
+    expect(screen.getByText("01-LC0524.MODE")).toBeInTheDocument();
 
-    expect(screen.getAllByText("01-LC0524.OP").length).toBeGreaterThan(0);
+    expect(screen.getByText("01-LC0524.OP")).toBeInTheDocument();
 
-    expect(screen.getAllByText("01-LC0524.PV").length).toBeGreaterThan(0);
+    expect(screen.getByText("01-LC0524.PV")).toBeInTheDocument();
 
-    expect(screen.getAllByText("01-LC0524.SP").length).toBeGreaterThan(0);
+    expect(screen.getByText("01-LC0524.SP")).toBeInTheDocument();
 
-    expect(screen.getAllByText("01-LC0524.STATUS").length).toBeGreaterThan(0);
+    expect(screen.getByText("01-LC0524.STATUS")).toBeInTheDocument();
   });
 
-  /* ------------------------------------------------------------------------ */
-  /*                           Default Values                                 */
-  /* ------------------------------------------------------------------------ */
+  it("selects reference column when column is clicked", () => {
+    render(<Properties onCancel={mockOnCancel} />);
 
-  it("renders default warning threshold", () => {
-    render(<Properties />);
-
-    expect(screen.getByLabelText("Warning Threshold %")).toHaveValue("10");
-  });
-
-  it("renders default abort threshold", () => {
-    render(<Properties />);
-
-    expect(screen.getByLabelText("Abort Threshold %")).toHaveValue("20");
-  });
-
-  it("renders default reference column", () => {
-    render(<Properties />);
-
-    expect(
-      screen.getByRole("combobox", {
-        name: "Reference Column",
-      }),
-    ).toHaveValue("mode");
-  });
-
-  /* ------------------------------------------------------------------------ */
-  /*                         Warning Threshold                                */
-  /* ------------------------------------------------------------------------ */
-
-  it("updates warning threshold", async () => {
-    const user = userEvent.setup();
-
-    render(<Properties />);
-
-    const input = screen.getByLabelText("Warning Threshold %");
-
-    await user.clear(input);
-    await user.type(input, "15");
-
-    expect(input).toHaveValue("15");
-  });
-
-  /* ------------------------------------------------------------------------ */
-  /*                          Abort Threshold                                 */
-  /* ------------------------------------------------------------------------ */
-
-  it("updates abort threshold", async () => {
-    const user = userEvent.setup();
-
-    render(<Properties />);
-
-    const input = screen.getByLabelText("Abort Threshold %");
-
-    await user.clear(input);
-    await user.type(input, "25");
-
-    expect(input).toHaveValue("25");
-  });
-
-  /* ------------------------------------------------------------------------ */
-  /*                           Reference Column                               */
-  /* ------------------------------------------------------------------------ */
-
-  it("updates reference column from select", async () => {
-    const user = userEvent.setup();
-
-    render(<Properties />);
-
-    const select = screen.getByRole("combobox", {
-      name: "Reference Column",
-    });
-
-    await user.selectOptions(select, "pv");
-
-    expect(select).toHaveValue("pv");
-  });
-
-  /* ------------------------------------------------------------------------ */
-  /*                        Bad Data Expression                               */
-  /* ------------------------------------------------------------------------ */
-
-  it("updates bad data expression", async () => {
-    const user = userEvent.setup();
-
-    render(<Properties />);
-
-    const textarea = screen.getByLabelText("Bad Data Expression");
-
-    await user.type(textarea, "bad data formula");
-
-    expect(textarea).toHaveValue("bad data formula");
-  });
-
-  /* ------------------------------------------------------------------------ */
-  /*                     Replacement Expression                              */
-  /* ------------------------------------------------------------------------ */
-
-  it("updates replacement expression", async () => {
-    const user = userEvent.setup();
-
-    render(<Properties />);
-
-    const textarea = screen.getByLabelText("Replacement Expression");
-
-    await user.type(textarea, "replacement formula");
-
-    expect(textarea).toHaveValue("replacement formula");
-  });
-
-  /* ------------------------------------------------------------------------ */
-  /*                         Left Panel Selection                             */
-  /* ------------------------------------------------------------------------ */
-
-  it("changes selected column from left panel", async () => {
-    const user = userEvent.setup();
-
-    render(<Properties />);
-
-    const pvButtons = screen.getAllByRole("button", {
+    const pvButton = screen.getByRole("button", {
       name: "01-LC0524.PV",
     });
 
-    expect(pvButtons.length).toBeGreaterThan(0);
+    fireEvent.click(pvButton);
 
-    await user.click(pvButtons[0]);
-
-    expect(
-      screen.getByRole("combobox", {
-        name: "Reference Column",
-      }),
-    ).toHaveValue("pv");
+    expect(pvButton.className).toContain("text-foreground-accent");
   });
 
-  it("changes selected column to mode", async () => {
-    const user = userEvent.setup();
+  it("renders threshold fields with default values", () => {
+    render(<Properties onCancel={mockOnCancel} />);
 
-    render(<Properties />);
+    const warningInput = screen.getByLabelText(
+      "Warning Threshold",
+    ) as HTMLInputElement;
 
-    const buttons = screen.getAllByRole("button", {
-      name: "01-LC0524.MODE",
-    });
+    const abortInput = screen.getByLabelText(
+      "Abort Threshold",
+    ) as HTMLInputElement;
 
-    await user.click(buttons[0]);
+    expect(warningInput.value).toBe("10");
 
-    expect(
-      screen.getByRole("combobox", {
-        name: "Reference Column",
-      }),
-    ).toHaveValue("mode");
+    expect(abortInput.value).toBe("20");
   });
 
-  it("changes selected column to op", async () => {
-    const user = userEvent.setup();
+  it("renders reference column select with default value", () => {
+    render(<Properties onCancel={mockOnCancel} />);
 
-    render(<Properties />);
+    const select = screen.getByLabelText(
+      "Reference Column",
+    ) as HTMLSelectElement;
 
-    const buttons = screen.getAllByRole("button", {
-      name: "01-LC0524.OP",
-    });
-
-    await user.click(buttons[0]);
-
-    expect(
-      screen.getByRole("combobox", {
-        name: "Reference Column",
-      }),
-    ).toHaveValue("op");
+    expect(select.value).toBe("mode");
   });
 
-  it("changes selected column to sp", async () => {
-    const user = userEvent.setup();
+  it("changes reference column from select", () => {
+    render(<Properties onCancel={mockOnCancel} />);
 
-    render(<Properties />);
+    const select = screen.getByLabelText(
+      "Reference Column",
+    ) as HTMLSelectElement;
 
-    const buttons = screen.getAllByRole("button", {
-      name: "01-LC0524.SP",
+    fireEvent.change(select, {
+      target: {
+        value: "pv",
+      },
     });
 
-    await user.click(buttons[0]);
-
-    expect(
-      screen.getByRole("combobox", {
-        name: "Reference Column",
-      }),
-    ).toHaveValue("sp");
+    expect(select.value).toBe("pv");
   });
 
-  it("changes selected column to status", async () => {
-    const user = userEvent.setup();
+  it("renders bad data expression field", () => {
+    render(<Properties onCancel={mockOnCancel} />);
 
-    render(<Properties />);
-
-    const buttons = screen.getAllByRole("button", {
-      name: "01-LC0524.STATUS",
-    });
-
-    await user.click(buttons[0]);
+    expect(screen.getByLabelText("Bad Data Expression")).toBeInTheDocument();
 
     expect(
-      screen.getByRole("combobox", {
-        name: "Reference Column",
-      }),
-    ).toHaveValue("status");
+      screen.getByPlaceholderText("Enter bad data expression"),
+    ).toBeInTheDocument();
   });
 
-  /* ------------------------------------------------------------------------ */
-  /*                         Complete Form                                    */
-  /* ------------------------------------------------------------------------ */
+  it("renders replacement expression field", () => {
+    render(<Properties onCancel={mockOnCancel} />);
 
-  it("updates the entire form", async () => {
-    const user = userEvent.setup();
+    expect(screen.getByLabelText("Replacement Expression")).toBeInTheDocument();
 
-    render(<Properties />);
+    expect(
+      screen.getByPlaceholderText("Enter replacement expression"),
+    ).toBeInTheDocument();
+  });
 
-    const warningInput = screen.getByLabelText("Warning Threshold %");
+  it("updates bad data expression", () => {
+    render(<Properties onCancel={mockOnCancel} />);
 
-    const abortInput = screen.getByLabelText("Abort Threshold %");
+    const textarea = screen.getByLabelText(
+      "Bad Data Expression",
+    ) as HTMLTextAreaElement;
 
-    const referenceColumn = screen.getByRole("combobox", {
-      name: "Reference Column",
+    fireEvent.change(textarea, {
+      target: {
+        value: "PV > 100",
+      },
     });
 
-    const badExpression = screen.getByLabelText("Bad Data Expression");
+    expect(textarea.value).toBe("PV > 100");
+  });
 
-    const replacementExpression = screen.getByLabelText(
+  it("updates replacement expression", () => {
+    render(<Properties onCancel={mockOnCancel} />);
+
+    const textarea = screen.getByLabelText(
       "Replacement Expression",
-    );
+    ) as HTMLTextAreaElement;
 
-    await user.clear(warningInput);
-    await user.type(warningInput, "50");
-
-    await user.clear(abortInput);
-    await user.type(abortInput, "80");
-
-    await user.selectOptions(referenceColumn, "status");
-
-    await user.type(badExpression, "bad expression");
-
-    await user.type(replacementExpression, "replacement expression");
-
-    expect(warningInput).toHaveValue("50");
-
-    expect(abortInput).toHaveValue("80");
-
-    expect(referenceColumn).toHaveValue("status");
-
-    expect(badExpression).toHaveValue("bad expression");
-
-    expect(replacementExpression).toHaveValue("replacement expression");
-  });
-
-  /* ------------------------------------------------------------------------ */
-  /*                              Help                                        */
-  /* ------------------------------------------------------------------------ */
-
-  it("allows clicking Help", async () => {
-    const user = userEvent.setup();
-
-    render(<Properties />);
-
-    const helpButton = screen.getByRole("button", {
-      name: "Help",
+    fireEvent.change(textarea, {
+      target: {
+        value: "PV = 0",
+      },
     });
 
-    await user.click(helpButton);
-
-    expect(helpButton).toBeInTheDocument();
+    expect(textarea.value).toBe("PV = 0");
   });
 
-  /* ------------------------------------------------------------------------ */
-  /*                           Apply To All                                   */
-  /* ------------------------------------------------------------------------ */
-
-  it("allows clicking Apply To All", async () => {
-    const user = userEvent.setup();
-
-    render(<Properties />);
-
-    const applyButton = screen.getByRole("button", {
-      name: "Apply To All",
-    });
-
-    await user.click(applyButton);
-
-    expect(applyButton).toBeInTheDocument();
-  });
-
-  /* ------------------------------------------------------------------------ */
-  /*                               Save                                       */
-  /* ------------------------------------------------------------------------ */
-
-  it("renders two Save buttons", () => {
-    render(<Properties />);
-
-    expect(
-      screen.getAllByRole("button", {
-        name: "Save",
-      }),
-    ).toHaveLength(2);
-  });
-
-  it("allows clicking header Save", async () => {
-    const user = userEvent.setup();
-
-    render(<Properties />);
-
-    const saveButtons = screen.getAllByRole("button", {
-      name: "Save",
-    });
-
-    await user.click(saveButtons[0]);
-
-    expect(saveButtons[0]).toBeInTheDocument();
-  });
-
-  it("allows clicking footer Save", async () => {
-    const user = userEvent.setup();
-
-    render(<Properties />);
-
-    const saveButtons = screen.getAllByRole("button", {
-      name: "Save",
-    });
-
-    await user.click(saveButtons[1]);
-
-    expect(saveButtons[1]).toBeInTheDocument();
-  });
-
-  /* ------------------------------------------------------------------------ */
-  /*                              Cancel                                      */
-  /* ------------------------------------------------------------------------ */
-
-  it("renders Cancel button", () => {
-    render(<Properties />);
+  it("renders refresh buttons", () => {
+    render(<Properties onCancel={mockOnCancel} />);
 
     expect(
       screen.getByRole("button", {
-        name: "Cancel",
+        name: "Refresh bad data expression",
+      }),
+    ).toBeInTheDocument();
+
+    expect(
+      screen.getByRole("button", {
+        name: "Refresh replacement expression",
       }),
     ).toBeInTheDocument();
   });
 
-  it("calls onCancel when Cancel is clicked", async () => {
-    const user = userEvent.setup();
-
-    const onCancel = vi.fn();
-
-    render(<Properties onCancel={onCancel} />);
-
-    await user.click(
-      screen.getByRole("button", {
-        name: "Cancel",
-      }),
-    );
-
-    expect(onCancel).toHaveBeenCalledTimes(1);
-  });
-
-  /* ------------------------------------------------------------------------ */
-  /*                         Refresh Actions                                  */
-  /* ------------------------------------------------------------------------ */
-
   it("starts bad expression refresh loading", () => {
-    vi.useFakeTimers();
+    render(<Properties onCancel={mockOnCancel} />);
 
-    try {
-      render(<Properties />);
+    const refreshButton = screen.getByRole("button", {
+      name: "Refresh bad data expression",
+    });
 
-      const refreshButton = screen.getByRole("button", {
-        name: "Refresh bad data expression",
-      });
+    fireEvent.click(refreshButton);
 
-      act(() => {
-        fireEvent.click(refreshButton);
-      });
-
-      expect(refreshButton).toHaveClass("animate-spin");
-
-      act(() => {
-        vi.advanceTimersByTime(2000);
-      });
-
-      expect(refreshButton).not.toHaveClass("animate-spin");
-    } finally {
-      vi.useRealTimers();
-    }
+    expect(refreshButton.querySelector("svg")?.getAttribute("class")).toContain(
+      "animate-spin",
+    );
   });
 
   it("starts replacement expression refresh loading", () => {
-    vi.useFakeTimers();
+    render(<Properties onCancel={mockOnCancel} />);
 
-    try {
-      render(<Properties />);
+    const refreshButton = screen.getByRole("button", {
+      name: "Refresh replacement expression",
+    });
 
-      const refreshButton = screen.getByRole("button", {
-        name: "Refresh replacement expression",
-      });
+    fireEvent.click(refreshButton);
 
-      act(() => {
-        fireEvent.click(refreshButton);
-      });
-
-      expect(refreshButton).toHaveClass("animate-spin");
-
-      act(() => {
-        vi.advanceTimersByTime(2000);
-      });
-
-      expect(refreshButton).not.toHaveClass("animate-spin");
-    } finally {
-      vi.useRealTimers();
-    }
+    expect(refreshButton.querySelector("svg")?.getAttribute("class")).toContain(
+      "animate-spin",
+    );
   });
 
-  /* ------------------------------------------------------------------------ */
-  /*                              Smoke Test                                  */
-  /* ------------------------------------------------------------------------ */
+  it("stops bad expression refresh loading after timeout", async () => {
+    vi.useFakeTimers();
 
-  it("renders without crashing", () => {
-    expect(() => {
-      render(<Properties />);
-    }).not.toThrow();
+    render(<Properties onCancel={mockOnCancel} />);
+
+    const refreshButton = screen.getByRole("button", {
+      name: "Refresh bad data expression",
+    });
+
+    fireEvent.click(refreshButton);
+
+    expect(refreshButton.querySelector("svg")?.getAttribute("class")).toContain(
+      "animate-spin",
+    );
+
+    vi.advanceTimersByTime(2000);
+
+    await waitFor(() => {
+      expect(
+        refreshButton.querySelector("svg")?.getAttribute("class"),
+      ).not.toContain("animate-spin");
+    });
+  });
+
+  it("stops replacement expression refresh loading after timeout", async () => {
+    vi.useFakeTimers();
+
+    render(<Properties onCancel={mockOnCancel} />);
+
+    const refreshButton = screen.getByRole("button", {
+      name: "Refresh replacement expression",
+    });
+
+    fireEvent.click(refreshButton);
+
+    expect(refreshButton.querySelector("svg")?.getAttribute("class")).toContain(
+      "animate-spin",
+    );
+
+    vi.advanceTimersByTime(2000);
+
+    await waitFor(() => {
+      expect(
+        refreshButton.querySelector("svg")?.getAttribute("class"),
+      ).not.toContain("animate-spin");
+    });
+  });
+
+  it("renders footer cancel button", () => {
+    render(<Properties onCancel={mockOnCancel} />);
+
+    expect(screen.getByText("Cancel")).toBeInTheDocument();
+  });
+
+  it("calls onCancel when cancel button is clicked", () => {
+    render(<Properties onCancel={mockOnCancel} />);
+
+    fireEvent.click(screen.getByText("Cancel"));
+
+    expect(mockOnCancel).toHaveBeenCalledTimes(1);
+  });
+
+  it("renders both save buttons", () => {
+    render(<Properties onCancel={mockOnCancel} />);
+
+    expect(screen.getAllByText("Save")).toHaveLength(2);
+  });
+
+  it("submits valid form without errors", async () => {
+    render(<Properties onCancel={mockOnCancel} />);
+
+    const warningInput = screen.getByLabelText("Warning Threshold");
+
+    fireEvent.change(warningInput, {
+      target: {
+        value: "15",
+      },
+    });
+
+    const saveButtons = screen.getAllByText("Save");
+
+    fireEvent.click(saveButtons[1]);
+
+    await waitFor(() => {
+      expect(
+        screen.queryByTestId("Warning Threshold-error"),
+      ).not.toBeInTheDocument();
+    });
+  });
+
+  it("renders validation errors when invalid threshold values are submitted", async () => {
+    render(<Properties onCancel={mockOnCancel} />);
+
+    const warningInput = screen.getByLabelText("Warning Threshold");
+
+    const abortInput = screen.getByLabelText("Abort Threshold");
+
+    fireEvent.change(warningInput, {
+      target: {
+        value: "",
+      },
+    });
+
+    fireEvent.change(abortInput, {
+      target: {
+        value: "",
+      },
+    });
+
+    fireEvent.click(screen.getAllByText("Save")[1]);
+
+    await waitFor(() => {
+      expect(screen.getByTestId("Warning Threshold-error")).toBeInTheDocument();
+
+      expect(screen.getByTestId("Abort Threshold-error")).toBeInTheDocument();
+    });
+  });
+
+  it("keeps selected column and form value in sync", () => {
+    render(<Properties onCancel={mockOnCancel} />);
+
+    const opButton = screen.getByRole("button", {
+      name: "01-LC0524.OP",
+    });
+
+    fireEvent.click(opButton);
+
+    const select = screen.getByLabelText(
+      "Reference Column",
+    ) as HTMLSelectElement;
+
+    expect(select.value).toBe("op");
+
+    expect(opButton.className).toContain("text-foreground-accent");
   });
 });

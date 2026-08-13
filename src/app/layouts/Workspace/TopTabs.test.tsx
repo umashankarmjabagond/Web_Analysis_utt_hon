@@ -1,47 +1,45 @@
-import { describe, expect, it, vi } from "vitest";
-
+import { describe, expect, it, vi, beforeEach } from "vitest";
 import { render, screen } from "../../../test";
 
 import TopTabs from "./TopTabs";
 
-const mockTabs = vi.fn();
+interface TabItem {
+  id: string;
+  label: string;
+  path: string;
+}
 
-vi.mock(
-  "../../../components/common/tabs/Tabs",
-  () => ({
-    Tabs: ({
-      items,
-    }: {
-      items: {
-        id: string;
-        label: string;
-        path: string;
-      }[];
-    }) => {
-      mockTabs(items);
+const mockTabs = vi.fn<(items: TabItem[]) => void>();
 
-      return (
-        <div data-testid="tabs">
-          Mock Tabs Component
-        </div>
-      );
-    },
-  }),
-);
+vi.mock("../../../components/common/tabs/Tabs", () => ({
+  Tabs: ({ items }: { items: TabItem[] }) => {
+    mockTabs(items);
+
+    return <div data-testid="tabs">Mock Tabs Component</div>;
+  },
+}));
 
 describe("TopTabs", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  const getTabs = (): TabItem[] => {
+    const tabs = mockTabs.mock.calls[0]?.[0];
+
+    if (!tabs) {
+      throw new Error("Tabs component was not called");
+    }
+
+    return tabs;
+  };
+
   it("renders Tabs component", () => {
     render(<TopTabs />);
 
-    expect(
-      screen.getByTestId("tabs"),
-    ).toBeInTheDocument();
+    expect(screen.getByTestId("tabs")).toBeInTheDocument();
 
-    expect(
-      screen.getByText(
-        "Mock Tabs Component",
-      ),
-    ).toBeInTheDocument();
+    expect(screen.getByText("Mock Tabs Component")).toBeInTheDocument();
   });
 
   it("passes tabs data to Tabs component", () => {
@@ -49,19 +47,15 @@ describe("TopTabs", () => {
 
     expect(mockTabs).toHaveBeenCalledTimes(1);
 
-    const tabs =
-      mockTabs.mock.calls[0][0];
+    const tabs = getTabs();
 
-    expect(
-      Array.isArray(tabs),
-    ).toBe(true);
+    expect(Array.isArray(tabs)).toBe(true);
   });
 
   it("passes all seven tabs", () => {
     render(<TopTabs />);
 
-    const tabs =
-      mockTabs.mock.calls[0][0];
+    const tabs = getTabs();
 
     expect(tabs).toHaveLength(7);
   });
@@ -69,8 +63,7 @@ describe("TopTabs", () => {
   it("passes correct import configuration tab", () => {
     render(<TopTabs />);
 
-    const tabs =
-      mockTabs.mock.calls[0][0];
+    const tabs = getTabs();
 
     expect(tabs[0]).toEqual({
       id: "import-config",
@@ -82,8 +75,7 @@ describe("TopTabs", () => {
   it("passes correct regulatory tab", () => {
     render(<TopTabs />);
 
-    const tabs =
-      mockTabs.mock.calls[0][0];
+    const tabs = getTabs();
 
     expect(tabs).toContainEqual({
       id: "regulatory",
@@ -95,8 +87,7 @@ describe("TopTabs", () => {
   it("passes correct MPC tab", () => {
     render(<TopTabs />);
 
-    const tabs =
-      mockTabs.mock.calls[0][0];
+    const tabs = getTabs();
 
     expect(tabs).toContainEqual({
       id: "mpc",
@@ -108,8 +99,7 @@ describe("TopTabs", () => {
   it("passes correct PWO tab", () => {
     render(<TopTabs />);
 
-    const tabs =
-      mockTabs.mock.calls[0][0];
+    const tabs = getTabs();
 
     expect(tabs).toContainEqual({
       id: "pwo",
@@ -121,8 +111,7 @@ describe("TopTabs", () => {
   it("passes correct analysis schedule tab", () => {
     render(<TopTabs />);
 
-    const tabs =
-      mockTabs.mock.calls[0][0];
+    const tabs = getTabs();
 
     expect(tabs).toContainEqual({
       id: "analysis-schedule",
@@ -134,8 +123,7 @@ describe("TopTabs", () => {
   it("passes correct custom KPI tab", () => {
     render(<TopTabs />);
 
-    const tabs =
-      mockTabs.mock.calls[0][0];
+    const tabs = getTabs();
 
     expect(tabs).toContainEqual({
       id: "custom-kpi",
@@ -147,8 +135,7 @@ describe("TopTabs", () => {
   it("passes correct analysis engine tab", () => {
     render(<TopTabs />);
 
-    const tabs =
-      mockTabs.mock.calls[0][0];
+    const tabs = getTabs();
 
     expect(tabs).toContainEqual({
       id: "analysis-engine",
@@ -160,16 +147,9 @@ describe("TopTabs", () => {
   it("contains expected tab ids", () => {
     render(<TopTabs />);
 
-    const tabs =
-      mockTabs.mock.calls[0][0];
+    const tabs = getTabs();
 
-    expect(
-      tabs.map(
-        (tab: {
-          id: string;
-        }) => tab.id,
-      ),
-    ).toEqual([
+    expect(tabs.map((tab) => tab.id)).toEqual([
       "import-config",
       "regulatory",
       "mpc",
@@ -183,16 +163,9 @@ describe("TopTabs", () => {
   it("contains expected tab labels", () => {
     render(<TopTabs />);
 
-    const tabs =
-      mockTabs.mock.calls[0][0];
+    const tabs = getTabs();
 
-    expect(
-      tabs.map(
-        (tab: {
-          label: string;
-        }) => tab.label,
-      ),
-    ).toEqual([
+    expect(tabs.map((tab) => tab.label)).toEqual([
       "Import Configuration File",
       "Regulatory Configuration",
       "MPC Configuration",
@@ -206,22 +179,10 @@ describe("TopTabs", () => {
   it("contains analysis engine dashboard path", () => {
     render(<TopTabs />);
 
-    const tabs =
-      mockTabs.mock.calls[0][0];
+    const tabs = getTabs();
 
-    const analysisEngineTab =
-      tabs.find(
-        (
-          tab: {
-            id: string;
-            path: string;
-          },
-        ) =>
-          tab.id === "analysis-engine",
-      );
+    const analysisEngineTab = tabs.find((tab) => tab.id === "analysis-engine");
 
-    expect(
-      analysisEngineTab?.path,
-    ).toBe("/dashboard");
+    expect(analysisEngineTab?.path).toBe("/dashboard");
   });
 });

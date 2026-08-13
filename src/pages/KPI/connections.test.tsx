@@ -1,17 +1,38 @@
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it, vi, afterEach } from "vitest";
+
 import userEvent from "@testing-library/user-event";
 import type { ReactNode } from "react";
+
 import * as utils from "../../utils/utils";
 import type { TreeNodeData } from "../../types/commonTypes";
 
 import { render, screen } from "../../test";
 import Connections from "./Connections";
 
-type MockTreeNode = {
-  id: string;
-  label: string;
-  children?: MockTreeNode[];
-};
+/* -------------------------------------------------------------------------- */
+/* i18next mock                                                               */
+/* -------------------------------------------------------------------------- */
+
+vi.mock("react-i18next", () => ({
+  useTranslation: () => ({
+    t: (key: string) => {
+      const translations: Record<string, string> = {
+        TAB_CONNECTIONS: "Connections",
+        COMMON_HELP: "Help",
+        COMMON_APPLY_TO_ALL: "Apply to All",
+        COMMON_SAVE: "Save",
+        CONNECTIONS_ALL_COLUMNS: "All Columns",
+        CONNECTIONS_SELECTED_COLUMNS: "Selected Columns",
+      };
+
+      return translations[key] ?? key;
+    },
+  }),
+}));
+
+/* -------------------------------------------------------------------------- */
+/* Utils mock                                                                 */
+/* -------------------------------------------------------------------------- */
 
 vi.mock("../../utils/utils", async () => {
   const actual =
@@ -27,43 +48,71 @@ vi.mock("../../utils/utils", async () => {
   };
 });
 
+/* -------------------------------------------------------------------------- */
+/* Tree mock                                                                  */
+/* -------------------------------------------------------------------------- */
+
+type MockTreeNode = {
+  id: string;
+  label: string;
+  children?: MockTreeNode[];
+};
+
 vi.mock("../../components/common/tree/Tree", () => ({
   default: ({
-  nodes,
-  onSelect,
-}: {
-  nodes: MockTreeNode[];
+    nodes,
+    onSelect,
+  }: {
+    nodes: MockTreeNode[];
+    selectedId?: string | null;
     onSelect: (id: string) => void;
   }) => {
     const renderNodes = (items: MockTreeNode[]): ReactNode[] =>
       items.flatMap((node) => [
-        <button key={node.id} onClick={() => onSelect(node.id)}>
+        <button key={node.id} type="button" onClick={() => onSelect(node.id)}>
           {node.label}
         </button>,
+
         ...(node.children ? renderNodes(node.children) : []),
       ]);
 
-    return <div>{renderNodes(nodes)}</div>;
+    return <div data-testid="mock-tree">{renderNodes(nodes)}</div>;
   },
 }));
+
+/* -------------------------------------------------------------------------- */
+/* Button mock                                                                */
+/* -------------------------------------------------------------------------- */
 
 vi.mock("../../components/forms/button/Button", () => ({
   default: ({
     children,
     onClick,
+    iconOnly,
+    icon,
   }: {
-    children: ReactNode;
+    children?: ReactNode;
     onClick?: () => void;
+    iconOnly?: boolean;
+    icon?: ReactNode;
   }) => (
-    <button data-testid="mock-button" onClick={onClick}>
-      {children}
+    <button type="button" data-testid="mock-button" onClick={onClick}>
+      {iconOnly ? icon : children}
     </button>
   ),
 }));
 
+/* -------------------------------------------------------------------------- */
+/* Cleanup                                                                    */
+/* -------------------------------------------------------------------------- */
+
 afterEach(() => {
   vi.restoreAllMocks();
 });
+
+/* -------------------------------------------------------------------------- */
+/* Tests                                                                      */
+/* -------------------------------------------------------------------------- */
 
 describe("Connections", () => {
   it("renders page title", () => {
@@ -180,6 +229,7 @@ describe("Connections", () => {
 
     expect(screen.getAllByText("01-LC0524 DS")).toHaveLength(1);
   });
+
   it("does nothing when selected node cannot be found", async () => {
     const user = userEvent.setup();
 
