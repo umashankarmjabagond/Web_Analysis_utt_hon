@@ -1,6 +1,7 @@
 import { cloneElement, isValidElement, type ReactElement } from "react";
 import type { IconButtonProps } from "../../../types/commonTypes";
-import clsx from "clsx";
+import type { LucideProps } from "lucide-react";
+import { cn } from "../../../utils/utils";
 
 const sizeClasses = {
   sm: "h-7 w-7",
@@ -21,7 +22,7 @@ const IconButton = ({
   ...props
 }: IconButtonProps) => {
   const renderedIcon = isValidElement(icon)
-    ? cloneElement(icon as ReactElement, {
+    ? cloneElement(icon as ReactElement<LucideProps>, {
         size: iconSizes[size],
         className: "text-[var(--color-button-focus)]",
         strokeWidth: 2.25,
@@ -31,19 +32,21 @@ const IconButton = ({
   return (
     <button
       type="button"
-      className={clsx(
+      className={cn(
         "inline-flex items-center justify-center",
-        "rounded-[var(--radius-sm)]",
-        "border border-border-1",
-        "bg-panel-bg",
+        "rounded-sm border",
+        "bg-button-secondary-background",
+        "border-button-secondary-border",
         "transition-colors duration-200",
-        "hover:bg-panel-hover",
-        "hover:border-[var(--color-button-focus)]",
-        "focus:outline-none",
-        "focus:ring-2",
-        "focus:ring-[var(--color-button-focus)]",
+        "hover:bg-button-secondary-hover-background",
+        "hover:border-button-secondary-hover-border",
+        "focus-visible:outline-2",
+        "focus-visible:outline-offset-2",
+        "focus-visible:outline-button-focus-ring",
         "disabled:cursor-not-allowed",
-        "disabled:opacity-50",
+        "disabled:bg-button-disabled-background",
+        "disabled:border-button-disabled-border",
+        "disabled:text-button-disabled-foreground",
         sizeClasses[size],
         className,
       )}

@@ -7,7 +7,7 @@ export default function MainLayout() {
     <div className="flex h-screen flex-col bg-app-background">
       <Header />
 
-      <div className="flex flex-1 gap-2 overflow-hidden p-2">
+      <div className="flex flex-1 gap-2 overflow-hidden pt-2 pr-2 py-2">
         <Sidebar />
 
         <Workspace />

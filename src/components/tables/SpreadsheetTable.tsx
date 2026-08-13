@@ -1,6 +1,9 @@
-interface SpreadsheetProps {
-  data: Array<Record<string, unknown>> | unknown[][];
-}
+import type { ReactNode } from "react";
+import type { SpreadsheetProps } from "../../types/commonTypes";
+import { useTranslation } from "react-i18next";
+import { cn } from "../../utils/utils";
+
+type CellValue = string | number | boolean | null | undefined | object;
 
 const getExcelColumn = (index: number): string => {
   let column = "";
@@ -15,82 +18,81 @@ const getExcelColumn = (index: number): string => {
   return column;
 };
 
+const renderCellValue = (value: CellValue): ReactNode => {
+  if (value === null) return "";
+
+  if (
+    typeof value === "string" ||
+    typeof value === "number" ||
+    typeof value === "boolean"
+  ) {
+    return value;
+  }
+
+  if (Array.isArray(value)) {
+    return value.join(", ");
+  }
+
+  if (typeof value === "object") {
+    return JSON.stringify(value);
+  }
+
+  return String(value);
+};
+
 const SpreadsheetTable = ({ data }: SpreadsheetProps) => {
+  const { t } = useTranslation();
   if (!data || data.length === 0) {
     return (
-      <div className="flex items-center justify-center p-6 text-[var(--color-text-primary)]">
-        No data available
+      <div className="flex items-center justify-center p-6 text-spreadsheet-cell-foreground">
+        {t("COMMON_NO_DATA_AVAILABLE")}
       </div>
     );
   }
 
-  // Convert object rows into array rows
-  const rows: unknown[][] = Array.isArray(data[0])
-    ? (data as unknown[][])
-    : data.map((item) => Object.values(item));
+  const rows: CellValue[][] = Array.isArray(data[0])
+    ? (data as CellValue[][])
+    : data.map((item) => Object.values(item) as CellValue[]);
 
-  const totalColumns = Math.max(...rows.map((r) => r.length));
+  const totalColumns = Math.max(...rows.map((row) => row.length));
 
   return (
     <div
-      className="dark
-        w-full
-        h-full
-        overflow-auto
-        rounded-[var(--radius-sm)]
-        border
-        border-[var(--color-border-1)]
-        bg-[var(--color-table-row-odd)]
-      "
+      className={cn(
+        "w-full overflow-auto",
+        "rounded-sm border",
+        "border-table-grid-border",
+        "bg-surface",
+      )}
     >
-      <table
-        className="
-          min-w-max
-          border-collapse
-          bg-[var(--color-table-row-odd)]
-        "
-      >
+      <table className="w-full border-collapse">
         <thead>
           <tr>
             {/* Top Left Corner */}
-
             <th
-              className="
-                sticky
-                top-0
-                left-0
-                z-30
-                h-8
-                w-12
-                min-w-[48px]
-                border
-                border-[var(--color-border-1)]
-                bg-[var(--color-table-header)]
-                relative
-              "
-            ></th>
+              className={cn(
+                "sticky left-0 top-0 z-30",
+                "h-8 min-w-12",
+                "border",
+                "border-spreadsheet-header-border",
+                "bg-spreadsheet-header-background",
+              )}
+            />
 
             {/* Excel Columns */}
-
             {Array.from({ length: totalColumns }).map((_, index) => (
               <th
                 key={index}
-                className="
-                  sticky
-                  top-0
-                  z-20
-                  min-h-[8px]
-                  max-h-[48px]
-                  min-w-[80px]
-                  min-w-[120px]
-                  border
-                  border-[var(--color-border-1)]
-                  bg-[var(--color-table-header)]
-                  text-center
-                  text-[13px]
-                  font-semibold
-                  text-[var(--color-text-primary)]
-                "
+                className={cn(
+                  "sticky top-0 z-20",
+                  "h-8 min-w-[120px]",
+                  "border",
+                  "border-spreadsheet-header-border",
+                  "bg-spreadsheet-header-background",
+                  "px-2",
+                  "text-center text-[13px]",
+                  "font-semibold text-spreadsheet-header-foreground",
+                )}
               >
                 {getExcelColumn(index)}
               </th>
@@ -102,63 +104,48 @@ const SpreadsheetTable = ({ data }: SpreadsheetProps) => {
           {rows.map((row, rowIndex) => (
             <tr
               key={rowIndex}
-              className="
-                bg-[var(--color-table-row-odd)]
-                !border-[var(--color-border-1)]
-                transition-colors
-                hover:bg-[var(--color-table-row-hover)]
-              "
+              className={cn(
+                "transition-colors",
+                "bg-spreadsheet-row-background",
+                "hover:bg-spreadsheet-row-hover-background",
+              )}
             >
               {/* Row Number */}
-
               <th
-                className="
-                  sticky
-                  left-0
-                  z-10
-                  min-h-[8px]
-                  max-h-[48px]
-                  min-w-[30px]
-                  max-w-[48px]
-                  border
-                  !border-[var(--color-border-1)]
-                  bg-[var(--color-table-header)]
-                  text-center
-                  text-[13px]
-                  font-medium
-                  text-[var(--color-text-primary)]
-                "
+                className={cn(
+                  "sticky left-0 z-10",
+                  "h-8 min-w-12",
+                  "border",
+                  "border-spreadsheet-row-number-border",
+                  "bg-spreadsheet-row-number-background",
+                  "text-center text-[13px]",
+                  "font-medium text-spreadsheet-row-number-foreground",
+                )}
               >
                 {rowIndex + 1}
               </th>
 
               {/* Cells */}
-
               {Array.from({ length: totalColumns }).map((_, colIndex) => (
                 <td
                   key={`${rowIndex}-${colIndex}`}
                   contentEditable
                   suppressContentEditableWarning
-                  className="
-                    min-h-[8px]
-                    max-h-[48px]
-                    min-w-[80px]
-                    max-w-[120px]
-                    border
-                    !border-[var(--color-border-1)]
-                    bg-[var(--background-primary-container)]
-                    px-2
-                    py-1
-                    text-[13px]
-                    text-[var(--color-text-primary)]
-                    outline-none
-                    transition-colors
-                    focus:bg-[var(--color-table-row-hover)]
-                    focus:ring-1
-                    focus:ring-[var(--color-primary)]
-                  "
+                  className={cn(
+                    "h-8 min-w-[120px]",
+                    "border",
+                    "border-spreadsheet-cell-border",
+                    "bg-spreadsheet-cell-background",
+                    "px-2 py-1",
+                    "text-[13px] text-spreadsheet-cell-foreground",
+                    "outline-none",
+                    "transition-colors",
+                    "focus:bg-spreadsheet-cell-focus-background",
+                    "focus:ring-1 focus:ring-spreadsheet-focus-ring",
+                    "focus:border-spreadsheet-cell-focus-border",
+                  )}
                 >
-                  {row[colIndex] ?? ""}
+                  {renderCellValue(row[colIndex])}
                 </td>
               ))}
             </tr>

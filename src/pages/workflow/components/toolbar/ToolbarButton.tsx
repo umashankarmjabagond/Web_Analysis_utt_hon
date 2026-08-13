@@ -1,12 +1,9 @@
-interface ToolbarButtonProps {
-  icon: React.ElementType;
-  label: string;
-  active?: boolean;
-}
+import type { ToolbarButtonProps } from "../../../../types/workFlowTypes";
+import { cn } from "../../../../utils/utils";
 
 export default function ToolbarButton({
-  icon,
-  active,
+  icon: Icon,
+  active = false,
   title,
   onClick,
 }: ToolbarButtonProps) {
@@ -14,23 +11,17 @@ export default function ToolbarButton({
     <button
       title={title}
       onClick={onClick}
-      className={`
-        h-7
-        w-7
-        rounded
-        flex
-        items-center
-        justify-center
-        transition-all
-        duration-150
-        ${
-          active
-            ? "bg-component-action-primary text-white"
-            : "text-text-muted hover:bg-app-surface-elevated"
-        }
-      `}
+      className={cn(
+        "flex h-7 w-7 items-center justify-center",
+        "rounded",
+        "cursor-pointer",
+        "transition-all duration-150",
+        active
+          ? "bg-toolbar-item-active-background text-toolbar-item-active-foreground"
+          : "text-foreground hover:bg-surface-hover",
+      )}
     >
-      {icon}
+      <Icon size={15} />
     </button>
   );
 }

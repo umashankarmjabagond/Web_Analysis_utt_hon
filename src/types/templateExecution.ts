@@ -8,7 +8,7 @@ export interface WorkflowData {
   edges: Edge[];
 }
 
-export interface ExexutionWorkflowResponse {
+export interface ExecutionWorkflowResponse {
   asset: ExecutionItem;
   workflow: WorkflowData;
 }

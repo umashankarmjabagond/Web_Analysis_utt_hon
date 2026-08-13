@@ -1,0 +1,82 @@
+@import "tailwindcss";
+@import "./tokens.css";
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+/* Default Scrollbar */
+/* WebKit WebKit (Chrome, Edge, Safari)*/
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-default-track);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-default-thumb);
+  border-radius: 9999px;
+  border: 2px solid var(--scrollbar-default-track);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-default-thumb-hover);
+}
+
+::-webkit-scrollbar-corner {
+  background: var(--scrollbar-default-track);
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-default-thumb) var(--scrollbar-default-track);
+}
+
+/* Table Scrollbar */
+.table-scrollbar::-webkit-scrollbar {
+  width: 16px;
+  height: 16px;
+}
+
+.table-scrollbar::-webkit-scrollbar-track {
+  background: var(--scrollbar-table-track);
+  border-left: 1px solid var(--scrollbar-table-border);
+  border-right: 1px solid var(--scrollbar-table-border);
+  box-shadow:
+    0.5px 0 0 var(--scrollbar-table-border) inset,
+    1px 0 0 var(--scrollbar-table-border) inset,
+    -0.5px 0 0 var(--scrollbar-table-border) inset,
+    -1px 0 0 var(--scrollbar-table-border) inset;
+}
+
+.table-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-table-thumb);
+  border-radius: 9999px;
+}
+
+.table-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-table-thumb-hover);
+}
+
+.table-scrollbar::-webkit-scrollbar-corner {
+  background: var(--scrollbar-table-track);
+}
+
+/* Firefox */
+.table-scrollbar {
+  scrollbar-width: auto;
+  scrollbar-color: var(--scrollbar-table-thumb) var(--scrollbar-table-track);
+}
+
+.bg-dot-grid {
+  background-image: radial-gradient(
+    var(--surface-elevated) 1.5px,
+    transparent 1.5px
+  );
+  background-size: 25px 25px;
+}

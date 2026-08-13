@@ -1,5 +1,7 @@
 import { useState, useRef, useEffect, type ReactNode } from "react";
 import { ChevronDown } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import { cn } from "../../../utils/utils";
 
 export interface DropdownItem {
   label: string;
@@ -17,11 +19,11 @@ interface DropdownProps {
 export default function Dropdown({
   items,
   onSelect,
-  placeholder = "Select",
+  placeholder,
   className = "",
 }: DropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
-
+  const { t } = useTranslation();
   const wrapperRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -47,37 +49,60 @@ export default function Dropdown({
   return (
     <div
       ref={wrapperRef}
-      className={`cursor-pointer relative inline-block ${className}`}
+      className={cn("relative inline-block cursor-pointer", className)}
     >
       {/* Trigger */}
-
       <button
         type="button"
         onClick={() => setIsOpen((prev) => !prev)}
-        className="cursor-pointer flex items-center gap-1 text-sm text-app-default-border hover:text-white transition-colors"
+        className={cn(
+          "flex cursor-pointer items-center gap-1",
+          "text-sm text-dropdown-trigger-foreground",
+          "transition-colors",
+          "hover:text-dropdown-trigger-hover-foreground",
+        )}
       >
-        <span>{placeholder}</span>
+        <span>{placeholder ?? t("COMMON_SELECT")}</span>
 
         <ChevronDown
           size={15}
-          className={`transition-transform duration-200 ${
-            isOpen ? "rotate-180" : ""
-          }`}
+          className={cn(
+            "text-dropdown-trigger-icon transition-transform duration-200",
+            isOpen && "rotate-180",
+          )}
         />
       </button>
 
       {/* Menu */}
-
       {isOpen && (
-        <div className="absolute -left-30 lg:left-auto lg:right-0 top-full z-50 mt-2 w-64 overflow-hidden rounded-md border border-app-surface-secondary bg-search-background shadow-xl">
+        <div
+          className={cn(
+            "absolute -left-30 top-full z-50 mt-2 w-64",
+            "overflow-hidden rounded-md border",
+            "border-dropdown-border",
+            "bg-dropdown-background",
+            "shadow-dropdown",
+            "lg:left-auto lg:right-0",
+          )}
+        >
           {items.map((item) => (
             <button
               key={item.value}
               type="button"
               onClick={() => handleSelect(item)}
-              className="cursor-pointer flex w-full items-center gap-2 px-4 py-3 text-left text-sm text-white transition-colors hover:bg-component-background-item-hover hover:text-[var(--app-node-selection-border)]"
+              className={cn(
+                "flex w-full cursor-pointer items-center gap-2",
+                "px-4 py-3 text-left text-sm",
+                "bg-dropdown-item-background",
+                "text-dropdown-item-foreground",
+                "transition-colors",
+                "hover:bg-dropdown-item-hover-background",
+                "hover:text-dropdown-item-hover-foreground",
+              )}
             >
-              {item.icon}
+              {item.icon && (
+                <span className="text-dropdown-icon">{item.icon}</span>
+              )}
 
               <span>{item.label}</span>
             </button>

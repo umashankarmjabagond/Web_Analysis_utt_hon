@@ -1,5 +1,7 @@
 import { X } from "lucide-react";
 import { type ReactNode, useEffect } from "react";
+import { useTranslation } from "react-i18next";
+import { cn } from "../../utils/utils";
 
 type DrawerVariant = "overlay" | "panel";
 interface DrawerProps {
@@ -87,49 +89,53 @@ const Drawer = ({
     : undefined;
 
   const { panel, open, close } = positionClasses[position];
+  const { t } = useTranslation();
 
   return (
     <>
       {isOverlay && (
         <div
           onClick={() => closeOnOverlayClick && onClose()}
-          className={`absolute inset-0 z-40 bg-black/40 transition-opacity duration-300 ${
-            opened ? "visible opacity-100" : "invisible opacity-0"
-          }`}
+          className={cn(
+            "absolute inset-0 z-40 transition-opacity duration-300",
+            "bg-drawer-overlay",
+            opened ? "visible opacity-100" : "invisible opacity-0",
+          )}
         />
       )}
 
       <div
         style={drawerStyle}
-        className={`dark  ${isOverlay ? `absolute ${panel} ${opened ? open : close} z-50` : "relative w-full"}  flex flex-col border border-[var(--app-divider)] bg-[var(--color-table-header)] text-[var(--color-text-primary)] shadow-2xl transition-transform duration-300 ${className}`}
+        className={cn(
+          "dark flex flex-col bg-drawer-background text-drawer-foreground shadow-drawer transition-transform duration-300",
+          isOverlay
+            ? `absolute ${panel} ${opened ? open : close} z-50`
+            : "relative w-full",
+          className,
+        )}
       >
         {title && (
-          <div className="flex shrink-0 items-center border border-[var(--app-divider)] bg-[var(--background-primary-container)]">
+          <div className="flex shrink-0 items-center border border-drawer-header-border bg-drawer-header-background">
             <div className="min-w-0 flex-1 overflow-hidden">
               {typeof title === "string" ? (
-                <h2 className="px-4 py-3 text-lg font-semibold">{title}</h2>
+                <h2 className="px-4 py-3 text-lg font-semibold text-drawer-header-foreground">
+                  {title}
+                </h2>
               ) : (
                 title
               )}
             </div>
 
             <button
+              type="button"
               onClick={onClose}
-              aria-label="Close drawer"
-              className="
-                flex
-                h-[34px]
-                w-[32px]
-                shrink-0
-                items-center
-                justify-center
-                p-2
-                text-[var(--color-text-secondary)]
-                transition-colors
-                hover:bg-[var(--color-surface)]
-                hover:text-[var(--color-primary)]
-                cursor-pointer
-                "
+              aria-label={t("COMMON_CLOSE")}
+              className={cn(
+                "flex h-[34px] w-8 shrink-0 cursor-pointer items-center justify-center p-2",
+                "text-drawer-close-foreground transition-colors",
+                "hover:bg-drawer-close-hover-background",
+                "hover:text-drawer-close-hover-foreground",
+              )}
             >
               <X size={16} strokeWidth={2} />
             </button>
@@ -137,13 +143,13 @@ const Drawer = ({
         )}
 
         <div
-          className={`flex flex-1 flex-col overflow-hidden ${bodyClassName}`}
+          className={cn("flex flex-1 flex-col overflow-hidden", bodyClassName)}
         >
           {children}
         </div>
 
         {footer && (
-          <div className="shrink-0 border-t border-[var(--color-border)] px-5 py-4">
+          <div className="shrink-0 border-t border-drawer-footer-border px-5 py-4">
             {footer}
           </div>
         )}

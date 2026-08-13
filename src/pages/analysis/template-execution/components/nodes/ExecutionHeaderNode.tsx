@@ -1,7 +1,7 @@
 import type { NodeProps } from "@xyflow/react";
 import { useTemplateExecutionStore } from "../../../../../store/templateExecutionStore";
-import { Check } from "lucide-react";
 import type { ExecutionHeaderFlowNode } from "../../../../../types/templateExecution";
+import Checkbox from "../../../../../components/forms/checkbox/CheckBox";
 
 export default function ExecutionHeaderNode({
   data,
@@ -16,20 +16,13 @@ export default function ExecutionHeaderNode({
 
   return (
     <div className="nodrag nopan flex  items-center h-6 w-[137px] pr-6 gap-2 shrink-0">
-      <div className="relative h-4 w-4 flex items-center justify-center shrink-0">
-        <input
-          type="checkbox"
-          className="nodrag nopan appearance-none peer h-4 w-4 rounded-xs border border-app-default-border bg-transparent checked:border-app-action-primary checked:bg-app-action-primary cursor-pointer"
-          checked={checked}
-          onClick={(e) => e.stopPropagation()}
-          onChange={() => toggleSelectedRow(data.itemId)}
-        />
-        <Check
-          className="pointer-events-none absolute h-3 w-3 text-black opacity-0 peer-checked:opacity-100"
-          strokeWidth={3}
-        />
-      </div>
-      <span className="text-app-text-primary">{data.itemId}</span>
+      <Checkbox
+        checked={checked}
+        className="nodrag nopan"
+        onClick={(e) => e.stopPropagation()}
+        onChange={() => toggleSelectedRow(data.itemId)}
+      />
+      <span className="text-foreground">{data.itemId}</span>
     </div>
   );
 }

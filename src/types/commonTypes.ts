@@ -4,8 +4,11 @@ import type {
   SelectHTMLAttributes,
   TextareaHTMLAttributes,
   ButtonHTMLAttributes,
+  InputHTMLAttributes,
 } from "react";
 // import type { DonutChartItem } from "./dashboardTypes";
+// import type { DonutChartItem } from "./dashboardTypes";
+import type { LucideIcon } from "lucide-react";
 
 export interface BreadcrumbItem {
   id: string;
@@ -54,9 +57,10 @@ export interface AccordionProps {
 
 export interface TemplateCardProps {
   title: string;
+  icon?: LucideIcon;
   draggable?: boolean;
+  onDragStart?: React.DragEventHandler<HTMLDivElement>;
   onClick?: () => void;
-  onDragStart?: (event: React.DragEvent<HTMLDivElement>) => void;
 }
 export interface TreeNodeData {
   id: string;
@@ -142,14 +146,21 @@ export interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>
   size?: "sm" | "md" | "lg";
 }
 
-type BadgeVariant = "neutral" | "success" | "warning" | "error" | "info";
-type BadgeSize = "xs" | "sm" | "md" | "lg";
-type BadgeAppearance = "solid" | "outline";
+export type BadgeVariant =
+  | "neutral"
+  | "success"
+  | "warning"
+  | "danger"
+  | "info";
+export type BadgeSize = "xs" | "sm" | "md" | "lg";
+export type BadgeFill = "solid" | "outline";
+export type BadgeType = "categorical" | "numeric";
 
 export interface BadgeProps {
+  type?: BadgeType;
   variant: BadgeVariant;
   size?: BadgeSize;
-  fill?: BadgeAppearance;
+  fill?: BadgeFill;
   icon?: React.ReactNode;
   className?: string;
   children: React.ReactNode;
@@ -171,7 +182,29 @@ export interface GroupedSelectorSection {
 export interface GroupedSelectorProps {
   placeholder?: string;
   sections: GroupedSelectorSection[];
+  icon?: LucideIcon;
   onSelect: (item: GroupedSelectorItem) => void;
   disabled?: boolean;
   className?: string;
+}
+
+export interface TooltipProps {
+  children: React.ReactElement;
+  content: React.ReactNode;
+  placement?: "top" | "bottom" | "left" | "right";
+  disabled?: boolean;
+  maxWidth?: number | string;
+  showArrow?: boolean;
+  className?: string;
+}
+
+export interface CheckboxProps extends InputHTMLAttributes<HTMLInputElement> {
+  checked: boolean;
+  label?: string;
+  size?: number;
+}
+export type CellValue = string | number | boolean | null | undefined;
+
+export interface SpreadsheetProps {
+  data: Array<Record<string, CellValue>> | CellValue[][];
 }
