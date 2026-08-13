@@ -1,21 +1,28 @@
-import { CirclePause, CirclePlay, Trash } from "lucide-react";
+import { Monitor, Pen, TextAlignJustify, Trash2, Workflow } from "lucide-react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import ToolbarExecutionButton from "./ToolbarExecutionButton";
 import { useNavigate } from "react-router-dom";
+
+import Badge from "../../../../components/common/badge/Badge";
+import Button from "../../../../components/forms/button/Button";
 import { ROUTES } from "../../../../constants/routes/routesConstant";
 import { useTemplateExecutionStore } from "../../../../store/templateExecutionStore";
-import Badge from "../../../../components/common/badge/Badge";
 import { EXECUTION_ACTION } from "../../../../types/templateExecution";
+import { cn } from "../../../../utils/utils";
 
-export default function ExecutionToolbar() {
+const TABS = [
+  { id: "compactView", icon: TextAlignJustify },
+  { id: "comfortableView", icon: Workflow },
+] as const;
+
+export default function FlowExecutionToolbar() {
   const { t } = useTranslation();
-
   const navigate = useNavigate();
+
+  const [activeTab, setActiveTab] = useState("compactView");
+
   const selectedExecutionItem = useTemplateExecutionStore(
     (state) => state.selectedExecutionItem,
-  );
-  const executionAction = useTemplateExecutionStore(
-    (state) => state.executionAction,
   );
   const setExecutionAction = useTemplateExecutionStore(
     (state) => state.setExecutionAction,
@@ -36,6 +43,11 @@ export default function ExecutionToolbar() {
     confirm(t("EXECUTION_PAUSE_CONFIRMATION"));
   };
 
+  const handleEdit = () => {
+    //  To do Edit Implementation
+    confirm(t("EXECUTION_DELETE_CONFIRMATION"));
+  };
+
   const handleDelete = () => {
     // To do API integration
     setExecutionAction(EXECUTION_ACTION.DELETE);
@@ -46,51 +58,96 @@ export default function ExecutionToolbar() {
   };
 
   return (
-    <div className="absolute left-4 right-4 top-4 z-10 flex h-12 items-center justify-between rounded-[6px] border border-border-default bg-background px-4 py-2">
-      <div className="flex h-7  items-center gap-4">
-        <span className="text-[20px] font-extrabold text-foreground-secondary">
+    <div className="flex h-12 items-center justify-between gap-3 border-b border-[#454545] bg-[#1B1B1B] px-5">
+      <div className="flex shrink-0 items-center gap-3">
+        <h1 className="text-[20px] font-extrabold leading-[30px] text-[#F0F0F0]">
           {name}
-        </span>
+        </h1>
 
         {type && (
           <Badge
             variant="info"
             fill="outline"
-            className="h-6 px-2 py-1 gap-1 rounded-2xl text-xs"
+            className="rounded-2xl border-[#4FB3FF66] bg-[#4FB3FF26] px-2 py-0.5"
           >
             {type.toUpperCase()}
           </Badge>
         )}
-      </div>
 
-      <div className="flex h-8 w-[300px] items-center gap-2">
-        <ToolbarExecutionButton
-          icon={CirclePlay}
-          label={t("EXECUTION_EXECUTE")}
-          active={executionAction === EXECUTION_ACTION.EXECUTE}
+        <div className="h-6 w-px bg-[#454545]" />
+
+        <Button
+          variant="primary"
+          size="medium"
+          className="rounded-[6px] bg-[#64C3FF] px-6 font-bold text-[14px] leading-5 text-[#303030]"
           onClick={handleExecute}
-        />
-        <ToolbarExecutionButton
-          icon={CirclePause}
-          label={t("EXECUTION_PAUSE")}
-          active={executionAction === EXECUTION_ACTION.PAUSE}
+        >
+          Execute All
+        </Button>
+
+        <Button
+          variant="secondary"
+          fill="solid"
+          size="medium"
+          className="rounded-[6px] border border-[#808080] bg-[#404040] px-6 font-bold text-[14px] leading-5 text-[#F0F0F0]"
           onClick={handlePause}
+        >
+          Pause All
+        </Button>
+
+        <Button
+          variant="secondary"
+          fill="solid"
+          size="medium"
+          iconOnly
+          icon={<Pen size={14} />}
+          className="h-8 w-8 shrink-0 rounded-[6px] border border-[#8C8C8C] bg-[#404040] p-0"
+          onClick={handleEdit}
+          aria-label="Edit"
         />
-        <ToolbarExecutionButton
-          icon={Trash}
-          label={t("COMMON_DELETE")}
-          active={executionAction === EXECUTION_ACTION.DELETE}
+
+        <Button
+          variant="secondary"
+          fill="solid"
+          size="medium"
+          iconOnly
+          icon={<Trash2 size={14} />}
+          className="h-8 w-8 shrink-0 rounded-[6px] border border-[#8C8C8C] bg-[#404040] p-0"
           onClick={handleDelete}
+          aria-label="Delete"
         />
       </div>
 
-      <div className="flex h-8 items-center">
-        <button
-          className="h-8 w-[161px] rounded-[4px] px-4 py-1.5 text-[14px] text-foreground-accent cursor-pointer"
+      <div className="flex h-[34px]  shrink-0 items-center gap-3">
+        <div className="flex h-[34px] w-[62px] items-center rounded-[6px] border border-[#454545] p-0.5">
+          {TABS.map(({ id, icon: Icon }) => (
+            <button
+              key={id}
+              type="button"
+              onClick={() => setActiveTab(id)}
+              className={cn(
+                "flex h-7 w-7 items-center justify-center rounded-[4px] cursor-pointer",
+                activeTab === id
+                  ? "bg-[#383838] text-[#F0F0F0]"
+                  : "bg-[#1B1B1B] text-[#B0B0B0]",
+              )}
+            >
+              <Icon size={14} />
+            </button>
+          ))}
+        </div>
+
+        <div className="h-6 w-px bg-[#454545]" />
+
+        <Button
+          variant="secondary"
+          fill="outline"
+          icon={<Monitor size={16} />}
+          className="h-8 rounded-[6px] border-0 bg-transparent px-6 font-bold text-[14px] leading-5 text-[#64C3FF] hover:bg-transparent"
           onClick={() => navigate(ROUTES.WORKFLOW)}
         >
-          {t("ANALYSIS_TEMPLATES")}
-        </button>
+          Analysis Templates
+        </Button>
       </div>
     </div>
   );
