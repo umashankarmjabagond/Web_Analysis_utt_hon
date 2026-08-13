@@ -1,5 +1,4 @@
 import { Outlet, useLocation } from "react-router-dom";
-
 import WorkspaceHeader from "../../../components/common/header/WorkspaceHeader";
 import LeftPanel from "../../../components/common/leftPanel/LeftPanel";
 import { panelConfig } from "../../../components/common/leftPanel/panelConfig";
