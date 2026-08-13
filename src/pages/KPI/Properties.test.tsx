@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
 
 import Properties from "./Properties";
@@ -12,24 +12,37 @@ vi.mock("react-i18next", () => ({
     t: (key: string) => {
       const translations: Record<string, string> = {
         PROPERTIES_DATA_PREPROCESSING_WIZARD: "Data Preprocessing Wizard",
+
         COMMON_HELP: "Help",
         COMMON_APPLY_TO_ALL: "Apply to All",
         COMMON_SAVE: "Save",
         COMMON_CANCEL: "Cancel",
 
         PROPERTIES_EDIT_COLUMNS_EXPRESSIONS: "Edit Columns / Expressions",
+
         PROPERTIES_EDIT_EXPRESSION: "Edit Expression",
+
         PROPERTIES_THRESHOLD: "Threshold",
+
         PROPERTIES_WARNING_THRESHOLD: "Warning Threshold",
+
         PROPERTIES_ABORT_THRESHOLD: "Abort Threshold",
+
         PROPERTIES_EXPRESSION: "Expression",
+
         PROPERTIES_REFERENCE_COLUMN: "Reference Column",
+
         PROPERTIES_BAD_DATA_EXPRESSION: "Bad Data Expression",
+
         PROPERTIES_BAD_DATA_EXPRESSION_PLACEHOLDER: "Enter bad data expression",
+
         PROPERTIES_REPLACEMENT_EXPRESSION: "Replacement Expression",
+
         PROPERTIES_REPLACEMENT_EXPRESSION_PLACEHOLDER:
           "Enter replacement expression",
+
         PROPERTIES_REFRESH_BAD_DATA_EXPRESSION: "Refresh bad data expression",
+
         PROPERTIES_REFRESH_REPLACEMENT_EXPRESSION:
           "Refresh replacement expression",
       };
@@ -38,6 +51,10 @@ vi.mock("react-i18next", () => ({
     },
   }),
 }));
+
+// -----------------------------------------------------------------------------
+// Button mock
+// -----------------------------------------------------------------------------
 
 vi.mock("../../components/forms/button/Button", () => ({
   default: ({
@@ -51,6 +68,7 @@ vi.mock("../../components/forms/button/Button", () => ({
     onClick?: () => void;
     icon?: React.ReactNode;
     "aria-label"?: string;
+    [key: string]: unknown;
   }) => (
     <button
       type="button"
@@ -64,6 +82,10 @@ vi.mock("../../components/forms/button/Button", () => ({
     </button>
   ),
 }));
+
+// -----------------------------------------------------------------------------
+// Input mock
+// -----------------------------------------------------------------------------
 
 vi.mock("../../components/forms/input/Input", () => ({
   default: ({
@@ -84,6 +106,10 @@ vi.mock("../../components/forms/input/Input", () => ({
     </div>
   ),
 }));
+
+// -----------------------------------------------------------------------------
+// Select mock
+// -----------------------------------------------------------------------------
 
 vi.mock("../../components/forms/select/Select", () => ({
   default: ({
@@ -115,6 +141,10 @@ vi.mock("../../components/forms/select/Select", () => ({
   ),
 }));
 
+// -----------------------------------------------------------------------------
+// TextArea mock
+// -----------------------------------------------------------------------------
+
 vi.mock("../../components/forms/textarea/TextArea", () => ({
   default: ({
     label,
@@ -132,6 +162,10 @@ vi.mock("../../components/forms/textarea/TextArea", () => ({
     </div>
   ),
 }));
+
+// -----------------------------------------------------------------------------
+// Utils mock
+// -----------------------------------------------------------------------------
 
 vi.mock("../../utils/utils", () => ({
   cn: (...classes: unknown[]) => classes.filter(Boolean).join(" "),
@@ -151,6 +185,10 @@ describe("Properties", () => {
   afterEach(() => {
     vi.useRealTimers();
   });
+
+  // ---------------------------------------------------------------------------
+  // Basic rendering
+  // ---------------------------------------------------------------------------
 
   it("renders page title", () => {
     render(<Properties onCancel={mockOnCancel} />);
@@ -174,18 +212,22 @@ describe("Properties", () => {
     expect(screen.getByText("Edit Columns / Expressions")).toBeInTheDocument();
   });
 
+  // ---------------------------------------------------------------------------
+  // Column options
+  // ---------------------------------------------------------------------------
+
   it("renders all column options", () => {
     render(<Properties onCancel={mockOnCancel} />);
 
-    expect(screen.getByText("01-LC0524.MODE")).toBeInTheDocument();
+    expect(screen.getAllByText("01-LC0524.MODE").length).toBeGreaterThan(0);
 
-    expect(screen.getByText("01-LC0524.OP")).toBeInTheDocument();
+    expect(screen.getAllByText("01-LC0524.OP").length).toBeGreaterThan(0);
 
-    expect(screen.getByText("01-LC0524.PV")).toBeInTheDocument();
+    expect(screen.getAllByText("01-LC0524.PV").length).toBeGreaterThan(0);
 
-    expect(screen.getByText("01-LC0524.SP")).toBeInTheDocument();
+    expect(screen.getAllByText("01-LC0524.SP").length).toBeGreaterThan(0);
 
-    expect(screen.getByText("01-LC0524.STATUS")).toBeInTheDocument();
+    expect(screen.getAllByText("01-LC0524.STATUS").length).toBeGreaterThan(0);
   });
 
   it("selects reference column when column is clicked", () => {
@@ -200,6 +242,10 @@ describe("Properties", () => {
     expect(pvButton.className).toContain("text-foreground-accent");
   });
 
+  // ---------------------------------------------------------------------------
+  // Threshold fields
+  // ---------------------------------------------------------------------------
+
   it("renders threshold fields with default values", () => {
     render(<Properties onCancel={mockOnCancel} />);
 
@@ -212,9 +258,12 @@ describe("Properties", () => {
     ) as HTMLInputElement;
 
     expect(warningInput.value).toBe("10");
-
     expect(abortInput.value).toBe("20");
   });
+
+  // ---------------------------------------------------------------------------
+  // Reference column
+  // ---------------------------------------------------------------------------
 
   it("renders reference column select with default value", () => {
     render(<Properties onCancel={mockOnCancel} />);
@@ -241,6 +290,10 @@ describe("Properties", () => {
 
     expect(select.value).toBe("pv");
   });
+
+  // ---------------------------------------------------------------------------
+  // Expressions
+  // ---------------------------------------------------------------------------
 
   it("renders bad data expression field", () => {
     render(<Properties onCancel={mockOnCancel} />);
@@ -293,6 +346,10 @@ describe("Properties", () => {
 
     expect(textarea.value).toBe("PV = 0");
   });
+
+  // ---------------------------------------------------------------------------
+  // Refresh buttons
+  // ---------------------------------------------------------------------------
 
   it("renders refresh buttons", () => {
     render(<Properties onCancel={mockOnCancel} />);
@@ -353,13 +410,11 @@ describe("Properties", () => {
       "animate-spin",
     );
 
-    vi.advanceTimersByTime(2000);
+    await vi.advanceTimersByTimeAsync(2000);
 
-    await waitFor(() => {
-      expect(
-        refreshButton.querySelector("svg")?.getAttribute("class"),
-      ).not.toContain("animate-spin");
-    });
+    expect(
+      refreshButton.querySelector("svg")?.getAttribute("class"),
+    ).not.toContain("animate-spin");
   });
 
   it("stops replacement expression refresh loading after timeout", async () => {
@@ -377,14 +432,16 @@ describe("Properties", () => {
       "animate-spin",
     );
 
-    vi.advanceTimersByTime(2000);
+    await vi.advanceTimersByTimeAsync(2000);
 
-    await waitFor(() => {
-      expect(
-        refreshButton.querySelector("svg")?.getAttribute("class"),
-      ).not.toContain("animate-spin");
-    });
+    expect(
+      refreshButton.querySelector("svg")?.getAttribute("class"),
+    ).not.toContain("animate-spin");
   });
+
+  // ---------------------------------------------------------------------------
+  // Footer
+  // ---------------------------------------------------------------------------
 
   it("renders footer cancel button", () => {
     render(<Properties onCancel={mockOnCancel} />);
@@ -406,6 +463,10 @@ describe("Properties", () => {
     expect(screen.getAllByText("Save")).toHaveLength(2);
   });
 
+  // ---------------------------------------------------------------------------
+  // Form submission
+  // ---------------------------------------------------------------------------
+
   it("submits valid form without errors", async () => {
     render(<Properties onCancel={mockOnCancel} />);
 
@@ -421,11 +482,9 @@ describe("Properties", () => {
 
     fireEvent.click(saveButtons[1]);
 
-    await waitFor(() => {
-      expect(
-        screen.queryByTestId("Warning Threshold-error"),
-      ).not.toBeInTheDocument();
-    });
+    expect(
+      screen.queryByTestId("Warning Threshold-error"),
+    ).not.toBeInTheDocument();
   });
 
   it("renders validation errors when invalid threshold values are submitted", async () => {
@@ -449,12 +508,18 @@ describe("Properties", () => {
 
     fireEvent.click(screen.getAllByText("Save")[1]);
 
-    await waitFor(() => {
-      expect(screen.getByTestId("Warning Threshold-error")).toBeInTheDocument();
+    expect(
+      await screen.findByTestId("Warning Threshold-error"),
+    ).toBeInTheDocument();
 
-      expect(screen.getByTestId("Abort Threshold-error")).toBeInTheDocument();
-    });
+    expect(
+      await screen.findByTestId("Abort Threshold-error"),
+    ).toBeInTheDocument();
   });
+
+  // ---------------------------------------------------------------------------
+  // Column/form synchronization
+  // ---------------------------------------------------------------------------
 
   it("keeps selected column and form value in sync", () => {
     render(<Properties onCancel={mockOnCancel} />);

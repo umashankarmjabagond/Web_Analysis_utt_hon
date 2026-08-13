@@ -4,6 +4,21 @@ import { render, screen } from "../../../test";
 
 import Notification from "./Notification";
 
+vi.mock("react-i18next", () => ({
+  useTranslation: () => ({
+    t: (key: string) => {
+      const translations: Record<string, string> = {
+        NOTIFICATION_SUCCESS: "Success",
+        NOTIFICATION_FAILURE: "Failure",
+        NOTIFICATION_WARNING: "Warning",
+        NOTIFICATION_INFO: "Info",
+      };
+
+      return translations[key] ?? key;
+    },
+  }),
+}));
+
 describe("Notification", () => {
   it("renders success notification", () => {
     render(
@@ -14,6 +29,7 @@ describe("Notification", () => {
     );
 
     expect(screen.getAllByText("Success")).toHaveLength(2);
+
     expect(
       screen.getByText("Operation completed successfully"),
     ).toBeInTheDocument();
@@ -29,6 +45,7 @@ describe("Notification", () => {
     );
 
     expect(screen.getByText("Saved Successfully")).toBeInTheDocument();
+
     expect(screen.getByText("Changes have been saved")).toBeInTheDocument();
   });
 
@@ -36,13 +53,15 @@ describe("Notification", () => {
     render(<Notification type="warning" message="Low battery" />);
 
     expect(screen.getAllByText("Warning")).toHaveLength(2);
+
     expect(screen.getByText("Low battery")).toBeInTheDocument();
   });
 
   it("renders failure notification", () => {
-    render(<Notification type="failure" message="Something went wrong" />);
+    render(<Notification type="danger" message="Something went wrong" />);
 
     expect(screen.getAllByText("Failure")).toHaveLength(2);
+
     expect(screen.getByText("Something went wrong")).toBeInTheDocument();
   });
 
@@ -50,6 +69,7 @@ describe("Notification", () => {
     render(<Notification type="info" message="Application updated" />);
 
     expect(screen.getAllByText("Info")).toHaveLength(2);
+
     expect(screen.getByText("Application updated")).toBeInTheDocument();
   });
 
@@ -57,6 +77,7 @@ describe("Notification", () => {
     render(<Notification type="warning" message="Disk space is low" />);
 
     expect(screen.getAllByText("Warning")).toHaveLength(2);
+
     expect(screen.getByText("Disk space is low")).toBeInTheDocument();
   });
 

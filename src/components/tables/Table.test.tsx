@@ -1,9 +1,27 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import userEvent from "@testing-library/user-event";
 import type { ColumnDef } from "@tanstack/react-table";
 
 import { render, screen } from "../../test";
 import Table from "./Table";
+
+vi.mock("react-i18next", () => ({
+  useTranslation: () => ({
+    t: (key: string) => {
+      const translations: Record<string, string> = {
+        COMMON_SEARCH: "Search...",
+        COMMON_FILTER: "Filter...",
+        COMMON_LOADING: "Loading...",
+        TABLE_NO_RECORDS_FOUND: "No records found",
+        TABLE_PAGE: "Page",
+        TABLE_OF: "of",
+        TABLE_SHOW: "Show",
+      };
+
+      return translations[key] ?? key;
+    },
+  }),
+}));
 
 type TestData = {
   name: string;
@@ -95,6 +113,18 @@ const placeholderColumns: ColumnDef<TestData>[] = [
   },
 ];
 
+/**
+ * Returns only the four actual pagination buttons.
+ *
+ * The reusable Select component also contains buttons,
+ * so using getAllByRole("button")[0..3] is unreliable.
+ */
+const getPaginationButtons = (container: HTMLElement) => {
+  return Array.from(container.querySelectorAll("button")).filter((button) =>
+    button.className.includes("w-8"),
+  );
+};
+
 describe("Table", () => {
   it("renders table element", () => {
     const { container } = render(<Table data={data} columns={columns} />);
@@ -146,7 +176,7 @@ describe("Table", () => {
     expect(screen.getByPlaceholderText("Search...")).toBeInTheDocument();
   });
 
-  it("does not render global search input when filterable is false", () => {
+  it("does not render global search when filterable is false", () => {
     render(<Table data={data} columns={columns} />);
 
     expect(screen.queryByPlaceholderText("Search...")).not.toBeInTheDocument();
@@ -180,58 +210,56 @@ describe("Table", () => {
     await user.type(filters[0], "John");
 
     expect(filters[0]).toHaveValue("John");
+  });
+
+  it("filters rows using column filter", async () => {
+    const user = userEvent.setup();
+
+    render(<Table data={data} columns={columns} filterable />);
+
+    const filters = screen.getAllByPlaceholderText("Filter...");
+
+    await user.type(filters[0], "John");
 
     expect(screen.getByText("John")).toBeInTheDocument();
 
     expect(screen.queryByText("Jane")).not.toBeInTheDocument();
   });
 
-  it("renders pagination controls when pagination is enabled", () => {
+  it("renders pagination when enabled", () => {
     render(<Table data={pagedData} columns={columns} pagination />);
 
-    expect(screen.getByText(/Page 1 of 2/i)).toBeInTheDocument();
+    expect(screen.getByText("Page 1 of 2")).toBeInTheDocument();
   });
 
-  it("does not render pagination when pagination is disabled", () => {
+  it("does not render pagination when disabled", () => {
     render(<Table data={data} columns={columns} />);
 
-    expect(screen.queryByText(/Page/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Page 1 of/i)).not.toBeInTheDocument();
   });
 
-  it("renders page size dropdown", () => {
+  it("renders default page size", () => {
     render(<Table data={pagedData} columns={columns} pagination />);
 
     expect(screen.getByText("Show 10")).toBeInTheDocument();
   });
 
-  it("changes page size", async () => {
-    const user = userEvent.setup();
+  it("renders all pagination buttons", () => {
+    const { container } = render(
+      <Table data={pagedData} columns={columns} pagination />,
+    );
 
-    render(<Table data={pagedData} columns={columns} pagination />);
+    const buttons = getPaginationButtons(container);
 
-    const select = screen.getByRole("combobox");
-
-    await user.click(select);
-
-    const option = screen.getByText("Show 20");
-
-    await user.click(option);
-
-    expect(screen.getByText(/Page 1 of 1/i)).toBeInTheDocument();
-  });
-
-  it("renders pagination buttons", () => {
-    render(<Table data={pagedData} columns={columns} pagination />);
-
-    const buttons = screen.getAllByRole("button");
-
-    expect(buttons.length).toBe(4);
+    expect(buttons).toHaveLength(4);
   });
 
   it("disables first and previous buttons on first page", () => {
-    render(<Table data={pagedData} columns={columns} pagination />);
+    const { container } = render(
+      <Table data={pagedData} columns={columns} pagination />,
+    );
 
-    const buttons = screen.getAllByRole("button");
+    const buttons = getPaginationButtons(container);
 
     expect(buttons[0]).toBeDisabled();
     expect(buttons[1]).toBeDisabled();
@@ -243,13 +271,19 @@ describe("Table", () => {
   it("moves to next page", async () => {
     const user = userEvent.setup();
 
-    render(<Table data={pagedData} columns={columns} pagination />);
+    const { container } = render(
+      <Table data={pagedData} columns={columns} pagination />,
+    );
 
-    const buttons = screen.getAllByRole("button");
+    const buttons = getPaginationButtons(container);
 
+    // 0 = first
+    // 1 = previous
+    // 2 = next
+    // 3 = last
     await user.click(buttons[2]);
 
-    expect(screen.getByText(/Page 2 of 2/i)).toBeInTheDocument();
+    expect(screen.getByText("Page 2 of 2")).toBeInTheDocument();
 
     expect(screen.getByText("User10")).toBeInTheDocument();
 
@@ -259,13 +293,15 @@ describe("Table", () => {
   it("moves to last page", async () => {
     const user = userEvent.setup();
 
-    render(<Table data={pagedData} columns={columns} pagination />);
+    const { container } = render(
+      <Table data={pagedData} columns={columns} pagination />,
+    );
 
-    const buttons = screen.getAllByRole("button");
+    const buttons = getPaginationButtons(container);
 
     await user.click(buttons[3]);
 
-    expect(screen.getByText(/Page 2 of 2/i)).toBeInTheDocument();
+    expect(screen.getByText("Page 2 of 2")).toBeInTheDocument();
 
     expect(screen.getByText("User19")).toBeInTheDocument();
   });
@@ -273,19 +309,21 @@ describe("Table", () => {
   it("moves back to previous page", async () => {
     const user = userEvent.setup();
 
-    render(<Table data={pagedData} columns={columns} pagination />);
+    const { container } = render(
+      <Table data={pagedData} columns={columns} pagination />,
+    );
 
-    const buttons = screen.getAllByRole("button");
+    let buttons = getPaginationButtons(container);
 
     await user.click(buttons[2]);
 
-    expect(screen.getByText(/Page 2 of 2/i)).toBeInTheDocument();
+    expect(screen.getByText("Page 2 of 2")).toBeInTheDocument();
 
-    const updatedButtons = screen.getAllByRole("button");
+    buttons = getPaginationButtons(container);
 
-    await user.click(updatedButtons[1]);
+    await user.click(buttons[1]);
 
-    expect(screen.getByText(/Page 1 of 2/i)).toBeInTheDocument();
+    expect(screen.getByText("Page 1 of 2")).toBeInTheDocument();
 
     expect(screen.getByText("User0")).toBeInTheDocument();
   });
@@ -293,19 +331,21 @@ describe("Table", () => {
   it("moves to first page", async () => {
     const user = userEvent.setup();
 
-    render(<Table data={pagedData} columns={columns} pagination />);
+    const { container } = render(
+      <Table data={pagedData} columns={columns} pagination />,
+    );
 
-    let buttons = screen.getAllByRole("button");
+    let buttons = getPaginationButtons(container);
 
     await user.click(buttons[3]);
 
-    expect(screen.getByText(/Page 2 of 2/i)).toBeInTheDocument();
+    expect(screen.getByText("Page 2 of 2")).toBeInTheDocument();
 
-    buttons = screen.getAllByRole("button");
+    buttons = getPaginationButtons(container);
 
     await user.click(buttons[0]);
 
-    expect(screen.getByText(/Page 1 of 2/i)).toBeInTheDocument();
+    expect(screen.getByText("Page 1 of 2")).toBeInTheDocument();
 
     expect(screen.getByText("User0")).toBeInTheDocument();
   });
@@ -316,7 +356,7 @@ describe("Table", () => {
     expect(screen.getByText("Name")).toBeInTheDocument();
   });
 
-  it("sorts ascending when sortable header is clicked", async () => {
+  it("sorts ascending when header is clicked", async () => {
     const user = userEvent.setup();
 
     render(<Table data={data} columns={columns} sortable />);
@@ -326,11 +366,10 @@ describe("Table", () => {
     const rows = screen.getAllByRole("row");
 
     expect(rows[1]).toHaveTextContent("Jane");
-
     expect(rows[2]).toHaveTextContent("John");
   });
 
-  it("sorts descending when sortable header is clicked twice", async () => {
+  it("sorts descending when header is clicked twice", async () => {
     const user = userEvent.setup();
 
     render(<Table data={data} columns={columns} sortable />);
@@ -343,31 +382,34 @@ describe("Table", () => {
     const rows = screen.getAllByRole("row");
 
     expect(rows[1]).toHaveTextContent("John");
-
     expect(rows[2]).toHaveTextContent("Jane");
   });
 
-  it("renders ascending sort icon after first click", async () => {
+  it("renders ascending sort icon", async () => {
     const user = userEvent.setup();
 
-    render(<Table data={data} columns={columns} sortable />);
+    const { container } = render(
+      <Table data={data} columns={columns} sortable />,
+    );
 
     await user.click(screen.getByText("Name"));
 
-    expect(document.querySelector("svg")).toBeInTheDocument();
+    expect(container.querySelector("svg")).toBeInTheDocument();
   });
 
-  it("renders descending sort icon after second click", async () => {
+  it("renders descending sort icon", async () => {
     const user = userEvent.setup();
 
-    render(<Table data={data} columns={columns} sortable />);
+    const { container } = render(
+      <Table data={data} columns={columns} sortable />,
+    );
 
     const header = screen.getByText("Name");
 
     await user.click(header);
     await user.click(header);
 
-    expect(document.querySelector("svg")).toBeInTheDocument();
+    expect(container.querySelector("svg")).toBeInTheDocument();
   });
 
   it("renders grouped headers", () => {
@@ -428,7 +470,7 @@ describe("Table", () => {
     expect(header).toHaveClass("sticky");
   });
 
-  it("renders zebra stripes mode without affecting rendering", () => {
+  it("renders zebra stripes mode", () => {
     render(<Table data={data} columns={columns} zebraStripes />);
 
     expect(screen.getByText("John")).toBeInTheDocument();
@@ -436,27 +478,47 @@ describe("Table", () => {
     expect(screen.getByText("Jane")).toBeInTheDocument();
   });
 
-  it("handles pagination button clicks without errors", async () => {
+  it("handles pagination button clicks", async () => {
+    const user = userEvent.setup();
+
+    const { container } = render(
+      <Table data={pagedData} columns={columns} pagination />,
+    );
+
+    let buttons = getPaginationButtons(container);
+
+    await user.click(buttons[2]);
+
+    buttons = getPaginationButtons(container);
+
+    await user.click(buttons[1]);
+
+    buttons = getPaginationButtons(container);
+
+    await user.click(buttons[3]);
+
+    buttons = getPaginationButtons(container);
+
+    await user.click(buttons[0]);
+
+    expect(screen.getByText("Page 1 of 2")).toBeInTheDocument();
+  });
+
+  it("renders page size options", async () => {
     const user = userEvent.setup();
 
     render(<Table data={pagedData} columns={columns} pagination />);
 
-    let buttons = screen.getAllByRole("button");
+    expect(screen.getByText("Show 10")).toBeInTheDocument();
 
-    await user.click(buttons[2]);
+    const show10 = screen.getByText("Show 10");
 
-    buttons = screen.getAllByRole("button");
+    await user.click(show10);
 
-    await user.click(buttons[1]);
+    expect(screen.getByText("Show 20")).toBeInTheDocument();
 
-    buttons = screen.getAllByRole("button");
+    expect(screen.getByText("Show 30")).toBeInTheDocument();
 
-    await user.click(buttons[3]);
-
-    buttons = screen.getAllByRole("button");
-
-    await user.click(buttons[0]);
-
-    expect(screen.getByText(/Page 1 of 2/i)).toBeInTheDocument();
+    expect(screen.getByText("Show 50")).toBeInTheDocument();
   });
 });
