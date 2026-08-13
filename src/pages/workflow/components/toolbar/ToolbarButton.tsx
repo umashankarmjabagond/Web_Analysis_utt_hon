@@ -1,9 +1,11 @@
 import type { ToolbarButtonProps } from "../../../../types/workFlowTypes";
+import { cn } from "../../../../utils/utils";
 export default function ToolbarButton({
   icon: Icon,
   active = false,
   title,
   onClick,
+  iconClassName,
 }: ToolbarButtonProps) {
   return (
     <button
@@ -28,7 +30,7 @@ export default function ToolbarButton({
         }
       `}
     >
-      <Icon size={13} strokeWidth={1.8} />
+      <Icon className={cn("h-4 w-4", iconClassName)} />
     </button>
   );
 }

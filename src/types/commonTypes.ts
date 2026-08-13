@@ -193,3 +193,18 @@ export type CellValue = string | number | boolean | null | undefined;
 export interface SpreadsheetProps {
   data: Array<Record<string, CellValue>> | CellValue[][];
 }
+
+export interface DropdownItem {
+  label: string;
+  value: string;
+  icon?: ReactNode;
+}
+
+export interface DropdownProps {
+  items: DropdownItem[];
+  onSelect: (item: DropdownItem) => void;
+  placeholder?: string;
+  className?: string;
+  menuClassName?: string;
+  itemClassName?: string;
+}

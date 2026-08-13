@@ -1,4 +1,11 @@
-import { ChevronLeft, Copy, Download, Trash2, Upload } from "lucide-react";
+import {
+  ChevronLeft,
+  StickyNoteX,
+  Download,
+  Trash2,
+  Upload,
+} from "lucide-react";
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ToolbarButton from "./ToolbarButton";
@@ -10,6 +17,7 @@ import Button from "../../../../components/forms/button/Button";
 import Notification from "../../../../components/common/notification/Notification";
 import { ROUTES } from "../../../../constants/routes/routesConstant";
 import { useTranslation } from "react-i18next";
+import { cn } from "../../../../utils/utils";
 
 export default function Toolbar() {
   const { t } = useTranslation();
@@ -122,7 +130,7 @@ export default function Toolbar() {
 
   return (
     <>
-      <div className=" flex h-12 min-h-9 w-full items-center justify-between border-b border-[#303030] bg-[#1b1b1b] px-2        ">
+      <div className=" flex h-12 min-h-9 w-full items-center justify-between border-b border-[#303030] bg-surface-primary px-2        ">
         <div className="flex h-full items-center px-4">
           <div
             className="
@@ -168,11 +176,19 @@ export default function Toolbar() {
         >
           <ToolbarButton title="Delete" icon={Trash2} onClick={handleDelete} />
 
-          <ToolbarButton title="Duplicate" icon={Copy} />
+          <ToolbarButton title="Duplicate" icon={StickyNoteX} />
 
-          <ToolbarButton title="Export Template" icon={Download} />
+          <ToolbarButton
+            title="Export Template"
+            icon={Download}
+            iconClassName="text-white"
+          />
 
-          <ToolbarButton title="Import Template" icon={Upload} />
+          <ToolbarButton
+            title="Import Template"
+            icon={Upload}
+            iconClassName="text-white"
+          />
 
           <div className="ml-1">
             <Dropdown
@@ -188,6 +204,22 @@ export default function Toolbar() {
                 },
               ]}
               onSelect={handleSaveAs}
+              menuClassName={cn(
+                "w-[280px]",
+                "overflow-hidden rounded-md",
+                "bg-dropdown-background",
+                "shadow-dropdown",
+              )}
+              itemClassName={cn(
+                "w-full h-[40px]",
+                "flex items-center",
+                "px-3",
+                "cursor-pointer",
+                "text-dropdown-item-foreground",
+                "hover:bg-surface-primary",
+                "hover:text-accordion-list-count",
+                "last:mb-0",
+              )}
             />
           </div>
         </div>
@@ -202,9 +234,10 @@ export default function Toolbar() {
             : t("TOOLBAR_MPC_TEMPLATE")
         }
         onClose={() => setIsSaveDialogOpen(false)}
+        width={420}
       >
         <div
-          className="
+          className="w-full
             flex
             flex-col
             gap-6
@@ -214,18 +247,16 @@ export default function Toolbar() {
           <Input
             className="
               h-8
-              w-[288px]
+             w-full
               rounded
-              border
-              border-search-border
               bg-app-surface
               text-[14px]
               text-white
             "
-            label="Template Name"
+            label={t("TOOLBAR_TEMPLATE_NAME")}
             value={templateName}
             onChange={(event) => setTemplateName(event.target.value)}
-            placeholder="add template name"
+            placeholder={t("TOOLBAR_ADD_TEMPLATE_NAME")}
           />
 
           <div

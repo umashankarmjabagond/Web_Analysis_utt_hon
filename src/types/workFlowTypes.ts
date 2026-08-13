@@ -119,6 +119,7 @@ export interface ToolbarButtonProps {
   title: string;
   active?: boolean;
   onClick?: MouseEventHandler<HTMLButtonElement>;
+  iconClassName?: string;
 }
 
 export interface PropertiesProps {

@@ -31,10 +31,6 @@ export function prepareWorkflowForCanvas(
 const X_GAP = 320;
 const Y_GAP = 180;
 
-/* -------------------------------------------------------------------------- */
-/*                           Backend -> React Flow                            */
-/* -------------------------------------------------------------------------- */
-
 export const backendToFlow = (
   workflow: BackendWorkflow,
 ): WorkflowCanvasData => {
@@ -83,10 +79,6 @@ export const backendToFlow = (
   };
 };
 
-/* -------------------------------------------------------------------------- */
-/*                           React Flow -> Backend                            */
-/* -------------------------------------------------------------------------- */
-
 export const flowToBackend = (
   nodes: WorkflowNode[],
   edges: Edge[],
@@ -108,28 +100,16 @@ export const flowToBackend = (
 
   return {
     LoopName: "",
-
     TemplateName: "",
-
     AnalysisName: "",
-
     Location: "",
-
     Description: "",
-
     HistorianFile: "",
-
     settings: {},
-
     thresholds: {},
-
     Elements: elements,
   };
 };
-
-/* -------------------------------------------------------------------------- */
-/*                           filterTree                                       */
-/* -------------------------------------------------------------------------- */
 
 export const filterTree = (
   nodes: TreeNodeData[],
