@@ -7,10 +7,14 @@ const mockSpreadsheetTable = vi.fn();
 
 vi.mock("react-i18next", () => ({
   useTranslation: () => ({
-    t: (key: string) => {
+    t: (key: string, options?: { tag?: string }) => {
       const translations: Record<string, string> = {
-        KPI_VIEW_DATA_FOR: "View Data for",
+        WORKFLOW_VIEW_DATA_TITLE: "View Data for",
       };
+
+      if (key === "WORKFLOW_VIEW_DATA_TITLE") {
+        return `${translations[key]} ${options?.tag ?? ""} Data Preprocessing`;
+      }
 
       return translations[key] ?? key;
     },
@@ -55,7 +59,10 @@ describe("KpiTable", () => {
   it("passes all table rows", () => {
     render(<KpiTable />);
 
-    const tableData = mockSpreadsheetTable.mock.calls[0][0];
+    const tableData = mockSpreadsheetTable.mock.calls[0][0] as Record<
+      string,
+      unknown
+    >[];
 
     expect(tableData).toHaveLength(20);
   });
@@ -63,7 +70,10 @@ describe("KpiTable", () => {
   it("passes first row correctly", () => {
     render(<KpiTable />);
 
-    const tableData = mockSpreadsheetTable.mock.calls[0][0];
+    const tableData = mockSpreadsheetTable.mock.calls[0][0] as Record<
+      string,
+      unknown
+    >[];
 
     expect(tableData[0]).toEqual({
       Tag: "56-FFC618",
@@ -85,7 +95,10 @@ describe("KpiTable", () => {
   it("contains expected columns", () => {
     render(<KpiTable />);
 
-    const tableData = mockSpreadsheetTable.mock.calls[0][0];
+    const tableData = mockSpreadsheetTable.mock.calls[0][0] as Record<
+      string,
+      unknown
+    >[];
 
     const firstRow = tableData[0];
 
@@ -107,19 +120,21 @@ describe("KpiTable", () => {
   it("passes rows with expected tag values", () => {
     render(<KpiTable />);
 
-    const tableData = mockSpreadsheetTable.mock.calls[0][0];
+    const tableData = mockSpreadsheetTable.mock.calls[0][0] as Record<
+      string,
+      unknown
+    >[];
 
-    expect(
-      tableData.every(
-        (row: Record<string, unknown>) => row.Tag === "56-FFC618",
-      ),
-    ).toBe(true);
+    expect(tableData.every((row) => row.Tag === "56-FFC618")).toBe(true);
   });
 
   it("passes KPI values to SpreadsheetTable", () => {
     render(<KpiTable />);
 
-    const tableData = mockSpreadsheetTable.mock.calls[0][0];
+    const tableData = mockSpreadsheetTable.mock.calls[0][0] as Record<
+      string,
+      unknown
+    >[];
 
     expect(tableData[0].PV).toBe(52.31);
     expect(tableData[0].SP).toBe(50);
@@ -129,18 +144,13 @@ describe("KpiTable", () => {
   it("passes timestamp values correctly", () => {
     render(<KpiTable />);
 
-    const tableData = mockSpreadsheetTable.mock.calls[0][0];
+    const tableData = mockSpreadsheetTable.mock.calls[0][0] as Record<
+      string,
+      unknown
+    >[];
 
-    expect(
-      tableData.some(
-        (row: Record<string, unknown>) => row.Timestamp === "09:45:01",
-      ),
-    ).toBe(true);
+    expect(tableData.some((row) => row.Timestamp === "09:45:01")).toBe(true);
 
-    expect(
-      tableData.some(
-        (row: Record<string, unknown>) => row.Timestamp === "09:45:05",
-      ),
-    ).toBe(true);
+    expect(tableData.some((row) => row.Timestamp === "09:45:05")).toBe(true);
   });
 });
