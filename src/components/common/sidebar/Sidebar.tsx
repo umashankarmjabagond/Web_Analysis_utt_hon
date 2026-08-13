@@ -20,7 +20,7 @@ const MENUS = [
 export default function Sidebar() {
   const { t } = useTranslation();
   return (
-    <aside className="w-14 bg-[#1b1b1b] border-r border-[#383838] px-2 py-3">
+    <aside className="w-14 bg-surface-primary border-r border-[#383838] px-2 py-3">
       <nav className="flex flex-col items-center">
         {MENUS.map(({ name, path, icon: Icon }) => (
           <NavLink

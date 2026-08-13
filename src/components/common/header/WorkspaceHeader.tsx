@@ -11,7 +11,7 @@ export default function WorkspaceHeader() {
         items-center
         border-b-1
         border-[#454545]
-        bg-[#1b1b1b]
+        bg-surface-primary
         overflow-x-auto
       "
     >

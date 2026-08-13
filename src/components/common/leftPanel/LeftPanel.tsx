@@ -11,7 +11,7 @@ export default function LeftPanel() {
   }
 
   return (
-    <aside className="w-[300px] p-3 overflow-y-auto flex flex-col bg-[#1b1b1b] border-r border-[#454545]">
+    <aside className="w-[300px] p-3 overflow-y-auto flex flex-col bg-surface-primary border-r border-[#454545]">
       {panel.component}
     </aside>
   );
