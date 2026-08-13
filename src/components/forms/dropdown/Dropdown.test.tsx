@@ -26,7 +26,7 @@ describe("Dropdown", () => {
     );
 
     expect(
-      screen.getByText("Select"),
+      screen.getByText("COMMON_SELECT"),
     ).toBeInTheDocument();
   });
 
