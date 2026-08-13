@@ -131,7 +131,7 @@ describe("CalculatedKpisAndErrors", () => {
   });
 
   it("renders with empty KPI array", () => {
-    render(<CalculatedKpisAndErrors kpis={[]} errors={[]} />);
+    render(<CalculatedKpisAndErrors kpis={[]} />);
 
     expect(screen.getByText("Calculated KPIs")).toBeInTheDocument();
 
