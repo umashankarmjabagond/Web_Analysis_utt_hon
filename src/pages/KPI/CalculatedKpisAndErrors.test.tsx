@@ -7,9 +7,9 @@ vi.mock("react-i18next", () => ({
   useTranslation: () => ({
     t: (key: string) => {
       const translations: Record<string, string> = {
-        CALCULATED_KPIS: "Calculated KPIs",
-        ERRORS: "Errors",
-        NO_ERRORS_FOUND: "No errors found",
+        CALCULATED_KPIS_TITLE: "Calculated KPIs",
+        CALCULATED_KPIS_ERRORS_TITLE: "Errors",
+        CALCULATED_KPIS_NO_ERRORS: "No errors found",
       };
 
       return translations[key] ?? key;
@@ -21,7 +21,7 @@ describe("CalculatedKpisAndErrors", () => {
   it("renders section headers", () => {
     render(<CalculatedKpisAndErrors />);
 
-    expect(screen.getAllByText("Calculated KPIs")).toHaveLength(2);
+    expect(screen.getByText("Calculated KPIs")).toBeInTheDocument();
 
     expect(screen.getByText("Errors")).toBeInTheDocument();
   });
@@ -131,10 +131,14 @@ describe("CalculatedKpisAndErrors", () => {
   });
 
   it("renders with empty KPI array", () => {
-    render(<CalculatedKpisAndErrors kpis={[]} />);
+    render(<CalculatedKpisAndErrors kpis={[]} errors={[]} />);
 
-    expect(screen.getAllByText("Calculated KPIs")).toHaveLength(2);
+    expect(screen.getByText("Calculated KPIs")).toBeInTheDocument();
+
+    expect(screen.getByText("Errors")).toBeInTheDocument();
 
     expect(screen.getByText("No errors found")).toBeInTheDocument();
+
+    expect(screen.queryByText("KPI 1")).not.toBeInTheDocument();
   });
 });
