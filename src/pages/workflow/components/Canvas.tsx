@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-
+import { useTranslation } from "react-i18next";
 import {
   Background,
   BackgroundVariant,
@@ -50,6 +50,8 @@ const generateUniqueName = (
 };
 
 export default function Canvas() {
+  const { t } = useTranslation();
+
   const {
     nodes,
     edges,
@@ -307,7 +309,7 @@ export default function Canvas() {
   };
 
   return (
-    <div className="relative h-full flex-1 bg-app-surface">
+    <div className="relative h-full flex-1 bg-surface">
       <div className="absolute left-4 right-3 top-5 z-10">
         <Toolbar />
       </div>
@@ -339,14 +341,12 @@ export default function Canvas() {
       {nodes.length === 0 && (
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
           <div className="max-w-md text-center">
-            <h2 className="text-4xl font-medium text-app-default-border">
-              Create New Template
+            <h2 className="text-4xl font-medium text-foreground-tertiary">
+              {t("CANVAS_CREATE_NEW_TEMPLATE")}
             </h2>
 
-            <p className="mt-4 text-base leading-6 text-app-default-border">
-              Create a template from scratch using attributes or predefined
-              templates as base from the left pane, customize it to your
-              requirements, and save it as a custom template.
+            <p className="mt-4 text-base leading-6 text-foreground-tertiary">
+              {t("CANVAS_CREATE_TEMPLATE_DESCRIPTION")}
             </p>
           </div>
         </div>
@@ -354,8 +354,8 @@ export default function Canvas() {
 
       <Dialog
         isOpen={isDialogOpen}
-        title="Add Attribute"
-        subtitle="Workflow"
+        title={t("CANVAS_ADD_ATTRIBUTE")}
+        subtitle={t("CANVAS_WORKFLOW")}
         onClose={() => {
           setIsDialogOpen(false);
           setSelectedEdge(null);
@@ -363,7 +363,7 @@ export default function Canvas() {
         width={620}
       >
         <GroupedSelector
-          placeholder="Select an option"
+          placeholder={t("COMMON_SELECT_OPTION")}
           sections={attributeCatalogSections.map((section) => ({
             id: section.id ?? section.title,
             title: section.title,

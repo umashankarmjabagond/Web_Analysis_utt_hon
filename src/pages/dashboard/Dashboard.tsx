@@ -1,3 +1,5 @@
+import Badge from "../../components/common/badge/Badge";
+import Select from "../../components/forms/select/Select";
 import TableCard from "../../components/tables/TableCard";
 import type {
   StatCardData,
@@ -5,12 +7,12 @@ import type {
   WarningRow,
 } from "../../types/dashboardTypes";
 import StatCard from "./components/StatCard";
-
 import { createColumnHelper } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
+
 const statCards: StatCardData[] = [
   {
-    title: "TOTAL UNITS",
+    title: "DASHBOARD_TOTAL_UNITS",
     chartData: [
       {
         name: "Good",
@@ -27,7 +29,7 @@ const statCards: StatCardData[] = [
     ],
   },
   {
-    title: "MPC ASSETS",
+    title: "DASHBOARD_MPC_ASSETS",
     chartData: [
       {
         name: "Good",
@@ -44,7 +46,7 @@ const statCards: StatCardData[] = [
     ],
   },
   {
-    title: "TOTAL CONTROLLERS",
+    title: "DASHBOARD_TOTAL_CONTROLLERS",
     chartData: [
       {
         name: "Good",
@@ -61,7 +63,7 @@ const statCards: StatCardData[] = [
     ],
   },
   {
-    title: "REGULATORY ASSETS",
+    title: "DASHBOARD_REGULATORY_ASSETS",
     chartData: [
       {
         name: "Good",
@@ -116,10 +118,6 @@ const statusData: StatusSummaryRow[] = [
     error: 1,
   },
 ];
-
-/* =====================================================
-                     WARNING DATA
-===================================================== */
 
 const warningData: WarningRow[] = [
   {
@@ -271,157 +269,100 @@ const warningData: WarningRow[] = [
   },
 ];
 
-/* =====================================================
-                    STATUS COLUMNS
-===================================================== */
-
 const statusColumnHelper = createColumnHelper<StatusSummaryRow>();
-
-const statusColumns = [
-  statusColumnHelper.accessor("unitName", {
-    header: "Unit Name",
-  }),
-
-  statusColumnHelper.accessor("totalControllers", {
-    header: "Total Controllers",
-
-    cell: ({ getValue }) => (
-      <div className="text-center font-medium">{getValue()}</div>
-    ),
-  }),
-
-  statusColumnHelper.accessor("good", {
-    header: "Good",
-
-    cell: ({ getValue }) => (
-      <div className="flex justify-center">
-        <span
-          className="
-            rounded-full
-            border
-            border-[var(--color-success)]
-            px-3
-            py-1
-            text-xs
-            font-semibold
-            text-[var(--color-success)]
-          "
-        >
-          {getValue()}
-        </span>
-      </div>
-    ),
-  }),
-
-  statusColumnHelper.accessor("warning", {
-    header: "Warnings",
-
-    cell: ({ getValue }) => (
-      <div className="flex justify-center">
-        <span
-          className="
-            rounded-full
-            border
-            border-[var(--color-warning)]
-            px-3
-            py-1
-            text-xs
-            font-semibold
-            text-[var(--color-warning)]
-          "
-        >
-          {getValue()}
-        </span>
-      </div>
-    ),
-  }),
-
-  statusColumnHelper.accessor("error", {
-    header: "Errors",
-
-    cell: ({ getValue }) => (
-      <div className="flex justify-center">
-        <span
-          className="
-            rounded-full
-            border
-            border-[var(--color-danger)]
-            px-3
-            py-1
-            text-xs
-            font-semibold
-            text-[var(--color-danger)]
-          "
-        >
-          {getValue()}
-        </span>
-      </div>
-    ),
-  }),
-];
-
-/* =====================================================
-                   WARNING COLUMNS
-===================================================== */
 
 const warningColumnHelper = createColumnHelper<WarningRow>();
 
-const warningColumns = [
-  warningColumnHelper.accessor("unitName", {
-    header: "Unit Name",
-  }),
-
-  warningColumnHelper.accessor("type", {
-    header: "Type",
-  }),
-
-  warningColumnHelper.accessor("controllerName", {
-    header: "Controller Name",
-
-    cell: ({ getValue }) => (
-      <span
-        className="
-          text-[var(--color-primary)]
-        "
-      >
-        {getValue()}
-      </span>
-    ),
-  }),
-
-  warningColumnHelper.accessor("attributeName", {
-    header: "Attribute Name",
-  }),
-
-  warningColumnHelper.accessor("errorMessage", {
-    header: "Error Message",
-  }),
-];
-
 export default function Dashboard() {
   const { t } = useTranslation();
+
+  const statusColumns = [
+    statusColumnHelper.accessor("unitName", {
+      header: t("TABLE_UNIT_NAME"),
+    }),
+
+    statusColumnHelper.accessor("totalControllers", {
+      header: t("TABLE_TOTAL_CONTROLLERS"),
+    }),
+
+    statusColumnHelper.accessor("good", {
+      header: t("TABLE_GOOD"),
+      cell: ({ getValue }) => (
+        <Badge
+          variant="success"
+          fill="outline"
+          className="bg-transparent px-3 py-1"
+        >
+          {getValue()}
+        </Badge>
+      ),
+    }),
+
+    statusColumnHelper.accessor("warning", {
+      header: t("TABLE_WARNINGS"),
+      cell: ({ getValue }) => (
+        <Badge
+          variant="warning"
+          fill="outline"
+          className="bg-transparent px-3 py-1"
+        >
+          {getValue()}
+        </Badge>
+      ),
+    }),
+
+    statusColumnHelper.accessor("error", {
+      header: t("TABLE_ERRORS"),
+      cell: ({ getValue }) => (
+        <Badge
+          variant="danger"
+          fill="outline"
+          className="bg-transparent px-3 py-1"
+        >
+          {getValue()}
+        </Badge>
+      ),
+    }),
+  ];
+
+  const warningColumns = [
+    warningColumnHelper.accessor("unitName", {
+      header: t("TABLE_UNIT_NAME"),
+    }),
+
+    warningColumnHelper.accessor("type", {
+      header: t("FILTER_TYPE"),
+    }),
+
+    warningColumnHelper.accessor("controllerName", {
+      header: t("TABLE_CONTROLLER_NAME"),
+      cell: ({ getValue }) => (
+        <span className="text-[var(--color-primary)]">{getValue()}</span>
+      ),
+    }),
+
+    warningColumnHelper.accessor("attributeName", {
+      header: t("TABLE_ATTRIBUTE_NAME"),
+    }),
+
+    warningColumnHelper.accessor("errorMessage", {
+      header: t("TABLE_ERROR_MESSAGE"),
+    }),
+  ];
   return (
-    <div
-      className="
-      h-full overflow-y-auto
-    mx-auto
-    w-full
-    min-h-[938px]
-    rounded-[2px]
-    bg-[#272727]
-    p-4
-    md:p-6
-    text-white
-  "
-    >
+    <div className="h-full overflow-y-auto mx-auto w-full min-h-[938px] rounded-xs bg-[#272727] p-4 md:p-6">
       <div className="flex items-center gap-3 w-full">
-        <h1 className="text-lg font-semibold tracking-wide">
+        <h1 className="text-lg font-semibold tracking-wide text-foreground-secondary">
           {t("DASHBOARD_POWER_BOILER")}
         </h1>
 
-        <span className="rounded-full border border-sky-500 px-2 py-0.5 text-xs font-medium text-sky-400">
+        <Badge
+          variant="info"
+          fill="outline"
+          className="px-2 py-1 text-xs font-medium h-6 rounded-2xl"
+        >
           {t("DASHBOARD_AREA")}
-        </span>
+        </Badge>
       </div>
 
       <div className="mt-4 flex flex-col gap-4 xl:flex-row">
@@ -433,11 +374,10 @@ export default function Dashboard() {
 
         <div className="flex-[804]  min-w-0">
           <TableCard
-            title="Unit Wise Status Summary"
+            title={t("DASHBOARD_UNIT_WISE_STATUS_SUMMARY")}
             columns={statusColumns}
             data={statusData}
             height="h-[344px]"
-            border="border-[var(--color-button-text-primary)]"
             headerActions={<></>}
           />
         </div>
@@ -445,83 +385,50 @@ export default function Dashboard() {
 
       <div className="mt-4 h-full">
         <TableCard
-          title="Warning And Error Summary"
+          title={t("DASHBOARD_WARNING_ERROR_SUMMARY")}
           badge={11}
           columns={warningColumns}
           data={warningData}
           headerActions={
             <>
               {/* Attribute Filter */}
-              <div className="flex h-[28px] w-[270px] items-center gap-9">
-                <label
-                  className="
-          w-[37px]
-          text-[13px]
-          leading-[20px]
-          font-semibold
-          whitespace-nowrap
-          text-[var(--text-text-primary)]
-        "
-                >
-                  Attributes
+              <div className="flex h-7 w-[270px] items-center gap-4">
+                <label className="w-[77px] shrink-0 whitespace-nowrap text-[13px] font-semibold leading-5 text-foreground">
+                  {t("FILTER_ATTRIBUTES")}
                 </label>
 
-                <select
-                  className="
-          h-[28px]
-          w-[217px]
-          rounded-[4px]
-          border
-          border-[var(--component-card-border)]
-          bg-[var(--background-primary-container)]
-          px-2
-          text-[12px]
-          leading-[20px]
-          text-[var(--text-text-primary)]
-          outline-none
-        "
-                >
-                  <option>All</option>
-                  <option>Data Source</option>
-                  <option>Data Sink</option>
-                  <option>Valve Stiction</option>
-                </select>
+                <Select
+                  value="All"
+                  onChange={() => {}}
+                  options={[
+                    { value: "All", label: t("FILTER_ALL") },
+                    { value: "Data Source", label: t("FILTER_DATA_SOURCE") },
+                    { value: "Data Sink", label: t("FILTER_DATA_SINK") },
+                    {
+                      value: "Valve Stiction",
+                      label: t("FILTER_VALVE_STICTION"),
+                    },
+                  ]}
+                  className="h-7 w-[177px] text-xs"
+                />
               </div>
 
               {/* Type Filter */}
-
-              <div className="flex h-[28px] w-[270px] items-center gap-3">
-                <label
-                  className="
-          w-[37px]
-          text-[12px]
-          font-semibold
-          leading-[20px]
-          whitespace-nowrap
-          text-[var(--text-text-primary)]
-        "
-                >
-                  Type
+              <div className="flex h-7 w-[270px] items-center gap-4">
+                <label className="w-[37px] shrink-0 whitespace-nowrap text-xs font-semibold leading-5 text-foreground">
+                  {t("FILTER_TYPE")}
                 </label>
 
-                <select
-                  className="
-          h-[28px]
-          w-[217px]
-          rounded-[4px]
-          border
-          border-[var(--component-card-border)]
-          bg-[var(--background-primary-container)]
-          px-2
-          text-[12px]
-          text-[var(--text-text-primary)]
-          outline-none
-        "
-                >
-                  <option>All</option>
-                  <option>Regulatory</option>
-                  <option>MPC</option>
-                </select>
+                <Select
+                  value="All"
+                  onChange={() => {}}
+                  options={[
+                    { value: "All", label: t("FILTER_ALL") },
+                    { value: "Regulatory", label: t("FILTER_REGULATORY") },
+                    { value: "MPC", label: t("FILTER_MPC") },
+                  ]}
+                  className="h-7 w-[217px] text-xs"
+                />
               </div>
             </>
           }

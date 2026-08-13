@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { CircleHelp, File, RefreshCcw, Trash2 } from "lucide-react";
-
+import { useTranslation } from "react-i18next";
 import Dialog from "../../components/common/dialogue/Dialog";
 import Button from "../../components/forms/button/Button";
 import Input from "../../components/forms/input/Input";
@@ -31,6 +31,7 @@ const ProjectAnalysisDialog = ({
   isOpen,
   onClose,
 }: ProjectAnalysisDialogProps) => {
+  const { t } = useTranslation();
   const [selectedProject, setSelectedProject] = useState<string>("");
   const [isNext, setIsNext] = useState<boolean>(false);
   const iconButtonClass = "!h-8 !w-8 !min-w-8 !p-0 !gap-0";
@@ -50,7 +51,7 @@ const ProjectAnalysisDialog = ({
   return (
     <Dialog
       isOpen={isOpen}
-      title="Project and Analysis"
+      title={t("PROJECT_ANALYSIS_TITLE")}
       width={900}
       onClose={onClose}
     >
@@ -61,18 +62,18 @@ const ProjectAnalysisDialog = ({
             {/* Header */}
             <div className="px-3 pt-3 pb-2">
               <p className="mb-3 text-xs font-medium text-[var(--color-text-primary)]">
-                Choose a project
+                {t("PROJECT_ANALYSIS_CHOOSE_PROJECT")}
               </p>
 
               <div className="mb-2 flex items-center gap-2">
                 <Button size="small" className="!h-8 !w-16">
-                  New
+                  {t("PROJECT_ANALYSIS_NEW")}
                 </Button>
 
                 {isNext && (
                   <>
                     <Button size="small" className="!h-8 !w-16">
-                      Clone
+                      {t("PROJECT_ANALYSIS_CLONE")}
                     </Button>
 
                     <Button
@@ -140,7 +141,10 @@ const ProjectAnalysisDialog = ({
             <div className="w-[348px] space-y-5">
               {/* Server */}
               <div>
-                <Input label="Server" placeholder="Input text" />
+                <Input
+                  label={t("PROJECT_ANALYSIS_SERVER")}
+                  placeholder={t("PROJECT_ANALYSIS_INPUT_TEXT")}
+                />
               </div>
 
               {/* Checkbox */}
@@ -149,21 +153,24 @@ const ProjectAnalysisDialog = ({
                   type="checkbox"
                   className="accent-[var(--color-primary)]"
                 />
-                Check out this analysis
+                {t("PROJECT_ANALYSIS_CHECKOUT_ANALYSIS")}
               </label>
 
               {/* Description */}
               <div>
                 <TextArea
-                  label="Description"
-                  placeholder="Multiple lines of text go here."
+                  label={t("PROJECT_ANALYSIS_DESCRIPTION")}
+                  placeholder={t("PROJECT_ANALYSIS_DESCRIPTION_PLACEHOLDER")}
                   rows={5}
                 />
               </div>
 
               {/* Created By */}
               <div>
-                <Input label="Created by" placeholder="cpmdc1\\cpmservice" />
+                <Input
+                  label={t("PROJECT_ANALYSIS_CREATED_BY")}
+                  placeholder="cpmdc1\\cpmservice"
+                />
               </div>
             </div>
           </div>
@@ -176,7 +183,7 @@ const ProjectAnalysisDialog = ({
             variant="secondary"
             icon={<CircleHelp size={16} strokeWidth={1.5} />}
           >
-            Help
+            {t("COMMON_HELP")}
           </Button>
 
           <div className="flex gap-2">
@@ -186,7 +193,7 @@ const ProjectAnalysisDialog = ({
               disabled={!isNext}
               onClick={() => handleBack()}
             >
-              Back
+              {t("BUTTON_BACK")}
             </Button>
 
             <Button
@@ -195,7 +202,7 @@ const ProjectAnalysisDialog = ({
               onClick={() => handleNextOrFinish()}
               disabled={!selectedProject}
             >
-              {!isNext ? "Next" : "Finish"}
+              {!isNext ? t("BUTTON_NEXT") : t("PROJECT_ANALYSIS_FINISH")}
             </Button>
           </div>
         </div>

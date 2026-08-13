@@ -36,7 +36,7 @@ export default function ExecuctionWorkflowEdge({
       id={id}
       path={edgePath}
       markerEnd={markerEnd}
-      style={{ stroke: "var(--app-default-edge)", strokeWidth: 2 }}
+      style={{ stroke: "var(--edge-default)", strokeWidth: 2 }}
     />
   );
 }

@@ -1,16 +1,17 @@
 import { useState } from "react";
-
+import { useTranslation } from "react-i18next";
 import Button from "../../components/forms/button/Button";
 import Input from "../../components/forms/input/Input";
 import Select from "../../components/forms/select/Select";
 import TextArea from "../../components/forms/textarea/TextArea";
-import { Check, CircleHelp, RotateCw } from "lucide-react";
+import { Check, CircleHelp, RefreshCw } from "lucide-react";
 import { useForm } from "react-hook-form";
 import {
   propertiesSchema,
   type PropertiesFormData,
 } from "../../schemas/propertiesSchema";
 import type { PropertiesProps } from "../../types/workFlowTypes";
+import { cn } from "../../utils/utils";
 
 const COLUMN_OPTIONS = [
   {
@@ -36,6 +37,7 @@ const COLUMN_OPTIONS = [
 ];
 
 const Properties: React.FC<PropertiesProps> = ({ onCancel }) => {
+  const { t } = useTranslation();
   const [badExpressionLoading, setBadExpressionLoading] = useState(false);
 
   const [replacementExpressionLoading, setReplacementExpressionLoading] =
@@ -91,26 +93,27 @@ const Properties: React.FC<PropertiesProps> = ({ onCancel }) => {
   };
 
   return (
-    <div className="flex h-full flex-col bg-panel-bg">
+    <div className="flex h-full flex-col bg-surface border border-t-0 border-border-default">
       {/* Header */}
       <div className="flex items-center justify-between px-6 py-3">
         <div className="flex flex-col">
-          <span className="text-xl font-semibold text-text-accent">
-            Data Preprocessing Wizard
+          <span className="text-[24px] font-bold text-foreground">
+            {t("PROPERTIES_DATA_PREPROCESSING_WIZARD")}
           </span>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           <Button
             variant="secondary"
+            fill="outline"
             size="medium"
             icon={<CircleHelp size={13} strokeWidth={2.2} />}
           >
-            Help
+            {t("COMMON_HELP")}
           </Button>
 
-          <Button variant="secondary" size="medium">
-            Apply To All
+          <Button variant="secondary" fill="outline" size="medium">
+            {t("COMMON_APPLY_TO_ALL")}
           </Button>
 
           <Button
@@ -118,7 +121,7 @@ const Properties: React.FC<PropertiesProps> = ({ onCancel }) => {
             size="medium"
             onClick={handleSubmit(handleSave)}
           >
-            Save
+            {t("COMMON_SAVE")}
           </Button>
         </div>
       </div>
@@ -127,11 +130,10 @@ const Properties: React.FC<PropertiesProps> = ({ onCancel }) => {
 
       <div className="flex flex-1 overflow-hidden">
         {/* Left Panel */}
-
-        <div className="flex w-[320px] flex-col border-r border-border-1">
+        <div className="flex w-[320px] flex-col border-r border-border-default">
           <div className="px-4 py-3">
-            <span className="text-base font-semibold leading-8 text-text-accent">
-              Edit the expressions of columns you wish to preprocess
+            <span className="text-base font-semibold leading-8 text-foreground">
+              {t("PROPERTIES_EDIT_COLUMNS_EXPRESSIONS")}
             </span>
           </div>
 
@@ -143,30 +145,19 @@ const Properties: React.FC<PropertiesProps> = ({ onCancel }) => {
                 <div key={column.value} className="px-4 py-1">
                   <button
                     onClick={() => setValue("referenceColumn", column.value)}
-                    className={`
-                        flex
-                        h-11
-                        w-full
-                        items-center
-                        justify-between
-                        rounded-sm
-                        px-4
-                        text-left
-                        transition-all
-                        ${
-                          selected
-                            ? "bg-panel-hover shadow-md text-[var(--color-button-primary)]"
-                            : "text-text-accent hover:bg-panel-hover/40"
-                        }
-                        `}
+                    className={cn(
+                      "flex h-11 w-full items-center justify-between",
+                      "rounded-sm px-4 text-left",
+                      "transition-all cursor-pointer",
+                      selected
+                        ? "bg-surface-card shadow-md text-foreground-accent"
+                        : "text-foreground hover:bg-surface-hover",
+                    )}
                   >
                     <span>{column.label}</span>
 
                     {selected && (
-                      <Check
-                        size={16}
-                        className="text-[var(--color-button-primary)]"
-                      />
+                      <Check size={16} className="text-foreground-accent" />
                     )}
                   </button>
                 </div>
@@ -176,29 +167,28 @@ const Properties: React.FC<PropertiesProps> = ({ onCancel }) => {
         </div>
 
         {/* Right Panel */}
-
         <div className="flex flex-1 flex-col overflow-y-auto p-6">
           <div>
-            <span className="text-s font-bold text-text-accent">
-              Edit the expressions you wish to preprocess
+            <span className="text-base font-bold text-foreground">
+              {t("PROPERTIES_EDIT_EXPRESSION")}
             </span>
           </div>
-          {/* Threshold */}
 
+          {/* Threshold */}
           <div className="flex flex-col gap-3 py-3">
-            <span className="text-m font-bold uppercase tracking-[2px] text-text-accent">
-              Threshold
+            <span className="text-xs font-bold uppercase tracking-[2px] text-foreground-secondary">
+              {t("PROPERTIES_THRESHOLD")}
             </span>
 
             <div className="grid grid-cols-2 gap-6">
               <Input
-                label="Warning Threshold %"
+                label={t("PROPERTIES_WARNING_THRESHOLD")}
                 error={errors.warningThreshold?.message}
                 {...register("warningThreshold")}
               />
 
               <Input
-                label="Abort Threshold %"
+                label={t("PROPERTIES_ABORT_THRESHOLD")}
                 error={errors.abortThreshold?.message}
                 {...register("abortThreshold")}
               />
@@ -206,15 +196,14 @@ const Properties: React.FC<PropertiesProps> = ({ onCancel }) => {
           </div>
 
           {/* Expression */}
-
           <div className="mt-8 flex flex-col gap-3">
-            <span className="text-m font-bold uppercase tracking-[2px] text-text-accent">
-              Expression
+            <span className="text-xs font-bold uppercase tracking-[2px] text-foreground-secondary">
+              {t("PROPERTIES_EXPRESSION")}
             </span>
 
             <div className="flex items-center gap-5">
-              <span className="w-[170px] text-sm font-medium text-text-accent">
-                Reference Column
+              <span className="w-[170px] text-base font-medium text-foreground">
+                {t("PROPERTIES_REFERENCE_COLUMN")}
               </span>
 
               <div className="flex-1">
@@ -228,58 +217,66 @@ const Properties: React.FC<PropertiesProps> = ({ onCancel }) => {
             <div className="flex gap-3">
               <div className="flex-1">
                 <TextArea
-                  label="Bad Data Expression"
-                  placeholder="Enter bad data expression..."
+                  label={t("PROPERTIES_BAD_DATA_EXPRESSION")}
+                  placeholder={t("PROPERTIES_BAD_DATA_EXPRESSION_PLACEHOLDER")}
                   rows={5}
                   {...register("badDataExpression")}
                 />
               </div>
 
-              <RotateCw
-                aria-label="Refresh bad data expression"
-                role="button"
-                tabIndex={0}
-                strokeWidth={2}
+              <Button
+                variant="secondary"
+                fill="outline"
+                size="medium"
+                iconOnly
+                icon={
+                  <RefreshCw
+                    size={16}
+                    strokeWidth={2}
+                    className={cn(
+                      badExpressionLoading
+                        ? "pointer-events-none animate-spin"
+                        : "hover:rotate-90",
+                    )}
+                  />
+                }
+                className="shrink-0 self-end"
                 onClick={handleBadExpressionRefresh}
-                className={`
-    mt-7
-    cursor-pointer
-    transition-transform
-    ${
-      badExpressionLoading
-        ? "animate-spin pointer-events-none"
-        : "hover:rotate-90"
-    }
-  `}
+                aria-label={t("PROPERTIES_REFRESH_BAD_DATA_EXPRESSION")}
               />
             </div>
 
             <div className="flex gap-3">
               <div className="flex-1">
                 <TextArea
-                  label="Replacement Expression"
-                  placeholder="Enter replacement expression..."
+                  label={t("PROPERTIES_REPLACEMENT_EXPRESSION")}
+                  placeholder={t(
+                    "PROPERTIES_REPLACEMENT_EXPRESSION_PLACEHOLDER",
+                  )}
                   rows={5}
                   {...register("replacementExpression")}
                 />
               </div>
 
-              <RotateCw
-                aria-label="Refresh replacement expression"
-                role="button"
-                tabIndex={0}
-                strokeWidth={2}
+              <Button
+                variant="secondary"
+                fill="outline"
+                size="medium"
+                iconOnly
+                icon={
+                  <RefreshCw
+                    size={16}
+                    strokeWidth={2}
+                    className={cn(
+                      replacementExpressionLoading
+                        ? "pointer-events-none animate-spin"
+                        : "hover:rotate-90",
+                    )}
+                  />
+                }
+                className="shrink-0 self-end"
                 onClick={handleReplacementRefresh}
-                className={`
-    mt-7
-    cursor-pointer
-    transition-transform
-    ${
-      replacementExpressionLoading
-        ? "animate-spin pointer-events-none"
-        : "hover:rotate-90"
-    }
-  `}
+                aria-label={t("PROPERTIES_REFRESH_REPLACEMENT_EXPRESSION")}
               />
             </div>
           </div>
@@ -287,14 +284,13 @@ const Properties: React.FC<PropertiesProps> = ({ onCancel }) => {
       </div>
 
       {/* Footer */}
-
-      <div className="flex items-center justify-end gap-3 border-t border-border-1 px-6 py-4">
-        <Button variant="secondary" onClick={onCancel}>
-          Cancel
+      <div className="flex items-center justify-end gap-3 px-6 py-4">
+        <Button variant="secondary" fill="outline" onClick={onCancel}>
+          {t("COMMON_CANCEL")}
         </Button>
 
         <Button variant="primary" onClick={handleSubmit(handleSave)}>
-          Save
+          {t("COMMON_SAVE")}
         </Button>
       </div>
     </div>

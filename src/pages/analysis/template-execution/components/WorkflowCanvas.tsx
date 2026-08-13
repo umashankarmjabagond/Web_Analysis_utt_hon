@@ -93,7 +93,7 @@ export default function WorkflowCanvas({
               proOptions={{ hideAttribution: true }}
             >
               <Background
-                color="var(--app-surface-elevated)"
+                color="var(--surface-elevated)"
                 size={3}
                 variant={BackgroundVariant.Dots}
                 gap={25}

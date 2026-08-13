@@ -1,5 +1,5 @@
 import { useState } from "react";
-
+import { useTranslation } from "react-i18next";
 import Tree from "../../components/common/tree/Tree";
 import Button from "../../components/forms/button/Button";
 
@@ -40,6 +40,7 @@ const allColumnsData: TreeNodeData[] = [
 ];
 
 export default function Connections() {
+  const { t } = useTranslation();
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
 
   const [allColumns] = useState<TreeNodeData[]>(allColumnsData);
@@ -73,15 +74,16 @@ export default function Connections() {
   };
 
   return (
-    <div className="flex h-[590px] w-full flex-col gap-6 --color-background p-6 text-white border-l border-r border-b border-border-1">
+    <div className="flex w-full flex-col gap-6 p-6 border border-t-0 border-border-default">
       <div className="flex h-[32px] items-center justify-between">
-        <h5 className="h-8 w-[146px] text-[24px] font-bold leading-8 text-white">
-          Connections
+        <h5 className="h-8 w-[146px] text-[24px] font-bold leading-8 text-foreground">
+          {t("TAB_CONNECTIONS")}
         </h5>
 
         <div className="flex h-8 items-center gap-3">
           <Button
             variant="secondary"
+            fill="outline"
             size="medium"
             icon={
               <CircleHelp
@@ -90,26 +92,31 @@ export default function Connections() {
                 className="text-button-primary"
               />
             }
-            className="!h-8 !w-[96px]"
+            className="h-8 w-24"
           >
-            Help
+            {t("COMMON_HELP")}
           </Button>
 
-          <Button variant="secondary" size="medium" className="!h-8 !w-[124px]">
-            Apply to All
+          <Button
+            variant="secondary"
+            fill="outline"
+            size="medium"
+            className="h-8 w-31"
+          >
+            {t("COMMON_APPLY_TO_ALL")}
           </Button>
 
-          <Button variant="primary" size="medium" className="!h-8 !w-[81px]">
-            Save
+          <Button variant="primary" size="medium" className="h-8 w-[81px]">
+            {t("COMMON_SAVE")}
           </Button>
         </div>
       </div>
 
       <div className="flex min-h-0 flex-1 gap-6">
-        <div className="h-[495px] flex-1 overflow-hidden rounded-[8px] bg-background-primary-container">
+        <div className="h-[495px] flex-1 overflow-hidden rounded-[8px] bg-surface-elevated">
           <div className="p-4">
-            <h3 className="h-6 text-[16px] font-bold leading-6 text-app-text-primary">
-              All Columns
+            <h3 className="h-6 text-[16px] font-bold leading-6 text-foreground">
+              {t("CONNECTIONS_ALL_COLUMNS")}
             </h3>
           </div>
 
@@ -125,25 +132,27 @@ export default function Connections() {
         <div className="flex h-[526px] w-[32px] flex-col items-center justify-center gap-6">
           <Button
             variant="secondary"
+            fill="outline"
+            iconOnly
+            icon={<ChevronRight size={16} />}
             onClick={moveToSelected}
-            className="!h-[32px] !w-[32px] !min-w-[32px] !p-2"
-          >
-            <ChevronRight size={16} />
-          </Button>
+            className="h-[32px] w-[32px] min-w-[32px] p-2"
+          />
 
           <Button
             variant="secondary"
+            fill="outline"
+            iconOnly
+            icon={<ChevronLeft size={16} />}
             onClick={removeFromSelected}
-            className="!h-[32px] !w-[32px] !min-w-[32px] !p-2"
-          >
-            <ChevronLeft size={16} />
-          </Button>
+            className="h-[32px] w-[32px] min-w-[32px] p-2"
+          />
         </div>
 
-        <div className="h-[495px] flex-1 overflow-hidden rounded-[8px] bg-background-primary-container">
+        <div className="h-[495px] flex-1 overflow-hidden rounded-[8px] bg-surface-elevated">
           <div className="p-4">
-            <h3 className="h-6 text-[16px] font-bold leading-6 text-app-text-primary">
-              Selected Columns
+            <h3 className="h-6 text-[16px] font-bold leading-6 text-foreground">
+              {t("CONNECTIONS_SELECTED_COLUMNS")}
             </h3>
           </div>
 

@@ -2,33 +2,35 @@ import { NavLink } from "react-router-dom";
 import { Home, LayoutGrid } from "lucide-react";
 import { ROUTES } from "../../../constants/routes/routesConstant";
 import { cn } from "../../../utils/utils";
+import { useTranslation } from "react-i18next";
 
-const menus = [
+const MENUS = [
   {
-    name: "Workflow",
+    name: "SIDEBAR_WORKFLOW",
     path: ROUTES.WORKFLOW,
     icon: Home,
   },
   {
-    name: "Dashboard",
+    name: "SIDEBAR_DASHBOARD",
     path: ROUTES.DASHBOARD,
     icon: LayoutGrid,
   },
 ];
 
 export default function Sidebar() {
+  const { t } = useTranslation();
   return (
     <aside
       className="w-16 rounded-md bg-surface"
       style={{ background: "#272727" }}
     >
       <nav className="flex flex-col items-center gap-1 p-2">
-        {menus.map(({ name, path, icon: Icon }) => (
+        {MENUS.map(({ name, path, icon: Icon }) => (
           <NavLink
             key={path}
             to={path}
             className="relative flex h-10 w-full items-center justify-center p-2"
-            title={name}
+            title={t(name)}
           >
             {({ isActive }) => (
               <>

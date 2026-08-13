@@ -6,7 +6,8 @@ body {
   color: var(--foreground);
 }
 
-/* WebKit (Chrome, Edge, Safari) */
+/* Default Scrollbar */
+/* WebKit WebKit (Chrome, Edge, Safari)*/
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -34,6 +35,42 @@ body {
 * {
   scrollbar-width: thin;
   scrollbar-color: var(--scrollbar-default-thumb) var(--scrollbar-default-track);
+}
+
+/* Table Scrollbar */
+.table-scrollbar::-webkit-scrollbar {
+  width: 16px;
+  height: 16px;
+}
+
+.table-scrollbar::-webkit-scrollbar-track {
+  background: var(--scrollbar-table-track);
+  border-left: 1px solid var(--scrollbar-table-border);
+  border-right: 1px solid var(--scrollbar-table-border);
+  box-shadow:
+    0.5px 0 0 var(--scrollbar-table-border) inset,
+    1px 0 0 var(--scrollbar-table-border) inset,
+    -0.5px 0 0 var(--scrollbar-table-border) inset,
+    -1px 0 0 var(--scrollbar-table-border) inset;
+}
+
+.table-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-table-thumb);
+  border-radius: 9999px;
+}
+
+.table-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-table-thumb-hover);
+}
+
+.table-scrollbar::-webkit-scrollbar-corner {
+  background: var(--scrollbar-table-track);
+}
+
+/* Firefox */
+.table-scrollbar {
+  scrollbar-width: auto;
+  scrollbar-color: var(--scrollbar-table-thumb) var(--scrollbar-table-track);
 }
 
 .bg-dot-grid {
