@@ -22,8 +22,13 @@ import { cn } from "../../../../utils/utils";
 export default function Toolbar() {
   const { t } = useTranslation();
 
-  const { nodes, deleteSelectedNodes, deleteSelectedEdges, clearWorkflow } =
-    useWorkflowStore();
+  const {
+    nodes,
+    edges,
+    deleteSelectedNodes,
+    deleteSelectedEdges,
+    clearWorkflow,
+  } = useWorkflowStore();
 
   const navigate = useNavigate();
 
@@ -48,6 +53,14 @@ export default function Toolbar() {
   const handleDelete = () => {
     deleteSelectedEdges();
     deleteSelectedNodes();
+  };
+
+  const handleClear = () => {
+    if (nodes.length === 0 && edges.length === 0) {
+      return;
+    }
+
+    clearWorkflow();
   };
 
   const handleSave = () => {
@@ -176,7 +189,17 @@ export default function Toolbar() {
         >
           <ToolbarButton title="Delete" icon={Trash2} onClick={handleDelete} />
 
-          <ToolbarButton title="Duplicate" icon={StickyNoteX} />
+          <ToolbarButton
+            title="Clear Workflow"
+            icon={StickyNoteX}
+            onClick={handleClear}
+            disabled={nodes.length === 0 && edges.length === 0}
+            iconClassName={
+              nodes.length === 0 && edges.length === 0
+                ? "text-toolbar-icon-disabled"
+                : "text-white"
+            }
+          />
 
           <ToolbarButton
             title="Export Template"

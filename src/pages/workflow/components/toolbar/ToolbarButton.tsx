@@ -5,6 +5,7 @@ export default function ToolbarButton({
   active = false,
   title,
   onClick,
+  disabled,
   iconClassName,
 }: ToolbarButtonProps) {
   return (
@@ -22,6 +23,7 @@ export default function ToolbarButton({
         rounded-[3px]
         transition-colors
         duration-150
+        disabled && "cursor-not-allowed",
 
         ${
           active
@@ -30,7 +32,13 @@ export default function ToolbarButton({
         }
       `}
     >
-      <Icon className={cn("h-4 w-4", iconClassName)} />
+      <Icon
+        className={cn(
+          "h-4 w-4",
+          iconClassName,
+          disabled && "text-toolbar-icon-disabled",
+        )}
+      />
     </button>
   );
 }
