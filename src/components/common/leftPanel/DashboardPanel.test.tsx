@@ -9,6 +9,12 @@ const mockNavigate = vi.fn();
 const mockUseParams = vi.fn();
 const mockTree = vi.fn();
 
+interface MockTreeProps {
+  nodes: unknown[];
+  selectedId?: string;
+  onSelect: (id: string) => void;
+}
+
 vi.mock("react-router-dom", async () => {
   const actual =
     await vi.importActual<typeof import("react-router-dom")>(
@@ -29,12 +35,13 @@ vi.mock("react-router-dom", async () => {
 });
 
 vi.mock("../tree/Tree", () => ({
-  default: (props: any) => {
+  default: (props: MockTreeProps) => {
     mockTree(props);
 
     return (
       <div data-testid="tree">
         <button
+          type="button"
           data-testid="select-node"
           onClick={() => props.onSelect("pump-101")}
         >
@@ -60,10 +67,14 @@ describe("DashboardPanel", () => {
     mockUseParams.mockReturnValue({});
   });
 
+  const getSearchInput = () => {
+    return screen.getByRole("textbox");
+  };
+
   it("renders search input", () => {
     render(<DashboardPanel />);
 
-    expect(screen.getByPlaceholderText("Search...")).toBeInTheDocument();
+    expect(getSearchInput()).toBeInTheDocument();
   });
 
   it("renders tree component", () => {
@@ -77,7 +88,7 @@ describe("DashboardPanel", () => {
 
     render(<DashboardPanel />);
 
-    const input = screen.getByPlaceholderText("Search...");
+    const input = getSearchInput();
 
     await user.type(input, "pump");
 
@@ -135,7 +146,7 @@ describe("DashboardPanel", () => {
 
     render(<DashboardPanel />);
 
-    const input = screen.getByPlaceholderText("Search...");
+    const input = getSearchInput();
 
     await user.type(input, "pump");
 
@@ -163,7 +174,7 @@ describe("DashboardPanel", () => {
   it("renders search icon input", () => {
     render(<DashboardPanel />);
 
-    expect(screen.getByPlaceholderText("Search...")).toBeInTheDocument();
+    expect(getSearchInput()).toBeInTheDocument();
   });
 
   it("renders filtered tree", () => {
