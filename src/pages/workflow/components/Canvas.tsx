@@ -1,14 +1,6 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import {
-  Background,
-  BackgroundVariant,
-  MarkerType,
-  ReactFlow,
-  useReactFlow,
-  type Edge,
-} from "@xyflow/react";
-
+import { MarkerType, ReactFlow, useReactFlow, type Edge } from "@xyflow/react";
 import {
   edgeTypes,
   nodeTypes,
@@ -16,22 +8,15 @@ import {
   type WorkflowListItem,
   type WorkflowNode,
 } from "../../../types/workFlowTypes";
-
-import Toolbar from "./toolbar/Toolbar";
 import { useWorkflowStore } from "../../../store/workflowStore";
-
 import { backendToFlow } from "../../../utils/utils";
 import Dialog from "../../../components/common/dialogue/Dialog";
-
 import GroupedSelector from "../../../components/forms/select/GroupedSelector";
 import {
   attributeCatalogSections,
   dummyWorkflows,
 } from "../workflowPanelData ";
 
-/**
- * Generates a unique backend element name.
- */
 const generateUniqueName = (
   baseName: string,
   existingNodes: WorkflowNode[],
@@ -47,6 +32,40 @@ const generateUniqueName = (
   }
 
   return `${baseName}${index}`;
+};
+
+const getCatalogIdFromElementType = (
+  elementType?: string,
+): string | undefined => {
+  if (!elementType) {
+    return undefined;
+  }
+
+  const normalizedType = elementType.toLowerCase();
+
+  for (const section of attributeCatalogSections) {
+    const item = section.items.find(
+      (item) => item.element?.elementType?.toLowerCase() === normalizedType,
+    );
+
+    if (item) {
+      return item.id;
+    }
+  }
+
+  return undefined;
+};
+
+const addCatalogIdsToNodes = (nodes: WorkflowNode[]): WorkflowNode[] => {
+  return nodes.map((node) => ({
+    ...node,
+
+    data: {
+      ...node.data,
+
+      catalogId: getCatalogIdFromElementType(node.data.element?.elementType),
+    },
+  }));
 };
 
 export default function Canvas() {
@@ -81,16 +100,22 @@ export default function Canvas() {
   }, [clearWorkflow]);
 
   useEffect(() => {
-    if (!pendingCatalogItem) return;
+    if (!pendingCatalogItem) {
+      return;
+    }
 
-    // Template
     if (pendingCatalogItem.element?.elementType === "Template") {
       const backendWorkflow = dummyWorkflows[pendingCatalogItem.id];
 
       if (backendWorkflow) {
         const canvasWorkflow = backendToFlow(backendWorkflow);
 
-        setNodes(canvasWorkflow.nodes);
+        const nodesWithCatalogIds = addCatalogIdsToNodes(
+          canvasWorkflow.nodes as WorkflowNode[],
+        );
+
+        setNodes(nodesWithCatalogIds);
+
         setEdges(canvasWorkflow.edges);
       }
 
@@ -116,6 +141,7 @@ export default function Canvas() {
       data: {
         label: pendingCatalogItem.title,
         element,
+        catalogId: pendingCatalogItem.id,
       },
     };
 
@@ -136,14 +162,6 @@ export default function Canvas() {
     event.dataTransfer.dropEffect = "move";
   }, []);
 
-  const handleEdgeInsert = useCallback(
-    (edge: { id: string; source: string; target: string }) => {
-      setSelectedEdge(edge as Edge);
-      setIsDialogOpen(true);
-    },
-    [setSelectedEdge],
-  );
-
   const handleDrop = useCallback(
     (event: React.DragEvent) => {
       event.preventDefault();
@@ -154,11 +172,6 @@ export default function Canvas() {
 
       const dragItem: WorkflowDragItem = JSON.parse(raw);
 
-      /**
-       * ==============================
-       * TEMPLATE DROP
-       * ==============================
-       */
       if (dragItem.type === "template") {
         const backendWorkflow = dummyWorkflows[dragItem.item.id];
 
@@ -166,19 +179,20 @@ export default function Canvas() {
 
         const canvasWorkflow = backendToFlow(backendWorkflow);
 
-        setNodes(canvasWorkflow.nodes);
+        const nodesWithCatalogIds = addCatalogIdsToNodes(
+          canvasWorkflow.nodes as WorkflowNode[],
+        );
+
+        setNodes(nodesWithCatalogIds);
+
         setEdges(canvasWorkflow.edges);
 
         return;
       }
 
-      /**
-       * ==============================
-       * ATTRIBUTE DROP
-       * ==============================
-       */
-
-      if (!dragItem.item.element) return;
+      if (!dragItem.item.element) {
+        return;
+      }
 
       const position = screenToFlowPosition({
         x: event.clientX,
@@ -199,6 +213,7 @@ export default function Canvas() {
         data: {
           label: dragItem.item.title,
           element,
+          catalogId: dragItem.item.id,
         },
       };
 
@@ -228,34 +243,31 @@ export default function Canvas() {
 
     window.addEventListener("keydown", handleKeyDown);
 
-    return () => window.removeEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
   }, [deleteSelectedEdges, deleteSelectedNodes]);
 
   const handleNodeDragStart = useCallback(() => {
     saveHistory();
   }, [saveHistory]);
 
-  const flowEdges = useMemo(
-    () =>
-      edges.map((edge) => ({
-        ...edge,
-        data: {
-          ...(edge.data ?? {}),
-          onEdgeInsert: handleEdgeInsert,
-        },
-      })),
-    [edges, handleEdgeInsert],
-  );
+  const flowEdges = edges;
 
   const handleAddNewNode = (item: WorkflowListItem) => {
-    if (!selectedEdge || !item.element) return;
+    if (!selectedEdge || !item.element) {
+      return;
+    }
 
     saveHistory();
 
-    const sourceNode = nodes.find((n) => n.id === selectedEdge.source);
-    const targetNode = nodes.find((n) => n.id === selectedEdge.target);
+    const sourceNode = nodes.find((node) => node.id === selectedEdge.source);
 
-    if (!sourceNode || !targetNode) return;
+    const targetNode = nodes.find((node) => node.id === selectedEdge.target);
+
+    if (!sourceNode || !targetNode) {
+      return;
+    }
 
     const element = structuredClone(item.element);
 
@@ -274,6 +286,7 @@ export default function Canvas() {
       data: {
         label: item.title,
         element,
+        catalogId: item.id,
       },
     };
 
@@ -309,12 +322,9 @@ export default function Canvas() {
   };
 
   return (
-    <div className="relative h-full flex-1 bg-surface">
-      <div className="absolute left-4 right-3 top-5 z-10">
-        <Toolbar />
-      </div>
-
+    <div className="relative h-full w-full">
       <ReactFlow<WorkflowNode, Edge>
+        className="!bg-[#111111]"
         nodes={nodes as WorkflowNode[]}
         edges={flowEdges}
         nodeTypes={nodeTypes}
@@ -333,24 +343,24 @@ export default function Canvas() {
         nodesConnectable
         connectOnClick={activeTool === "connect"}
         onNodeDragStart={handleNodeDragStart}
-        proOptions={{ hideAttribution: true }}
+        proOptions={{
+          hideAttribution: true,
+        }}
       >
-        <Background variant={BackgroundVariant.Dots} gap={20} size={1} />
-      </ReactFlow>
+        {nodes.length === 0 && (
+          <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+            <div className="max-w-md text-center">
+              <h2 className="text-4xl font-medium text-app-default-border">
+                {t("CANVAS_CREATE_NEW_TEMPLATE")}
+              </h2>
 
-      {nodes.length === 0 && (
-        <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-          <div className="max-w-md text-center">
-            <h2 className="text-4xl font-medium text-foreground-tertiary">
-              {t("CANVAS_CREATE_NEW_TEMPLATE")}
-            </h2>
-
-            <p className="mt-4 text-base leading-6 text-foreground-tertiary">
-              {t("CANVAS_CREATE_TEMPLATE_DESCRIPTION")}
-            </p>
+              <p className="mt-4 text-base leading-6 text-app-default-border">
+                {t("CANVAS_CREATE_TEMPLATE_DESCRIPTION")}
+              </p>
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </ReactFlow>
 
       <Dialog
         isOpen={isDialogOpen}
