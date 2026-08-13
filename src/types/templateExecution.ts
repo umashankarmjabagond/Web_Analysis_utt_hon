@@ -21,6 +21,7 @@ export interface TemplateExecutionWorkflow {
 export interface TemplateExecutionResponse {
   template: ExecutionItem;
   workflows: TemplateExecutionWorkflow[];
+  total: number;
 }
 
 // analysis/flowBuilders/templateItemFlowBuilder - custom execustion header node creation
@@ -106,4 +107,7 @@ export interface ExecutionItem {
 // analysis template -  workflow canvas
 export interface WorkflowCanvasProps {
   executionContext: ExecutionItemType;
+  loadMore: () => void;
+  hasMore: boolean;
+  isLoadingMore: boolean;
 }
