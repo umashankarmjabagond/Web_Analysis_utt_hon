@@ -94,17 +94,21 @@ describe("StatCard", () => {
     );
 
     expect(
-      screen.getByText("Good"),
-    ).toBeInTheDocument();
-
-    expect(
       screen.getByText(
-        "Warning",
+        "COMMON_GOOD",
       ),
     ).toBeInTheDocument();
 
     expect(
-      screen.getByText("Error"),
+      screen.getByText(
+        "COMMON_WARNING",
+      ),
+    ).toBeInTheDocument();
+
+    expect(
+      screen.getByText(
+        "COMMON_ERROR",
+      ),
     ).toBeInTheDocument();
   });
 
@@ -136,18 +140,14 @@ describe("StatCard", () => {
     ).toHaveBeenCalledWith({
       data: mockData.chartData,
       size: 88,
-      colors:
-        STATUS_COLORS,
+      colors: STATUS_COLORS,
     });
   });
 
   it("renders correct number of legend items", () => {
-    const { container } =
-      render(
-        <StatCard
-          data={mockData}
-        />,
-      );
+    const { container } = render(
+      <StatCard data={mockData} />,
+    );
 
     expect(
       container.querySelectorAll(
@@ -157,12 +157,9 @@ describe("StatCard", () => {
   });
 
   it("applies correct status colors", () => {
-    const { container } =
-      render(
-        <StatCard
-          data={mockData}
-        />,
-      );
+    const { container } = render(
+      <StatCard data={mockData} />,
+    );
 
     const indicators =
       container.querySelectorAll(
@@ -195,8 +192,7 @@ describe("StatCard", () => {
     render(
       <StatCard
         data={{
-          title:
-            "EMPTY CARD",
+          title: "EMPTY CARD",
           chartData: [],
         }}
       />,
@@ -211,8 +207,7 @@ describe("StatCard", () => {
     render(
       <StatCard
         data={{
-          title:
-            "EMPTY CARD",
+          title: "EMPTY CARD",
           chartData: [],
         }}
       />,
@@ -223,8 +218,7 @@ describe("StatCard", () => {
     ).toHaveBeenCalledWith({
       data: [],
       size: 88,
-      colors:
-        STATUS_COLORS,
+      colors: STATUS_COLORS,
     });
   });
 });

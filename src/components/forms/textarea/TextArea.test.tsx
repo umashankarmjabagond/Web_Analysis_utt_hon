@@ -75,7 +75,7 @@ describe("TextArea", () => {
     expect(
       screen.getByRole("textbox"),
     ).toHaveClass(
-      "border-[var(--color-border-1)]",
+      "border-textarea-border",
     );
   });
 
@@ -87,7 +87,7 @@ describe("TextArea", () => {
     expect(
       screen.getByRole("textbox"),
     ).toHaveClass(
-      "border-[var(--color-danger)]",
+      "border-textarea-error-border",
     );
   });
 
@@ -151,7 +151,9 @@ describe("TextArea", () => {
     const wrapper =
       container.firstChild;
 
-    expect(wrapper).not.toHaveClass(
+    expect(
+      wrapper,
+    ).not.toHaveClass(
       "w-full",
     );
   });
@@ -163,7 +165,9 @@ describe("TextArea", () => {
 
     expect(
       screen.getByRole("textbox"),
-    ).toHaveClass("custom-class");
+    ).toHaveClass(
+      "custom-class",
+    );
   });
 
   it("passes additional props", () => {

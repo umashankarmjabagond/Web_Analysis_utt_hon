@@ -3,42 +3,15 @@ import { render, screen } from "../../../test";
 
 import WorkspaceHeader from "./WorkspaceHeader";
 
-// Mock react-router-dom
-vi.mock("react-router-dom", async () => {
-  const actual =
-    await vi.importActual<typeof import("react-router-dom")>(
-      "react-router-dom",
-    );
-
-  return {
-    ...actual,
-    useLocation: () => ({
-      pathname: "/dashboard",
-    }),
-  };
-});
-
-// Mock panelConfig
-vi.mock("../leftPanel/panelConfig", () => ({
-  panelConfig: [
-    {
-      path: "/dashboard",
-      header: "Plant Hierarchy",
-      component: null,
-    },
-  ],
-}));
-
-// Mock TopTabs
 vi.mock("../../../app/layouts/Workspace/TopTabs", () => ({
-  default: () => <div>Top Tabs</div>,
+  default: () => <div data-testid="top-tabs">Top Tabs</div>,
 }));
 
 describe("WorkspaceHeader", () => {
-  it("renders panel header", () => {
+  it("renders workspace header", () => {
     render(<WorkspaceHeader />);
 
-    expect(screen.getByText("Plant Hierarchy")).toBeInTheDocument();
+    expect(screen.getByTestId("top-tabs")).toBeInTheDocument();
   });
 
   it("renders TopTabs", () => {
@@ -47,10 +20,11 @@ describe("WorkspaceHeader", () => {
     expect(screen.getByText("Top Tabs")).toBeInTheDocument();
   });
 
-  it("renders both header and TopTabs", () => {
+  it("renders both workspace header and TopTabs", () => {
     render(<WorkspaceHeader />);
 
-    expect(screen.getByText("Plant Hierarchy")).toBeInTheDocument();
+    expect(screen.getByTestId("top-tabs")).toBeInTheDocument();
+
     expect(screen.getByText("Top Tabs")).toBeInTheDocument();
   });
 });

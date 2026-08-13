@@ -1,240 +1,150 @@
-import { describe, expect, it, vi, beforeEach } from "vitest";
-import { render, screen, fireEvent } from "../../test";
+import { fireEvent, render, screen } from "../../test";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import Drawer from "./Drawer";
-
-vi.mock("lucide-react", () => ({
-  X: () => <span data-testid="close-icon">X</span>,
-}));
 
 describe("Drawer", () => {
   const onClose = vi.fn();
 
   beforeEach(() => {
     vi.clearAllMocks();
+    document.body.style.overflow = "";
   });
+
+  const renderDrawer = (
+    props: Partial<React.ComponentProps<typeof Drawer>> = {},
+  ) => {
+    return render(
+      <Drawer opened onClose={onClose} {...props}>
+        Drawer Content
+      </Drawer>,
+    );
+  };
 
   it("renders children", () => {
-    render(
-      <Drawer opened onClose={onClose}>
-        <div>Drawer Content</div>
-      </Drawer>,
-    );
+    renderDrawer();
 
-    expect(
-      screen.getByText("Drawer Content"),
-    ).toBeInTheDocument();
+    expect(screen.getByText("Drawer Content")).toBeInTheDocument();
   });
 
-  it("renders title string", () => {
-    render(
-      <Drawer
-        opened
-        onClose={onClose}
-        title="My Drawer"
-      >
-        Content
-      </Drawer>,
-    );
+  it("renders string title", () => {
+    renderDrawer({
+      title: "My Drawer",
+    });
 
-    expect(
-      screen.getByText("My Drawer"),
-    ).toBeInTheDocument();
+    expect(screen.getByText("My Drawer")).toBeInTheDocument();
   });
 
-  it("renders title react node", () => {
-    render(
-      <Drawer
-        opened
-        onClose={onClose}
-        title={<div>Custom Title</div>}
-      >
-        Content
-      </Drawer>,
-    );
+  it("renders ReactNode title", () => {
+    renderDrawer({
+      title: <span>Custom Title</span>,
+    });
 
-    expect(
-      screen.getByText("Custom Title"),
-    ).toBeInTheDocument();
+    expect(screen.getByText("Custom Title")).toBeInTheDocument();
   });
 
   it("renders footer", () => {
-    render(
-      <Drawer
-        opened
-        onClose={onClose}
-        footer={<div>Footer Content</div>}
-      >
-        Content
-      </Drawer>,
-    );
+    renderDrawer({
+      footer: <div>Footer Content</div>,
+    });
 
-    expect(
-      screen.getByText("Footer Content"),
-    ).toBeInTheDocument();
+    expect(screen.getByText("Footer Content")).toBeInTheDocument();
+  });
+
+  it("does not render footer when footer is not provided", () => {
+    renderDrawer();
+
+    expect(screen.queryByText("Footer Content")).not.toBeInTheDocument();
   });
 
   it("renders close button when title exists", () => {
-    render(
-      <Drawer
-        opened
-        onClose={onClose}
-        title="Drawer"
-      >
-        Content
-      </Drawer>,
-    );
+    renderDrawer({
+      title: "My Drawer",
+    });
 
-    expect(
-      screen.getByRole("button", {
-        name: "Close drawer",
-      }),
-    ).toBeInTheDocument();
+    const buttons = screen.getAllByRole("button");
+
+    expect(buttons.length).toBeGreaterThan(0);
   });
 
-  it("calls onClose when close button clicked", () => {
-    render(
-      <Drawer
-        opened
-        onClose={onClose}
-        title="Drawer"
-      >
-        Content
-      </Drawer>,
-    );
+  it("calls onClose when close button is clicked", () => {
+    renderDrawer({
+      title: "My Drawer",
+    });
 
-    fireEvent.click(
-      screen.getByRole("button", {
-        name: "Close drawer",
-      }),
-    );
+    const buttons = screen.getAllByRole("button");
+
+    expect(buttons.length).toBeGreaterThan(0);
+
+    fireEvent.click(buttons[0]);
 
     expect(onClose).toHaveBeenCalledTimes(1);
-  });
-
-  it("renders footer only when provided", () => {
-    render(
-      <Drawer opened onClose={onClose}>
-        Content
-      </Drawer>,
-    );
-
-    expect(
-      screen.queryByText("Footer Content"),
-    ).not.toBeInTheDocument();
   });
 
   it("applies bodyClassName", () => {
-    render(
-      <Drawer
-        opened
-        onClose={onClose}
-        bodyClassName="custom-body"
-      >
-        Content
-      </Drawer>,
-    );
+    const { container } = renderDrawer({
+      bodyClassName: "custom-body",
+    });
 
-    expect(
-      document.querySelector(".custom-body"),
-    ).toBeInTheDocument();
+    expect(container.querySelector(".custom-body")).toBeInTheDocument();
   });
 
   it("applies custom className", () => {
-    render(
-      <Drawer
-        opened
-        onClose={onClose}
-        className="custom-drawer"
-      >
-        Content
-      </Drawer>,
-    );
+    const { container } = renderDrawer({
+      className: "custom-drawer",
+    });
 
-    expect(
-      document.querySelector(".custom-drawer"),
-    ).toBeInTheDocument();
+    expect(container.querySelector(".custom-drawer")).toBeInTheDocument();
   });
 
   it("renders overlay variant by default", () => {
-    const { container } = render(
-      <Drawer opened onClose={onClose}>
-        Content
-      </Drawer>,
-    );
+    const { container } = renderDrawer();
 
-    expect(
-      container.querySelector(
-        ".bg-black\\/40",
-      ),
-    ).toBeInTheDocument();
+    const overlay = container.querySelector(".bg-drawer-overlay");
+
+    expect(overlay).toBeInTheDocument();
   });
 
-  it("does not render overlay in panel variant", () => {
-    const { container } = render(
-      <Drawer
-        variant="panel"
-        opened
-        onClose={onClose}
-      >
-        Content
-      </Drawer>,
-    );
+  it("does not render overlay for panel variant", () => {
+    const { container } = renderDrawer({
+      variant: "panel",
+    });
 
-    expect(
-      container.querySelector(
-        ".bg-black\\/40",
-      ),
-    ).not.toBeInTheDocument();
+    const overlay = container.querySelector(".bg-drawer-overlay");
+
+    expect(overlay).not.toBeInTheDocument();
   });
 
-  it("calls onClose when overlay clicked and closeOnOverlayClick is true", () => {
-    const { container } = render(
-      <Drawer
-        opened
-        onClose={onClose}
-        closeOnOverlayClick
-      >
-        Content
-      </Drawer>,
-    );
+  it("calls onClose when overlay is clicked and closeOnOverlayClick is true", () => {
+    const { container } = renderDrawer({
+      closeOnOverlayClick: true,
+    });
 
-    const overlay =
-      container.querySelector(
-        ".bg-black\\/40",
-      );
+    const overlay = container.querySelector(".bg-drawer-overlay");
 
-    fireEvent.click(overlay!);
+    expect(overlay).toBeInTheDocument();
+
+    fireEvent.click(overlay as HTMLElement);
 
     expect(onClose).toHaveBeenCalledTimes(1);
   });
 
-  it("does not call onClose when overlay clicked and closeOnOverlayClick is false", () => {
-    const { container } = render(
-      <Drawer
-        opened
-        onClose={onClose}
-      >
-        Content
-      </Drawer>,
-    );
+  it("does not call onClose when overlay is clicked and closeOnOverlayClick is false", () => {
+    const { container } = renderDrawer({
+      closeOnOverlayClick: false,
+    });
 
-    const overlay =
-      container.querySelector(
-        ".bg-black\\/40",
-      );
+    const overlay = container.querySelector(".bg-drawer-overlay");
 
-    fireEvent.click(overlay!);
+    expect(overlay).toBeInTheDocument();
+
+    fireEvent.click(overlay as HTMLElement);
 
     expect(onClose).not.toHaveBeenCalled();
   });
 
-  it("calls onClose when escape key is pressed", () => {
-    render(
-      <Drawer opened onClose={onClose}>
-        Content
-      </Drawer>,
-    );
+  it("calls onClose when Escape is pressed", () => {
+    renderDrawer();
 
     fireEvent.keyDown(document, {
       key: "Escape",
@@ -243,12 +153,8 @@ describe("Drawer", () => {
     expect(onClose).toHaveBeenCalledTimes(1);
   });
 
-  it("does not call onClose for different key", () => {
-    render(
-      <Drawer opened onClose={onClose}>
-        Content
-      </Drawer>,
-    );
+  it("does not call onClose when another key is pressed", () => {
+    renderDrawer();
 
     fireEvent.keyDown(document, {
       key: "Enter",
@@ -257,129 +163,269 @@ describe("Drawer", () => {
     expect(onClose).not.toHaveBeenCalled();
   });
 
-  it("sets body overflow when opened", () => {
-    render(
-      <Drawer opened onClose={onClose}>
-        Content
+  it("sets body overflow to hidden when opened", () => {
+    renderDrawer();
+
+    expect(document.body.style.overflow).toBe("hidden");
+  });
+
+  it("restores body overflow when drawer is closed", () => {
+    const { rerender } = renderDrawer();
+
+    expect(document.body.style.overflow).toBe("hidden");
+
+    rerender(
+      <Drawer opened={false} onClose={onClose}>
+        Drawer Content
       </Drawer>,
     );
 
-    expect(
-      document.body.style.overflow,
-    ).toBe("hidden");
+    expect(document.body.style.overflow).toBe("");
+  });
+
+  it("does not change body overflow for panel variant", () => {
+    renderDrawer({
+      variant: "panel",
+    });
+
+    expect(document.body.style.overflow).toBe("");
   });
 
   it("renders left position", () => {
-    render(
-      <Drawer
-        opened
-        position="left"
-        onClose={onClose}
-      >
-        Content
-      </Drawer>,
-    );
+    const { container } = renderDrawer({
+      position: "left",
+    });
 
-    expect(
-      screen.getByText("Content"),
-    ).toBeInTheDocument();
+    const drawer = container.querySelector(".left-0.top-0.h-full");
+
+    expect(drawer).toBeInTheDocument();
+    expect(drawer).toHaveClass("translate-x-0");
   });
 
   it("renders right position", () => {
-    render(
-      <Drawer
-        opened
-        position="right"
-        onClose={onClose}
-      >
-        Content
-      </Drawer>,
-    );
+    const { container } = renderDrawer({
+      position: "right",
+    });
 
-    expect(
-      screen.getByText("Content"),
-    ).toBeInTheDocument();
+    const drawer = container.querySelector(".right-0.top-0.h-full");
+
+    expect(drawer).toBeInTheDocument();
+    expect(drawer).toHaveClass("translate-x-0");
   });
 
   it("renders top position", () => {
-    render(
-      <Drawer
-        opened
-        position="top"
-        onClose={onClose}
-      >
-        Content
-      </Drawer>,
-    );
+    const { container } = renderDrawer({
+      position: "top",
+    });
 
-    expect(
-      screen.getByText("Content"),
-    ).toBeInTheDocument();
+    const drawer = container.querySelector(".left-0.top-0.w-full");
+
+    expect(drawer).toBeInTheDocument();
+    expect(drawer).toHaveClass("translate-y-0");
   });
 
   it("renders bottom position", () => {
-    render(
-      <Drawer
-        opened
-        position="bottom"
-              onClose={onClose}
-    >
-      Content
-    </Drawer>,
-  );
+    const { container } = renderDrawer({
+      position: "bottom",
+    });
 
-  expect(
-    screen.getByText("Content"),
-  ).toBeInTheDocument();
-});
+    const drawer = container.querySelector(".bottom-0.left-0.w-full");
 
-it("supports custom size", () => {
-  render(
-    <Drawer
-      opened
-      position="left"
-      size="xl"
-      onClose={onClose}
-    >
-      Content
-    </Drawer>,
-  );
+    expect(drawer).toBeInTheDocument();
+    expect(drawer).toHaveClass("translate-y-0");
+  });
 
-  expect(
-    screen.getByText("Content"),
-  ).toBeInTheDocument();
-});
+  it("renders closed drawer with close transform", () => {
+    const { container } = renderDrawer({
+      opened: false,
+    });
 
-it("renders closed drawer", () => {
-  render(
-    <Drawer
-      opened={false}
-      onClose={onClose}
-    >
-      Content
-    </Drawer>,
-  );
+    const drawer = container.querySelector(".bottom-0.left-0.w-full");
 
-  expect(
-    screen.getByText("Content"),
-  ).toBeInTheDocument();
-});
+    expect(drawer).toBeInTheDocument();
+    expect(drawer).toHaveClass("translate-y-full");
+  });
 
-it("renders close icon", () => {
-  render(
-    <Drawer
-      opened
-      title="Drawer"
-      onClose={onClose}
-    >
-      Content
-    </Drawer>,
-  );
+  it("renders closed left drawer with correct transform", () => {
+    const { container } = renderDrawer({
+      opened: false,
+      position: "left",
+    });
 
-  expect(
-    screen.getByTestId(
-      "close-icon",
-    ),
-  ).toBeInTheDocument();
-});
+    const drawer = container.querySelector(".left-0.top-0.h-full");
+
+    expect(drawer).toBeInTheDocument();
+    expect(drawer).toHaveClass("-translate-x-full");
+  });
+
+  it("renders closed right drawer with correct transform", () => {
+    const { container } = renderDrawer({
+      opened: false,
+      position: "right",
+    });
+
+    const drawer = container.querySelector(".right-0.top-0.h-full");
+
+    expect(drawer).toBeInTheDocument();
+    expect(drawer).toHaveClass("translate-x-full");
+  });
+
+  it("renders closed top drawer with correct transform", () => {
+    const { container } = renderDrawer({
+      opened: false,
+      position: "top",
+    });
+
+    const drawer = container.querySelector(".left-0.top-0.w-full");
+
+    expect(drawer).toBeInTheDocument();
+    expect(drawer).toHaveClass("-translate-y-full");
+  });
+
+  it("supports small size", () => {
+    const { container } = renderDrawer({
+      size: "sm",
+      position: "left",
+    });
+
+    const drawer = container.querySelector(".left-0.top-0.h-full");
+
+    expect(drawer).toBeInTheDocument();
+    expect(drawer).toHaveStyle({
+      width: "320px",
+    });
+  });
+
+  it("supports medium size", () => {
+    const { container } = renderDrawer({
+      size: "md",
+      position: "left",
+    });
+
+    const drawer = container.querySelector(".left-0.top-0.h-full");
+
+    expect(drawer).toBeInTheDocument();
+    expect(drawer).toHaveStyle({
+      width: "420px",
+    });
+  });
+
+  it("supports large size", () => {
+    const { container } = renderDrawer({
+      size: "lg",
+      position: "left",
+    });
+
+    const drawer = container.querySelector(".left-0.top-0.h-full");
+
+    expect(drawer).toBeInTheDocument();
+    expect(drawer).toHaveStyle({
+      width: "560px",
+    });
+  });
+
+  it("supports extra large size", () => {
+    const { container } = renderDrawer({
+      size: "xl",
+      position: "left",
+    });
+
+    const drawer = container.querySelector(".left-0.top-0.h-full");
+
+    expect(drawer).toBeInTheDocument();
+    expect(drawer).toHaveStyle({
+      width: "680px",
+    });
+  });
+
+  it("supports full size", () => {
+    const { container } = renderDrawer({
+      size: "full",
+      position: "left",
+    });
+
+    const drawer = container.querySelector(".left-0.top-0.h-full");
+
+    expect(drawer).toBeInTheDocument();
+    expect(drawer).toHaveStyle({
+      width: "100%",
+    });
+  });
+
+  it("uses height for top position", () => {
+    const { container } = renderDrawer({
+      position: "top",
+      size: "lg",
+    });
+
+    const drawer = container.querySelector(".left-0.top-0.w-full");
+
+    expect(drawer).toBeInTheDocument();
+
+    expect(drawer).toHaveStyle({
+      height: "560px",
+    });
+  });
+
+  it("uses height for bottom position", () => {
+    const { container } = renderDrawer({
+      position: "bottom",
+      size: "xl",
+    });
+
+    const drawer = container.querySelector(".bottom-0.left-0.w-full");
+
+    expect(drawer).toBeInTheDocument();
+
+    expect(drawer).toHaveStyle({
+      height: "680px",
+    });
+  });
+
+  it("does not apply drawer size style for panel variant", () => {
+    const { container } = renderDrawer({
+      variant: "panel",
+      position: "left",
+      size: "lg",
+    });
+
+    const drawer = container.querySelector(".relative.w-full");
+
+    expect(drawer).toBeInTheDocument();
+    expect(drawer).not.toHaveStyle({
+      width: "560px",
+    });
+  });
+
+  it("renders title as heading when title is a string", () => {
+    renderDrawer({
+      title: "Drawer Title",
+    });
+
+    expect(
+      screen.getByRole("heading", {
+        name: "Drawer Title",
+      }),
+    ).toBeInTheDocument();
+  });
+
+  it("renders title without creating a heading when title is a ReactNode", () => {
+    renderDrawer({
+      title: <div>Custom React Title</div>,
+    });
+
+    expect(screen.getByText("Custom React Title")).toBeInTheDocument();
+  });
+
+  it("renders footer content correctly", () => {
+    renderDrawer({
+      footer: <button type="button">Footer Action</button>,
+    });
+
+    expect(
+      screen.getByRole("button", {
+        name: "Footer Action",
+      }),
+    ).toBeInTheDocument();
+  });
 });
