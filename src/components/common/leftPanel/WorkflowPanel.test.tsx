@@ -6,8 +6,28 @@ import {
   mockCatalogSections,
   mockAttributeCatalogSections,
 } from "../../../test/mocks/workflowPanelData";
+import WorkflowPanel from "./WorkflowPanel";
+
+// -----------------------------------------------------------------------------
+// Mocks
+// -----------------------------------------------------------------------------
 
 const setPendingCatalogItem = vi.fn();
+
+vi.mock("react-i18next", () => ({
+  useTranslation: () => ({
+    t: (key: string) => {
+      const translations: Record<string, string> = {
+        WORKFLOW_CATALOG: "Catalog",
+        WORKFLOW_TEMPLATES: "Templates",
+        WORKFLOW_ATTRIBUTES: "Attributes",
+        COMMON_SEARCH: "Search...",
+      };
+
+      return translations[key] ?? key;
+    },
+  }),
+}));
 
 vi.mock("../../../store/workflowStore", () => ({
   useWorkflowStore: () => ({
@@ -21,32 +41,94 @@ vi.mock("../../../pages/workflow/workflowPanelData ", () => ({
 }));
 
 vi.mock("../../forms/accordion/Accordion", () => ({
-  default: ({ title, children }: any) => (
+  default: ({
+    title,
+    count,
+    children,
+  }: {
+    title: string;
+    count?: number;
+    children: React.ReactNode;
+  }) => (
     <div data-testid="accordion">
-      <h3>{title}</h3>
-      {children}
+      <div data-testid="accordion-title">{title}</div>
+
+      {count !== undefined && (
+        <span data-testid="accordion-count">{count}</span>
+      )}
+
+      <div>{children}</div>
     </div>
   ),
 }));
 
 vi.mock("../../../pages/workflow/components/TemplateCard", () => ({
-  default: ({ title, onClick, onDragStart, draggable }: any) => (
-    <button draggable={draggable} onClick={onClick} onDragStart={onDragStart}>
+  default: ({
+    title,
+    onClick,
+    onDragStart,
+    draggable,
+  }: {
+    title: string;
+    onClick?: () => void;
+    onDragStart?: (event: React.DragEvent) => void;
+    draggable?: boolean;
+  }) => (
+    <button
+      type="button"
+      draggable={draggable}
+      onClick={onClick}
+      onDragStart={onDragStart}
+      data-testid={`template-card-${title}`}
+    >
       {title}
     </button>
   ),
 }));
 
-import WorkflowPanel from "./WorkflowPanel";
+vi.mock("../../forms/input/Input", () => ({
+  default: ({
+    value,
+    onChange,
+    placeholder,
+    ...props
+  }: {
+    value?: string;
+    onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    placeholder?: string;
+    [key: string]: unknown;
+  }) => (
+    <input
+      value={value}
+      onChange={onChange}
+      placeholder={placeholder}
+      {...props}
+    />
+  ),
+}));
+
+vi.mock("../../utils/utils", () => ({
+  cn: (...classes: unknown[]) => classes.filter(Boolean).join(" "),
+}));
+
+// -----------------------------------------------------------------------------
+// Tests
+// -----------------------------------------------------------------------------
 
 describe("WorkflowPanel", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    window.innerWidth = 1400;
+
+    Object.defineProperty(window, "innerWidth", {
+      writable: true,
+      configurable: true,
+      value: 1400,
+    });
   });
 
   it("renders catalog title", () => {
     render(<WorkflowPanel />);
+
     expect(screen.getByText("Catalog")).toBeInTheDocument();
   });
 
@@ -54,11 +136,15 @@ describe("WorkflowPanel", () => {
     render(<WorkflowPanel />);
 
     expect(
-      screen.getByRole("button", { name: "Templates" }),
+      screen.getByRole("button", {
+        name: "Templates",
+      }),
     ).toBeInTheDocument();
 
     expect(
-      screen.getByRole("button", { name: "Attributes" }),
+      screen.getByRole("button", {
+        name: "Attributes",
+      }),
     ).toBeInTheDocument();
   });
 
@@ -71,9 +157,17 @@ describe("WorkflowPanel", () => {
   it("shows template items by default", () => {
     render(<WorkflowPanel />);
 
-    expect(screen.getByRole("button", { name: "Pump" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", {
+        name: "Pump",
+      }),
+    ).toBeInTheDocument();
 
-    expect(screen.getByRole("button", { name: "Valve" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", {
+        name: "Valve",
+      }),
+    ).toBeInTheDocument();
   });
 
   it("switches to attributes tab", async () => {
@@ -92,6 +186,30 @@ describe("WorkflowPanel", () => {
         name: "Temperature",
       }),
     ).toBeInTheDocument();
+  });
+
+  it("removes template items when switching to attributes tab", async () => {
+    const user = userEvent.setup();
+
+    render(<WorkflowPanel />);
+
+    await user.click(
+      screen.getByRole("button", {
+        name: "Attributes",
+      }),
+    );
+
+    expect(
+      screen.queryByRole("button", {
+        name: "Pump",
+      }),
+    ).not.toBeInTheDocument();
+
+    expect(
+      screen.queryByRole("button", {
+        name: "Valve",
+      }),
+    ).not.toBeInTheDocument();
   });
 
   it("filters template items", async () => {
@@ -160,10 +278,40 @@ describe("WorkflowPanel", () => {
         name: "Pump",
       }),
     ).toBeInTheDocument();
+
+    expect(
+      screen.getByRole("button", {
+        name: "Valve",
+      }),
+    ).toBeInTheDocument();
+  });
+
+  it("filters attributes after switching to attributes tab", async () => {
+    const user = userEvent.setup();
+
+    render(<WorkflowPanel />);
+
+    await user.click(
+      screen.getByRole("button", {
+        name: "Attributes",
+      }),
+    );
+
+    await user.type(screen.getByPlaceholderText("Search..."), "Temperature");
+
+    expect(
+      screen.getByRole("button", {
+        name: "Temperature",
+      }),
+    ).toBeInTheDocument();
   });
 
   it("calls setPendingCatalogItem on mobile", async () => {
-    window.innerWidth = 768;
+    Object.defineProperty(window, "innerWidth", {
+      writable: true,
+      configurable: true,
+      value: 768,
+    });
 
     const user = userEvent.setup();
 
@@ -178,8 +326,36 @@ describe("WorkflowPanel", () => {
     expect(setPendingCatalogItem).toHaveBeenCalledTimes(1);
   });
 
+  it("passes clicked item to setPendingCatalogItem on mobile", async () => {
+    Object.defineProperty(window, "innerWidth", {
+      writable: true,
+      configurable: true,
+      value: 768,
+    });
+
+    const user = userEvent.setup();
+
+    render(<WorkflowPanel />);
+
+    await user.click(
+      screen.getByRole("button", {
+        name: "Pump",
+      }),
+    );
+
+    expect(setPendingCatalogItem).toHaveBeenCalledWith(
+      expect.objectContaining({
+        title: "Pump",
+      }),
+    );
+  });
+
   it("does not call setPendingCatalogItem on desktop", async () => {
-    window.innerWidth = 1400;
+    Object.defineProperty(window, "innerWidth", {
+      writable: true,
+      configurable: true,
+      value: 1400,
+    });
 
     const user = userEvent.setup();
 
@@ -194,10 +370,66 @@ describe("WorkflowPanel", () => {
     expect(setPendingCatalogItem).not.toHaveBeenCalled();
   });
 
+  it("does not call setPendingCatalogItem when width is exactly 1280", async () => {
+    Object.defineProperty(window, "innerWidth", {
+      writable: true,
+      configurable: true,
+      value: 1280,
+    });
+
+    const user = userEvent.setup();
+
+    render(<WorkflowPanel />);
+
+    await user.click(
+      screen.getByRole("button", {
+        name: "Pump",
+      }),
+    );
+
+    expect(setPendingCatalogItem).not.toHaveBeenCalled();
+  });
+
+  it("calls setPendingCatalogItem below 1280 width", async () => {
+    Object.defineProperty(window, "innerWidth", {
+      writable: true,
+      configurable: true,
+      value: 1279,
+    });
+
+    const user = userEvent.setup();
+
+    render(<WorkflowPanel />);
+
+    await user.click(
+      screen.getByRole("button", {
+        name: "Pump",
+      }),
+    );
+
+    expect(setPendingCatalogItem).toHaveBeenCalledTimes(1);
+  });
+
   it("renders accordion", () => {
     render(<WorkflowPanel />);
 
     expect(screen.getByTestId("accordion")).toBeInTheDocument();
+  });
+
+  it("passes section title to accordion", () => {
+    render(<WorkflowPanel />);
+
+    expect(screen.getByTestId("accordion-title")).toHaveTextContent(
+      mockCatalogSections[0].title,
+    );
+  });
+
+  it("passes correct item count to accordion", () => {
+    render(<WorkflowPanel />);
+
+    expect(screen.getByTestId("accordion-count")).toHaveTextContent(
+      String(mockCatalogSections[0].items.length),
+    );
   });
 
   it("handles drag start", () => {
@@ -209,11 +441,13 @@ describe("WorkflowPanel", () => {
 
     const setData = vi.fn();
 
+    const dataTransfer = {
+      setData,
+      effectAllowed: "",
+    };
+
     fireEvent.dragStart(card, {
-      dataTransfer: {
-        setData,
-        effectAllowed: "",
-      },
+      dataTransfer,
     });
 
     expect(setData).toHaveBeenCalled();
@@ -230,11 +464,13 @@ describe("WorkflowPanel", () => {
 
     const setData = vi.fn();
 
+    const dataTransfer = {
+      setData,
+      effectAllowed: "",
+    };
+
     fireEvent.dragStart(card, {
-      dataTransfer: {
-        setData,
-        effectAllowed: "",
-      },
+      dataTransfer,
     });
 
     const payload = JSON.parse(setData.mock.calls[0][1]);
@@ -251,7 +487,7 @@ describe("WorkflowPanel", () => {
       name: "Pump",
     });
 
-    const dataTransfer: any = {
+    const dataTransfer = {
       setData: vi.fn(),
       effectAllowed: "",
     };
@@ -261,5 +497,48 @@ describe("WorkflowPanel", () => {
     });
 
     expect(dataTransfer.effectAllowed).toBe("move");
+  });
+
+  it("uses attribute type in drag payload when dragging from attributes tab", async () => {
+    const user = userEvent.setup();
+
+    render(<WorkflowPanel />);
+
+    await user.click(
+      screen.getByRole("button", {
+        name: "Attributes",
+      }),
+    );
+
+    const card = screen.getByRole("button", {
+      name: "Temperature",
+    });
+
+    const setData = vi.fn();
+
+    const dataTransfer = {
+      setData,
+      effectAllowed: "",
+    };
+
+    fireEvent.dragStart(card, {
+      dataTransfer,
+    });
+
+    const payload = JSON.parse(setData.mock.calls[0][1]);
+
+    expect(payload.type).toBe("attribute");
+
+    expect(payload.item.title).toBe("Temperature");
+  });
+
+  it("does not render items from empty filtered sections", async () => {
+    const user = userEvent.setup();
+
+    render(<WorkflowPanel />);
+
+    await user.type(screen.getByPlaceholderText("Search..."), "XYZ");
+
+    expect(screen.queryByTestId("accordion")).not.toBeInTheDocument();
   });
 });

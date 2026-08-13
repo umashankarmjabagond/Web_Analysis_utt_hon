@@ -1,9 +1,7 @@
 import { useLocation } from "react-router-dom";
 import { panelConfig } from "./panelConfig";
-import { useTranslation } from "react-i18next";
 export default function LeftPanel() {
   const location = useLocation();
-  const { t } = useTranslation();
   const panel = panelConfig.find((item) =>
     location.pathname.startsWith(item.path),
   );
@@ -13,7 +11,7 @@ export default function LeftPanel() {
   }
 
   return (
-    <aside className="w-[320px]  p-4 overflow-y-auto rounded-md flex flex-col gap-2 bg-[#272727]">
+    <aside className="w-[300px] p-3 overflow-y-auto flex flex-col bg-surface-primary border-r border-[#454545]">
       {panel.component}
     </aside>
   );

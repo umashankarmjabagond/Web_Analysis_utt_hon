@@ -20,27 +20,28 @@ const MENUS = [
 export default function Sidebar() {
   const { t } = useTranslation();
   return (
-    <aside
-      className="w-16 rounded-md bg-surface"
-      style={{ background: "#272727" }}
-    >
-      <nav className="flex flex-col items-center gap-1 p-2">
+    <aside className="w-14 bg-surface-primary border-r border-[#383838] px-2 py-3">
+      <nav className="flex flex-col items-center">
         {MENUS.map(({ name, path, icon: Icon }) => (
           <NavLink
             key={path}
             to={path}
-            className="relative flex h-10 w-full items-center justify-center p-2"
+            className={({ isActive }) =>
+              cn(
+                "relative flex h-10 w-full items-center justify-center",
+                "transition-colors duration-150",
+                isActive
+                  ? "bg-[#2b2b2b] rounded-lg"
+                  : "bg-transparent hover:bg-[#242424]",
+              )
+            }
             title={t(name)}
           >
             {({ isActive }) => (
               <>
-                {isActive && (
-                  <span className="absolute left-1 top-1/2 h-6 w-0.5 -translate-y-1/2 rounded-[1px] bg-selection-indicator" />
-                )}
-
                 <Icon
                   className={cn(
-                    "h-5 w-5",
+                    "h-4 w-4",
                     isActive ? "text-foreground" : "text-foreground-secondary",
                   )}
                 />

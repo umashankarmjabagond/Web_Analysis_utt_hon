@@ -40,10 +40,6 @@ import {
 
 import standaloneWorkflow from "./Standalone_BK3BFC0126.json";
 
-/* -------------------------------------------------------------------------- */
-/*                              TEMPLATE WORKFLOWS                            */
-/* -------------------------------------------------------------------------- */
-
 export const dummyWorkflows: Record<string, BackendWorkflow> = {
   standalone: standaloneWorkflow as BackendWorkflow,
 };
@@ -171,9 +167,6 @@ export const catalogSections: WorkflowSection[] = [
   },
 ];
 
-/* -------------------------------------------------------------------------- */
-/*                            ATTRIBUTE CATALOG                               */
-/* -------------------------------------------------------------------------- */
 const createAttribute = (
   id: string,
   title: string,

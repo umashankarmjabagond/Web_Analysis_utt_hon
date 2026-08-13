@@ -1,54 +1,38 @@
 import {
-  ArrowLeft,
-  MousePointer2,
-  GitBranch,
-  Pencil,
-  Grid2X2,
-  Undo2,
-  Redo2,
-  Circle,
-  Square,
-  Type,
+  ChevronLeft,
+  StickyNoteX,
   Download,
+  Trash2,
   Upload,
-  MoveRight,
-  ChevronDown,
 } from "lucide-react";
-import { useTranslation } from "react-i18next";
+
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import ToolbarButton from "./ToolbarButton";
 import { useWorkflowStore } from "../../../../store/workflowStore";
 import Dropdown from "../../../../components/forms/dropdown/Dropdown";
-import { useState } from "react";
 import Dialog from "../../../../components/common/dialogue/Dialog";
 import Input from "../../../../components/forms/input/Input";
 import Button from "../../../../components/forms/button/Button";
 import Notification from "../../../../components/common/notification/Notification";
-import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../../../constants/routes/routesConstant";
+import { useTranslation } from "react-i18next";
+import { cn } from "../../../../utils/utils";
 
 export default function Toolbar() {
   const { t } = useTranslation();
+
   const {
     nodes,
-    activeTool,
-    setActiveTool,
+    edges,
     deleteSelectedNodes,
     deleteSelectedEdges,
-    undo,
-    redo,
     clearWorkflow,
   } = useWorkflowStore();
 
   const navigate = useNavigate();
 
   const [isSaveDialogOpen, setIsSaveDialogOpen] = useState(false);
-  const [showNotification, setShowNotification] = useState(false);
-  const [notificationType, setNotificationType] = useState<
-    "success" | "warning"
-  >("success");
-
-  const [notificationTitle, setNotificationTitle] = useState("");
-  const [notificationMessage, setNotificationMessage] = useState("");
 
   const [templateType, setTemplateType] = useState<"regulatory" | "mpc" | null>(
     null,
@@ -56,8 +40,28 @@ export default function Toolbar() {
 
   const [templateName, setTemplateName] = useState("");
 
-  const [showMoreMenu, setShowMoreMenu] = useState(false);
-  const [showActionMenu, setShowActionMenu] = useState(false);
+  const [showNotification, setShowNotification] = useState(false);
+
+  const [notificationType, setNotificationType] = useState<
+    "success" | "warning"
+  >("success");
+
+  const [notificationTitle, setNotificationTitle] = useState("");
+
+  const [notificationMessage, setNotificationMessage] = useState("");
+
+  const handleDelete = () => {
+    deleteSelectedEdges();
+    deleteSelectedNodes();
+  };
+
+  const handleClear = () => {
+    if (nodes.length === 0 && edges.length === 0) {
+      return;
+    }
+
+    clearWorkflow();
+  };
 
   const handleSave = () => {
     const existingTemplates = JSON.parse(
@@ -78,9 +82,10 @@ export default function Toolbar() {
       JSON.stringify(existingTemplates),
     );
 
-    console.log("Saved Template:", newTemplate);
-
+    // Close dialog
     setIsSaveDialogOpen(false);
+
+    // Success notification
     setNotificationType("success");
 
     setNotificationTitle(
@@ -96,253 +101,151 @@ export default function Toolbar() {
     );
 
     setShowNotification(true);
+
+    // Clear current workflow
     clearWorkflow();
 
+    // Hide notification
     setTimeout(() => {
       setShowNotification(false);
     }, 3000);
   };
 
+  const handleSaveAs = (item: { value: string; label: string }) => {
+    if (nodes.length === 0) {
+      setNotificationType("warning");
+
+      setNotificationTitle("Nothing to Save");
+
+      setNotificationMessage(
+        "Please create a workflow before saving the template.",
+      );
+
+      setShowNotification(true);
+
+      setTimeout(() => {
+        setShowNotification(false);
+      }, 3000);
+
+      return;
+    }
+
+    setTemplateType(item.value as "regulatory" | "mpc");
+
+    const templates = JSON.parse(
+      localStorage.getItem("workflowTemplates") || "[]",
+    );
+
+    setTemplateName(`Custom_${templates.length + 1}`);
+
+    setIsSaveDialogOpen(true);
+  };
+
   return (
-    <div className="flex min-h-12 items-center rounded-[6px] border border-border-default bg-background px-1 xl: justify-between">
-      {/* LEFT */}
-
-      <div className="flex items-center gap-1">
-        <div className="flex items-center gap-1 w-[141px] pr-1 text-xs md:text-sm md:pr-4">
-          <ArrowLeft
-            className="cursor-pointer text-foreground"
-            onClick={() => navigate(ROUTES.DASHBOARD)}
-            size={16}
-          />
-          <span className="text-foreground text-base">{t("NEW_TEMPLATE")}</span>
-        </div>
-
-        <ToolbarButton
-          title={t("TOOLBAR_POINTER")}
-          active={activeTool === "pointer"}
-          icon={MousePointer2}
-          onClick={() => setActiveTool("pointer")}
-        />
-
-        <ToolbarButton title={t("TOOLBAR_CONNECTOR_1")} icon={MoveRight} />
-
-        <ToolbarButton
-          title={t("TOOLBAR_CONNECTOR_2")}
-          active={activeTool === "connect"}
-          icon={GitBranch}
-          onClick={() => setActiveTool("connect")}
-        />
-
-        <div className="relative xl:hidden">
-          <button
-            onClick={() => {
-              setShowMoreMenu((prev) => !prev);
-              setShowActionMenu(false);
-            }}
-            className="flex items-center gap-1 rounded border border-border-default px-1 py-1 text-xs text-foreground-secondary"
+    <>
+      <div className=" flex h-12 min-h-9 w-full items-center justify-between border-b border-[#303030] bg-surface-primary px-2        ">
+        <div className="flex h-full items-center px-4">
+          <div
+            className="
+              flex
+              h-full
+              items-center
+              gap-1.5
+              pr-3
+              text-[12px]
+              text-white
+            "
           >
-            {t("TOOLBAR_MORE")}
-            <ChevronDown size={14} />
-          </button>
+            <button
+              type="button"
+              aria-label="Back"
+              title="Back"
+              onClick={() => navigate(ROUTES.DASHBOARD)}
+              className="
+                flex
+                items-center
+                justify-center
+                transition-colors cursor-pointer
+                hover:text-white
+              "
+            >
+              <ChevronLeft size={14} strokeWidth={1.8} />
+            </button>
 
-          {showMoreMenu && (
-            <div className="absolute right-0 top-full z-50 mt-2 flex flex-col rounded-md border border-border-default bg-background shadow-xl">
-              <button className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-foreground">
-                <Pencil size={14} />
-              </button>
-
-              <button className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-foreground">
-                <Grid2X2 size={14} />
-              </button>
-
-              <button
-                onClick={undo}
-                className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-foreground"
-              >
-                <Undo2 size={14} />
-              </button>
-
-              <button
-                onClick={redo}
-                className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-foreground"
-              >
-                <Redo2 size={14} />
-              </button>
-
-              <button
-                onClick={() => {
-                  deleteSelectedEdges();
-                  deleteSelectedNodes();
-                }}
-                className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-foreground"
-              >
-                <Circle size={14} />
-              </button>
-
-              <button className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-foreground">
-                <Square size={14} />
-              </button>
-
-              <button className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-foreground">
-                <Type size={14} />
-              </button>
-            </div>
-          )}
+            <span className="whitespace-nowrap text-[18px]">
+              {t("NEW_TEMPLATE")}
+            </span>
+            <span className="mx-4 h-5 w-[1px] bg-[#454545]" />
+          </div>
         </div>
 
-        {/* RIGHT TABLET */}
-        <div className="relative xl:hidden">
-          <button
-            onClick={() => {
-              setShowActionMenu((prev) => !prev);
-              setShowMoreMenu(false);
-            }}
-            className="flex items-center gap-1 rounded border border-border-default px-1 py-1 text-xs text-foreground"
-          >
-            {t("TOOLBAR_ACTIONS")}
-            <ChevronDown size={14} />
-          </button>
-
-          {showActionMenu && (
-            <div className="absolute right-0 top-full z-50 mt-2 w-52 rounded-md border border-border-default bg-background shadow-xl">
-              <button className="block w-full px-3 py-2 text-left text-sm text-foreground-accent hover:bg-surface-hover">
-                {t("TOOLBAR_IMPORT_TEMPLATE")}
-              </button>
-
-              <button className="block w-full px-3 py-2 text-left text-sm text-foreground-tertiary hover:bg-surface-hover">
-                {t("TOOLBAR_EXPORT_TEMPLATE")}
-              </button>
-
-              <div className="border-t border-border-default p-2">
-                <Dropdown
-                  placeholder={t("TOOLBAR_SAVE_AS")}
-                  items={[
-                    {
-                      label: t("TOOLBAR_CUSTOM_REGULATORY_TEMPLATE"),
-                      value: "regulatory",
-                    },
-                    {
-                      label: t("TOOLBAR_CUSTOM_MPC_TEMPLATES"),
-                      value: "mpc",
-                    },
-                  ]}
-                  onSelect={(item) => {
-                    if (nodes.length === 0) {
-                      setNotificationType("warning");
-                      setNotificationTitle(t("TOOLBAR_NOTHING_TO_SAVE"));
-                      setNotificationMessage(
-                        t("TOOLBAR_CREATE_WORKFLOW_FIRST"),
-                      );
-
-                      setShowNotification(true);
-
-                      setTimeout(() => {
-                        setShowNotification(false);
-                      }, 3000);
-
-                      return;
-                    }
-
-                    setTemplateType(item.value as "regulatory" | "mpc");
-
-                    const templates = JSON.parse(
-                      localStorage.getItem("workflowTemplates") || "[]",
-                    );
-
-                    setTemplateName(`Custom_${templates.length + 1}`);
-
-                    setIsSaveDialogOpen(true);
-                  }}
-                />
-              </div>
-            </div>
-          )}
-        </div>
-
-        <div className="hidden xl:flex items-center gap-2">
-          <ToolbarButton title={t("TOOLBAR_PENCIL")} icon={Pencil} />
-
-          <ToolbarButton title={t("TOOLBAR_GRID")} icon={Grid2X2} />
+        <div
+          className="
+            flex
+            h-full
+            items-center
+            gap-1
+          "
+        >
+          <ToolbarButton title="Delete" icon={Trash2} onClick={handleDelete} />
 
           <ToolbarButton
-            title={t("TOOLBAR_UNDO")}
-            icon={Undo2}
-            onClick={undo}
-          />
-
-          <ToolbarButton
-            title={t("TOOLBAR_REDO")}
-            icon={Redo2}
-            onClick={redo}
-          />
-
-          <ToolbarButton
-            title={t("COMMON_DELETE")}
-            icon={Circle}
-            onClick={() => {
-              deleteSelectedEdges();
-              deleteSelectedNodes();
-            }}
-          />
-
-          <ToolbarButton title={t("TOOLBAR_RECTANGLE")} icon={Square} />
-
-          <ToolbarButton title={t("TOOLBAR_TEXT")} icon={Type} />
-        </div>
-      </div>
-
-      {/* RIGHT */}
-
-      {/* RIGHT DESKTOP */}
-      <div className="hidden xl:flex items-center gap-6 text-sm pr-4">
-        <button className="flex items-center gap-1 text-foreground-accent text-sm hover:text-foreground transition-colors cursor-pointer">
-          <Upload size={15} />
-          {t("TOOLBAR_IMPORT_TEMPLATE")}
-        </button>
-
-        <button className="flex items-center gap-1 text-foreground-tertiary text-sm hover:text-foreground transition-colors cursor-pointer">
-          <Download size={15} />
-          {t("TOOLBAR_EXPORT_TEMPLATE")}
-        </button>
-
-        <Dropdown
-          placeholder={t("TOOLBAR_SAVE_AS")}
-          items={[
-            {
-              label: t("TOOLBAR_CUSTOM_REGULATORY_TEMPLATE"),
-              value: "regulatory",
-            },
-            {
-              label: t("TOOLBAR_CUSTOM_MPC_TEMPLATES"),
-              value: "mpc",
-            },
-          ]}
-          onSelect={(item) => {
-            if (nodes.length === 0) {
-              setNotificationType("warning");
-              setNotificationTitle(t("TOOLBAR_NOTHING_TO_SAVE"));
-              setNotificationMessage(t("TOOLBAR_CREATE_WORKFLOW_BEFORE_SAVE"));
-
-              setShowNotification(true);
-
-              setTimeout(() => {
-                setShowNotification(false);
-              }, 3000);
-
-              return;
+            title="Clear Workflow"
+            icon={StickyNoteX}
+            onClick={handleClear}
+            disabled={nodes.length === 0 && edges.length === 0}
+            iconClassName={
+              nodes.length === 0 && edges.length === 0
+                ? "text-toolbar-icon-disabled"
+                : "text-white"
             }
+          />
 
-            setTemplateType(item.value as "regulatory" | "mpc");
+          <ToolbarButton
+            title="Export Template"
+            icon={Download}
+            iconClassName="text-white"
+          />
 
-            const templates = JSON.parse(
-              localStorage.getItem("workflowTemplates") || "[]",
-            );
+          <ToolbarButton
+            title="Import Template"
+            icon={Upload}
+            iconClassName="text-white"
+          />
 
-            setTemplateName(`Custom_${templates.length + 1}`);
-
-            setIsSaveDialogOpen(true);
-          }}
-        />
+          <div className="ml-1">
+            <Dropdown
+              placeholder="Save As"
+              items={[
+                {
+                  label: "Custom Regulatory Template",
+                  value: "regulatory",
+                },
+                {
+                  label: "Custom MPC Templates",
+                  value: "mpc",
+                },
+              ]}
+              onSelect={handleSaveAs}
+              menuClassName={cn(
+                "w-[280px]",
+                "overflow-hidden rounded-md",
+                "bg-dropdown-background",
+                "shadow-dropdown",
+              )}
+              itemClassName={cn(
+                "w-full h-[40px]",
+                "flex items-center",
+                "px-3",
+                "cursor-pointer",
+                "text-dropdown-item-foreground",
+                "hover:bg-surface-primary",
+                "hover:text-accordion-list-count",
+                "last:mb-0",
+              )}
+            />
+          </div>
+        </div>
       </div>
 
       <Dialog
@@ -354,17 +257,38 @@ export default function Toolbar() {
             : t("TOOLBAR_MPC_TEMPLATE")
         }
         onClose={() => setIsSaveDialogOpen(false)}
+        width={420}
       >
-        <div className="flex flex-col gap-6 text-sm">
+        <div
+          className="w-full
+            flex
+            flex-col
+            gap-6
+            text-sm
+          "
+        >
           <Input
-            className="w-[288px] h-8 rounded text-[14px]"
+            className="
+              h-8
+             w-full
+              rounded
+              bg-app-surface
+              text-[14px]
+              text-white
+            "
             label={t("TOOLBAR_TEMPLATE_NAME")}
             value={templateName}
-            onChange={(e) => setTemplateName(e.target.value)}
+            onChange={(event) => setTemplateName(event.target.value)}
             placeholder={t("TOOLBAR_ADD_TEMPLATE_NAME")}
           />
 
-          <div className="flex justify-end gap-4">
+          <div
+            className="
+              flex
+              justify-end
+              gap-4
+            "
+          >
             <Button
               variant="secondary"
               fill="outline"
@@ -379,8 +303,16 @@ export default function Toolbar() {
           </div>
         </div>
       </Dialog>
+
       {showNotification && (
-        <div className="fixed right-6 top-20 z-[9999]">
+        <div
+          className="
+            fixed
+            right-6
+            top-20
+            z-[9999]
+          "
+        >
           <Notification
             type={notificationType}
             title={notificationTitle}
@@ -389,6 +321,6 @@ export default function Toolbar() {
           />
         </div>
       )}
-    </div>
+    </>
   );
 }

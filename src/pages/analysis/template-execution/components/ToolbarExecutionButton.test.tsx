@@ -72,7 +72,7 @@ describe("ToolbarExecutionButton", () => {
     expect(
       screen.getByRole("button"),
     ).toHaveClass(
-      "text-app-action-primary",
+      "text-foreground-accent",
     );
   });
 
@@ -88,7 +88,7 @@ describe("ToolbarExecutionButton", () => {
     expect(
       screen.getByRole("button"),
     ).toHaveClass(
-      "text-app-action-secondary",
+      "text-foreground-muted",
     );
   });
 
@@ -103,7 +103,7 @@ describe("ToolbarExecutionButton", () => {
     expect(
       screen.getByRole("button"),
     ).toHaveClass(
-      "text-app-action-secondary",
+      "text-foreground-muted",
     );
   });
 

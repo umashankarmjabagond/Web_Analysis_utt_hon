@@ -8,38 +8,26 @@ describe("STATUS_COLORS", () => {
   });
 
   it("contains Good status color", () => {
-    expect(STATUS_COLORS.Good).toBe(
-      "#68D560",
-    );
+    expect(STATUS_COLORS.Good).toBe("var(--chart-success)");
   });
 
   it("contains Warning status color", () => {
-    expect(
-      STATUS_COLORS.Warning,
-    ).toBe("#FFDB42");
+    expect(STATUS_COLORS.Warning).toBe("var(--chart-warning)");
   });
 
   it("contains Error status color", () => {
-    expect(STATUS_COLORS.Error).toBe(
-      "#FF644C",
-    );
+    expect(STATUS_COLORS.Error).toBe("var(--chart-danger)");
   });
 
   it("contains all expected keys", () => {
-    expect(
-      Object.keys(STATUS_COLORS),
-    ).toEqual([
-      "Good",
-      "Warning",
-      "Error",
-    ]);
+    expect(Object.keys(STATUS_COLORS)).toEqual(["Good", "Warning", "Error"]);
   });
 
   it("matches the expected object", () => {
     expect(STATUS_COLORS).toEqual({
-      Good: "#68D560",
-      Warning: "#FFDB42",
-      Error: "#FF644C",
+      Good: "var(--chart-success)",
+      Warning: "var(--chart-warning)",
+      Error: "var(--chart-danger)",
     });
   });
 });

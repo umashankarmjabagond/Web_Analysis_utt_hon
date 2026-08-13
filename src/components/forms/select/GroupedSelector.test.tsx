@@ -32,8 +32,8 @@ describe("GroupedSelector", () => {
     );
 
     expect(
-      screen.getByText("Select an option"),
-    ).toBeInTheDocument();
+  screen.getByText("COMMON_SELECT_OPTION"),
+).toBeInTheDocument();
   });
 
   it("renders custom placeholder", () => {
@@ -131,9 +131,9 @@ describe("GroupedSelector", () => {
     );
 
     const headerButton =
-      screen.getByRole("button", {
-        name: /select an option/i,
-      });
+  screen.getByRole("button", {
+    name: "COMMON_SELECT_OPTION",
+  });
 
     await user.click(headerButton);
 
@@ -153,9 +153,9 @@ describe("GroupedSelector", () => {
     );
 
     const headerButton =
-      screen.getByRole("button", {
-        name: /select an option/i,
-      });
+  screen.getByRole("button", {
+    name: "COMMON_SELECT_OPTION",
+  });
 
     await user.click(headerButton);
 
@@ -171,23 +171,25 @@ describe("GroupedSelector", () => {
   });
 
   it("shows no options available when all sections are empty", () => {
-    render(
-      <GroupedSelector
-        sections={[
-          {
-            id: "empty",
-            title: "Empty",
-            items: [],
-          },
-        ]}
-        onSelect={vi.fn()}
-      />,
-    );
+  render(
+    <GroupedSelector
+      sections={[
+        {
+          id: "empty",
+          title: "Empty",
+          items: [],
+        },
+      ]}
+      onSelect={vi.fn()}
+    />,
+  );
 
-    expect(
-      screen.getByText("No options available"),
-    ).toBeInTheDocument();
-  });
+  expect(
+    screen.getByText(
+      "COMMON_NO_OPTIONS",
+    ),
+  ).toBeInTheDocument();
+});
 
   it("renders multiple sections", () => {
     render(
@@ -240,7 +242,7 @@ describe("GroupedSelector", () => {
 
     const headerButton =
   screen.getByRole("button", {
-    name: /select an option/i,
+    name: "COMMON_SELECT_OPTION",
   });
 
     await user.click(headerButton);
@@ -251,21 +253,21 @@ describe("GroupedSelector", () => {
   });
 
   it("renders disabled state", () => {
-    render(
-      <GroupedSelector
-        disabled
-        sections={sections}
-        onSelect={vi.fn()}
-      />,
-    );
+  render(
+    <GroupedSelector
+      disabled
+      sections={sections}
+      onSelect={vi.fn()}
+    />,
+  );
 
-    expect(
-  screen.getByRole("button", {
-    name: /select an option/i,
-  }),
-).toBeDisabled();
+  expect(
+    screen.getByRole("button", {
+      name: "COMMON_SELECT_OPTION",
+    }),
+  ).toBeDisabled();
+});
 
-  });
 
   it("applies custom className", () => {
     const { container } = render(

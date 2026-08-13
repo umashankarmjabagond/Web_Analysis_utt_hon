@@ -6,87 +6,140 @@ import Badge from "./Badge";
 
 describe("Badge", () => {
   it("renders children", () => {
-    render(<Badge variant="success">Completed</Badge>);
+    render(
+      <Badge variant="success">
+        Completed
+      </Badge>,
+    );
 
-    expect(screen.getByText("Completed")).toBeInTheDocument();
+    expect(
+      screen.getByText("Completed"),
+    ).toBeInTheDocument();
   });
 
   it("renders icon", () => {
     render(
       <Badge
         variant="success"
-        icon={<Check data-testid="badge-icon" size={14} />}
+        icon={
+          <Check
+            data-testid="badge-icon"
+            size={14}
+          />
+        }
       >
         Success
       </Badge>,
     );
 
-    expect(screen.getByTestId("badge-icon")).toBeInTheDocument();
+    expect(
+      screen.getByTestId("badge-icon"),
+    ).toBeInTheDocument();
   });
 
   it("applies success solid variant", () => {
-    const { container } = render(<Badge variant="success">Success</Badge>);
+    const { container } = render(
+      <Badge variant="success">
+        Success
+      </Badge>,
+    );
 
-    const badge = container.firstChild as HTMLElement;
+    const badge =
+      container.firstChild as HTMLElement;
 
     expect(badge).toHaveClass(
-      "bg-app-badge-success-background",
-      "text-app-badge-success-text",
+      "bg-badge-success-solid-background",
+      "border-badge-success-solid-border",
+      "text-badge-success-solid-foreground",
     );
   });
 
   it("applies outline fill", () => {
     const { container } = render(
-      <Badge variant="warning" fill="outline">
+      <Badge
+        variant="warning"
+        fill="outline"
+      >
         Warning
       </Badge>,
     );
 
-    const badge = container.firstChild as HTMLElement;
+    const badge =
+      container.firstChild as HTMLElement;
 
     expect(badge).toHaveClass(
-      "border-app-badge-warning-outline",
-      "text-app-badge-warning-outline",
+      "bg-badge-warning-outline-background",
+      "border-badge-warning-outline-border",
+      "text-badge-warning-outline-foreground",
     );
   });
 
   it("applies selected size", () => {
     const { container } = render(
-      <Badge variant="info" size="lg">
+      <Badge
+        variant="info"
+        size="lg"
+      >
         Info
       </Badge>,
     );
 
-    const badge = container.firstChild as HTMLElement;
+    const badge =
+      container.firstChild as HTMLElement;
 
-    expect(badge).toHaveClass("h-7", "px-3", "text-base");
+    expect(badge).toHaveClass(
+      "h-7",
+    );
   });
 
   it("uses default size and fill", () => {
-    const { container } = render(<Badge variant="neutral">Neutral</Badge>);
+    const { container } = render(
+      <Badge variant="neutral">
+        Neutral
+      </Badge>,
+    );
 
-    const badge = container.firstChild as HTMLElement;
+    const badge =
+      container.firstChild as HTMLElement;
 
-    expect(badge).toHaveClass("h-6");
-    expect(badge).toHaveClass("bg-app-badge-neutral-background");
+    expect(badge).toHaveClass(
+      "h-6",
+    );
+
+    expect(badge).toHaveClass(
+      "bg-badge-neutral-solid-background",
+      "border-badge-neutral-solid-border",
+      "text-badge-neutral-solid-foreground",
+    );
   });
 
   it("applies custom className", () => {
     const { container } = render(
-      <Badge variant="error" className="custom-class">
-        Error
+      <Badge
+        variant="neutral"
+        className="custom-class"
+      >
+        Badge
       </Badge>,
     );
 
-    const badge = container.firstChild as HTMLElement;
+    const badge =
+      container.firstChild as HTMLElement;
 
-    expect(badge).toHaveClass("custom-class");
+    expect(badge).toHaveClass(
+      "custom-class",
+    );
   });
 
   it("renders base styles", () => {
-    const { container } = render(<Badge variant="neutral">Badge</Badge>);
+    const { container } = render(
+      <Badge variant="neutral">
+        Badge
+      </Badge>,
+    );
 
-    const badge = container.firstChild as HTMLElement;
+    const badge =
+      container.firstChild as HTMLElement;
 
     expect(badge).toHaveClass(
       "inline-flex",

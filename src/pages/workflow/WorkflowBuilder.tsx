@@ -1,7 +1,5 @@
 import "@xyflow/react/dist/style.css";
-
 import { ReactFlowProvider } from "@xyflow/react";
-
 import Canvas from "./components/Canvas";
 
 export default function WorkflowBuilder() {

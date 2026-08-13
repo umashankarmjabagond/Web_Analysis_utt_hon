@@ -11,7 +11,8 @@ describe("panelConfig", () => {
   it("contains Workflow panel configuration", () => {
     expect(panelConfig[0]).toMatchObject({
       path: ROUTES.WORKFLOW,
-      header: "Workflow Nodes",
+      header: "WORKFLOW_NODES",
+      layout: "workflow",
     });
 
     expect(panelConfig[0].component).toBeTruthy();
@@ -20,7 +21,8 @@ describe("panelConfig", () => {
   it("contains Dashboard panel configuration", () => {
     expect(panelConfig[1]).toMatchObject({
       path: ROUTES.DASHBOARD,
-      header: "Plant Hierarchy",
+      header: "PLANT_HIERARCHY",
+      layout: "default",
     });
 
     expect(panelConfig[1].component).toBeTruthy();

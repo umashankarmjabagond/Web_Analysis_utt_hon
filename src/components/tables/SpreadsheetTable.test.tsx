@@ -8,7 +8,7 @@ describe("SpreadsheetTable", () => {
     render(<SpreadsheetTable data={[]} />);
 
     expect(
-      screen.getByText("No data available"),
+      screen.getByText("COMMON_NO_DATA_AVAILABLE"),
     ).toBeInTheDocument();
   });
 
@@ -20,7 +20,7 @@ describe("SpreadsheetTable", () => {
     );
 
     expect(
-      screen.getByText("No data available"),
+      screen.getByText("COMMON_NO_DATA_AVAILABLE"),
     ).toBeInTheDocument();
   });
 
@@ -74,18 +74,17 @@ describe("SpreadsheetTable", () => {
     );
 
     expect(
-  screen.getAllByText("A").length,
-).toBeGreaterThan(0);
+      screen.getAllByText("A").length,
+    ).toBeGreaterThan(0);
 
-expect(
-  screen.getAllByText("B").length,
-).toBeGreaterThan(0);
+    expect(
+      screen.getAllByText("B").length,
+    ).toBeGreaterThan(0);
 
-expect(
-  screen.getAllByText("C").length,
-).toBeGreaterThan(0);
-
-});
+    expect(
+      screen.getAllByText("C").length,
+    ).toBeGreaterThan(0);
+  });
 
   it("renders row numbers", () => {
     render(
@@ -131,50 +130,62 @@ expect(
   });
 
   it("handles boolean true values", () => {
-  const { container } = render(
-    <SpreadsheetTable
-      data={[[true]]}
-    />,
-  );
+    const { container } = render(
+      <SpreadsheetTable
+        data={[[true]]}
+      />,
+    );
 
-  expect(
-  container.querySelectorAll("td"),
-).toHaveLength(1);
-});
+    expect(
+      container.querySelectorAll("td"),
+    ).toHaveLength(1);
+  });
 
   it("handles boolean false values", () => {
-  const { container } = render(
-    <SpreadsheetTable
-      data={[[false]]}
-    />,
-  );
+    const { container } = render(
+      <SpreadsheetTable
+        data={[[false]]}
+      />,
+    );
 
-  expect(
-    container.querySelectorAll("td"),
-  ).toHaveLength(1);
-});
+    expect(
+      container.querySelectorAll("td"),
+    ).toHaveLength(1);
+  });
 
-  const arrayValue = [
-  "A",
-  "B",
-  "C",
-] as unknown as never;
+  it("handles array values", () => {
+    const arrayValue = [
+      "A",
+      "B",
+      "C",
+    ] as unknown as never;
 
-render(
-  <SpreadsheetTable
-    data={[[arrayValue]]}
-  />,
-);
+    const { container } = render(
+      <SpreadsheetTable
+        data={[[arrayValue]]}
+      />,
+    );
 
-  const objectValue = {
-  name: "Test",
-} as unknown as never;
+    expect(
+      container.querySelector("table"),
+    ).toBeInTheDocument();
+  });
 
-render(
-  <SpreadsheetTable
-    data={[[objectValue]]}
-  />,
-);
+  it("handles object values", () => {
+    const objectValue = {
+      name: "Test",
+    } as unknown as never;
+
+    const { container } = render(
+      <SpreadsheetTable
+        data={[[objectValue]]}
+      />,
+    );
+
+    expect(
+      container.querySelector("table"),
+    ).toBeInTheDocument();
+  });
 
   it("renders empty string for null values", () => {
     const { container } = render(
@@ -186,7 +197,10 @@ render(
     const cells =
       container.querySelectorAll("td");
 
-    expect(cells[0]).toBeInTheDocument();
+    expect(
+      cells[0],
+    ).toBeInTheDocument();
+
     expect(
       cells[0].textContent,
     ).toBe("");
@@ -208,7 +222,7 @@ render(
     );
   });
 
-  it("renders correct number of cells", () => {
+    it("renders correct number of cells", () => {
     const { container } = render(
       <SpreadsheetTable
         data={[
@@ -265,12 +279,12 @@ render(
       />,
     );
 
-   expect(
-  screen.getAllByText("A").length,
-).toBeGreaterThan(0);
+    expect(
+      screen.getAllByText("A").length,
+    ).toBeGreaterThan(0);
 
-expect(
-  screen.getByText("D"),
-).toBeInTheDocument();
+    expect(
+      screen.getByText("D"),
+    ).toBeInTheDocument();
   });
 });
