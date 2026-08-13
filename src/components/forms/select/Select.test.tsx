@@ -144,31 +144,31 @@ describe("Select", () => {
   });
 
   it("applies error variant", () => {
-    render(
-      <Select
-        options={options}
-        error="Required field"
-      />,
-    );
+  render(
+    <Select
+      options={options}
+      error="Required field"
+    />,
+  );
 
-    expect(
-      screen.getByRole("combobox"),
-    ).toHaveClass(
-      "border-[var(--color-danger)]",
-    );
-  });
+  expect(
+    screen.getByRole("combobox"),
+  ).toHaveClass(
+    "border-select-error-border",
+  );
+});
 
   it("applies default variant when no error", () => {
-    render(
-      <Select options={options} />,
-    );
+  render(
+    <Select options={options} />,
+  );
 
-    expect(
-      screen.getByRole("combobox"),
-    ).toHaveClass(
-      "border-[var(--color-border-1)]",
-    );
-  });
+  expect(
+    screen.getByRole("combobox"),
+  ).toHaveClass(
+    "border-select-border",
+  );
+});
 
   it("applies full width", () => {
     const { container } = render(
@@ -184,19 +184,14 @@ describe("Select", () => {
   });
 
   it("renders without full width by default", () => {
-    const { container } = render(
-      <Select options={options} />,
-    );
+  render(
+    <Select options={options} />,
+  );
 
-    const wrappers =
-      container.querySelectorAll(
-        ".w-full",
-      );
-
-    expect(
-      wrappers.length,
-    ).toBeGreaterThan(0);
-  });
+  expect(
+    screen.getByRole("combobox"),
+  ).toHaveClass("w-auto");
+});
 
   it("applies custom className", () => {
     render(

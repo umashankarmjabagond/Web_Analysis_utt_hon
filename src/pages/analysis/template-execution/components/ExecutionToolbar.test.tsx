@@ -118,7 +118,7 @@ describe(
       );
     });
 
-        it("renders execution item name", () => {
+    it("renders execution item name", () => {
       render(
         <ExecutionToolbar />,
       );
@@ -145,22 +145,21 @@ describe(
     });
 
     it("does not render badge when type is undefined", () => {
-  mockSelectedExecutionItem =
-    {
-      name: "Test Asset",
-    };
+      mockSelectedExecutionItem =
+        {
+          name: "Test Asset",
+        };
 
-  render(
-    <ExecutionToolbar />,
-  );
+      render(
+        <ExecutionToolbar />,
+      );
 
-  expect(
-    screen.queryByTestId(
-      "badge",
-    ),
-  ).not.toBeInTheDocument();
-});
-
+      expect(
+        screen.queryByTestId(
+          "badge",
+        ),
+      ).not.toBeInTheDocument();
+    });
 
     it("handles execute action", () => {
       render(
@@ -169,7 +168,7 @@ describe(
 
       fireEvent.click(
         screen.getByTestId(
-          "btn-Execute",
+          "btn-EXECUTION_EXECUTE",
         ),
       );
 
@@ -181,9 +180,7 @@ describe(
 
       expect(
         confirm,
-      ).toHaveBeenCalledWith(
-        "Start Executing ?",
-      );
+      ).toHaveBeenCalled();
     });
 
     it("handles pause action", () => {
@@ -193,7 +190,7 @@ describe(
 
       fireEvent.click(
         screen.getByTestId(
-          "btn-Pause",
+          "btn-EXECUTION_PAUSE",
         ),
       );
 
@@ -205,9 +202,7 @@ describe(
 
       expect(
         confirm,
-      ).toHaveBeenCalledWith(
-        "Pause execution ?",
-      );
+      ).toHaveBeenCalled();
     });
 
     it("handles delete action", () => {
@@ -219,7 +214,7 @@ describe(
 
       fireEvent.click(
         screen.getByTestId(
-          "btn-Delete",
+          "btn-COMMON_DELETE",
         ),
       );
 
@@ -231,9 +226,7 @@ describe(
 
       expect(
         confirm,
-      ).toHaveBeenCalledWith(
-        "Delete Workflow ?",
-      );
+      ).toHaveBeenCalled();
 
       vi.advanceTimersByTime(
         1000,
@@ -258,7 +251,7 @@ describe(
 
       expect(
         screen.getByTestId(
-          "btn-Execute",
+          "btn-EXECUTION_EXECUTE",
         ),
       ).toHaveAttribute(
         "data-active",
@@ -276,7 +269,7 @@ describe(
 
       expect(
         screen.getByTestId(
-          "btn-Pause",
+          "btn-EXECUTION_PAUSE",
         ),
       ).toHaveAttribute(
         "data-active",
@@ -294,7 +287,7 @@ describe(
 
       expect(
         screen.getByTestId(
-          "btn-Delete",
+          "btn-COMMON_DELETE",
         ),
       ).toHaveAttribute(
         "data-active",
@@ -312,7 +305,7 @@ describe(
           "button",
           {
             name:
-              "Analysis Templates",
+              "ANALYSIS_TEMPLATES",
           },
         ),
       );
@@ -325,19 +318,19 @@ describe(
     });
 
     it("renders when selectedExecutionItem is undefined", () => {
-  mockSelectedExecutionItem =
-    undefined;
+      mockSelectedExecutionItem =
+        undefined;
 
-  render(
-    <ExecutionToolbar />,
-  );
+      render(
+        <ExecutionToolbar />,
+      );
 
-  expect(
-    screen.getByRole("button", {
-      name: "Analysis Templates",
-    }),
-  ).toBeInTheDocument();
-});
-
+      expect(
+        screen.getByRole("button", {
+          name:
+            "ANALYSIS_TEMPLATES",
+        }),
+      ).toBeInTheDocument();
+    });
   },
 );

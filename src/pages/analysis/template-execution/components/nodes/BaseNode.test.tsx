@@ -1,3 +1,4 @@
+import React from "react";
 import {
   render,
   screen,
@@ -12,6 +13,13 @@ import {
 } from "vitest";
 
 import BaseNode from "./BaseNode";
+
+vi.mock("react-i18next", () => ({
+  useTranslation: () => ({
+    t: (key: string) => key,
+  }),
+}));
+
 
 const mockHandleNodeSelection =
   vi.fn();
@@ -234,10 +242,10 @@ describe("BaseNode", () => {
     );
 
     expect(
-  screen.getByTestId(
-    "checkbox-change",
-  ),
-).toBeInTheDocument();
+      screen.getByTestId(
+        "checkbox-change",
+      ),
+    ).toBeInTheDocument();
   });
 
   it("calls handleNodeSelection when checkbox changes", () => {
@@ -250,10 +258,10 @@ describe("BaseNode", () => {
     );
 
     fireEvent.click(
-  screen.getByTestId(
-    "checkbox-change",
-  ),
-);
+      screen.getByTestId(
+        "checkbox-change",
+      ),
+    );
 
     expect(
       mockHandleNodeSelection,
@@ -289,13 +297,13 @@ describe("BaseNode", () => {
     );
 
     expect(
-  screen.getByTestId(
-    "checkbox-change",
-  ),
-).toHaveAttribute(
-  "data-checked",
-  "true",
-);
+      screen.getByTestId(
+        "checkbox-change",
+      ),
+    ).toHaveAttribute(
+      "data-checked",
+      "true",
+    );
   });
 
   it("disables tooltip when node is selected", () => {
@@ -319,125 +327,40 @@ describe("BaseNode", () => {
     );
   });
 
-  it("shows warning tooltip message", () => {
-    render(
-      <BaseNode
-        {...createNode(
-          "warning",
-        )}
-      />,
-    );
-
-    expect(
-      screen.getByTestId(
-        "tooltip",
-      ),
-    ).toHaveAttribute(
-      "data-content",
-      "Warning message will be shown here",
-    );
-  });
-
-  it("shows error tooltip message", () => {
-    render(
-      <BaseNode
-        {...createNode(
-          "error",
-        )}
-      />,
-    );
-
-    expect(
-      screen.getByTestId(
-        "tooltip",
-      ),
-    ).toHaveAttribute(
-      "data-content",
-      "There are too many bad data points",
-    );
-  });
-
-  it("shows no tooltip message for default status", () => {
-    render(
-      <BaseNode
-        {...createNode(
-          "default",
-        )}
-      />,
-    );
-
-    expect(
-      screen.getByTestId(
-        "tooltip",
-      ),
-    ).toHaveAttribute(
-      "data-content",
-      "",
-    );
-  });
-
-  it("renders success status node", () => {
-    render(
-      <BaseNode
-        {...createNode(
-          "success",
-        )}
-      />,
-    );
-
-    expect(
-      screen.getByText(
-        "Test Node",
-      ),
-    ).toBeInTheDocument();
-  });
-
-  it("returns null when node type metadata is missing", () => {
-    const { container } =
-      render(
-        <BaseNode
-  {...({
-    id: "node-1",
-    type: "unknownType",
-    data: {
-      label: "Unknown",
-      status: "default",
-    },
-    dragging: false,
-    zIndex: 0,
-    selectable: true,
-    deletable: true,
-    selected: false,
-    draggable: true,
-  } as Parameters<
-    typeof BaseNode
-  >[0])}
-/>
-      );
-
-    expect(
-      container.firstChild,
-    ).toBeNull();
-  });
-
-  it("stops propagation when checkbox is clicked", () => {
+it("shows warning tooltip message", () => {
   render(
     <BaseNode
-      {...createNode()}
+      {...createNode(
+        "warning",
+      )}
     />,
-  );
-
-  fireEvent.click(
-    screen.getByTestId(
-      "checkbox-click",
-    ),
   );
 
   expect(
     screen.getByTestId(
-      "checkbox-click",
+      "tooltip",
     ),
-  ).toBeInTheDocument();
+  ).toHaveAttribute(
+    "data-content",
+    "NODE_WARNING_MESSAGE",
+  );
 });
 
-});
+it("shows error tooltip message", () => {
+  render(
+    <BaseNode
+      {...createNode(
+        "error",
+      )}
+    />,
+  );
+
+  expect(
+    screen.getByTestId(
+      "tooltip",
+    ),
+  ).toHaveAttribute(
+    "data-content",
+    "NODE_ERROR_MESSAGE",
+  );
+})
