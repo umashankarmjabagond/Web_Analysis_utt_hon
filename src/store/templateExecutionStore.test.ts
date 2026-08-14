@@ -13,6 +13,8 @@ describe("templateExecutionStore", () => {
       selectedRowIds: [],
       executionAction: EXECUTION_ACTION.IDLE,
       isNodeDrawerOpen: false,
+      hasMoreWorkflows: true,
+      isLoadingMoreWorkflows: false,
     });
   });
 
@@ -23,14 +25,9 @@ describe("templateExecutionStore", () => {
       },
     ];
 
-    useTemplateExecutionStore
-      .getState()
-      .setNodes(nodes as never);
+    useTemplateExecutionStore.getState().setNodes(nodes as never);
 
-    expect(
-      useTemplateExecutionStore.getState()
-        .nodes,
-    ).toEqual(nodes);
+    expect(useTemplateExecutionStore.getState().nodes).toEqual(nodes);
   });
 
   it("sets edges", () => {
@@ -40,14 +37,9 @@ describe("templateExecutionStore", () => {
       },
     ];
 
-    useTemplateExecutionStore
-      .getState()
-      .setEdges(edges as never);
+    useTemplateExecutionStore.getState().setEdges(edges as never);
 
-    expect(
-      useTemplateExecutionStore.getState()
-        .edges,
-    ).toEqual(edges);
+    expect(useTemplateExecutionStore.getState().edges).toEqual(edges);
   });
 
   it("sets selected execution item", () => {
@@ -57,79 +49,53 @@ describe("templateExecutionStore", () => {
 
     useTemplateExecutionStore
       .getState()
-      .setSelectedExecutionItem(
-        item as never,
-      );
+      .setSelectedExecutionItem(item as never);
 
-    expect(
-      useTemplateExecutionStore.getState()
-        .selectedExecutionItem,
-    ).toEqual(item);
+    expect(useTemplateExecutionStore.getState().selectedExecutionItem).toEqual(
+      item,
+    );
   });
 
   it("sets execution action", () => {
     useTemplateExecutionStore
       .getState()
-      .setExecutionAction(
-        EXECUTION_ACTION.EXECUTE,
-      );
+      .setExecutionAction(EXECUTION_ACTION.EXECUTE);
 
-    expect(
-      useTemplateExecutionStore.getState()
-        .executionAction,
-    ).toBe(
+    expect(useTemplateExecutionStore.getState().executionAction).toBe(
       EXECUTION_ACTION.EXECUTE,
     );
   });
 
   it("opens node drawer", () => {
-    useTemplateExecutionStore
-      .getState()
-      .setNodeDrawerOpen(true);
+    useTemplateExecutionStore.getState().setNodeDrawerOpen(true);
 
-    expect(
-      useTemplateExecutionStore.getState()
-        .isNodeDrawerOpen,
-    ).toBe(true);
+    expect(useTemplateExecutionStore.getState().isNodeDrawerOpen).toBe(true);
   });
 
   it("closes node drawer", () => {
-    useTemplateExecutionStore
-      .getState()
-      .setNodeDrawerOpen(false);
+    useTemplateExecutionStore.getState().setNodeDrawerOpen(false);
 
-    expect(
-      useTemplateExecutionStore.getState()
-        .isNodeDrawerOpen,
-    ).toBe(false);
+    expect(useTemplateExecutionStore.getState().isNodeDrawerOpen).toBe(false);
   });
 
   it("updates existing node", () => {
-  const node = {
-    id: "node-1",
-  };
+    const node = {
+      id: "node-1",
+    };
 
-  useTemplateExecutionStore.setState({
-    nodes: [node] as never,
+    useTemplateExecutionStore.setState({
+      nodes: [node] as never,
+    });
+
+    useTemplateExecutionStore.getState().updateNode("node-1", {
+      updated: true,
+    } as never);
+
+    expect(useTemplateExecutionStore.getState().nodes[0]).toMatchObject({
+      id: "node-1",
+      updated: true,
+    });
   });
-
-  useTemplateExecutionStore
-    .getState()
-    .updateNode(
-      "node-1",
-      {
-        updated: true,
-      } as never,
-    );
-
-  expect(
-    useTemplateExecutionStore.getState()
-      .nodes[0],
-  ).toMatchObject({
-    id: "node-1",
-    updated: true,
-  });
-});
 
   it("does not update non existing node", () => {
     useTemplateExecutionStore.setState({
@@ -140,16 +106,11 @@ describe("templateExecutionStore", () => {
       ] as never,
     });
 
-    useTemplateExecutionStore
-      .getState()
-      .updateNode("node-2", {
-        name: "Changed",
-      } as never);
+    useTemplateExecutionStore.getState().updateNode("node-2", {
+      name: "Changed",
+    } as never);
 
-    expect(
-      useTemplateExecutionStore.getState()
-        .nodes,
-    ).toEqual([
+    expect(useTemplateExecutionStore.getState().nodes).toEqual([
       {
         id: "node-1",
       },
@@ -157,16 +118,11 @@ describe("templateExecutionStore", () => {
   });
 
   it("adds selected node when not already selected", () => {
-    useTemplateExecutionStore
-      .getState()
-      .toggleSelectedNode(
-        "node-1",
-      );
+    useTemplateExecutionStore.getState().toggleSelectedNode("node-1");
 
-    expect(
-      useTemplateExecutionStore.getState()
-        .selectedNodeIds,
-    ).toEqual(["node-1"]);
+    expect(useTemplateExecutionStore.getState().selectedNodeIds).toEqual([
+      "node-1",
+    ]);
   });
 
   it("removes selected node when already selected", () => {
@@ -174,29 +130,17 @@ describe("templateExecutionStore", () => {
       selectedNodeIds: ["node-1"],
     });
 
-    useTemplateExecutionStore
-      .getState()
-      .toggleSelectedNode(
-        "node-1",
-      );
+    useTemplateExecutionStore.getState().toggleSelectedNode("node-1");
 
-    expect(
-      useTemplateExecutionStore.getState()
-        .selectedNodeIds,
-    ).toEqual([]);
+    expect(useTemplateExecutionStore.getState().selectedNodeIds).toEqual([]);
   });
 
   it("adds selected row when not already selected", () => {
-    useTemplateExecutionStore
-      .getState()
-      .toggleSelectedRow(
-        "row-1",
-      );
+    useTemplateExecutionStore.getState().toggleSelectedRow("row-1");
 
-    expect(
-      useTemplateExecutionStore.getState()
-        .selectedRowIds,
-    ).toEqual(["row-1"]);
+    expect(useTemplateExecutionStore.getState().selectedRowIds).toEqual([
+      "row-1",
+    ]);
   });
 
   it("removes selected row when already selected", () => {
@@ -204,16 +148,78 @@ describe("templateExecutionStore", () => {
       selectedRowIds: ["row-1"],
     });
 
+    useTemplateExecutionStore.getState().toggleSelectedRow("row-1");
+
+    expect(useTemplateExecutionStore.getState().selectedRowIds).toEqual([]);
+  });
+
+  it("sets hasMoreWorkflows", () => {
+    useTemplateExecutionStore.getState().setHasMoreWorkflows(false);
+
+    expect(useTemplateExecutionStore.getState().hasMoreWorkflows).toBe(false);
+  });
+
+  it("sets isLoadingMoreWorkflows", () => {
+    useTemplateExecutionStore.getState().setIsLoadingMoreWorkflows(true);
+
+    expect(useTemplateExecutionStore.getState().isLoadingMoreWorkflows).toBe(
+      true,
+    );
+  });
+
+  it("appends workflow nodes and edges", () => {
+    const existingNodes = [
+      {
+        id: "node-1",
+      },
+    ];
+
+    const existingEdges = [
+      {
+        id: "edge-1",
+      },
+    ];
+
+    const newNodes = [
+      {
+        id: "node-2",
+      },
+    ];
+
+    const newEdges = [
+      {
+        id: "edge-2",
+      },
+    ];
+
+    useTemplateExecutionStore.setState({
+      nodes: existingNodes as never,
+      edges: existingEdges as never,
+    });
+
     useTemplateExecutionStore
       .getState()
-      .toggleSelectedRow(
-        "row-1",
-      );
+      .appendWorkflow(newNodes as never, newEdges as never);
 
-    expect(
-      useTemplateExecutionStore.getState()
-        .selectedRowIds,
-    ).toEqual([]);
+    const state = useTemplateExecutionStore.getState();
+
+    expect(state.nodes).toEqual([
+      {
+        id: "node-1",
+      },
+      {
+        id: "node-2",
+      },
+    ]);
+
+    expect(state.edges).toEqual([
+      {
+        id: "edge-1",
+      },
+      {
+        id: "edge-2",
+      },
+    ]);
   });
 
   it("loads workflow", () => {
@@ -231,20 +237,11 @@ describe("templateExecutionStore", () => {
 
     useTemplateExecutionStore
       .getState()
-      .loadWorkflow(
-        nodes as never,
-        edges as never,
-      );
+      .loadWorkflow(nodes as never, edges as never);
 
-    expect(
-      useTemplateExecutionStore.getState()
-        .nodes,
-    ).toEqual(nodes);
+    expect(useTemplateExecutionStore.getState().nodes).toEqual(nodes);
 
-    expect(
-      useTemplateExecutionStore.getState()
-        .edges,
-    ).toEqual(edges);
+    expect(useTemplateExecutionStore.getState().edges).toEqual(edges);
   });
 
   it("resets UI state when loading workflow", () => {
@@ -252,33 +249,21 @@ describe("templateExecutionStore", () => {
       selectedNodeIds: ["node-1"],
       selectedRowIds: ["row-1"],
       isNodeDrawerOpen: true,
-      executionAction:
-        EXECUTION_ACTION.EXECUTE,
+      executionAction: EXECUTION_ACTION.EXECUTE,
+      hasMoreWorkflows: false,
+      isLoadingMoreWorkflows: true,
     });
 
-    useTemplateExecutionStore
-      .getState()
-      .loadWorkflow([], []);
+    useTemplateExecutionStore.getState().loadWorkflow([], []);
 
-    const state =
-      useTemplateExecutionStore.getState();
+    const state = useTemplateExecutionStore.getState();
 
-    expect(
-      state.selectedNodeIds,
-    ).toEqual([]);
+    expect(state.selectedNodeIds).toEqual([]);
+    expect(state.selectedRowIds).toEqual([]);
+    expect(state.isNodeDrawerOpen).toBe(false);
+    expect(state.executionAction).toBe(EXECUTION_ACTION.IDLE);
 
-    expect(
-      state.selectedRowIds,
-    ).toEqual([]);
-
-    expect(
-      state.isNodeDrawerOpen,
-    ).toBe(false);
-
-    expect(
-      state.executionAction,
-    ).toBe(
-      EXECUTION_ACTION.IDLE,
-    );
+    expect(state.hasMoreWorkflows).toBe(true);
+    expect(state.isLoadingMoreWorkflows).toBe(false);
   });
 });

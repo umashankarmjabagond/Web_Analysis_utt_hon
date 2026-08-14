@@ -7,6 +7,7 @@ import WorkflowCanvas from "./WorkflowCanvas";
 import type { Edge, Node } from "@xyflow/react";
 
 const mockHandleNodeSelection = vi.fn();
+const mockLoadMore = vi.fn();
 
 const mockNodes: Node[] = [
   {
