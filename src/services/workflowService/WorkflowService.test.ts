@@ -1,13 +1,22 @@
-import {
-  beforeEach,
-  describe,
-  expect,
-  it,
-  vi,
-} from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import workflowService from "./WorkflowService";
 import { BaseService } from "../BaseService";
+
+type MockResponse = unknown;
+
+type BaseServiceTestMethods = {
+  get: (url: string, ...args: unknown[]) => Promise<MockResponse>;
+
+  post: (url: string, ...args: unknown[]) => Promise<MockResponse>;
+
+  put: (url: string, ...args: unknown[]) => Promise<MockResponse>;
+
+  delete: (url: string, ...args: unknown[]) => Promise<MockResponse>;
+};
+
+const getBaseServicePrototype = (): BaseServiceTestMethods =>
+  BaseService.prototype as unknown as BaseServiceTestMethods;
 
 describe("WorkflowService", () => {
   beforeEach(() => {
@@ -16,50 +25,38 @@ describe("WorkflowService", () => {
 
   it("getAll calls get with workflow endpoint", async () => {
     const getSpy = vi
-      .spyOn(
-        BaseService.prototype as any,
-        "get",
-      )
+      .spyOn(getBaseServicePrototype(), "get")
       .mockResolvedValue([]);
 
     await workflowService.getAll();
 
-    expect(getSpy).toHaveBeenCalledWith(
-      "/workflow",
-    );
+    expect(getSpy).toHaveBeenCalledWith("/workflow");
   });
 
   it("returns result from getAll", async () => {
     const response = [
-      { id: 1 },
+      {
+        id: 1,
+      },
     ];
 
-    vi.spyOn(
-      BaseService.prototype as any,
-      "get",
-    ).mockResolvedValue(response);
+    vi.spyOn(getBaseServicePrototype(), "get").mockResolvedValue(response);
 
-    const result =
-      await workflowService.getAll();
+    const result = await workflowService.getAll();
 
     expect(result).toEqual(response);
   });
 
   it("create calls post with correct arguments", async () => {
     const postSpy = vi
-      .spyOn(
-        BaseService.prototype as any,
-        "post",
-      )
+      .spyOn(getBaseServicePrototype(), "post")
       .mockResolvedValue({});
 
     const payload = {
       name: "workflow",
     };
 
-    await workflowService.create(
-      payload,
-    );
+    await workflowService.create(payload);
 
     expect(postSpy).toHaveBeenCalledWith(
       "/workflow",
@@ -73,35 +70,23 @@ describe("WorkflowService", () => {
       id: 1,
     };
 
-    vi.spyOn(
-      BaseService.prototype as any,
-      "post",
-    ).mockResolvedValue(response);
+    vi.spyOn(getBaseServicePrototype(), "post").mockResolvedValue(response);
 
-    const result =
-      await workflowService.create(
-        {},
-      );
+    const result = await workflowService.create({});
 
     expect(result).toEqual(response);
   });
 
   it("update calls put with correct arguments", async () => {
     const putSpy = vi
-      .spyOn(
-        BaseService.prototype as any,
-        "put",
-      )
+      .spyOn(getBaseServicePrototype(), "put")
       .mockResolvedValue({});
 
     const payload = {
       name: "updated workflow",
     };
 
-    await workflowService.update(
-      123,
-      payload,
-    );
+    await workflowService.update(123, payload);
 
     expect(putSpy).toHaveBeenCalledWith(
       "/workflow/123",
@@ -115,31 +100,19 @@ describe("WorkflowService", () => {
       updated: true,
     };
 
-    vi.spyOn(
-      BaseService.prototype as any,
-      "put",
-    ).mockResolvedValue(response);
+    vi.spyOn(getBaseServicePrototype(), "put").mockResolvedValue(response);
 
-    const result =
-      await workflowService.update(
-        123,
-        {},
-      );
+    const result = await workflowService.update(123, {});
 
     expect(result).toEqual(response);
   });
 
   it("remove calls delete with correct arguments", async () => {
     const deleteSpy = vi
-      .spyOn(
-        BaseService.prototype as any,
-        "delete",
-      )
+      .spyOn(getBaseServicePrototype(), "delete")
       .mockResolvedValue({});
 
-    await workflowService.remove(
-      456,
-    );
+    await workflowService.remove(456);
 
     expect(deleteSpy).toHaveBeenCalledWith(
       "/workflow/456",
@@ -152,15 +125,9 @@ describe("WorkflowService", () => {
       deleted: true,
     };
 
-    vi.spyOn(
-      BaseService.prototype as any,
-      "delete",
-    ).mockResolvedValue(response);
+    vi.spyOn(getBaseServicePrototype(), "delete").mockResolvedValue(response);
 
-    const result =
-      await workflowService.remove(
-        456,
-      );
+    const result = await workflowService.remove(456);
 
     expect(result).toEqual(response);
   });

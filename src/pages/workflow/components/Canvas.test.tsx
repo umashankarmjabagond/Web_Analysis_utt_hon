@@ -1,4 +1,4 @@
-import React, { type DragEvent, type MouseEvent, type ReactNode } from "react";
+import React, { type ReactNode } from "react";
 
 import { fireEvent, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
@@ -129,7 +129,6 @@ vi.mock("@xyflow/react", () => ({
   ReactFlow: ({
     children,
     nodes,
-    edges,
     onDrop,
     onDragOver,
     onNodeClick,
@@ -138,11 +137,23 @@ vi.mock("@xyflow/react", () => ({
   }: {
     children?: ReactNode;
     nodes?: WorkflowNode[];
-    edges?: MockEdge[];
-    onDrop?: (event: DragEvent) => void;
-    onDragOver?: (event: DragEvent) => void;
-    onNodeClick?: (event: MouseEvent, node: WorkflowNode) => void;
+
+    /*
+     * IMPORTANT:
+     * These must be React's event types because the
+     * callbacks are attached to React DOM elements.
+     */
+    onDrop?: (event: React.DragEvent<HTMLButtonElement>) => void;
+
+    onDragOver?: (event: React.DragEvent<HTMLButtonElement>) => void;
+
+    onNodeClick?: (
+      event: React.MouseEvent<HTMLButtonElement>,
+      node: WorkflowNode,
+    ) => void;
+
     onPaneClick?: () => void;
+
     onNodeDragStart?: () => void;
   }) => {
     const firstNode = nodes?.[0];
