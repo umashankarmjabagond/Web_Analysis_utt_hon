@@ -1,136 +1,137 @@
-import {
-  describe,
-  expect,
-  it,
-  vi,
-  beforeEach,
-} from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import workflowMockData from "../../pages/analysis/template-execution/mock/workflow.mock.json";
-import templateWorkflowMockData from "../../pages/analysis/template-execution/mock/templateExecution.mock.json";
+
+import { generateTemplateExecutionMock } from "../../pages/analysis/template-execution/mock/templateExecutionGenerator";
 
 import {
   getExecutionWorkflow,
   getTemplateExecutionWorkflows,
 } from "./templateExecutionService";
 
-describe(
-  "templateExecutionService",
-  () => {
-    beforeEach(() => {
-      vi.clearAllMocks();
+const MOCK_TOTAL_ROWS = 1000;
+const PAGE_SIZE = 10;
+const MOCK_DELAY = 3000;
+
+describe("templateExecutionService", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.useFakeTimers();
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it("returns execution workflow data", async () => {
+    const result = await getExecutionWorkflow("workflow-1");
+
+    expect(result).toEqual(workflowMockData);
+  });
+
+  it("logs execution workflow id", async () => {
+    const consoleSpy = vi.spyOn(console, "log").mockImplementation(() => {});
+
+    await getExecutionWorkflow("workflow-123");
+
+    expect(consoleSpy).toHaveBeenCalledWith(
+      "Fetching execution workflow for id:",
+      "workflow-123",
+    );
+
+    consoleSpy.mockRestore();
+  });
+
+  it("returns only the requested template workflow page", async () => {
+    const resultPromise = getTemplateExecutionWorkflows("template-1", {
+      offset: 0,
+      limit: PAGE_SIZE,
     });
 
-    it(
-      "returns execution workflow data",
-      async () => {
-        const result =
-          await getExecutionWorkflow(
-            "workflow-1",
-          );
+    await vi.advanceTimersByTimeAsync(MOCK_DELAY);
 
-        expect(
-          result,
-        ).toEqual(
-          workflowMockData,
-        );
-      },
+    const result = await resultPromise;
+
+    const expectedDataset = generateTemplateExecutionMock(MOCK_TOTAL_ROWS);
+
+    expect(result.workflows).toHaveLength(PAGE_SIZE);
+
+    expect(result.workflows).toEqual(
+      expectedDataset.workflows.slice(0, PAGE_SIZE),
     );
 
-    it(
-      "logs execution workflow id",
-      async () => {
-        const consoleSpy = vi
-          .spyOn(console, "log")
-          .mockImplementation(
-            () => {},
-          );
+    expect(result.total).toBe(MOCK_TOTAL_ROWS);
+    expect(result.template).toEqual(expectedDataset.template);
+  });
 
-        await getExecutionWorkflow(
-          "workflow-123",
-        );
+  it("returns the correct page using offset and limit", async () => {
+    const offset = 20;
 
-        expect(
-          consoleSpy,
-        ).toHaveBeenCalledWith(
-          "Fetching execution workflow for id:",
-          "workflow-123",
-        );
+    const resultPromise = getTemplateExecutionWorkflows("template-1", {
+      offset,
+      limit: PAGE_SIZE,
+    });
 
-        consoleSpy.mockRestore();
-      },
+    await vi.advanceTimersByTimeAsync(MOCK_DELAY);
+
+    const result = await resultPromise;
+
+    const expectedDataset = generateTemplateExecutionMock(MOCK_TOTAL_ROWS);
+
+    expect(result.workflows).toEqual(
+      expectedDataset.workflows.slice(offset, offset + PAGE_SIZE),
     );
 
-    it(
-      "returns template execution workflow data",
-      async () => {
-        const result =
-          await getTemplateExecutionWorkflows(
-            "template-1",
-          );
+    expect(result.workflows[0]?.itemId).toBe("56-FFC620");
+  });
 
-        expect(
-          result,
-        ).toEqual(
-          templateWorkflowMockData,
-        );
-      },
+  it("logs template workflow pagination parameters", async () => {
+    const consoleSpy = vi.spyOn(console, "log").mockImplementation(() => {});
+
+    const resultPromise = getTemplateExecutionWorkflows("template-123", {
+      offset: 10,
+      limit: 10,
+    });
+
+    await vi.advanceTimersByTimeAsync(MOCK_DELAY);
+
+    await resultPromise;
+
+    expect(consoleSpy).toHaveBeenCalledWith(
+      "Fetching template workflows: template-123, offset 10, limit 10",
     );
 
-    it(
-      "logs template workflow id",
-      async () => {
-        const consoleSpy = vi
-          .spyOn(console, "log")
-          .mockImplementation(
-            () => {},
-          );
+    consoleSpy.mockRestore();
+  });
 
-        await getTemplateExecutionWorkflows(
-          "template-123",
-        );
+  it("returns fewer workflows when the requested page reaches the end", async () => {
+    const offset = 995;
+    const limit = 10;
 
-        expect(
-          consoleSpy,
-        ).toHaveBeenCalledWith(
-          "Fetching template execution workflows for template id:",
-          "template-123",
-        );
+    const resultPromise = getTemplateExecutionWorkflows("template-1", {
+      offset,
+      limit,
+    });
 
-        consoleSpy.mockRestore();
-      },
-    );
+    await vi.advanceTimersByTimeAsync(MOCK_DELAY);
 
-    it(
-      "returns workflow mock data for any id",
-      async () => {
-        const result =
-          await getExecutionWorkflow(
-            "any-id",
-          );
+    const result = await resultPromise;
 
-        expect(
-          result,
-        ).toBe(
-          workflowMockData,
-        );
-      },
-    );
+    expect(result.workflows).toHaveLength(5);
 
-    it(
-      "returns template mock data for any template id",
-      async () => {
-        const result =
-          await getTemplateExecutionWorkflows(
-            "any-template-id",
-          );
+    expect(result.total).toBe(MOCK_TOTAL_ROWS);
+  });
 
-        expect(
-          result,
-        ).toBe(
-          templateWorkflowMockData,
-        );
-      },
-    );
-  },
-);
+  it("does not return more than the requested page size", async () => {
+    const resultPromise = getTemplateExecutionWorkflows("template-1", {
+      offset: 100,
+      limit: PAGE_SIZE,
+    });
+
+    await vi.advanceTimersByTimeAsync(MOCK_DELAY);
+
+    const result = await resultPromise;
+
+    expect(result.workflows.length).toBeLessThanOrEqual(PAGE_SIZE);
+  });
+});
