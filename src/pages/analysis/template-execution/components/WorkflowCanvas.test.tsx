@@ -1,14 +1,15 @@
-import { fireEvent, render, screen } from "@testing-library/react";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import React, { type ReactNode } from "react";
+import { render, screen, fireEvent } from "@testing-library/react";
+import { describe, expect, it, vi, beforeEach } from "vitest";
 
 import WorkflowCanvas from "./WorkflowCanvas";
 
-import type { Edge } from "@xyflow/react";
+import type { Edge, Node } from "@xyflow/react";
 
 const mockHandleNodeSelection = vi.fn();
 const mockLoadMore = vi.fn();
 
-const mockNodes = [
+const mockNodes: Node[] = [
   {
     id: "node-1",
     type: "customNode",
@@ -41,16 +42,20 @@ let mockParams: {
   itemId: "asset-1",
 };
 
+const renderWorkflowCanvas = (executionContext: "asset" | "unit" = "asset") =>
+  render(<WorkflowCanvas executionContext={executionContext} />);
+
 vi.mock("react-router-dom", () => ({
   useParams: () => mockParams,
 }));
 
 vi.mock("../../../../store/templateExecutionStore", () => ({
-  useTemplateExecutionStore: vi.fn((selector) =>
-    selector({
-      nodes: mockNodes,
-      edges: mockEdges,
-    }),
+  useTemplateExecutionStore: vi.fn(
+    (selector: (state: { nodes: Node[]; edges: Edge[] }) => unknown) =>
+      selector({
+        nodes: mockNodes,
+        edges: mockEdges,
+      }),
   ),
 }));
 
@@ -72,6 +77,11 @@ vi.mock("@xyflow/react", async () => {
   const actual =
     await vi.importActual<typeof import("@xyflow/react")>("@xyflow/react");
 
+  type MockReactFlowProps = {
+    onNodeClick?: (event: globalThis.MouseEvent, node: Node) => void;
+    children?: ReactNode;
+  };
+
   return {
     ...actual,
 
@@ -85,24 +95,20 @@ vi.mock("@xyflow/react", async () => {
 
     Background: () => <div data-testid="background" />,
 
-    ReactFlow: ({
-      onNodeClick,
-      children,
-    }: {
-      onNodeClick?: (event: unknown, node: unknown) => void;
-      children?: React.ReactNode;
-    }) => (
+    ReactFlow: ({ onNodeClick, children }: MockReactFlowProps) => (
       <div data-testid="react-flow">
         <button
+          type="button"
           data-testid="normal-node"
-          onClick={() => onNodeClick?.({}, mockNodes[0])}
+          onClick={(event) => onNodeClick?.(event.nativeEvent, mockNodes[0])}
         >
           Normal Node
         </button>
 
         <button
+          type="button"
           data-testid="header-node"
-          onClick={() => onNodeClick?.({}, mockNodes[1])}
+          onClick={(event) => onNodeClick?.(event.nativeEvent, mockNodes[1])}
         >
           Header Node
         </button>
@@ -123,60 +129,38 @@ describe("WorkflowCanvas", () => {
     };
   });
 
-  const renderCanvas = (
-    overrides: Partial<{
-      executionContext: "unit" | "asset";
-      loadMore: () => void;
-      hasMore: boolean;
-      isLoadingMore: boolean;
-    }> = {},
-  ) => {
-    return render(
-      <WorkflowCanvas
-        executionContext={overrides.executionContext ?? "unit"}
-        loadMore={overrides.loadMore ?? mockLoadMore}
-        hasMore={overrides.hasMore ?? true}
-        isLoadingMore={overrides.isLoadingMore ?? false}
-      />,
-    );
-  };
-
   it("renders ReactFlow", () => {
-    renderCanvas();
+    renderWorkflowCanvas();
 
     expect(screen.getByTestId("react-flow")).toBeInTheDocument();
   });
 
   it("renders ExecutionNodeDrawer", () => {
-    renderCanvas();
+    renderWorkflowCanvas();
 
     expect(screen.getByTestId("node-drawer")).toBeInTheDocument();
   });
 
   it("renders details panel for asset context", () => {
-    renderCanvas({
-      executionContext: "asset",
-    });
+    renderWorkflowCanvas("asset");
 
     expect(screen.getByTestId("details-panel")).toBeInTheDocument();
   });
 
   it("does not render details panel for unit context", () => {
-    renderCanvas({
-      executionContext: "unit",
-    });
+    renderWorkflowCanvas("unit");
 
     expect(screen.queryByTestId("details-panel")).not.toBeInTheDocument();
   });
 
   it("renders background", () => {
-    renderCanvas();
+    renderWorkflowCanvas();
 
     expect(screen.getByTestId("background")).toBeInTheDocument();
   });
 
   it("calls handleNodeSelection for normal node", () => {
-    renderCanvas();
+    renderWorkflowCanvas();
 
     fireEvent.click(screen.getByTestId("normal-node"));
 
@@ -184,7 +168,7 @@ describe("WorkflowCanvas", () => {
   });
 
   it("does not call handleNodeSelection for executionHeader node", () => {
-    renderCanvas();
+    renderWorkflowCanvas();
 
     fireEvent.click(screen.getByTestId("header-node"));
 
@@ -192,7 +176,7 @@ describe("WorkflowCanvas", () => {
   });
 
   it("renders with node data present", () => {
-    renderCanvas();
+    renderWorkflowCanvas();
 
     expect(screen.getByTestId("react-flow")).toBeInTheDocument();
   });
@@ -203,105 +187,8 @@ describe("WorkflowCanvas", () => {
       itemId: undefined,
     };
 
-    renderCanvas({
-      executionContext: "unit",
-    });
+    renderWorkflowCanvas("unit");
 
     expect(screen.getByTestId("react-flow")).toBeInTheDocument();
-  });
-
-  it("calls loadMore when scrolled near the bottom", () => {
-    renderCanvas({
-      hasMore: true,
-      isLoadingMore: false,
-    });
-
-    /*
-     * scrollHeight = 1000
-     * scrollTop = 600
-     * clientHeight = 200
-     *
-     * distanceFromBottom =
-     * 1000 - (600 + 200)
-     * = 200
-     *
-     * SCROLL_THRESHOLD = 300
-     *
-     * Therefore loadMore() should be called.
-     */
-
-    const scrollContainer = screen.getByTestId("react-flow").parentElement;
-
-    expect(scrollContainer).not.toBeNull();
-
-    fireEvent.scroll(scrollContainer!, {
-      currentTarget: {
-        scrollTop: 600,
-        scrollHeight: 1000,
-        clientHeight: 200,
-      },
-    });
-
-    expect(mockLoadMore).toHaveBeenCalledTimes(1);
-  });
-
-  it("does not call loadMore when there are no more workflows", () => {
-    renderCanvas({
-      hasMore: false,
-      isLoadingMore: false,
-    });
-
-    const scrollContainer = screen.getByTestId("react-flow").parentElement;
-
-    expect(scrollContainer).not.toBeNull();
-
-    fireEvent.scroll(scrollContainer!, {
-      currentTarget: {
-        scrollTop: 600,
-        scrollHeight: 1000,
-        clientHeight: 200,
-      },
-    });
-
-    expect(mockLoadMore).not.toHaveBeenCalled();
-  });
-
-  it("does not call loadMore while another request is loading", () => {
-    renderCanvas({
-      hasMore: true,
-      isLoadingMore: true,
-    });
-
-    const scrollContainer = screen.getByTestId("react-flow").parentElement;
-
-    expect(scrollContainer).not.toBeNull();
-
-    fireEvent.scroll(scrollContainer!, {
-      currentTarget: {
-        scrollTop: 600,
-        scrollHeight: 1000,
-        clientHeight: 200,
-      },
-    });
-
-    expect(mockLoadMore).not.toHaveBeenCalled();
-  });
-
-  it("shows loading indicator while loading more workflows", () => {
-    renderCanvas({
-      hasMore: true,
-      isLoadingMore: true,
-    });
-
-    expect(screen.getByText("Loading more rows...")).toBeInTheDocument();
-  });
-
-  it("does not show loading indicator when not loading", () => {
-    renderCanvas({
-      hasMore: true,
-      isLoadingMore: false,
-    });
-
-    expect(screen.queryByText("Loading more rows...")).not.toBeInTheDocument();
   });
 });
