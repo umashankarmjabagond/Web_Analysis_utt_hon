@@ -9,6 +9,12 @@ const mockNavigate = vi.fn();
 const mockDeleteSelectedNodes = vi.fn();
 const mockDeleteSelectedEdges = vi.fn();
 const mockClearWorkflow = vi.fn();
+const mockSetNodes = vi.fn();
+const mockSetEdges = vi.fn();
+const mockSetIsImporting = vi.fn();
+
+const mockExportWorkflow = vi.fn();
+const mockImportWorkflow = vi.fn();
 
 const mockStore: {
   nodes: Array<{ id: string }>;
@@ -16,12 +22,18 @@ const mockStore: {
   deleteSelectedNodes: typeof mockDeleteSelectedNodes;
   deleteSelectedEdges: typeof mockDeleteSelectedEdges;
   clearWorkflow: typeof mockClearWorkflow;
+  setNodes: typeof mockSetNodes;
+  setEdges: typeof mockSetEdges;
+  setIsImporting: typeof mockSetIsImporting;
 } = {
   nodes: [],
   edges: [],
   deleteSelectedNodes: mockDeleteSelectedNodes,
   deleteSelectedEdges: mockDeleteSelectedEdges,
   clearWorkflow: mockClearWorkflow,
+  setNodes: mockSetNodes,
+  setEdges: mockSetEdges,
+  setIsImporting: mockSetIsImporting,
 };
 
 vi.mock("react-router-dom", () => ({
@@ -36,6 +48,19 @@ vi.mock("react-i18next", () => ({
 
 vi.mock("../../../../store/workflowStore", () => ({
   useWorkflowStore: () => mockStore,
+}));
+
+vi.mock("../../../../utils/utils", () => ({
+  cn: (...classes: Array<string | false | null | undefined>) =>
+    classes.filter(Boolean).join(" "),
+
+  exportWorkflow: (...args: unknown[]) => {
+    mockExportWorkflow(...args);
+  },
+
+  importWorkflow: (...args: unknown[]) => {
+    return mockImportWorkflow(...args);
+  },
 }));
 
 vi.mock("./ToolbarButton", () => ({
@@ -115,17 +140,25 @@ vi.mock("../../../../components/common/dialogue/Dialog", () => ({
     ) : null,
 }));
 
-vi.mock("../../../../components/forms/input/Input", () => ({
-  default: ({
+vi.mock("../../../../components/forms/input/Input", () => {
+  const MockInput = ({
     label,
     value,
     onChange,
+    ...props
   }: {
     label?: string;
     value?: string;
     onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  }) => <input aria-label={label} value={value} onChange={onChange} />,
-}));
+    [key: string]: unknown;
+  }) => (
+    <input aria-label={label} value={value} onChange={onChange} {...props} />
+  );
+
+  return {
+    default: MockInput,
+  };
+});
 
 vi.mock("../../../../components/forms/button/Button", () => ({
   default: ({
@@ -170,6 +203,9 @@ describe("Toolbar", () => {
 
     mockStore.nodes = [];
     mockStore.edges = [];
+
+    mockImportWorkflow.mockReset();
+    mockExportWorkflow.mockReset();
 
     Storage.prototype.getItem = vi.fn(() => "[]");
     Storage.prototype.setItem = vi.fn();
@@ -620,5 +656,352 @@ describe("Toolbar", () => {
     });
 
     expect(screen.queryByTestId("notification")).not.toBeInTheDocument();
+  });
+
+  // --------------------------------------------------
+  // EXPORT TESTS
+  // --------------------------------------------------
+
+  it("shows warning notification when exporting empty workflow", () => {
+    mockStore.nodes = [];
+    mockStore.edges = [];
+
+    render(<Toolbar />);
+
+    fireEvent.click(screen.getByText("Export Template"));
+
+    expect(screen.getByText("Nothing to Export")).toBeInTheDocument();
+
+    expect(
+      screen.getByText("Please create a workflow before exporting."),
+    ).toBeInTheDocument();
+
+    expect(mockExportWorkflow).not.toHaveBeenCalled();
+  });
+
+  it("exports workflow when nodes are present", () => {
+    mockStore.nodes = [
+      {
+        id: "node-1",
+      },
+    ];
+
+    mockStore.edges = [
+      {
+        id: "edge-1",
+      },
+    ];
+
+    render(<Toolbar />);
+
+    fireEvent.click(screen.getByText("Export Template"));
+
+    expect(mockExportWorkflow).toHaveBeenCalledTimes(1);
+
+    expect(mockExportWorkflow).toHaveBeenCalledWith(
+      mockStore.nodes,
+      mockStore.edges,
+      "workflow.json",
+    );
+  });
+
+  it("executes export warning notification timeout", () => {
+    vi.useFakeTimers();
+
+    mockStore.nodes = [];
+    mockStore.edges = [];
+
+    render(<Toolbar />);
+
+    fireEvent.click(screen.getByText("Export Template"));
+
+    expect(screen.getByTestId("notification")).toBeInTheDocument();
+
+    act(() => {
+      vi.runAllTimers();
+    });
+
+    expect(screen.queryByTestId("notification")).not.toBeInTheDocument();
+  });
+
+  // --------------------------------------------------
+  // IMPORT TESTS
+  // --------------------------------------------------
+
+  it("opens file picker when import template is clicked", () => {
+    const clickSpy = vi
+      .spyOn(HTMLInputElement.prototype, "click")
+      .mockImplementation(() => {});
+
+    render(<Toolbar />);
+
+    fireEvent.click(screen.getByText("Import Template"));
+
+    expect(clickSpy).toHaveBeenCalledTimes(1);
+
+    clickSpy.mockRestore();
+  });
+
+  it("does nothing when no import file is selected", async () => {
+    render(<Toolbar />);
+
+    const fileInput = document.querySelector(
+      'input[type="file"]',
+    ) as HTMLInputElement;
+
+    await act(async () => {
+      fireEvent.change(fileInput, {
+        target: {
+          files: [],
+          value: "",
+        },
+      });
+    });
+
+    expect(mockSetIsImporting).not.toHaveBeenCalled();
+
+    expect(mockImportWorkflow).not.toHaveBeenCalled();
+  });
+
+  it("imports workflow successfully", async () => {
+    const importedWorkflow = {
+      nodes: [
+        {
+          id: "imported-node",
+        },
+      ],
+      edges: [
+        {
+          id: "imported-edge",
+        },
+      ],
+    };
+
+    mockImportWorkflow.mockResolvedValue(importedWorkflow);
+
+    render(<Toolbar />);
+
+    const fileInput = document.querySelector(
+      'input[type="file"]',
+    ) as HTMLInputElement;
+
+    const file = new File(
+      [
+        JSON.stringify({
+          nodes: importedWorkflow.nodes,
+          edges: importedWorkflow.edges,
+        }),
+      ],
+      "workflow.json",
+      {
+        type: "application/json",
+      },
+    );
+
+    await act(async () => {
+      fireEvent.change(fileInput, {
+        target: {
+          files: [file],
+        },
+      });
+    });
+
+    expect(mockSetIsImporting).toHaveBeenCalledWith(true);
+
+    expect(mockImportWorkflow).toHaveBeenCalledTimes(1);
+
+    expect(mockImportWorkflow).toHaveBeenCalledWith(file);
+
+    expect(mockSetNodes).toHaveBeenCalledWith(importedWorkflow.nodes);
+
+    expect(mockSetEdges).toHaveBeenCalledWith(importedWorkflow.edges);
+
+    expect(mockSetIsImporting).toHaveBeenLastCalledWith(false);
+
+    expect(screen.getByText("Import Successful")).toBeInTheDocument();
+
+    expect(
+      screen.getByText("Workflow imported successfully."),
+    ).toBeInTheDocument();
+  });
+
+  it("shows import failed notification when import throws an Error", async () => {
+    mockImportWorkflow.mockRejectedValue(new Error("Invalid workflow file"));
+
+    render(<Toolbar />);
+
+    const fileInput = document.querySelector(
+      'input[type="file"]',
+    ) as HTMLInputElement;
+
+    const file = new File(["invalid workflow"], "workflow.json", {
+      type: "application/json",
+    });
+
+    await act(async () => {
+      fireEvent.change(fileInput, {
+        target: {
+          files: [file],
+        },
+      });
+    });
+
+    expect(screen.getByText("Import Failed")).toBeInTheDocument();
+
+    expect(screen.getByText("Invalid workflow file")).toBeInTheDocument();
+
+    expect(mockSetIsImporting).toHaveBeenCalledWith(true);
+
+    expect(mockSetIsImporting).toHaveBeenLastCalledWith(false);
+  });
+
+  it("shows default import error when a non-Error is thrown", async () => {
+    mockImportWorkflow.mockRejectedValue("invalid file");
+
+    render(<Toolbar />);
+
+    const fileInput = document.querySelector(
+      'input[type="file"]',
+    ) as HTMLInputElement;
+
+    const file = new File(["invalid workflow"], "workflow.json", {
+      type: "application/json",
+    });
+
+    await act(async () => {
+      fireEvent.change(fileInput, {
+        target: {
+          files: [file],
+        },
+      });
+    });
+
+    expect(screen.getByText("Import Failed")).toBeInTheDocument();
+
+    expect(screen.getByText("Unable to import workflow.")).toBeInTheDocument();
+  });
+
+  it("executes import success notification timeout", async () => {
+    vi.useFakeTimers();
+
+    mockImportWorkflow.mockResolvedValue({
+      nodes: [
+        {
+          id: "node-1",
+        },
+      ],
+      edges: [],
+    });
+
+    render(<Toolbar />);
+
+    const fileInput = document.querySelector(
+      'input[type="file"]',
+    ) as HTMLInputElement;
+
+    const file = new File(["{}"], "workflow.json", {
+      type: "application/json",
+    });
+
+    await act(async () => {
+      fireEvent.change(fileInput, {
+        target: {
+          files: [file],
+        },
+      });
+    });
+
+    expect(screen.getByTestId("notification")).toBeInTheDocument();
+
+    act(() => {
+      vi.runAllTimers();
+    });
+
+    expect(screen.queryByTestId("notification")).not.toBeInTheDocument();
+  });
+
+  it("executes import failure notification timeout", async () => {
+    vi.useFakeTimers();
+
+    mockImportWorkflow.mockRejectedValue(new Error("Import error"));
+
+    render(<Toolbar />);
+
+    const fileInput = document.querySelector(
+      'input[type="file"]',
+    ) as HTMLInputElement;
+
+    const file = new File(["invalid"], "workflow.json", {
+      type: "application/json",
+    });
+
+    await act(async () => {
+      fireEvent.change(fileInput, {
+        target: {
+          files: [file],
+        },
+      });
+    });
+
+    expect(screen.getByTestId("notification")).toBeInTheDocument();
+
+    act(() => {
+      vi.runAllTimers();
+    });
+
+    expect(screen.queryByTestId("notification")).not.toBeInTheDocument();
+  });
+
+  it("resets importing state after successful import", async () => {
+    mockImportWorkflow.mockResolvedValue({
+      nodes: [],
+      edges: [],
+    });
+
+    render(<Toolbar />);
+
+    const fileInput = document.querySelector(
+      'input[type="file"]',
+    ) as HTMLInputElement;
+
+    const file = new File(["{}"], "workflow.json", {
+      type: "application/json",
+    });
+
+    await act(async () => {
+      fireEvent.change(fileInput, {
+        target: {
+          files: [file],
+        },
+      });
+    });
+
+    expect(mockSetIsImporting).toHaveBeenCalledWith(true);
+    expect(mockSetIsImporting).toHaveBeenLastCalledWith(false);
+  });
+
+  it("resets importing state after failed import", async () => {
+    mockImportWorkflow.mockRejectedValue(new Error("Import failed"));
+
+    render(<Toolbar />);
+
+    const fileInput = document.querySelector(
+      'input[type="file"]',
+    ) as HTMLInputElement;
+
+    const file = new File(["invalid"], "workflow.json", {
+      type: "application/json",
+    });
+
+    await act(async () => {
+      fireEvent.change(fileInput, {
+        target: {
+          files: [file],
+        },
+      });
+    });
+
+    expect(mockSetIsImporting).toHaveBeenCalledWith(true);
+    expect(mockSetIsImporting).toHaveBeenLastCalledWith(false);
   });
 });
