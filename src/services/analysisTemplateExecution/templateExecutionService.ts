@@ -1,5 +1,4 @@
 import workflowMockData from "../../pages/analysis/template-execution/mock/workflow.mock.json";
-import templateWorkflowMockData from "../../pages/analysis/template-execution/mock/templateExecution.mock.json";
 import type {
   ExecutionWorkflowResponse,
   TemplateExecutionResponse,

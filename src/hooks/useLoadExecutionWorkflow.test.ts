@@ -261,6 +261,21 @@ describe("useLoadExecutionWorkflow", () => {
   });
 
   it("does not load more when hasMore is false", async () => {
+    vi.mocked(getTemplateExecutionWorkflows).mockResolvedValue({
+      workflows: [],
+      template: {
+        id: "template-1",
+        name: "Template 1",
+        type: "unit",
+      },
+      total: 0,
+    } as never);
+
+    vi.mocked(buildTemplateCanvas).mockReturnValue({
+      nodes: [],
+      edges: [],
+    } as never);
+
     (
       useTemplateExecutionStore as unknown as {
         mockImplementation: (
@@ -284,12 +299,20 @@ describe("useLoadExecutionWorkflow", () => {
     const { result } = renderHook(() => useLoadExecutionWorkflow("template-1"));
 
     await waitFor(() => {
-      expect(getTemplateExecutionWorkflows).toHaveBeenCalledTimes(1);
+      expect(getTemplateExecutionWorkflows).toHaveBeenCalledWith("template-1", {
+        offset: 0,
+        limit: 10,
+      });
     });
+
+    const initialCallCount = vi.mocked(getTemplateExecutionWorkflows).mock.calls
+      .length;
 
     await result.current.loadMore();
 
-    expect(getTemplateExecutionWorkflows).toHaveBeenCalledTimes(1);
+    expect(getTemplateExecutionWorkflows).toHaveBeenCalledTimes(
+      initialCallCount,
+    );
 
     expect(appendWorkflow).not.toHaveBeenCalled();
   });
@@ -315,18 +338,46 @@ describe("useLoadExecutionWorkflow", () => {
       }),
     );
 
+    vi.mocked(getTemplateExecutionWorkflows).mockResolvedValue({
+      workflows: [
+        {
+          itemId: "item-1",
+          workflow: {
+            nodes: [],
+            edges: [],
+          },
+        },
+      ],
+      template: {
+        id: "template-1",
+        name: "Template 1",
+        type: "unit",
+      },
+      total: 1000,
+    } as never);
+
+    vi.mocked(buildTemplateCanvas).mockReturnValue({
+      nodes: [],
+      edges: [],
+    } as never);
+
     const { result } = renderHook(() => useLoadExecutionWorkflow("template-1"));
 
     await waitFor(() => {
-      expect(getTemplateExecutionWorkflows).toHaveBeenCalled();
+      expect(getTemplateExecutionWorkflows).toHaveBeenCalledWith("template-1", {
+        offset: 0,
+        limit: 10,
+      });
     });
 
-    const callCount = vi.mocked(getTemplateExecutionWorkflows).mock.calls
+    const initialCallCount = vi.mocked(getTemplateExecutionWorkflows).mock.calls
       .length;
 
     await result.current.loadMore();
 
-    expect(getTemplateExecutionWorkflows).toHaveBeenCalledTimes(callCount);
+    expect(getTemplateExecutionWorkflows).toHaveBeenCalledTimes(
+      initialCallCount,
+    );
 
     expect(appendWorkflow).not.toHaveBeenCalled();
   });
