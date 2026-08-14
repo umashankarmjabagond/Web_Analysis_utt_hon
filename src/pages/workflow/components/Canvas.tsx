@@ -16,6 +16,7 @@ import {
   attributeCatalogSections,
   dummyWorkflows,
 } from "../workflowPanelData ";
+import ZoomControls from "./ZoomControls";
 
 const generateUniqueName = (
   baseName: string,
@@ -361,6 +362,7 @@ export default function Canvas() {
             </div>
           </div>
         )}
+        <ZoomControls />
       </ReactFlow>
 
       {isImporting && (

@@ -129,6 +129,7 @@ vi.mock("@xyflow/react", () => ({
   ReactFlow: ({
     children,
     nodes,
+    edges,
     onDrop,
     onDragOver,
     onNodeClick,
@@ -197,6 +198,18 @@ vi.mock("@xyflow/react", () => ({
     })),
   }),
 
+  /*
+   * ZoomControls uses useViewport().
+   *
+   * Canvas tests need to provide this hook because
+   * ZoomControls is rendered inside Canvas.
+   */
+  useViewport: () => ({
+    zoom: 1,
+    x: 0,
+    y: 0,
+  }),
+
   MarkerType: {
     ArrowClosed: "arrowclosed",
   },
@@ -208,7 +221,7 @@ vi.mock("../../../store/workflowStore", () => ({
   useWorkflowStore: () => mockStore,
 }));
 
-/*                               DIALOG MOCK */
+/*                              DIALOG MOCK */
 
 vi.mock("../../../components/common/dialogue/Dialog", () => ({
   default: ({ isOpen, children }: { isOpen: boolean; children?: ReactNode }) =>
@@ -378,6 +391,7 @@ describe("Canvas", () => {
     const addedNode = mockStore.addNode.mock.calls[0][0] as WorkflowNode;
 
     expect(addedNode.type).toBe("baseNode");
+
     expect(addedNode.position).toEqual({
       x: 100,
       y: 100,
