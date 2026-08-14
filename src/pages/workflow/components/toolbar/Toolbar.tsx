@@ -6,7 +6,7 @@ import {
   Upload,
 } from "lucide-react";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ToolbarButton from "./ToolbarButton";
 import { useWorkflowStore } from "../../../../store/workflowStore";
@@ -17,7 +17,8 @@ import Button from "../../../../components/forms/button/Button";
 import Notification from "../../../../components/common/notification/Notification";
 import { ROUTES } from "../../../../constants/routes/routesConstant";
 import { useTranslation } from "react-i18next";
-import { cn } from "../../../../utils/utils";
+import { cn, exportWorkflow, importWorkflow } from "../../../../utils/utils";
+import type { WorkflowNode } from "../../../../types/workFlowTypes";
 
 export default function Toolbar() {
   const { t } = useTranslation();
@@ -25,10 +26,15 @@ export default function Toolbar() {
   const {
     nodes,
     edges,
+    setNodes,
+    setEdges,
     deleteSelectedNodes,
     deleteSelectedEdges,
     clearWorkflow,
+    setIsImporting,
   } = useWorkflowStore();
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const navigate = useNavigate();
 
@@ -141,6 +147,69 @@ export default function Toolbar() {
     setIsSaveDialogOpen(true);
   };
 
+  const handleExport = () => {
+    if (nodes.length === 0) {
+      setNotificationType("warning");
+      setNotificationTitle("Nothing to Export");
+      setNotificationMessage("Please create a workflow before exporting.");
+      setShowNotification(true);
+
+      setTimeout(() => {
+        setShowNotification(false);
+      }, 3000);
+
+      return;
+    }
+
+    exportWorkflow(nodes as WorkflowNode[], edges, "workflow.json");
+  };
+
+  const handleImportClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleImportFile = async (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const file = event.target.files?.[0];
+
+    if (!file) {
+      return;
+    }
+
+    setIsImporting(true);
+
+    try {
+      const workflow = await importWorkflow(file);
+
+      setNodes(workflow.nodes);
+      setEdges(workflow.edges);
+
+      setNotificationType("success");
+      setNotificationTitle("Import Successful");
+      setNotificationMessage("Workflow imported successfully.");
+      setShowNotification(true);
+
+      setTimeout(() => {
+        setShowNotification(false);
+      }, 3000);
+    } catch (error) {
+      setNotificationType("warning");
+      setNotificationTitle("Import Failed");
+      setNotificationMessage(
+        error instanceof Error ? error.message : "Unable to import workflow.",
+      );
+      setShowNotification(true);
+
+      setTimeout(() => {
+        setShowNotification(false);
+      }, 3000);
+    } finally {
+      setIsImporting(false);
+    }
+
+    event.target.value = "";
+  };
   return (
     <>
       <div className=" flex h-12 min-h-9 w-full items-center justify-between border-b border-[#303030] bg-surface-primary px-2        ">
@@ -202,15 +271,17 @@ export default function Toolbar() {
           />
 
           <ToolbarButton
-            title="Export Template"
+            title="Import Template"
             icon={Download}
             iconClassName="text-white"
+            onClick={handleImportClick}
           />
 
           <ToolbarButton
-            title="Import Template"
+            title="Export Template"
             icon={Upload}
             iconClassName="text-white"
+            onClick={handleExport}
           />
 
           <div className="ml-1">
@@ -247,7 +318,6 @@ export default function Toolbar() {
           </div>
         </div>
       </div>
-
       <Dialog
         isOpen={isSaveDialogOpen}
         subtitle={t("TOOLBAR_SAVE_AS")}
@@ -303,7 +373,6 @@ export default function Toolbar() {
           </div>
         </div>
       </Dialog>
-
       {showNotification && (
         <div
           className="
@@ -321,6 +390,15 @@ export default function Toolbar() {
           />
         </div>
       )}
+
+      {/* this is for import input */}
+      <Input
+        ref={fileInputRef}
+        type="file"
+        accept=".json,application/json"
+        className="hidden"
+        onChange={handleImportFile}
+      />
     </>
   );
 }
