@@ -90,6 +90,7 @@ export default function Canvas() {
     clearWorkflow,
     pendingCatalogItem,
     setPendingCatalogItem,
+    isImporting,
   } = useWorkflowStore();
 
   const { screenToFlowPosition } = useReactFlow<WorkflowNode, Edge>();
@@ -361,6 +362,16 @@ export default function Canvas() {
           </div>
         )}
       </ReactFlow>
+
+      {isImporting && (
+        <div className="absolute inset-0 z-50 flex items-center justify-center bg-[#111111]/80">
+          <div className="flex flex-col items-center gap-3">
+            <div className="h-8 w-8 animate-spin rounded-full border-2 border-white/20 border-t-white" />
+
+            <p className="text-sm text-white">Importing, please wait...</p>
+          </div>
+        </div>
+      )}
 
       <Dialog
         isOpen={isDialogOpen}

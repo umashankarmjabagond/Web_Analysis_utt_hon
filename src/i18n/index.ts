@@ -30,15 +30,6 @@ const resources = {
 
 const supportedLanguages = Object.keys(resources);
 
-/**
- * Resolution order
- *
- * Browser : en-IN
- * 1. en-IN
- * 2. en
- *    -> en-US
- * 3. fallback -> en-US
- */
 function resolveLanguage(browserLanguage: string): string {
   // 1. Exact locale
   if (supportedLanguages.includes(browserLanguage)) {
