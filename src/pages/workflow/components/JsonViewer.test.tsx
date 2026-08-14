@@ -1,15 +1,5 @@
-import React from "react";
-import {
-  beforeEach,
-  describe,
-  expect,
-  it,
-  vi,
-} from "vitest";
-import {
-  render,
-  screen,
-} from "@testing-library/react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { render, screen } from "@testing-library/react";
 
 import JsonViewer from "./JsonViewer";
 
@@ -23,12 +13,9 @@ vi.mock("react-i18next", () => ({
   }),
 }));
 
-vi.mock(
-  "../../../utils/utils",
-  () => ({
-    flowToBackend,
-  }),
-);
+vi.mock("../../../utils/utils", () => ({
+  flowToBackend,
+}));
 
 let storeState: {
   nodes: unknown[];
@@ -36,13 +23,9 @@ let storeState: {
   selectedNode: unknown;
 };
 
-vi.mock(
-  "../../../store/workflowStore",
-  () => ({
-    useWorkflowStore: () =>
-      storeState,
-  }),
-);
+vi.mock("../../../store/workflowStore", () => ({
+  useWorkflowStore: () => storeState,
+}));
 
 beforeEach(() => {
   vi.clearAllMocks();
@@ -62,17 +45,9 @@ describe("JsonViewer", () => {
   it("renders headers", () => {
     render(<JsonViewer />);
 
-    expect(
-      screen.getByText(
-        "WORKFLOW_JSON",
-      ),
-    ).toBeInTheDocument();
+    expect(screen.getByText("WORKFLOW_JSON")).toBeInTheDocument();
 
-    expect(
-      screen.getByText(
-        "SELECTED_ELEMENT",
-      ),
-    ).toBeInTheDocument();
+    expect(screen.getByText("SELECTED_ELEMENT")).toBeInTheDocument();
   });
 
   it("calls flowToBackend with nodes and edges", () => {
@@ -90,52 +65,37 @@ describe("JsonViewer", () => {
 
     render(<JsonViewer />);
 
-    expect(
-      flowToBackend,
-    ).toHaveBeenCalledWith(
+    expect(flowToBackend).toHaveBeenCalledWith(
       storeState.nodes,
       storeState.edges,
     );
   });
 
   it("renders backend json", () => {
-  flowToBackend.mockReturnValue({
-    workflow: "test",
+    flowToBackend.mockReturnValue({
+      workflow: "test",
+    });
+
+    render(<JsonViewer />);
+
+    expect(screen.getByText(/"workflow": "test"/)).toBeInTheDocument();
   });
-
-  render(<JsonViewer />);
-
-  expect(
-    screen.getByText(
-      /"workflow": "test"/,
-    ),
-  ).toBeInTheDocument();
-});
 
   it("renders selected node element json", () => {
     storeState.selectedNode = {
       data: {
         element: {
           Name: "Temperature",
-          elementType:
-            "Attribute",
+          elementType: "Attribute",
         },
       },
     };
 
     render(<JsonViewer />);
 
-    expect(
-      screen.getByText(
-        /Temperature/,
-      ),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/Temperature/)).toBeInTheDocument();
 
-    expect(
-      screen.getByText(
-        /Attribute/,
-      ),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/Attribute/)).toBeInTheDocument();
   });
 
   it("renders null when selectedNode is null", () => {
@@ -143,12 +103,9 @@ describe("JsonViewer", () => {
 
     render(<JsonViewer />);
 
-    const nullValues =
-      screen.getAllByText("null");
+    const nullValues = screen.getAllByText("null");
 
-    expect(
-      nullValues.length,
-    ).toBeGreaterThan(0);
+    expect(nullValues.length).toBeGreaterThan(0);
   });
 
   it("renders selected node when element is undefined", () => {
@@ -158,36 +115,25 @@ describe("JsonViewer", () => {
 
     render(<JsonViewer />);
 
-    const nullValues =
-      screen.getAllByText("null");
+    const nullValues = screen.getAllByText("null");
 
-    expect(
-      nullValues.length,
-    ).toBeGreaterThan(0);
+    expect(nullValues.length).toBeGreaterThan(0);
   });
 
   it("updates backend json when flowToBackend returns different data", () => {
-  flowToBackend.mockReturnValue({
-    id: "workflow-1",
-    nodes: [
-      {
-        id: "node-1",
-      },
-    ],
+    flowToBackend.mockReturnValue({
+      id: "workflow-1",
+      nodes: [
+        {
+          id: "node-1",
+        },
+      ],
+    });
+
+    render(<JsonViewer />);
+
+    expect(screen.getByText(/"id": "workflow-1"/)).toBeInTheDocument();
+
+    expect(screen.getByText(/"nodes"/)).toBeInTheDocument();
   });
-
-  render(<JsonViewer />);
-
-  expect(
-    screen.getByText(
-      /"id": "workflow-1"/,
-    ),
-  ).toBeInTheDocument();
-
-  expect(
-    screen.getByText(
-      /"nodes"/,
-    ),
-  ).toBeInTheDocument();
-});
 });
