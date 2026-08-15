@@ -1,6 +1,4 @@
 import {
-  Background,
-  BackgroundVariant,
   ConnectionMode,
   ReactFlow,
   type NodeMouseHandler,
@@ -20,7 +18,8 @@ import type {
   ExecutionFlowNode,
   WorkflowCanvasProps,
 } from "../../../../types/templateExecution";
-import { Loader2 } from "lucide-react";
+import { useParams } from "react-router-dom";
+import { useMemo } from "react";
 
 export default function WorkflowCanvas({
   executionContext,
@@ -91,14 +90,7 @@ export default function WorkflowCanvas({
               fitView={false}
               defaultViewport={{ x: 0, y: 0, zoom: 1 }}
               proOptions={{ hideAttribution: true }}
-            >
-              <Background
-                color="var(--surface-elevated)"
-                size={3}
-                variant={BackgroundVariant.Dots}
-                gap={25}
-              />
-            </ReactFlow>
+            />
           </div>
 
           {isLoadingMore && (
@@ -108,15 +100,7 @@ export default function WorkflowCanvas({
             </div>
           )}
         </div>
-
-        {showDetailsPanel && (
-          <div className="h-[60%] overflow-y-auto flex flex-col">
-            <ExecutionDetailsPanel />
-          </div>
-        )}
       </div>
-
-      <ExecutionNodeDrawer />
     </>
   );
 }

@@ -6,30 +6,71 @@ import type {
   WorkflowData,
 } from "../../../../types/templateExecution";
 
-const ROW_HEIGHT = 200;
+const ROW_GAP = 24;
+
+const CANVAS_LAYOUT = {
+  rowLeft: 24,
+  rowTop: 24,
+};
 
 export const buildTemplateCanvas = (
   workflows: TemplateExecutionWorkflow[],
   startIndex = 0,
 ): WorkflowData => {
+  const PREPEND_HEADER = true;
+
+  const rows = workflows.map((workflow) =>
+    buildTemplateItemFlow(workflow.itemId, workflow.workflow, PREPEND_HEADER),
+  );
+
+  const rowNodes = rows
+    .map((row) => row.nodes.find((node) => node.type === "executionRow"))
+    .filter((node): node is ExecutionFlowNode => node !== undefined);
+
+  const maxRowWidth = Math.max(
+    ...rowNodes.map((row) =>
+      typeof row.style?.width === "number" ? row.style.width : 0,
+    ),
+    0,
+  );
+
   const nodes: ExecutionFlowNode[] = [];
   const edges: Edge[] = [];
 
-  const PREPEND_HEADER = true;
+  let offsetY = CANVAS_LAYOUT.rowTop;
 
-  workflows.forEach((workflow, i) => {
-    const globalIndex = startIndex + i;
+  rows.forEach((row) => {
+    const rowNode = row.nodes.find((node) => node.type === "executionRow");
+    if (!rowNode) {
+      return;
+    }
 
-    const canvas = buildTemplateItemFlow(
-      workflow.itemId,
-      workflow.workflow,
-      PREPEND_HEADER,
-    );
+    const rowHeight =
+      typeof rowNode.style?.height === "number" ? rowNode.style.height : 0;
 
-    const shiftedNodes = shiftNodes(canvas.nodes, globalIndex * ROW_HEIGHT);
+    const positionedNodes = row.nodes.map((node) => {
+      if (node.id !== rowNode.id) {
+        return node;
+      }
 
-    nodes.push(...shiftedNodes);
-    edges.push(...canvas.edges);
+      return {
+        ...node,
+        position: {
+          ...node.position,
+          x: CANVAS_LAYOUT.rowLeft,
+          y: offsetY,
+        },
+        style: {
+          ...node.style,
+          width: maxRowWidth,
+        },
+      };
+    });
+
+    nodes.push(...positionedNodes);
+    edges.push(...row.edges);
+
+    offsetY += rowHeight + ROW_GAP;
   });
 
   return {
@@ -37,15 +78,3 @@ export const buildTemplateCanvas = (
     edges,
   };
 };
-
-const shiftNodes = (
-  nodes: ExecutionFlowNode[],
-  offsetY: number,
-): ExecutionFlowNode[] =>
-  nodes.map((node) => ({
-    ...node,
-    position: {
-      ...node.position,
-      y: node.position.y + offsetY,
-    },
-  }));

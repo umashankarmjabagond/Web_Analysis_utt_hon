@@ -17,7 +17,6 @@ export default function ExecuctionWorkflowEdge({
   targetY,
   sourcePosition,
   targetPosition,
-  markerEnd,
   data,
 }: ExecutionWorkflowEdgeProps) {
   const pathType = data?.pathType ?? "default";
@@ -35,8 +34,7 @@ export default function ExecuctionWorkflowEdge({
     <BaseEdge
       id={id}
       path={edgePath}
-      markerEnd={markerEnd}
-      style={{ stroke: "var(--edge-default)", strokeWidth: 2 }}
+      style={{ stroke: "var(--edge-default)", strokeWidth: 1 }}
     />
   );
 }
