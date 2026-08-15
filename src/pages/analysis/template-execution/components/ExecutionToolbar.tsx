@@ -27,9 +27,22 @@ export default function FlowExecutionToolbar() {
   const setExecutionAction = useTemplateExecutionStore(
     (state) => state.setExecutionAction,
   );
+  const selectedRowsCount = useTemplateExecutionStore(
+    (state) => state.selectedRowIds.length,
+  );
 
   const name = selectedExecutionItem?.name;
   const type = selectedExecutionItem?.type;
+
+  const executeLabel =
+    Number(selectedRowsCount) > 0
+      ? `Execute Selected (${selectedRowsCount})`
+      : "Execute All";
+
+  const pauseLabel =
+    Number(selectedRowsCount) > 0
+      ? `Pause Selected (${selectedRowsCount})`
+      : "Pause All";
 
   const handleExecute = () => {
     // To do API integration
@@ -82,7 +95,7 @@ export default function FlowExecutionToolbar() {
           className="rounded-[6px] bg-[#64C3FF] px-6 font-bold text-[14px] leading-5 text-[#303030]"
           onClick={handleExecute}
         >
-          Execute All
+          {executeLabel}
         </Button>
 
         <Button
@@ -92,7 +105,7 @@ export default function FlowExecutionToolbar() {
           className="rounded-[6px] border border-[#808080] bg-[#404040] px-6 font-bold text-[14px] leading-5 text-[#F0F0F0]"
           onClick={handlePause}
         >
-          Pause All
+          {pauseLabel}
         </Button>
 
         <Button

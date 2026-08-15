@@ -27,7 +27,7 @@ export interface TemplateExecutionResponse {
 // analysis/flowBuilders/templateItemFlowBuilder - custom execustion header node creation
 export interface CreateExecutionHeaderNodeProps {
   itemId: string;
-  y?: number;
+  y: number;
 }
 
 // analysis template execution nodes types
