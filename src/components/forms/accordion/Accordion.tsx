@@ -25,7 +25,7 @@ export default function Accordion({
         <div className="flex items-center gap-2">
           {count !== undefined && (
             <Badge
-              className="bg-[#4FB3FF]"
+              className="bg-accordion-list-count"
               type="numeric"
               variant="neutral"
               size="sm"

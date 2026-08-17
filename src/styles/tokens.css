@@ -41,6 +41,9 @@
   --gray-1550: #1f1f1f;
   --gray-1600: #111827;
   --gray-1650: #1e293b;
+  --gray-1700: #1b1b1b;
+  --gray-1750: #383838;
+  --gray-1800: #2e2e2e;
 
   /* White  */
   --white-50: #ffffff;
@@ -70,6 +73,7 @@
   --blue-850: #1976d2;
   --blue-900: #4f9dff;
   --blue-1000: #60a5fa;
+  --blue-1050: #4fb3ff;
   --blue-1100: #3b82f6;
   --blue-1200: #7aa2ff;
   --blue-1250: #2563eb;
@@ -126,6 +130,7 @@
   --background: var(--gray-1500); /* #202020 */
 
   --surface: var(--gray-1350); /* #272727 */
+  --surface-primary: var(--gray-1700); /* #1b1b1b */
   --surface-secondary: var(--gray-775); /* #505050 */
   --surface-card: var(--gray-1150); /* #353535 */
   --surface-elevated: var(--gray-1000); /* #404040 */
@@ -134,6 +139,8 @@
   --surface-emphasis: var(--gray-1200); /* 303030 */
   --surface-accent: var(--blue-200); /* #64C3FF */
   --surface-control-light: var(--gray-180); /* #D0D0D0 */
+
+  --surface-control-light2: var(--gray-1800); /* #2e2e2e */
 
   /* Foreground / Text */
   --foreground: var(--white-400); /* #F0F0F0 */
@@ -568,6 +575,8 @@
   --tab-disabled-border: transparent;
   --tab-disabled-foreground: var(--foreground-disabled);
 
+  --tab-active-box: var(--gray-1750);
+
   /* Segmented Tabs */
 
   --segmented-tab-container-background: var(--surface-secondary);
@@ -593,7 +602,7 @@
 
   /* Accordion */
 
-  --accordion-background: var(--surface-elevated);
+  --accordion-background: var(--surface-control-light2);
   --accordion-border: var(--border-default);
 
   --accordion-header-background: transparent;
@@ -606,6 +615,7 @@
   --accordion-expander-hover: var(--foreground-strong);
 
   --accordion-focus-ring: var(--focus-ring);
+  --accordion-list-count: var(--blue-1050);
 
   --accordion-disabled-foreground: var(--foreground-disabled);
 
@@ -737,7 +747,7 @@
   --breadcrumb-focus-ring: var(--focus-ring);
 
   /* Card */
-  --card-background: var(--surface-card);
+  --card-background: var(--tab-active-box);
   --card-border: var(--border-default);
 
   --card-foreground: var(--foreground);
@@ -800,6 +810,7 @@
   --color-background: var(--background);
 
   --color-surface: var(--surface);
+  --color-surface-primary: var(--surface-primary);
   --color-surface-secondary: var(--surface-secondary);
   --color-surface-card: var(--surface-card);
   --color-surface-elevated: var(--surface-elevated);
@@ -1357,6 +1368,8 @@
   --color-tab-disabled-border: var(--tab-disabled-border);
   --color-tab-disabled-foreground: var(--tab-disabled-foreground);
 
+  --color-tab-active-box: var(--tab-active-box);
+
   /* Segmented Tabs */
   --color-segmented-tab-container-background: var(
     --segmented-tab-container-background
@@ -1407,6 +1420,7 @@
   --color-accordion-expander-hover: var(--accordion-expander-hover);
 
   --color-accordion-focus-ring: var(--accordion-focus-ring);
+  --color-accordion-list-count: var(--accordion-list-count);
 
   --color-accordion-disabled-foreground: var(--accordion-disabled-foreground);
 

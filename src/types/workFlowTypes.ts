@@ -118,7 +118,9 @@ export interface ToolbarButtonProps {
   icon: LucideIcon;
   title: string;
   active?: boolean;
+  disabled?: boolean;
   onClick?: MouseEventHandler<HTMLButtonElement>;
+  iconClassName?: string;
 }
 
 export interface PropertiesProps {

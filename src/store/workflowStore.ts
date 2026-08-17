@@ -68,10 +68,10 @@ interface WorkflowStore {
 
   pendingCatalogItem: WorkflowListItem | null;
 
-  setPendingCatalogItem: (
-    item: WorkflowListItem | null,
-  ) => void;
+  setPendingCatalogItem: (item: WorkflowListItem | null) => void;
 
+  isImporting: boolean;
+  setIsImporting: (value: boolean) => void;
 }
 
 export const useWorkflowStore = create<WorkflowStore>((set, get) => ({
@@ -91,6 +91,8 @@ export const useWorkflowStore = create<WorkflowStore>((set, get) => ({
   future: [],
 
   pendingCatalogItem: null,
+  setIsImporting: (value) => set({ isImporting: value }),
+  isImporting: false,
 
   setNodes: (nodes) =>
     set({
@@ -113,10 +115,10 @@ export const useWorkflowStore = create<WorkflowStore>((set, get) => ({
       selectedEdge: edge,
     }),
 
-    setPendingCatalogItem: (item) =>
-  set({
-    pendingCatalogItem: item,
-  }),
+  setPendingCatalogItem: (item) =>
+    set({
+      pendingCatalogItem: item,
+    }),
 
   setActiveTool: (tool) =>
     set({
@@ -289,11 +291,11 @@ export const useWorkflowStore = create<WorkflowStore>((set, get) => ({
     }));
   },
   setWorkflow: (nodes, edges) =>
-  set({
-    nodes,
-    edges,
-    selectedNode: null,
-    selectedEdge: null,
-    pendingCatalogItem: null,
-  }),
+    set({
+      nodes,
+      edges,
+      selectedNode: null,
+      selectedEdge: null,
+      pendingCatalogItem: null,
+    }),
 }));

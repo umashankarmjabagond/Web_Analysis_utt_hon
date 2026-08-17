@@ -36,6 +36,7 @@ import {
   GitBranch,
   Gauge,
   BrainCircuit,
+  type LucideIcon,
 } from "lucide-react";
 
 import standaloneWorkflow from "./Standalone_BK3BFC0126.json";
@@ -172,7 +173,7 @@ const createAttribute = (
   title: string,
   description: string,
   elementType: string,
-  icon: any,
+  icon: LucideIcon,
 ) => ({
   id,
   title,

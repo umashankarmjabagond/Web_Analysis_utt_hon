@@ -31,10 +31,6 @@ export function prepareWorkflowForCanvas(
 const X_GAP = 320;
 const Y_GAP = 180;
 
-/* -------------------------------------------------------------------------- */
-/*                           Backend -> React Flow                            */
-/* -------------------------------------------------------------------------- */
-
 export const backendToFlow = (
   workflow: BackendWorkflow,
 ): WorkflowCanvasData => {
@@ -83,10 +79,6 @@ export const backendToFlow = (
   };
 };
 
-/* -------------------------------------------------------------------------- */
-/*                           React Flow -> Backend                            */
-/* -------------------------------------------------------------------------- */
-
 export const flowToBackend = (
   nodes: WorkflowNode[],
   edges: Edge[],
@@ -108,28 +100,16 @@ export const flowToBackend = (
 
   return {
     LoopName: "",
-
     TemplateName: "",
-
     AnalysisName: "",
-
     Location: "",
-
     Description: "",
-
     HistorianFile: "",
-
     settings: {},
-
     thresholds: {},
-
     Elements: elements,
   };
 };
-
-/* -------------------------------------------------------------------------- */
-/*                           filterTree                                       */
-/* -------------------------------------------------------------------------- */
 
 export const filterTree = (
   nodes: TreeNodeData[],
@@ -214,3 +194,64 @@ export function removeNode(
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
+
+export const exportWorkflow = (
+  nodes: WorkflowNode[],
+  edges: Edge[],
+  fileName = "workflow.json",
+) => {
+  const backendWorkflow: BackendWorkflow = flowToBackend(nodes, edges);
+
+  const json = JSON.stringify(backendWorkflow, null, 2);
+
+  const blob = new Blob([json], {
+    type: "application/json",
+  });
+
+  const url = URL.createObjectURL(blob);
+
+  const link = document.createElement("a");
+
+  link.href = url;
+  link.download = fileName;
+
+  document.body.appendChild(link);
+
+  link.click();
+
+  document.body.removeChild(link);
+
+  URL.revokeObjectURL(url);
+};
+
+export const importWorkflow = (
+  file: File,
+): Promise<ReturnType<typeof backendToFlow>> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.onload = (event) => {
+      try {
+        const text = event.target?.result;
+
+        if (typeof text !== "string") {
+          throw new Error("Unable to read the file.");
+        }
+
+        const backendWorkflow: BackendWorkflow = JSON.parse(text);
+
+        const workflow = backendToFlow(backendWorkflow);
+
+        resolve(workflow);
+      } catch (error) {
+        reject(new Error("Invalid workflow JSON file."));
+      }
+    };
+
+    reader.onerror = () => {
+      reject(new Error("Failed to read the file."));
+    };
+
+    reader.readAsText(file);
+  });
+};

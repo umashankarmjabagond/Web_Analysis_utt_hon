@@ -32,7 +32,6 @@ const Table = <T extends object>({
   loading = false,
 
   stickyHeader = false,
-  zebraStripes = false,
 
   className = "",
   tableClassName = "",
@@ -245,7 +244,7 @@ const Table = <T extends object>({
               </td>
             </tr>
           ) : (
-            table.getRowModel().rows.map((row, rowIndex) => (
+            table.getRowModel().rows.map((row) => (
               <tr
                 key={row.id}
                 className={cn(
