@@ -8,8 +8,6 @@ import { useParams } from "react-router-dom";
 
 import { nodeTypes } from "./nodes/nodeTypes";
 import { edgeTypes } from "./edges/edgeTypes";
-import ExecutionDetailsPanel from "./ExecutionDetailsPanel";
-import ExecutionNodeDrawer from "./ExecutionNodeDrawer";
 
 import { useTemplateExecutionStore } from "../../../../store/templateExecutionStore";
 import { useWorkflowCanvasInteractions } from "../../../../hooks/useWorkflowInteractions";
@@ -18,8 +16,7 @@ import type {
   ExecutionFlowNode,
   WorkflowCanvasProps,
 } from "../../../../types/templateExecution";
-import { useParams } from "react-router-dom";
-import { useMemo } from "react";
+import { Loader2 } from "lucide-react";
 
 export default function WorkflowCanvas({
   executionContext,
