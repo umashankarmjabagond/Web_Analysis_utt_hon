@@ -171,5 +171,79 @@
   "CANVAS_CREATE_NEW_TEMPLATE": "Neue Vorlage erstellen",
   "CANVAS_CREATE_TEMPLATE_DESCRIPTION": "Ziehen Sie Attribute oder Vorlagen aus dem linken Bereich hierher. Bewegen Sie den Mauszeiger über ein Attribut und klicken Sie auf den \"+\"-Anschluss, um ein neues hinzuzufügen, oder ziehen Sie von einem \"+\"-Anschluss auf ein vorhandenes Attribut, um sie miteinander zu verbinden.",
   "CANVAS_ADD_ATTRIBUTE": "Attribut hinzufügen",
-  "CANVAS_WORKFLOW": "Workflow"
+  "CANVAS_WORKFLOW": "Workflow",
+
+  "CONTROLLER_UNIT": "HDS2",
+  "CONTROLLER_STEP_1_TITLE": "OP/PV-Bereich & Abtastung",
+  "CONTROLLER_STEP_2_TITLE": "PV/SP/OP-Normalisierung",
+  "CONTROLLER_STEP_3_TITLE": "Aux- & Vorwärtskopplungs-Normalisierung",
+  "CONTROLLER_STEP_4_TITLE": "Fehlerhafte Daten & Anlageninformationen",
+  "CONTROLLER_STEP_5_TITLE": "Abstimmungsinformationen",
+  "CONTROLLER_STEP_6_TITLE": "Sensorgrenzen & Toleranz",
+
+  "CONTROLLER_OP_PV_RANGE": "OP/PV-BEREICH",
+  "CONTROLLER_OP_MIN": "OP Min",
+  "CONTROLLER_PV_MIN": "PV Min",
+  "CONTROLLER_OP_MAX": "OP Max",
+  "CONTROLLER_PV_MAX": "PV Max",
+
+  "CONTROLLER_SAMPLE_INTERVAL": "ABTASTINTERVALL",
+  "CONTROLLER_AVERAGE_SAMPLE_INTERVAL": "Durchschnittliches Abtastzeitintervall",
+  "CONTROLLER_SPECIFIED_INTERVAL": "Angegebenes Intervall",
+
+  "CONTROLLER_SAMPLING_OPTIONS": "ABTASTOPTIONEN",
+  "CONTROLLER_SERVICE_FACTOR_THRESHOLD": "Schwellenwert des Servicefaktors",
+  "CONTROLLER_MIN_CONTIGUOUS_SAMPLE_COUNT": "Minimale Anzahl zusammenhängender Abtastungen",
+  "CONTROLLER_IS_SLAVE": "isSlave",
+
+  "CONTROLLER_NORMALIZATION_DESCRIPTION": "Bitte geben Sie die Normalisierungsausdrücke an.",
+  "CONTROLLER_PV": "PV",
+  "CONTROLLER_SP": "SP",
+  "CONTROLLER_OP": "OP",
+
+  "CONTROLLER_AUX_1": "Aux1",
+  "CONTROLLER_AUX_2": "Aux2",
+  "CONTROLLER_AUX_3": "Aux3",
+  "CONTROLLER_IN_GAP": "In Gap",
+  "CONTROLLER_FEED_FORWARD": "Vorwärtskopplung",
+
+  "CONTROLLER_BAD_DATA_OPTIONS": "OPTIONEN FÜR FEHLERHAFTE DATEN",
+  "CONTROLLER_WARNING_THRESHOLD": "Warnschwellenwert %",
+  "CONTROLLER_ABORT_THRESHOLD": "Abbruchschwellenwert %",
+  "CONTROLLER_BAD_PV_THRESHOLD": "Schwellenwert für fehlerhafte PV %",
+
+  "CONTROLLER_PLANT_INFORMATION": "ANLAGENINFORMATIONEN",
+  "CONTROLLER_WEIGHT": "Gewicht",
+  "CONTROLLER_DESCRIPTION": "Beschreibung",
+  "CONTROLLER_DEFAULT_DESCRIPTION": "FÜLLSTANDSREGLER FÜR WEISSWASSERTANK",
+  "CONTROLLER_ALLOW_ROBUST_DIAGNOSTIC": "Robuste Diagnose zulassen",
+
+  "CONTROLLER_ELIMINATION_EXPRESSION": "ELIMINIERUNGSAUSDRUCK",
+
+  "CONTROLLER_TUNING_INFORMATION": "ABSTIMMUNGSINFORMATIONEN",
+  "CONTROLLER_GAIN": "Verstärkung",
+  "CONTROLLER_DERIVATIVE_FILTER": "Differentialfilter",
+  "CONTROLLER_INTEGRAL_TIME": "Integralzeit",
+  "CONTROLLER_PV_FILTER": "PV-Filter",
+  "CONTROLLER_DERIVATIVE_TIME": "Differentialzeit",
+  "CONTROLLER_COMMENT": "Kommentar",
+  "CONTROLLER_TUNING_HISTORY_DAYS": "Anzahl der zu speichernden Abstimmungshistorientage",
+  "CONTROLLER_BROWSE_HISTORY": "Historie durchsuchen...",
+
+  "CONTROLLER_SENSOR_MAX_MIN": "SENSOR MAX/MIN",
+  "CONTROLLER_SENSOR_HIGH_LIMIT": "Obere Sensorgrenze",
+  "CONTROLLER_SENSOR_LOW_LIMIT": "Untere Sensorgrenze",
+
+  "CONTROLLER_TOLERANCE": "TOLERANZ",
+  "CONTROLLER_FREEZE_DURATION": "Einfrierdauer (min)",
+  "CONTROLLER_ACCEPTABLE_VIOLATION": "Zulässige Überschreitung der Sensorgrenzen (%)",
+
+  "CONTROLLER_SHOW_ADVANCED_SETTINGS": "Erweiterte Einstellungen anzeigen",
+  "CONTROLLER_ADVANCED_SETTINGS": "ERWEITERTE EINSTELLUNGEN",
+  "CONTROLLER_MAX_MEASUREMENT_CHANGE": "Maximal zulässige Änderung der Messung",
+  "CONTROLLER_MIN_MEASUREMENT_CHANGE": "Erwartete minimale Änderung der Messung",
+
+  "CONTROLLER_RESET": "{{field}} zurücksetzen",
+  "CONTROLLER_STEP": "Schritt {{current}} von {{total}}",
+  "CONTROLLER_FINISH": "Fertig"
 }

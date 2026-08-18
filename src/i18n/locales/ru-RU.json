@@ -173,5 +173,79 @@
   "CANVAS_CREATE_NEW_TEMPLATE": "Создать новый шаблон",
   "CANVAS_CREATE_TEMPLATE_DESCRIPTION": "Перетащите атрибуты или шаблоны с левой панели сюда. Наведите курсор на атрибут и нажмите на соединитель \"+\", чтобы добавить новый, или перетащите его от соединителя \"+\" на существующий атрибут, чтобы соединить их.",
   "CANVAS_ADD_ATTRIBUTE": "Добавить атрибут",
-  "CANVAS_WORKFLOW": "Рабочий процесс"
+  "CANVAS_WORKFLOW": "Рабочий процесс",
+
+  "CONTROLLER_UNIT": "HDS2",
+  "CONTROLLER_STEP_1_TITLE": "Диапазон OP/PV и дискретизация",
+  "CONTROLLER_STEP_2_TITLE": "Нормализация PV/SP/OP",
+  "CONTROLLER_STEP_3_TITLE": "Нормализация Aux и упреждающей связи",
+  "CONTROLLER_STEP_4_TITLE": "Ошибочные данные и информация об установке",
+  "CONTROLLER_STEP_5_TITLE": "Информация о настройке",
+  "CONTROLLER_STEP_6_TITLE": "Пределы и допуски датчика",
+
+  "CONTROLLER_OP_PV_RANGE": "ДИАПАЗОН OP/PV",
+  "CONTROLLER_OP_MIN": "Мин. OP",
+  "CONTROLLER_PV_MIN": "Мин. PV",
+  "CONTROLLER_OP_MAX": "Макс. OP",
+  "CONTROLLER_PV_MAX": "Макс. PV",
+
+  "CONTROLLER_SAMPLE_INTERVAL": "ИНТЕРВАЛ ДИСКРЕТИЗАЦИИ",
+  "CONTROLLER_AVERAGE_SAMPLE_INTERVAL": "Средний интервал времени дискретизации",
+  "CONTROLLER_SPECIFIED_INTERVAL": "Заданный интервал",
+
+  "CONTROLLER_SAMPLING_OPTIONS": "ПАРАМЕТРЫ ДИСКРЕТИЗАЦИИ",
+  "CONTROLLER_SERVICE_FACTOR_THRESHOLD": "Порог коэффициента обслуживания",
+  "CONTROLLER_MIN_CONTIGUOUS_SAMPLE_COUNT": "Минимальное количество последовательных отсчётов",
+  "CONTROLLER_IS_SLAVE": "isSlave",
+
+  "CONTROLLER_NORMALIZATION_DESCRIPTION": "Укажите выражения для нормализации.",
+  "CONTROLLER_PV": "PV",
+  "CONTROLLER_SP": "SP",
+  "CONTROLLER_OP": "OP",
+
+  "CONTROLLER_AUX_1": "Aux1",
+  "CONTROLLER_AUX_2": "Aux2",
+  "CONTROLLER_AUX_3": "Aux3",
+  "CONTROLLER_IN_GAP": "In Gap",
+  "CONTROLLER_FEED_FORWARD": "Упреждающая связь",
+
+  "CONTROLLER_BAD_DATA_OPTIONS": "ПАРАМЕТРЫ НЕКОРРЕКТНЫХ ДАННЫХ",
+  "CONTROLLER_WARNING_THRESHOLD": "Порог предупреждения %",
+  "CONTROLLER_ABORT_THRESHOLD": "Порог прерывания %",
+  "CONTROLLER_BAD_PV_THRESHOLD": "Порог некорректного PV %",
+
+  "CONTROLLER_PLANT_INFORMATION": "ИНФОРМАЦИЯ ОБ УСТАНОВКЕ",
+  "CONTROLLER_WEIGHT": "Вес",
+  "CONTROLLER_DESCRIPTION": "Описание",
+  "CONTROLLER_DEFAULT_DESCRIPTION": "КОНТРОЛЛЕР УРОВНЯ БАКА БЕЛОЙ ВОДЫ",
+  "CONTROLLER_ALLOW_ROBUST_DIAGNOSTIC": "Разрешить устойчивую диагностику",
+
+  "CONTROLLER_ELIMINATION_EXPRESSION": "ВЫРАЖЕНИЕ ИСКЛЮЧЕНИЯ",
+
+  "CONTROLLER_TUNING_INFORMATION": "ИНФОРМАЦИЯ О НАСТРОЙКЕ",
+  "CONTROLLER_GAIN": "Коэффициент усиления",
+  "CONTROLLER_DERIVATIVE_FILTER": "Дифференциальный фильтр",
+  "CONTROLLER_INTEGRAL_TIME": "Интегральное время",
+  "CONTROLLER_PV_FILTER": "PV-фильтр",
+  "CONTROLLER_DERIVATIVE_TIME": "Дифференциальное время",
+  "CONTROLLER_COMMENT": "Комментарий",
+  "CONTROLLER_TUNING_HISTORY_DAYS": "Количество дней хранения истории настройки",
+  "CONTROLLER_BROWSE_HISTORY": "Просмотреть историю...",
+
+  "CONTROLLER_SENSOR_MAX_MIN": "МАКС./МИН. ДАТЧИКА",
+  "CONTROLLER_SENSOR_HIGH_LIMIT": "Верхний предел датчика",
+  "CONTROLLER_SENSOR_LOW_LIMIT": "Нижний предел датчика",
+
+  "CONTROLLER_TOLERANCE": "ДОПУСК",
+  "CONTROLLER_FREEZE_DURATION": "Длительность заморозки (мин)",
+  "CONTROLLER_ACCEPTABLE_VIOLATION": "Допустимое превышение пределов датчика (%)",
+
+  "CONTROLLER_SHOW_ADVANCED_SETTINGS": "Показать расширенные настройки",
+  "CONTROLLER_ADVANCED_SETTINGS": "РАСШИРЕННЫЕ НАСТРОЙКИ",
+  "CONTROLLER_MAX_MEASUREMENT_CHANGE": "Максимально допустимое изменение измерения",
+  "CONTROLLER_MIN_MEASUREMENT_CHANGE": "Ожидаемое минимальное изменение измерения",
+
+  "CONTROLLER_RESET": "Сбросить {{field}}",
+  "CONTROLLER_STEP": "Шаг {{current}} из {{total}}",
+  "CONTROLLER_FINISH": "Завершить"
 }

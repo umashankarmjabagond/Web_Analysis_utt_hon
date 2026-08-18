@@ -174,5 +174,79 @@
   "CANVAS_CREATE_NEW_TEMPLATE": "إنشاء قالب جديد",
   "CANVAS_CREATE_TEMPLATE_DESCRIPTION": "اسحب السمات أو القوالب من اللوحة اليسرى وأفلتها هنا. مرر مؤشر الماوس فوق سمة وانقر على موصل \"+\" لإضافة سمة جديدة، أو اسحب من موصل \"+\" إلى سمة موجودة لربطهما معًا.",
   "CANVAS_ADD_ATTRIBUTE": "إضافة خاصية",
-  "CANVAS_WORKFLOW": "سير العمل"
+  "CANVAS_WORKFLOW": "سير العمل",
+
+  "CONTROLLER_UNIT": "HDS2",
+  "CONTROLLER_STEP_1_TITLE": "نطاق OP/PV وأخذ العينات",
+  "CONTROLLER_STEP_2_TITLE": "تطبيع PV/SP/OP",
+  "CONTROLLER_STEP_3_TITLE": "تطبيع Aux والتغذية الأمامية",
+  "CONTROLLER_STEP_4_TITLE": "البيانات غير الصالحة ومعلومات المصنع",
+  "CONTROLLER_STEP_5_TITLE": "معلومات الضبط",
+  "CONTROLLER_STEP_6_TITLE": "حدود المستشعر والتفاوت",
+
+  "CONTROLLER_OP_PV_RANGE": "نطاق OP/PV",
+  "CONTROLLER_OP_MIN": "الحد الأدنى لـ OP",
+  "CONTROLLER_PV_MIN": "الحد الأدنى لـ PV",
+  "CONTROLLER_OP_MAX": "الحد الأقصى لـ OP",
+  "CONTROLLER_PV_MAX": "الحد الأقصى لـ PV",
+
+  "CONTROLLER_SAMPLE_INTERVAL": "فاصل أخذ العينات",
+  "CONTROLLER_AVERAGE_SAMPLE_INTERVAL": "متوسط الفاصل الزمني لأخذ العينات",
+  "CONTROLLER_SPECIFIED_INTERVAL": "الفاصل المحدد",
+
+  "CONTROLLER_SAMPLING_OPTIONS": "خيارات أخذ العينات",
+  "CONTROLLER_SERVICE_FACTOR_THRESHOLD": "حد عامل الخدمة",
+  "CONTROLLER_MIN_CONTIGUOUS_SAMPLE_COUNT": "الحد الأدنى لعدد العينات المتتالية",
+  "CONTROLLER_IS_SLAVE": "isSlave",
+
+  "CONTROLLER_NORMALIZATION_DESCRIPTION": "يرجى إدخال تعبيرات التطبيع.",
+  "CONTROLLER_PV": "PV",
+  "CONTROLLER_SP": "SP",
+  "CONTROLLER_OP": "OP",
+
+  "CONTROLLER_AUX_1": "Aux1",
+  "CONTROLLER_AUX_2": "Aux2",
+  "CONTROLLER_AUX_3": "Aux3",
+  "CONTROLLER_IN_GAP": "In Gap",
+  "CONTROLLER_FEED_FORWARD": "التغذية الأمامية",
+
+  "CONTROLLER_BAD_DATA_OPTIONS": "خيارات البيانات غير الصالحة",
+  "CONTROLLER_WARNING_THRESHOLD": "حد التحذير %",
+  "CONTROLLER_ABORT_THRESHOLD": "حد الإيقاف %",
+  "CONTROLLER_BAD_PV_THRESHOLD": "حد PV غير الصالح %",
+
+  "CONTROLLER_PLANT_INFORMATION": "معلومات المصنع",
+  "CONTROLLER_WEIGHT": "الوزن",
+  "CONTROLLER_DESCRIPTION": "الوصف",
+  "CONTROLLER_DEFAULT_DESCRIPTION": "وحدة تحكم مستوى خزان المياه البيضاء",
+  "CONTROLLER_ALLOW_ROBUST_DIAGNOSTIC": "السماح بالتشخيص المتين",
+
+  "CONTROLLER_ELIMINATION_EXPRESSION": "تعبير الإزالة",
+
+  "CONTROLLER_TUNING_INFORMATION": "معلومات الضبط",
+  "CONTROLLER_GAIN": "الكسب",
+  "CONTROLLER_DERIVATIVE_FILTER": "مرشح المشتقة",
+  "CONTROLLER_INTEGRAL_TIME": "الزمن التكاملي",
+  "CONTROLLER_PV_FILTER": "مرشح PV",
+  "CONTROLLER_DERIVATIVE_TIME": "الزمن التفاضلي",
+  "CONTROLLER_COMMENT": "تعليق",
+  "CONTROLLER_TUNING_HISTORY_DAYS": "عدد أيام الاحتفاظ بسجل الضبط",
+  "CONTROLLER_BROWSE_HISTORY": "استعراض السجل...",
+
+  "CONTROLLER_SENSOR_MAX_MIN": "الحد الأقصى/الأدنى للمستشعر",
+  "CONTROLLER_SENSOR_HIGH_LIMIT": "الحد الأعلى للمستشعر",
+  "CONTROLLER_SENSOR_LOW_LIMIT": "الحد الأدنى للمستشعر",
+
+  "CONTROLLER_TOLERANCE": "التفاوت",
+  "CONTROLLER_FREEZE_DURATION": "مدة التجميد (بالدقائق)",
+  "CONTROLLER_ACCEPTABLE_VIOLATION": "التجاوز المقبول لحدود المستشعر (%)",
+
+  "CONTROLLER_SHOW_ADVANCED_SETTINGS": "إظهار الإعدادات المتقدمة",
+  "CONTROLLER_ADVANCED_SETTINGS": "الإعدادات المتقدمة",
+  "CONTROLLER_MAX_MEASUREMENT_CHANGE": "الحد الأقصى المسموح لتغيير القياس",
+  "CONTROLLER_MIN_MEASUREMENT_CHANGE": "الحد الأدنى المتوقع لتغيير القياس",
+
+  "CONTROLLER_RESET": "إعادة تعيين {{field}}",
+  "CONTROLLER_STEP": "الخطوة {{current}} من {{total}}",
+  "CONTROLLER_FINISH": "إنهاء"
 }
