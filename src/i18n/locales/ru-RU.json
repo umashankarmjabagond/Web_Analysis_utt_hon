@@ -131,12 +131,19 @@
   "NODE_WARNING_MESSAGE": "Здесь будет показано предупреждающее сообщение",
   "NODE_ERROR_MESSAGE": "Слишком много некорректных точек данных",
 
-  "EXECUTION_EXECUTE": "Выполнить",
-  "EXECUTION_PAUSE": "Пауза",
+  "EXECUTION_TOOLBAR_EDIT": "Редактировать",
+  "EXECUTION_TOOLBAR_DELETE": "Удалить",
+  "EXECUTION_TOOLBAR_COMPACT_VIEW": "Компактный вид",
+  "EXECUTION_TOOLBAR_COMFORTABLE_VIEW": "Удобный вид",
+  "EXECUTION_TOOLBAR_ANALYSIS_TEMPLATES": "Шаблоны анализа",
+
+  "EXECUTION_EXECUTE": "Выполнить все",
+  "EXECUTION_PAUSE": "Приостановить все",
+  "EXECUTION_EXECUTE_SELECTED": "Выполнить выбранные",
+  "EXECUTION_PAUSE_SELECTED": "Приостановить выбранные",
   "EXECUTION_START_CONFIRMATION": "Начать выполнение?",
   "EXECUTION_PAUSE_CONFIRMATION": "Приостановить выполнение?",
   "EXECUTION_DELETE_CONFIRMATION": "Удалить рабочий процесс?",
-  "ANALYSIS_TEMPLATES": "Шаблоны анализа",
 
   "CALCULATED_KPIS_TITLE": "Рассчитанные KPI",
   "CALCULATED_KPIS_ERRORS_TITLE": "Ошибки",

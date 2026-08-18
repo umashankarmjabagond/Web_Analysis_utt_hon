@@ -128,12 +128,19 @@
   "NODE_WARNING_MESSAGE": "Hier wird die Warnmeldung angezeigt",
   "NODE_ERROR_MESSAGE": "Es gibt zu viele fehlerhafte Datenpunkte",
 
-  "EXECUTION_EXECUTE": "Ausführen",
-  "EXECUTION_PAUSE": "Pausieren",
+  "EXECUTION_TOOLBAR_EDIT": "Bearbeiten",
+  "EXECUTION_TOOLBAR_DELETE": "Löschen",
+  "EXECUTION_TOOLBAR_COMPACT_VIEW": "Kompakte Ansicht",
+  "EXECUTION_TOOLBAR_COMFORTABLE_VIEW": "Komfortable Ansicht",
+  "EXECUTION_TOOLBAR_ANALYSIS_TEMPLATES": "Analysevorlagen",
+
+  "EXECUTION_EXECUTE": "Alle ausführen",
+  "EXECUTION_PAUSE": "Alle pausieren",
+  "EXECUTION_EXECUTE_SELECTED": "Ausgewählte ausführen",
+  "EXECUTION_PAUSE_SELECTED": "Ausgewählte pausieren",
   "EXECUTION_START_CONFIRMATION": "Ausführung starten?",
   "EXECUTION_PAUSE_CONFIRMATION": "Ausführung pausieren?",
   "EXECUTION_DELETE_CONFIRMATION": "Workflow löschen?",
-  "ANALYSIS_TEMPLATES": "Analysevorlagen",
 
   "COMMON_HELP": "Hilfe",
   "COMMON_APPLY_TO_ALL": "Auf alle anwenden",
