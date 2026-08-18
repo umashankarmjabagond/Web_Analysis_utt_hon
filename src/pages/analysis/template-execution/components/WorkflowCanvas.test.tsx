@@ -1,13 +1,12 @@
-import React, { type ReactNode } from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, expect, it, vi, beforeEach } from "vitest";
 
 import WorkflowCanvas from "./WorkflowCanvas";
 
 import type { Edge, Node } from "@xyflow/react";
+import type { ReactNode } from "react";
 
 const mockHandleNodeSelection = vi.fn();
-const mockLoadMore = vi.fn();
 
 const mockNodes: Node[] = [
   {
@@ -43,7 +42,14 @@ let mockParams: {
 };
 
 const renderWorkflowCanvas = (executionContext: "asset" | "unit" = "asset") =>
-  render(<WorkflowCanvas executionContext={executionContext} />);
+  render(
+    <WorkflowCanvas
+      executionContext={executionContext}
+      loadMore={vi.fn()}
+      hasMore={false}
+      isLoadingMore={false}
+    />,
+  );
 
 vi.mock("react-router-dom", () => ({
   useParams: () => mockParams,
