@@ -6,18 +6,21 @@ import Badge from "../../../../components/common/badge/Badge";
 import Button from "../../../../components/forms/button/Button";
 import { ROUTES } from "../../../../constants/routes/routesConstant";
 import { useTemplateExecutionStore } from "../../../../store/templateExecutionStore";
-import { EXECUTION_ACTION } from "../../../../types/templateExecution";
+import {
+  EXECUTION_ACTION,
+  EXECUTION_VIEW_MODE,
+} from "../../../../types/templateExecution";
 import { cn } from "../../../../utils/utils";
 import Tooltip from "../../../../components/common/tooltip/Tooltip";
 
 const VIEW_MODES = [
   {
-    id: "compact",
+    id: EXECUTION_VIEW_MODE.COMPACT,
     icon: TextAlignJustify,
     tooltipKey: "EXECUTION_TOOLBAR_COMPACT_VIEW",
   },
   {
-    id: "comfortable",
+    id: EXECUTION_VIEW_MODE.COMFORTABLE,
     icon: Workflow,
     tooltipKey: "EXECUTION_TOOLBAR_COMFORTABLE_VIEW",
   },
@@ -34,10 +37,10 @@ export default function FlowExecutionToolbar() {
     (state) => state.setExecutionAction,
   );
 
-  const selectedViewMode = useTemplateExecutionStore(
+  const executionViewMode = useTemplateExecutionStore(
     (state) => state.executionViewMode,
   );
-  const setViewMode = useTemplateExecutionStore(
+  const setExecutionViewMode = useTemplateExecutionStore(
     (state) => state.setExecutionViewMode,
   );
 
@@ -72,7 +75,7 @@ export default function FlowExecutionToolbar() {
 
   const handleEdit = () => {
     //  To do Edit Implementation
-    confirm(t("EXECUTION_DELETE_CONFIRMATION"));
+    confirm(t("EXECUTION_EDIT_CONFIRMATION"));
   };
 
   const handleDelete = () => {
@@ -158,18 +161,19 @@ export default function FlowExecutionToolbar() {
       <div className="flex h-[34px]  shrink-0 items-center gap-3">
         <div className="flex h-[34px] w-[62px] items-center rounded-[6px] border border-[#454545] p-0.5">
           {VIEW_MODES.map(({ id, icon: Icon, tooltipKey }) => (
-            <Tooltip content={t(tooltipKey)}>
+            <Tooltip key={id} content={t(tooltipKey)}>
               <Button
-                key={id}
                 type="button"
                 variant="secondary"
-                onClick={() => setViewMode(id)}
+                onClick={() => setExecutionViewMode(id)}
                 className={cn(
                   "flex h-7 w-7 items-center justify-center rounded-[4px] cursor-pointer border-0",
-                  selectedViewMode === id
+                  executionViewMode === id
                     ? "bg-[#383838] text-[#F0F0F0]"
                     : "bg-[#1B1B1B] text-[#B0B0B0]",
                 )}
+                aria-label={t(tooltipKey)}
+                aria-pressed={executionViewMode === id}
               >
                 <Icon size={14} />
               </Button>
