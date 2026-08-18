@@ -1,13 +1,6 @@
-import {
-  BaseEdge,
-  getBezierPath,
-  getSmoothStepPath,
-  getStraightPath,
-} from "@xyflow/react";
-import type {
-  ExecutionWorkflowEdgeProps,
-  WorkflowEdgeData,
-} from "../../../../../types/templateExecution";
+import { BaseEdge } from "@xyflow/react";
+import type { ExecutionWorkflowEdgeProps } from "../../../../../types/templateExecution";
+import { getPathFn } from "../../flowBuilders/edgeGeometry";
 
 export default function ExecuctionWorkflowEdge({
   id,
@@ -38,17 +31,3 @@ export default function ExecuctionWorkflowEdge({
     />
   );
 }
-
-const getPathFn = (path: WorkflowEdgeData["pathType"]) => {
-  switch (path) {
-    case "smoothstep":
-      return getSmoothStepPath;
-
-    case "straight":
-      return getStraightPath;
-
-    case "bezier":
-    default:
-      return getBezierPath;
-  }
-};
