@@ -8,7 +8,7 @@ import {
   type ExecutionItem,
 } from "../types/templateExecution";
 
-interface TemplateExecutionState {
+export interface TemplateExecutionState {
   // Workflow
   nodes: ExecutionFlowNode[];
   setNodes: (nodes: ExecutionFlowNode[]) => void;
