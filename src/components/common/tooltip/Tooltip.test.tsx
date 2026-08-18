@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import userEvent from "@testing-library/user-event";
+
 import { render, screen } from "../../../test";
 
 import Tooltip from "./Tooltip";
@@ -13,7 +14,9 @@ describe("Tooltip", () => {
     );
 
     expect(
-      screen.getByRole("button", { name: "Hover Me" }),
+      screen.getByRole("button", {
+        name: "Hover Me",
+      }),
     ).toBeInTheDocument();
   });
 
@@ -29,6 +32,7 @@ describe("Tooltip", () => {
     await user.hover(screen.getByRole("button"));
 
     expect(screen.getByRole("tooltip")).toBeInTheDocument();
+
     expect(screen.getByText("Tooltip Content")).toBeInTheDocument();
   });
 
@@ -44,6 +48,7 @@ describe("Tooltip", () => {
     const button = screen.getByRole("button");
 
     await user.hover(button);
+
     expect(screen.getByRole("tooltip")).toBeInTheDocument();
 
     await user.unhover(button);
@@ -63,6 +68,7 @@ describe("Tooltip", () => {
     await user.tab();
 
     expect(screen.getByRole("tooltip")).toBeInTheDocument();
+
     expect(screen.getByText("Tooltip Content")).toBeInTheDocument();
   });
 
@@ -74,11 +80,13 @@ describe("Tooltip", () => {
         <Tooltip content="Tooltip Content">
           <button>Focus Me</button>
         </Tooltip>
+
         <button>Next Button</button>
       </>,
     );
 
     await user.tab();
+
     expect(screen.getByRole("tooltip")).toBeInTheDocument();
 
     await user.tab();
@@ -94,7 +102,9 @@ describe("Tooltip", () => {
     );
 
     expect(
-      screen.getByRole("button", { name: "Hover Me" }),
+      screen.getByRole("button", {
+        name: "Hover Me",
+      }),
     ).toBeInTheDocument();
 
     expect(screen.queryByRole("tooltip")).not.toBeInTheDocument();
@@ -147,7 +157,7 @@ describe("Tooltip", () => {
   it("renders arrow by default", async () => {
     const user = userEvent.setup();
 
-    const { container } = render(
+    render(
       <Tooltip content="Tooltip Content">
         <button>Hover Me</button>
       </Tooltip>,
@@ -155,7 +165,9 @@ describe("Tooltip", () => {
 
     await user.hover(screen.getByRole("button"));
 
-    const arrow = container.querySelector(".rotate-45");
+    const tooltip = screen.getByRole("tooltip");
+
+    const arrow = tooltip.querySelector(".rotate-45");
 
     expect(arrow).toBeInTheDocument();
   });
@@ -163,7 +175,7 @@ describe("Tooltip", () => {
   it("does not render arrow when showArrow is false", async () => {
     const user = userEvent.setup();
 
-    const { container } = render(
+    render(
       <Tooltip content="Tooltip Content" showArrow={false}>
         <button>Hover Me</button>
       </Tooltip>,
@@ -171,7 +183,9 @@ describe("Tooltip", () => {
 
     await user.hover(screen.getByRole("button"));
 
-    const arrow = container.querySelector(".rotate-45");
+    const tooltip = screen.getByRole("tooltip");
+
+    const arrow = tooltip.querySelector(".rotate-45");
 
     expect(arrow).not.toBeInTheDocument();
   });
