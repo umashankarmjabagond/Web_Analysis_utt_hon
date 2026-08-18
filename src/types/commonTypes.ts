@@ -39,9 +39,9 @@ export interface BreadcrumbProps {
 
 export const NOTIFICATION_TYPE = {
   SUCCESS: "success",
-  ERROR: "error",
   WARNING: "warning",
   INFO: "info",
+  DANGER: "danger",
 } as const;
 
 export type NotificationType =
@@ -49,10 +49,11 @@ export type NotificationType =
 
 export interface NotificationProps {
   type: NotificationType;
-  title?: string;
   message: string;
-  duration?: number;
+  title?: string;
   onClose?: () => void;
+  width?: number | string;
+  duration?: number;
 }
 
 export interface DialogProps {
@@ -204,6 +205,7 @@ export interface CheckboxProps extends InputHTMLAttributes<HTMLInputElement> {
   checked: boolean;
   label?: string;
   size?: number;
+  labelClassName?: string;
 }
 export type CellValue = string | number | boolean | null | undefined;
 

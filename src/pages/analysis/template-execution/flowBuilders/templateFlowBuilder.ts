@@ -10,19 +10,23 @@ const ROW_HEIGHT = 200;
 
 export const buildTemplateCanvas = (
   workflows: TemplateExecutionWorkflow[],
+  startIndex = 0,
 ): WorkflowData => {
   const nodes: ExecutionFlowNode[] = [];
   const edges: Edge[] = [];
+
   const PREPEND_HEADER = true;
 
-  workflows.forEach((workflow, index) => {
+  workflows.forEach((workflow, i) => {
+    const globalIndex = startIndex + i;
+
     const canvas = buildTemplateItemFlow(
       workflow.itemId,
       workflow.workflow,
       PREPEND_HEADER,
     );
 
-    const shiftedNodes = shiftNodes(canvas.nodes, index * ROW_HEIGHT);
+    const shiftedNodes = shiftNodes(canvas.nodes, globalIndex * ROW_HEIGHT);
 
     nodes.push(...shiftedNodes);
     edges.push(...canvas.edges);

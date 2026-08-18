@@ -7,6 +7,7 @@ interface TabItem {
   id: string;
   label: string;
   path: string;
+  active?: boolean;
 }
 
 const { mockTabs } = vi.hoisted(() => ({
@@ -18,17 +19,11 @@ vi.mock("react-i18next", () => ({
     t: (key: string): string => {
       const translations: Record<string, string> = {
         TAB_IMPORT_CONFIGURATION: "Import Configuration File",
-
         TAB_REGULATORY_CONFIGURATION: "Regulatory Configuration",
-
         TAB_MPC_CONFIGURATION: "MPC Configuration",
-
         TAB_PWO_CONFIGURATION: "PWO Configuration",
-
         TAB_ANALYSIS_SCHEDULE: "Analysis Schedule",
-
         TAB_CUSTOM_KPI_CONFIGURATION: "Custom KPI Configuration",
-
         TAB_ANALYSIS_ENGINE: "Analysis Engine",
       };
 
@@ -173,6 +168,7 @@ describe("TopTabs", () => {
       id: "analysis-engine",
       label: "Analysis Engine",
       path: "/dashboard",
+      active: true,
     });
   });
 

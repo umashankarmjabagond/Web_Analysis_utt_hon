@@ -16,6 +16,7 @@ import {
   attributeCatalogSections,
   dummyWorkflows,
 } from "../workflowPanelData ";
+import ZoomControls from "./ZoomControls";
 
 const generateUniqueName = (
   baseName: string,
@@ -90,6 +91,7 @@ export default function Canvas() {
     clearWorkflow,
     pendingCatalogItem,
     setPendingCatalogItem,
+    isImporting,
   } = useWorkflowStore();
 
   const { screenToFlowPosition } = useReactFlow<WorkflowNode, Edge>();
@@ -349,18 +351,29 @@ export default function Canvas() {
       >
         {nodes.length === 0 && (
           <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-            <div className="max-w-md text-center">
-              <h2 className="text-4xl font-medium text-app-default-border">
+            <div className="max-w-lg text-center">
+              <h2 className="text-4xl font-medium text-foreground-tertiary">
                 {t("CANVAS_CREATE_NEW_TEMPLATE")}
               </h2>
 
-              <p className="mt-4 text-base leading-6 text-app-default-border">
+              <p className="mt-4 text-base leading-6 text-foreground-tertiary">
                 {t("CANVAS_CREATE_TEMPLATE_DESCRIPTION")}
               </p>
             </div>
           </div>
         )}
+        <ZoomControls />
       </ReactFlow>
+
+      {isImporting && (
+        <div className="absolute inset-0 z-50 flex items-center justify-center bg-[#111111]/80">
+          <div className="flex flex-col items-center gap-3">
+            <div className="h-8 w-8 animate-spin rounded-full border-2 border-white/20 border-t-white" />
+
+            <p className="text-sm text-white">Importing, please wait...</p>
+          </div>
+        </div>
+      )}
 
       <Dialog
         isOpen={isDialogOpen}

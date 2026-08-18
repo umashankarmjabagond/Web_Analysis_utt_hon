@@ -19,14 +19,16 @@ const Checkbox: React.FC<CheckboxProps> = ({
   label,
   className = "",
   size = 16,
+  labelClassName = "",
   ...props
 }) => {
   const variant = disabled ? "disabled" : checked ? "checked" : "default";
 
   return (
     <label className="flex items-center gap-2">
+      {/* Checkbox only */}
       <span
-        className="relative flex items-center justify-center shrink-0"
+        className="relative flex shrink-0 items-center justify-center"
         style={{
           width: size,
           height: size,
@@ -41,7 +43,7 @@ const Checkbox: React.FC<CheckboxProps> = ({
             height: size,
           }}
           className={cn(
-            "peer appearance-none rounded-xs border cursor-pointer",
+            "peer cursor-pointer appearance-none rounded-xs border",
             "outline-none transition-colors",
             variants[variant],
             "checked:focus:ring-1 checked:focus:ring-checkbox-focus-ring",
@@ -54,9 +56,14 @@ const Checkbox: React.FC<CheckboxProps> = ({
           strokeWidth={3}
           className="pointer-events-none absolute h-3 w-3 text-checkbox-checkmark opacity-0 peer-checked:opacity-100"
         />
-
-        {label && <span className="text-sm text-foreground">{label}</span>}
       </span>
+
+      {/* Label outside fixed-size checkbox */}
+      {label && (
+        <span className={cn("text-sm text-foreground", labelClassName)}>
+          {label}
+        </span>
+      )}
     </label>
   );
 };

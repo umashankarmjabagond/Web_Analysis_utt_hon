@@ -9,11 +9,19 @@ export default function TemplateExecution({
   itemId,
 }: TemplateExecutionProps) {
   const executionContext = itemId ? "asset" : "unit";
-  useLoadExecutionWorkflow(template, itemId);
+  const { loadMore, hasMore, isLoadingMore } = useLoadExecutionWorkflow(
+    template,
+    itemId,
+  );
   return (
     <div className="relative h-full">
       <ExecutionToolbar />
-      <WorkflowCanvas executionContext={executionContext} />
+      <WorkflowCanvas
+        executionContext={executionContext}
+        loadMore={loadMore}
+        hasMore={hasMore}
+        isLoadingMore={isLoadingMore}
+      />
     </div>
   );
 }

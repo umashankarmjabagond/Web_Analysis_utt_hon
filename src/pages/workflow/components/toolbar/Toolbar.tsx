@@ -6,7 +6,7 @@ import {
   Upload,
 } from "lucide-react";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ToolbarButton from "./ToolbarButton";
 import { useWorkflowStore } from "../../../../store/workflowStore";
@@ -17,7 +17,8 @@ import Button from "../../../../components/forms/button/Button";
 import Notification from "../../../../components/common/notification/Notification";
 import { ROUTES } from "../../../../constants/routes/routesConstant";
 import { useTranslation } from "react-i18next";
-import { cn } from "../../../../utils/utils";
+import { cn, exportWorkflow, importWorkflow } from "../../../../utils/utils";
+import type { WorkflowNode } from "../../../../types/workFlowTypes";
 
 export default function Toolbar() {
   const { t } = useTranslation();
@@ -25,10 +26,15 @@ export default function Toolbar() {
   const {
     nodes,
     edges,
+    setNodes,
+    setEdges,
     deleteSelectedNodes,
     deleteSelectedEdges,
     clearWorkflow,
+    setIsImporting,
   } = useWorkflowStore();
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const navigate = useNavigate();
 
@@ -104,11 +110,6 @@ export default function Toolbar() {
 
     // Clear current workflow
     clearWorkflow();
-
-    // Hide notification
-    setTimeout(() => {
-      setShowNotification(false);
-    }, 3000);
   };
 
   const handleSaveAs = (item: { value: string; label: string }) => {
@@ -122,10 +123,6 @@ export default function Toolbar() {
       );
 
       setShowNotification(true);
-
-      setTimeout(() => {
-        setShowNotification(false);
-      }, 3000);
 
       return;
     }
@@ -141,6 +138,59 @@ export default function Toolbar() {
     setIsSaveDialogOpen(true);
   };
 
+  const handleExport = () => {
+    if (nodes.length === 0) {
+      setNotificationType("warning");
+      setNotificationTitle("Nothing to Export");
+      setNotificationMessage("Please create a workflow before exporting.");
+      setShowNotification(true);
+      return;
+    }
+
+    exportWorkflow(nodes as WorkflowNode[], edges, "workflow.json");
+  };
+
+  const handleImportClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleImportFile = async (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const file = event.target.files?.[0];
+
+    if (!file) {
+      return;
+    }
+
+    setIsImporting(true);
+
+    try {
+      const workflow = await importWorkflow(file);
+
+      setNodes(workflow.nodes);
+      setEdges(workflow.edges);
+
+      setNotificationType("success");
+      setNotificationTitle("Import Successful");
+      setNotificationMessage("Workflow imported successfully.");
+      setShowNotification(true);
+    } catch (error) {
+      setNotificationType("warning");
+      setNotificationTitle("Import Failed");
+      setNotificationMessage(
+        error instanceof Error ? error.message : "Unable to import workflow.",
+      );
+      setShowNotification(true);
+    } finally {
+      setIsImporting(false);
+    }
+
+    event.target.value = "";
+  };
+
+  const hasSelectedElements =
+    nodes.some((node) => node.selected) || edges.some((edge) => edge.selected);
   return (
     <>
       <div className=" flex h-12 min-h-9 w-full items-center justify-between border-b border-[#303030] bg-surface-primary px-2        ">
@@ -187,33 +237,53 @@ export default function Toolbar() {
             gap-1
           "
         >
-          <ToolbarButton title="Delete" icon={Trash2} onClick={handleDelete} />
+          <div className="flex items-center gap-4">
+            {/* Delete / Clear */}
+            <ToolbarButton
+              icon={Trash2}
+              title="Delete"
+              onClick={handleDelete}
+              disabled={!hasSelectedElements}
+              iconClassName={
+                !hasSelectedElements
+                  ? "text-toolbar-icon-disabled"
+                  : "text-white"
+              }
+            />
 
-          <ToolbarButton
-            title="Clear Workflow"
-            icon={StickyNoteX}
-            onClick={handleClear}
-            disabled={nodes.length === 0 && edges.length === 0}
-            iconClassName={
-              nodes.length === 0 && edges.length === 0
-                ? "text-toolbar-icon-disabled"
-                : "text-white"
-            }
-          />
+            <ToolbarButton
+              title="Clear Workflow"
+              icon={StickyNoteX}
+              onClick={handleClear}
+              disabled={nodes.length === 0 && edges.length === 0}
+              iconClassName={
+                nodes.length === 0 && edges.length === 0
+                  ? "text-toolbar-icon-disabled"
+                  : "text-white"
+              }
+            />
 
-          <ToolbarButton
-            title="Export Template"
-            icon={Download}
-            iconClassName="text-white"
-          />
+            {/* Divider */}
+            <div className="h-6 w-px bg-[#383838]" />
 
-          <ToolbarButton
-            title="Import Template"
-            icon={Upload}
-            iconClassName="text-white"
-          />
+            {/* Import / Export */}
+            <ToolbarButton
+              title="Import Template"
+              icon={Download}
+              iconClassName="text-white"
+              onClick={handleImportClick}
+            />
 
-          <div className="ml-1">
+            <ToolbarButton
+              title="Export Template"
+              icon={Upload}
+              iconClassName="text-white"
+              onClick={handleExport}
+            />
+
+            {/* Divider */}
+            <div className="h-6 w-px bg-tab-active-box" />
+
             <Dropdown
               placeholder="Save As"
               items={[
@@ -247,7 +317,6 @@ export default function Toolbar() {
           </div>
         </div>
       </div>
-
       <Dialog
         isOpen={isSaveDialogOpen}
         subtitle={t("TOOLBAR_SAVE_AS")}
@@ -261,7 +330,7 @@ export default function Toolbar() {
       >
         <div
           className="w-full
-            flex
+            flex px-2
             flex-col
             gap-6
             text-sm
@@ -297,13 +366,16 @@ export default function Toolbar() {
               {t("COMMON_CANCEL")}
             </Button>
 
-            <Button variant="primary" onClick={handleSave}>
+            <Button
+              disabled={!templateName}
+              variant="primary"
+              onClick={handleSave}
+            >
               {t("COMMON_SAVE")}
             </Button>
           </div>
         </div>
       </Dialog>
-
       {showNotification && (
         <div
           className="
@@ -321,6 +393,15 @@ export default function Toolbar() {
           />
         </div>
       )}
+
+      {/* this is for import input */}
+      <Input
+        ref={fileInputRef}
+        type="file"
+        accept=".json,application/json"
+        className="hidden"
+        onChange={handleImportFile}
+      />
     </>
   );
 }
