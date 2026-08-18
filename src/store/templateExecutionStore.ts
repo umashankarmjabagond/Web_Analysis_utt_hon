@@ -3,6 +3,7 @@ import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 import {
   EXECUTION_ACTION,
+  EXECUTION_VIEW_MODE,
   type ExecutionAction,
   type ExecutionFlowNode,
   type ExecutionItem,
@@ -53,7 +54,7 @@ export const useTemplateExecutionStore = create<TemplateExecutionState>()(
     nodes: [],
     edges: [],
     selectedExecutionItem: null,
-    executionViewMode: "compact",
+    executionViewMode: EXECUTION_VIEW_MODE.COMPACT,
     selectedNodeIds: [],
     selectedRowIds: [],
     executionAction: EXECUTION_ACTION.IDLE,

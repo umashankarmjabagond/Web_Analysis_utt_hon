@@ -144,7 +144,13 @@ export interface ToolbarButtonProps {
   onClick?: () => void;
 }
 
-export type ExecutionViewMode = "compact" | "comfortable";
+export const EXECUTION_VIEW_MODE = {
+  COMPACT: "compact",
+  COMFORTABLE: "comfortable",
+};
+
+export type ExecutionViewMode =
+  (typeof EXECUTION_VIEW_MODE)[keyof typeof EXECUTION_VIEW_MODE];
 
 // analysis template
 export interface TemplateExecutionProps {
