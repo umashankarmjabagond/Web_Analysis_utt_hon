@@ -7,26 +7,11 @@ import {
 import type {
   EdgePathResult,
   EdgePathType,
+  GetEdgePathParams,
+  GetHandleCoordinatesParams,
   HandleCoordinates,
   PathBounds,
 } from "../../../../types/templateExecution";
-
-type GetHandleCoordinatesParams = {
-  nodeX: number;
-  nodeY: number;
-  nodeWidth: number;
-  nodeIconHeight: number;
-  handleId: string | null | undefined;
-};
-
-type GetEdgePathParams = {
-  sourceX: number;
-  sourceY: number;
-  targetX: number;
-  targetY: number;
-  sourcePosition: Position;
-  targetPosition: Position;
-};
 
 // Handles in BaseNode are attached to the icon box only (not the label
 // below it), so this must be called with icon height, not full node height.

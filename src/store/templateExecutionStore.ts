@@ -6,6 +6,7 @@ import {
   type ExecutionAction,
   type ExecutionFlowNode,
   type ExecutionItem,
+  type ExecutionViewMode,
 } from "../types/templateExecution";
 
 export interface TemplateExecutionState {
@@ -19,6 +20,9 @@ export interface TemplateExecutionState {
   // Context
   selectedExecutionItem: ExecutionItem | null; // Unit or Asset
   setSelectedExecutionItem: (item: ExecutionItem) => void;
+
+  executionViewMode: ExecutionViewMode;
+  setExecutionViewMode: (viewMode: ExecutionViewMode) => void;
 
   // Selection
   selectedNodeIds: string[];
@@ -49,6 +53,7 @@ export const useTemplateExecutionStore = create<TemplateExecutionState>()(
     nodes: [],
     edges: [],
     selectedExecutionItem: null,
+    executionViewMode: "compact",
     selectedNodeIds: [],
     selectedRowIds: [],
     executionAction: EXECUTION_ACTION.IDLE,
@@ -60,6 +65,12 @@ export const useTemplateExecutionStore = create<TemplateExecutionState>()(
     setSelectedExecutionItem: (item) => {
       set((state) => {
         state.selectedExecutionItem = item;
+      });
+    },
+
+    setExecutionViewMode: (viewMode) => {
+      set((state) => {
+        state.executionViewMode = viewMode;
       });
     },
 

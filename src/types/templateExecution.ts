@@ -83,6 +83,23 @@ export type EdgePathResult = {
   offsetY: number;
 };
 
+export type GetHandleCoordinatesParams = {
+  nodeX: number;
+  nodeY: number;
+  nodeWidth: number;
+  nodeIconHeight: number;
+  handleId: string | null | undefined;
+};
+
+export type GetEdgePathParams = {
+  sourceX: number;
+  sourceY: number;
+  targetX: number;
+  targetY: number;
+  sourcePosition: Position;
+  targetPosition: Position;
+};
+
 // layout / bounds
 export type Bounds = {
   minX: number;
@@ -126,6 +143,8 @@ export interface ToolbarButtonProps {
   active?: boolean;
   onClick?: () => void;
 }
+
+export type ExecutionViewMode = "compact" | "comfortable";
 
 // analysis template
 export interface TemplateExecutionProps {
