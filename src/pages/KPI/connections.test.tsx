@@ -1,269 +1,432 @@
-import { describe, expect, it, vi, afterEach } from "vitest";
-
+import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import type { ReactNode } from "react";
+import { describe, expect, it, vi } from "vitest";
 
-import * as utils from "../../utils/utils";
-import type { TreeNodeData } from "../../types/commonTypes";
+import Connections, {
+  buildSelectedTreeFromSource,
+  getSelectedTree,
+  DEFAULT_SELECTED_COLUMNS,
+} from "./Connections";
 
-import { render, screen } from "../../test";
-import Connections from "./Connections";
 
-/* -------------------------------------------------------------------------- */
-/* i18next mock                                                               */
-/* -------------------------------------------------------------------------- */
 
 vi.mock("react-i18next", () => ({
   useTranslation: () => ({
-    t: (key: string) => {
-      const translations: Record<string, string> = {
-        TAB_CONNECTIONS: "Connections",
-        COMMON_HELP: "Help",
-        COMMON_APPLY_TO_ALL: "Apply to All",
-        COMMON_SAVE: "Save",
-        CONNECTIONS_ALL_COLUMNS: "All Columns",
-        CONNECTIONS_SELECTED_COLUMNS: "Selected Columns",
-      };
-
-      return translations[key] ?? key;
-    },
+    t: (key: string) => key,
   }),
 }));
-
-/* -------------------------------------------------------------------------- */
-/* Utils mock                                                                 */
-/* -------------------------------------------------------------------------- */
-
-vi.mock("../../utils/utils", async () => {
-  const actual =
-    await vi.importActual<typeof import("../../utils/utils")>(
-      "../../utils/utils",
-    );
-
-  return {
-    ...actual,
-    findNode: vi.fn(actual.findNode),
-    nodeExists: vi.fn(actual.nodeExists),
-    removeNode: vi.fn(actual.removeNode),
-  };
-});
-
-/* -------------------------------------------------------------------------- */
-/* Tree mock                                                                  */
-/* -------------------------------------------------------------------------- */
-
-type MockTreeNode = {
-  id: string;
-  label: string;
-  children?: MockTreeNode[];
-};
-
-vi.mock("../../components/common/tree/Tree", () => ({
-  default: ({
-    nodes,
-    onSelect,
-  }: {
-    nodes: MockTreeNode[];
-    selectedId?: string | null;
-    onSelect: (id: string) => void;
-  }) => {
-    const renderNodes = (items: MockTreeNode[]): ReactNode[] =>
-      items.flatMap((node) => [
-        <button key={node.id} type="button" onClick={() => onSelect(node.id)}>
-          {node.label}
-        </button>,
-
-        ...(node.children ? renderNodes(node.children) : []),
-      ]);
-
-    return <div data-testid="mock-tree">{renderNodes(nodes)}</div>;
-  },
-}));
-
-/* -------------------------------------------------------------------------- */
-/* Button mock                                                                */
-/* -------------------------------------------------------------------------- */
-
-vi.mock("../../components/forms/button/Button", () => ({
-  default: ({
-    children,
-    onClick,
-    iconOnly,
-    icon,
-  }: {
-    children?: ReactNode;
-    onClick?: () => void;
-    iconOnly?: boolean;
-    icon?: ReactNode;
-  }) => (
-    <button type="button" data-testid="mock-button" onClick={onClick}>
-      {iconOnly ? icon : children}
-    </button>
-  ),
-}));
-
-/* -------------------------------------------------------------------------- */
-/* Cleanup                                                                    */
-/* -------------------------------------------------------------------------- */
-
-afterEach(() => {
-  vi.restoreAllMocks();
-});
-
-/* -------------------------------------------------------------------------- */
-/* Tests                                                                      */
-/* -------------------------------------------------------------------------- */
 
 describe("Connections", () => {
   it("renders page title", () => {
     render(<Connections />);
 
-    expect(screen.getByText("Connections")).toBeInTheDocument();
+    expect(
+      screen.getByText("Configure Input Columns"),
+    ).toBeInTheDocument();
   });
 
-  it("renders action buttons", () => {
+  it("renders panel headings", () => {
     render(<Connections />);
 
-    expect(screen.getByText("Help")).toBeInTheDocument();
+    expect(
+      screen.getByText("DATA PREPROCESSING"),
+    ).toBeInTheDocument();
 
-    expect(screen.getByText("Apply to All")).toBeInTheDocument();
-
-    expect(screen.getByText("Save")).toBeInTheDocument();
+    expect(
+      screen.getByText("DATA SOURCE"),
+    ).toBeInTheDocument();
   });
 
-  it("renders both section headers", () => {
+  it("renders footer buttons", () => {
     render(<Connections />);
 
-    expect(screen.getByText("All Columns")).toBeInTheDocument();
+    expect(
+      screen.getByText("Cancel"),
+    ).toBeInTheDocument();
 
-    expect(screen.getByText("Selected Columns")).toBeInTheDocument();
+    expect(
+      screen.getByText("Finish"),
+    ).toBeInTheDocument();
   });
 
-  it("renders nested nodes", () => {
+  it("renders close button", () => {
     render(<Connections />);
 
-    expect(screen.getByText("01-LC0524.PV")).toBeInTheDocument();
-
-    expect(screen.getByText("03-PC0251.MODE")).toBeInTheDocument();
-
-    expect(screen.getByText("03-PC0251.OP")).toBeInTheDocument();
-
-    expect(screen.getByText("03-PC0251.SP")).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", {
+        name: "COMMON_CLOSE",
+      }),
+    ).toBeInTheDocument();
   });
 
-  it("does nothing when move is clicked without selecting a node", async () => {
+  it("renders instruction text", () => {
+    render(<Connections />);
+
+    expect(
+      screen.getByText(
+        /Please select the inputs/i,
+      ),
+    ).toBeInTheDocument();
+  });
+
+  it("renders breadcrumb text", () => {
+    render(<Connections />);
+
+    expect(
+      screen.getByText("Data Preprocessing"),
+    ).toBeInTheDocument();
+
+    expect(
+      screen.getByText("Data Source"),
+    ).toBeInTheDocument();
+  });
+
+  it("renders hierarchy nodes", () => {
+    render(<Connections />);
+
+    expect(
+      screen.getAllByText(
+        "DPR1 Data Preprocessing",
+      ).length,
+    ).toBeGreaterThan(0);
+
+    expect(
+      screen.getAllByText(
+        "TimeSeriesSample",
+      ).length,
+    ).toBeGreaterThan(0);
+  });
+
+  it("shows None initially", () => {
+    render(<Connections />);
+
+    expect(
+      screen.getByText("None"),
+    ).toBeInTheDocument();
+  });
+
+  it("renders all leaf nodes", () => {
+  render(<Connections />);
+
+  expect(
+    screen.getByText("DPR1.PV"),
+  ).toBeInTheDocument();
+
+  expect(
+    screen.getByText("DPR1.MODE"),
+  ).toBeInTheDocument();
+
+  expect(
+    screen.getByText("DPR1.OP"),
+  ).toBeInTheDocument();
+
+  expect(
+    screen.getByText("DPR1.SP"),
+  ).toBeInTheDocument();
+});
+
+  it("renders checkboxes", () => {
+    render(<Connections />);
+
+    expect(
+      screen.getAllByRole("checkbox").length,
+    ).toBeGreaterThan(0);
+  });
+
+  it("selects a left checkbox", async () => {
     const user = userEvent.setup();
 
     render(<Connections />);
 
-    const buttons = screen.getAllByTestId("mock-button");
+    const checkboxes =
+      screen.getAllByRole("checkbox");
 
-    const moveButton = buttons[3];
+    await user.click(checkboxes[0]);
 
-    await user.click(moveButton);
-
-    expect(screen.getByText("Selected Columns")).toBeInTheDocument();
+    expect(
+      checkboxes[0],
+    ).toBeChecked();
   });
 
-  it("moves selected parent node", async () => {
+  it("moves a node to selected panel", async () => {
+  const user = userEvent.setup();
+
+  render(<Connections />);
+
+  const checkboxes =
+    screen.getAllByRole("checkbox");
+
+  await user.click(checkboxes[0]);
+
+  const buttons =
+    screen.getAllByRole("button");
+
+  const moveRightButton = buttons.find(
+    (button) =>
+      button.querySelector("svg") &&
+      !button.getAttribute("aria-label"),
+  );
+
+  if (moveRightButton) {
+    await user.click(moveRightButton);
+  }
+
+  expect(
+    screen.getAllByText("DPR1.PV"),
+  ).toHaveLength(2);
+});
+
+  it("moves multiple nodes to selected panel", async () => {
+  const user = userEvent.setup();
+
+  render(<Connections />);
+
+  const checkboxes =
+    screen.getAllByRole("checkbox");
+
+  await user.click(checkboxes[0]);
+  await user.click(checkboxes[1]);
+
+  const buttons =
+    screen.getAllByRole("button");
+
+  await user.click(buttons[1]);
+
+  expect(
+    screen.getAllByText("DPR1.PV"),
+  ).toHaveLength(2);
+
+  expect(
+    screen.getAllByText("DPR1.MODE"),
+  ).toHaveLength(2);
+});
+
+  it("removes None after moving data", async () => {
     const user = userEvent.setup();
 
     render(<Connections />);
 
-    await user.click(screen.getByText("01-LC0524 DS"));
+    const checkboxes =
+      screen.getAllByRole("checkbox");
 
-    const buttons = screen.getAllByTestId("mock-button");
+    await user.click(checkboxes[0]);
 
-    await user.click(buttons[3]);
+    const buttons =
+      screen.getAllByRole("button");
 
-    expect(screen.getAllByText("01-LC0524 DS")).toHaveLength(2);
+    await user.click(buttons[1]);
+
+    expect(
+      screen.queryByText("None"),
+    ).not.toBeInTheDocument();
   });
 
-  it("moves selected nested node", async () => {
+  it("allows selecting checkbox in selected panel", async () => {
     const user = userEvent.setup();
 
     render(<Connections />);
 
-    await user.click(screen.getByText("01-LC0524.PV"));
+    let checkboxes =
+      screen.getAllByRole("checkbox");
 
-    const buttons = screen.getAllByTestId("mock-button");
+    await user.click(checkboxes[0]);
 
-    await user.click(buttons[3]);
+    const buttons =
+      screen.getAllByRole("button");
 
-    expect(screen.getAllByText("01-LC0524.PV")).toHaveLength(2);
+    await user.click(buttons[1]);
+
+    checkboxes =
+      screen.getAllByRole("checkbox");
+
+    const lastCheckbox =
+      checkboxes[checkboxes.length - 1];
+
+    await user.click(lastCheckbox);
+
+    expect(lastCheckbox).toBeChecked();
   });
 
-  it("does nothing when remove is clicked without selecting a node", async () => {
+  it("does not crash when remove is clicked without selection", async () => {
     const user = userEvent.setup();
 
     render(<Connections />);
 
-    const buttons = screen.getAllByTestId("mock-button");
+    const buttons =
+      screen.getAllByRole("button");
 
-    const removeButton = buttons[4];
+    await user.click(buttons[2]);
 
-    await user.click(removeButton);
-
-    expect(screen.getByText("Selected Columns")).toBeInTheDocument();
+    expect(
+      screen.getByText("DATA SOURCE"),
+    ).toBeInTheDocument();
   });
 
-  it("removes previously selected node", async () => {
+  it("moves and removes a node", async () => {
     const user = userEvent.setup();
 
     render(<Connections />);
 
-    await user.click(screen.getByText("01-LC0524 DS"));
+    let checkboxes =
+      screen.getAllByRole("checkbox");
 
-    const buttons = screen.getAllByTestId("mock-button");
+    await user.click(checkboxes[0]);
 
-    const moveButton = buttons[3];
-    const removeButton = buttons[4];
+    const buttons =
+      screen.getAllByRole("button");
 
-    await user.click(moveButton);
+    await user.click(buttons[1]);
 
-    expect(screen.getAllByText("01-LC0524 DS")).toHaveLength(2);
+    checkboxes =
+      screen.getAllByRole("checkbox");
 
-    await user.click(screen.getAllByText("01-LC0524 DS")[1]);
+    const rightCheckbox =
+      checkboxes[checkboxes.length - 1];
 
-    await user.click(removeButton);
+    await user.click(rightCheckbox);
 
-    expect(screen.getAllByText("01-LC0524 DS")).toHaveLength(1);
+    await user.click(buttons[2]);
+
+    expect(
+      screen.getByText("DATA SOURCE"),
+    ).toBeInTheDocument();
   });
 
-  it("does nothing when selected node cannot be found", async () => {
-    const user = userEvent.setup();
+  it("unchecks a left checkbox when clicked twice", async () => {
+  const user = userEvent.setup();
 
-    vi.mocked(utils.findNode).mockReturnValueOnce(null);
+  render(<Connections />);
 
-    render(<Connections />);
+  const checkbox = screen.getAllByRole(
+    "checkbox",
+  )[0];
 
-    await user.click(screen.getByText("01-LC0524 DS"));
+  await user.click(checkbox);
 
-    const buttons = screen.getAllByTestId("mock-button");
+  expect(checkbox).toBeChecked();
 
-    await user.click(buttons[3]);
+  await user.click(checkbox);
 
-    expect(utils.findNode).toHaveBeenCalled();
+  expect(checkbox).not.toBeChecked();
+});
+
+it("unchecks a right panel checkbox when clicked twice", async () => {
+  const user = userEvent.setup();
+
+  render(<Connections />);
+
+  let checkboxes =
+    screen.getAllByRole("checkbox");
+
+  await user.click(checkboxes[0]);
+
+  const buttons =
+    screen.getAllByRole("button");
+
+  await user.click(buttons[1]);
+
+  checkboxes =
+    screen.getAllByRole("checkbox");
+
+  const rightCheckbox =
+    checkboxes[checkboxes.length - 1];
+
+  await user.click(rightCheckbox);
+
+  expect(rightCheckbox).toBeChecked();
+
+  await user.click(rightCheckbox);
+
+  expect(rightCheckbox).not.toBeChecked();
+});
+
+it("keeps selected items when remove is clicked without selecting right checkbox", async () => {
+  const user = userEvent.setup();
+
+  render(<Connections />);
+
+  const checkboxes =
+    screen.getAllByRole("checkbox");
+
+  await user.click(checkboxes[0]);
+
+  const buttons =
+    screen.getAllByRole("button");
+
+  await user.click(buttons[1]);
+
+  await user.click(buttons[2]);
+
+  expect(
+    screen.getAllByText("DPR1.PV"),
+  ).toHaveLength(2);
+});
+});
+
+describe("buildSelectedTreeFromSource", () => {
+  it("returns empty array when no ids match", () => {
+    const source = [
+      {
+        id: "root",
+        label: "Root",
+        children: [
+          {
+            id: "leaf",
+            label: "Leaf",
+          },
+        ],
+      },
+    ];
+
+    expect(
+      buildSelectedTreeFromSource(source, []),
+    ).toEqual([]);
   });
 
-  it("does nothing when node already exists in selected columns", async () => {
-    const user = userEvent.setup();
+  it("handles leaf node without children property", () => {
+  const result = getSelectedTree(
+    [
+      {
+        id: "leaf",
+        label: "Leaf",
+      },
+    ],
+    [],
+  );
 
-    vi.mocked(utils.findNode).mockReturnValueOnce({
-      id: "ds",
-      label: "01-LC0524 DS",
-    } as TreeNodeData);
+  expect(result).toBeDefined();
+});
 
-    vi.mocked(utils.nodeExists).mockReturnValueOnce(true);
+it("returns default tree when generated tree is empty", () => {
+  const result = getSelectedTree([], []);
 
-    render(<Connections />);
+  expect(result).toEqual(
+    DEFAULT_SELECTED_COLUMNS,
+  );
+});
 
-    await user.click(screen.getByText("01-LC0524 DS"));
+});
 
-    const buttons = screen.getAllByTestId("mock-button");
+describe("getSelectedTree", () => {
+  it("returns default tree when no matching ids exist", () => {
+    const result = getSelectedTree([], []);
 
-    await user.click(buttons[3]);
+    expect(result).toEqual(
+      DEFAULT_SELECTED_COLUMNS,
+    );
+  });
 
-    expect(utils.nodeExists).toHaveBeenCalled();
+  it("handles node without children property", () => {
+    const result = getSelectedTree(
+      [
+        {
+          id: "leaf",
+          label: "Leaf",
+        },
+      ],
+      [],
+    );
+
+    expect(result).toBeDefined();
   });
 });

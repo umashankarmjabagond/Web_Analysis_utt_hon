@@ -39,7 +39,21 @@ const allColumnsData: TreeNodeData[] = [
   },
 ];
 
-const buildSelectedTreeFromSource = (
+export const DEFAULT_SELECTED_COLUMNS: TreeNodeData[] = [
+  {
+    id: "ds",
+    label: "DPR1 Data Preprocessing",
+    children: [
+      {
+        id: "sample",
+        label: "TimeSeriesSample",
+        children: [],
+      },
+    ],
+  },
+];
+
+export const buildSelectedTreeFromSource = (
   sourceNodes: TreeNodeData[],
   selectedIds: string[],
 ): TreeNodeData[] => {
@@ -63,6 +77,38 @@ const buildSelectedTreeFromSource = (
     .filter(Boolean) as TreeNodeData[];
 };
 
+export const getSelectedTree = (
+  selectedColumns: TreeNodeData[],
+  leftCheckedIds: string[],
+) => {
+  const existingIds = new Set<string>();
+
+  const collectIds = (nodes: TreeNodeData[]) => {
+    nodes.forEach((node) => {
+      if (!node.children?.length) {
+        existingIds.add(node.id);
+      }
+
+      if (node.children) {
+        collectIds(node.children);
+      }
+    });
+  };
+
+  collectIds(selectedColumns);
+
+  const mergedIds = [...existingIds, ...leftCheckedIds];
+
+  const tree = buildSelectedTreeFromSource(
+    allColumnsData,
+    mergedIds,
+  );
+
+  return tree.length > 0
+    ? tree
+    : DEFAULT_SELECTED_COLUMNS;
+};
+
 export default function Connections() {
   const { t } = useTranslation();
 
@@ -70,19 +116,8 @@ export default function Connections() {
 
   const [rightCheckedIds, setRightCheckedIds] = useState<string[]>([]);
 
-  const [selectedColumns, setSelectedColumns] = useState<TreeNodeData[]>([
-    {
-      id: "ds",
-      label: "DPR1 Data Preprocessing",
-      children: [
-        {
-          id: "sample",
-          label: "TimeSeriesSample",
-          children: [],
-        },
-      ],
-    },
-  ]);
+const [selectedColumns, setSelectedColumns] =
+  useState<TreeNodeData[]>(DEFAULT_SELECTED_COLUMNS);
 
   const toggleLeftCheck = (id: string) => {
     setLeftCheckedIds((prev) =>
@@ -96,66 +131,16 @@ export default function Connections() {
     );
   };
 
-  const findLeafNodes = (
-    nodes: TreeNodeData[],
-    ids: string[],
-  ): TreeNodeData[] => {
-    let result: TreeNodeData[] = [];
-
-    for (const node of nodes) {
-      if (ids.includes(node.id) && !node.children?.length) {
-        result.push(node);
-      }
-
-      if (node.children) {
-        result = [...result, ...findLeafNodes(node.children, ids)];
-      }
-    }
-
-    return result;
-  };
-
   const moveToSelected = () => {
-    const existingIds = new Set<string>();
+  setSelectedColumns(
+    getSelectedTree(
+      selectedColumns,
+      leftCheckedIds,
+    ),
+  );
 
-    const collectIds = (nodes: TreeNodeData[]) => {
-      nodes.forEach((node) => {
-        if (!node.children?.length) {
-          existingIds.add(node.id);
-        }
-
-        if (node.children) {
-          collectIds(node.children);
-        }
-      });
-    };
-
-    collectIds(selectedColumns);
-
-    const mergedIds = [...existingIds, ...leftCheckedIds];
-
-    const tree = buildSelectedTreeFromSource(allColumnsData, mergedIds);
-
-    setSelectedColumns(
-      tree.length > 0
-        ? tree
-        : [
-            {
-              id: "ds",
-              label: "DPR1 Data Preprocessing",
-              children: [
-                {
-                  id: "sample",
-                  label: "TimeSeriesSample",
-                  children: [],
-                },
-              ],
-            },
-          ],
-    );
-
-    setLeftCheckedIds([]);
-  };
+  setLeftCheckedIds([]);
+};
 
   const removeFromSelected = () => {
     const remainingIds: string[] = [];
@@ -188,7 +173,7 @@ export default function Connections() {
       {/* Header */}
       <div className="pb-4 h-[102px] px-10 pt-10 gap-3">
         <div className="flex items-center justify-between h-[30px]">
-          <h2 className="font-bold h-[30px] text-[20px] leading-[30px] tracking-[0px] text-[#F0F0F0]">
+          <h2 className="font-bold h-[30px] text-[20px] leading-[30px] tracking-[0px] text-text-primary">
             Configure Input Columns
           </h2>
 
@@ -209,13 +194,13 @@ export default function Connections() {
         </div>
 
         <div className="mt-2 flex items-center text-sm text-muted-foreground h-4">
-          <span className="h-4 text-[12px] leading-4 font-medium tracking-[0px] text-[#B0B0B0]">
+          <span className="h-4 text-[12px] leading-4 font-medium tracking-[0px] text-default-border">
             Data Preprocessing
           </span>
 
           <MoveRight size={14} className="mx-2" />
 
-          <span className="h-4 text-[12px] leading-4 font-medium tracking-[0px] text-[#B0B0B0]">
+          <span className="h-4 text-[12px] leading-4 font-medium tracking-[0px] text-default-border">
             Data Source
           </span>
         </div>
@@ -232,7 +217,7 @@ export default function Connections() {
         {/* Panel Titles */}
         <div className="grid grid-cols-[1fr_40px_1fr] gap-6 mb-2">
           <div className="h-[16px]">
-            <h3 className="h-4 text-[12px] leading-4 font-bold uppercase tracking-[0.3px] text-[#B0B0B0]">
+            <h3 className="h-4 text-[12px] leading-4 font-bold uppercase tracking-[0.3px] text-default-border">
               DATA PREPROCESSING
             </h3>
           </div>
@@ -240,7 +225,7 @@ export default function Connections() {
           <div />
 
           <div className="h-[16px]">
-            <h3 className="h-4 text-[12px] leading-4 font-bold uppercase tracking-[0.3px] text-[#B0B0B0]">
+            <h3 className="h-4 text-[12px] leading-4 font-bold uppercase tracking-[0.3px] text-default-border">
               DATA SOURCE
             </h3>
           </div>
