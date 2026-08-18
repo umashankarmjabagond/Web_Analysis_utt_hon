@@ -1,5 +1,4 @@
 import { Monitor, Pen, TextAlignJustify, Trash2, Workflow } from "lucide-react";
-import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
@@ -11,14 +10,14 @@ import { EXECUTION_ACTION } from "../../../../types/templateExecution";
 import { cn } from "../../../../utils/utils";
 import Tooltip from "../../../../components/common/tooltip/Tooltip";
 
-const TABS = [
+const VIEW_MODES = [
   {
-    id: "compactView",
+    id: "compact",
     icon: TextAlignJustify,
     tooltipKey: "EXECUTION_TOOLBAR_COMPACT_VIEW",
   },
   {
-    id: "comfortableView",
+    id: "comfortable",
     icon: Workflow,
     tooltipKey: "EXECUTION_TOOLBAR_COMFORTABLE_VIEW",
   },
@@ -28,14 +27,20 @@ export default function FlowExecutionToolbar() {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const [activeTab, setActiveTab] = useState("compactView");
-
   const selectedExecutionItem = useTemplateExecutionStore(
     (state) => state.selectedExecutionItem,
   );
   const setExecutionAction = useTemplateExecutionStore(
     (state) => state.setExecutionAction,
   );
+
+  const selectedViewMode = useTemplateExecutionStore(
+    (state) => state.executionViewMode,
+  );
+  const setViewMode = useTemplateExecutionStore(
+    (state) => state.setExecutionViewMode,
+  );
+
   const selectedRowsCount = useTemplateExecutionStore(
     (state) => state.selectedRowIds.length,
   );
@@ -50,7 +55,7 @@ export default function FlowExecutionToolbar() {
 
   const pauseLabel =
     Number(selectedRowsCount) > 0
-      ? `${t("EXECUTION_EXECUTE_SELECTED")} (${selectedRowsCount})`
+      ? `${t("EXECUTION_PAUSE_SELECTED")} (${selectedRowsCount})`
       : t("EXECUTION_PAUSE");
 
   const handleExecute = () => {
@@ -151,22 +156,23 @@ export default function FlowExecutionToolbar() {
       </div>
 
       <div className="flex h-[34px]  shrink-0 items-center gap-3">
-        <div className="flex gap-0.5 h-[34px] w-[62px] items-center rounded-[6px] border border-[#454545] p-0.5">
-          {TABS.map(({ id, icon: Icon, tooltipKey }) => (
+        <div className="flex h-[34px] w-[62px] items-center rounded-[6px] border border-[#454545] p-0.5">
+          {VIEW_MODES.map(({ id, icon: Icon, tooltipKey }) => (
             <Tooltip content={t(tooltipKey)}>
-              <button
+              <Button
                 key={id}
                 type="button"
-                onClick={() => setActiveTab(id)}
+                variant="secondary"
+                onClick={() => setViewMode(id)}
                 className={cn(
-                  "flex h-7 w-7 items-center justify-center rounded-[4px] cursor-pointer hover:bg-surface-hover",
-                  activeTab === id
+                  "flex h-7 w-7 items-center justify-center rounded-[4px] cursor-pointer border-0",
+                  selectedViewMode === id
                     ? "bg-[#383838] text-[#F0F0F0]"
                     : "bg-[#1B1B1B] text-[#B0B0B0]",
                 )}
               >
                 <Icon size={14} />
-              </button>
+              </Button>
             </Tooltip>
           ))}
         </div>
