@@ -128,7 +128,7 @@ const ControllerConfiguration: React.FC<ControllerConfigurationProps> = ({
 
   const renderResettableInputs = (inputFields: TextField[]) =>
     inputFields.map(({ label, field, type }) => (
-      <div key={field} className="flex w-full items-end gap-2">
+      <div key={field} className="flex w-full items-end gap-2 px-1">
         <div className="flex-1">
           <Input
             className="h-13 border-0"
@@ -139,28 +139,13 @@ const ControllerConfiguration: React.FC<ControllerConfigurationProps> = ({
           />
         </div>
 
-        <button
-          type="button"
-          title={t("CONTROLLER_RESET", {
-            field: t(label),
-          })}
+        <RotateCcw
+          className={`resetButtonClass mb-5`}
+          cursor={"pointer"}
+          size={14}
+          strokeWidth={1.8}
           onClick={() => resetFields(field)}
-          className="
-            mb-5
-            flex
-            h-8
-            w-8
-            shrink-0
-            items-center
-            justify-center
-            rounded-md
-            text-controller-reset-foreground
-            transition-colors
-            hover:text-controller-reset-hover-foreground
-          "
-        >
-          <RotateCcw size={14} strokeWidth={1.8} />
-        </button>
+        />
       </div>
     ));
 
@@ -246,16 +231,14 @@ const ControllerConfiguration: React.FC<ControllerConfigurationProps> = ({
                   {t("CONTROLLER_OP_PV_RANGE")}
                 </h3>
 
-                <button
-                  type="button"
-                  title={t("COMMON_RESET")}
+                <RotateCcw
+                  className={resetButtonClass}
+                  size={16}
+                  cursor="pointer"
                   onClick={() =>
                     resetFields("opMin", "pvMin", "opMax", "pvMax")
                   }
-                  className={resetButtonClass}
-                >
-                  <RotateCcw size={16} />
-                </button>
+                />
               </div>
 
               <div className="grid grid-cols-2 gap-4">
@@ -318,19 +301,16 @@ const ControllerConfiguration: React.FC<ControllerConfigurationProps> = ({
             </div>
 
             <div className={sectionClass}>
-              <label className="flex items-center gap-3 text-sm text-controller-title">
-                <Checkbox
-                  checked={formData.isSlave}
-                  className="nodrag nopan"
-                  onClick={(e) => {
-                    e.stopPropagation();
+              <Checkbox
+                label={t("CONTROLLER_IS_SLAVE")}
+                checked={formData.isSlave}
+                className="nodrag nopan"
+                onClick={(e) => {
+                  e.stopPropagation();
 
-                    updateField("isSlave", !formData.isSlave);
-                  }}
-                />
-
-                <span>{t("CONTROLLER_IS_SLAVE")}</span>
-              </label>
+                  updateField("isSlave", !formData.isSlave);
+                }}
+              />
             </div>
           </div>
         )}
@@ -378,22 +358,19 @@ const ControllerConfiguration: React.FC<ControllerConfigurationProps> = ({
             </div>
 
             <div className={sectionClass}>
-              <label className="flex items-center gap-3 text-sm text-controller-title">
-                <Checkbox
-                  checked={formData.allowRobustDiagnostic}
-                  className="nodrag nopan"
-                  onClick={(e) => {
-                    e.stopPropagation();
+              <Checkbox
+                label={t("CONTROLLER_ALLOW_ROBUST_DIAGNOSTIC")}
+                checked={formData.allowRobustDiagnostic}
+                className="nodrag nopan"
+                onClick={(e) => {
+                  e.stopPropagation();
 
-                    updateField(
-                      "allowRobustDiagnostic",
-                      !formData.allowRobustDiagnostic,
-                    );
-                  }}
-                />
-
-                <span>{t("CONTROLLER_ALLOW_ROBUST_DIAGNOSTIC")}</span>
-              </label>
+                  updateField(
+                    "allowRobustDiagnostic",
+                    !formData.allowRobustDiagnostic,
+                  );
+                }}
+              />
             </div>
 
             <div className={sectionClass}>
@@ -402,14 +379,12 @@ const ControllerConfiguration: React.FC<ControllerConfigurationProps> = ({
                   {t("CONTROLLER_ELIMINATION_EXPRESSION")}
                 </h3>
 
-                <button
-                  type="button"
-                  title={t("COMMON_RESET")}
-                  onClick={() => resetFields("eliminationExpression")}
+                <RotateCcw
+                  size={16}
                   className={resetButtonClass}
-                >
-                  <RotateCcw size={16} />
-                </button>
+                  cursor="pointer"
+                  onClick={() => resetFields("eliminationExpression")}
+                />
               </div>
 
               <TextArea
@@ -431,9 +406,8 @@ const ControllerConfiguration: React.FC<ControllerConfigurationProps> = ({
                   {t("CONTROLLER_TUNING_INFORMATION")}
                 </h3>
 
-                <button
-                  type="button"
-                  title={t("COMMON_RESET")}
+                <RotateCcw
+                  size={16}
                   onClick={() =>
                     resetFields(
                       "gain",
@@ -444,9 +418,7 @@ const ControllerConfiguration: React.FC<ControllerConfigurationProps> = ({
                     )
                   }
                   className={resetButtonClass}
-                >
-                  <RotateCcw size={16} />
-                </button>
+                />
               </div>
 
               <div className="grid grid-cols-2 gap-4">
@@ -460,14 +432,11 @@ const ControllerConfiguration: React.FC<ControllerConfigurationProps> = ({
                   {t("CONTROLLER_COMMENT")}
                 </label>
 
-                <button
-                  type="button"
-                  title={t("COMMON_RESET")}
+                <RotateCcw
+                  size={16}
                   onClick={() => resetFields("comment")}
                   className={resetButtonClass}
-                >
-                  <RotateCcw size={16} />
-                </button>
+                />
               </div>
 
               <TextArea
@@ -507,16 +476,14 @@ const ControllerConfiguration: React.FC<ControllerConfigurationProps> = ({
                   {t("CONTROLLER_SENSOR_MAX_MIN")}
                 </h3>
 
-                <button
-                  type="button"
-                  title={t("COMMON_RESET")}
+                <RotateCcw
+                  size={16}
+                  className={resetButtonClass}
+                  cursor="pointer"
                   onClick={() =>
                     resetFields("sensorHighLimit", "sensorLowLimit")
                   }
-                  className={resetButtonClass}
-                >
-                  <RotateCcw size={16} />
-                </button>
+                />
               </div>
 
               <div className="grid grid-cols-2 gap-4">
@@ -530,16 +497,14 @@ const ControllerConfiguration: React.FC<ControllerConfigurationProps> = ({
                   {t("CONTROLLER_TOLERANCE")}
                 </h3>
 
-                <button
-                  type="button"
-                  title={t("COMMON_RESET")}
+                <RotateCcw
+                  size={16}
+                  className={resetButtonClass}
+                  cursor={"pointer"}
                   onClick={() =>
                     resetFields("freezeDuration", "acceptableViolation")
                   }
-                  className={resetButtonClass}
-                >
-                  <RotateCcw size={16} />
-                </button>
+                />
               </div>
 
               <div className="grid grid-cols-2 gap-4">
@@ -548,25 +513,22 @@ const ControllerConfiguration: React.FC<ControllerConfigurationProps> = ({
             </div>
 
             <div className={sectionClass}>
-              <label className="mb-4 flex items-center gap-3 text-sm text-controller-title">
-                <Checkbox
-                  checked={formData.showAdvancedSettings}
-                  className="nodrag nopan"
-                  onClick={(e) => {
-                    e.stopPropagation();
+              <Checkbox
+                label={t("CONTROLLER_SHOW_ADVANCED_SETTINGS")}
+                checked={formData.showAdvancedSettings}
+                className="nodrag nopan"
+                onClick={(e) => {
+                  e.stopPropagation();
 
-                    updateField(
-                      "showAdvancedSettings",
-                      !formData.showAdvancedSettings,
-                    );
-                  }}
-                />
-
-                <span>{t("CONTROLLER_SHOW_ADVANCED_SETTINGS")}</span>
-              </label>
+                  updateField(
+                    "showAdvancedSettings",
+                    !formData.showAdvancedSettings,
+                  );
+                }}
+              />
 
               {formData.showAdvancedSettings && (
-                <div className="rounded-md border border-controller-border p-3">
+                <div className="rounded-md border border-controller-border p-3 mt-3">
                   <h3 className={sectionTitleClass}>
                     {t("CONTROLLER_ADVANCED_SETTINGS")}
                   </h3>

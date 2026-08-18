@@ -187,6 +187,7 @@ export interface CheckboxProps extends InputHTMLAttributes<HTMLInputElement> {
   checked: boolean;
   label?: string;
   size?: number;
+  labelClassName?: string;
 }
 export type CellValue = string | number | boolean | null | undefined;
 
