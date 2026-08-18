@@ -103,8 +103,6 @@ const ControllerConfiguration: React.FC<ControllerConfigurationProps> = ({
       return;
     }
 
-    console.log("Controller Configuration:", formData);
-
     onFinish?.();
   };
 

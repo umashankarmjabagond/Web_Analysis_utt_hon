@@ -1,4 +1,3 @@
-import React from "react";
 import { describe, expect, it, vi, beforeEach } from "vitest";
 import { fireEvent, render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
@@ -501,8 +500,6 @@ describe("ControllerConfiguration", () => {
         }),
       );
     }
-
-    const textareas = screen.getAllByRole("textbox");
 
     /*
      * Step 5 contains the comment TextArea.
