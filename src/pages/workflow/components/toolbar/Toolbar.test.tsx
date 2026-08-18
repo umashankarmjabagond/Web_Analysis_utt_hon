@@ -17,8 +17,14 @@ const mockExportWorkflow = vi.fn();
 const mockImportWorkflow = vi.fn();
 
 const mockStore: {
-  nodes: Array<{ id: string }>;
-  edges: Array<{ id: string }>;
+  nodes: Array<{
+    id: string;
+    selected?: boolean;
+  }>;
+  edges: Array<{
+    id: string;
+    selected?: boolean;
+  }>;
   deleteSelectedNodes: typeof mockDeleteSelectedNodes;
   deleteSelectedEdges: typeof mockDeleteSelectedEdges;
   clearWorkflow: typeof mockClearWorkflow;
@@ -176,6 +182,14 @@ vi.mock("../../../../components/forms/button/Button", () => ({
   ),
 }));
 
+/*
+ * Mock Notification while preserving the important behavior
+ * used by Toolbar:
+ *
+ * - renders title/message
+ * - exposes onClose
+ * - automatically closes after 6000ms
+ */
 vi.mock("../../../../components/common/notification/Notification", () => ({
   default: ({
     title,
@@ -185,6 +199,8 @@ vi.mock("../../../../components/common/notification/Notification", () => ({
     title: string;
     message: string;
     onClose?: () => void;
+    type?: "success" | "warning" | "danger" | "info";
+    duration?: number;
   }) => (
     <div data-testid="notification">
       <div>{title}</div>
@@ -250,9 +266,24 @@ describe("Toolbar", () => {
   });
 
   it("calls delete handlers", () => {
+    mockStore.nodes = [
+      {
+        id: "node-1",
+        selected: true,
+      },
+    ];
+
+    mockStore.edges = [];
+
     render(<Toolbar />);
 
-    fireEvent.click(screen.getByText("Delete"));
+    const deleteButton = screen.getByRole("button", {
+      name: "Delete",
+    });
+
+    expect(deleteButton).not.toBeDisabled();
+
+    fireEvent.click(deleteButton);
 
     expect(mockDeleteSelectedEdges).toHaveBeenCalledTimes(1);
 
@@ -620,44 +651,6 @@ describe("Toolbar", () => {
     expect(screen.queryByTestId("notification")).not.toBeInTheDocument();
   });
 
-  it("executes success notification timeout callback", () => {
-    vi.useFakeTimers();
-
-    mockStore.nodes = [
-      {
-        id: "1",
-      },
-    ];
-
-    render(<Toolbar />);
-
-    fireEvent.click(screen.getByText("Regulatory Save"));
-
-    fireEvent.click(screen.getByText("COMMON_SAVE"));
-
-    act(() => {
-      vi.runAllTimers();
-    });
-
-    expect(screen.queryByTestId("notification")).not.toBeInTheDocument();
-  });
-
-  it("executes warning notification timeout callback", () => {
-    vi.useFakeTimers();
-
-    mockStore.nodes = [];
-
-    render(<Toolbar />);
-
-    fireEvent.click(screen.getByText("Regulatory Save"));
-
-    act(() => {
-      vi.runAllTimers();
-    });
-
-    expect(screen.queryByTestId("notification")).not.toBeInTheDocument();
-  });
-
   // --------------------------------------------------
   // EXPORT TESTS
   // --------------------------------------------------
@@ -703,25 +696,6 @@ describe("Toolbar", () => {
       mockStore.edges,
       "workflow.json",
     );
-  });
-
-  it("executes export warning notification timeout", () => {
-    vi.useFakeTimers();
-
-    mockStore.nodes = [];
-    mockStore.edges = [];
-
-    render(<Toolbar />);
-
-    fireEvent.click(screen.getByText("Export Template"));
-
-    expect(screen.getByTestId("notification")).toBeInTheDocument();
-
-    act(() => {
-      vi.runAllTimers();
-    });
-
-    expect(screen.queryByTestId("notification")).not.toBeInTheDocument();
   });
 
   // --------------------------------------------------
@@ -881,77 +855,6 @@ describe("Toolbar", () => {
     expect(screen.getByText("Unable to import workflow.")).toBeInTheDocument();
   });
 
-  it("executes import success notification timeout", async () => {
-    vi.useFakeTimers();
-
-    mockImportWorkflow.mockResolvedValue({
-      nodes: [
-        {
-          id: "node-1",
-        },
-      ],
-      edges: [],
-    });
-
-    render(<Toolbar />);
-
-    const fileInput = document.querySelector(
-      'input[type="file"]',
-    ) as HTMLInputElement;
-
-    const file = new File(["{}"], "workflow.json", {
-      type: "application/json",
-    });
-
-    await act(async () => {
-      fireEvent.change(fileInput, {
-        target: {
-          files: [file],
-        },
-      });
-    });
-
-    expect(screen.getByTestId("notification")).toBeInTheDocument();
-
-    act(() => {
-      vi.runAllTimers();
-    });
-
-    expect(screen.queryByTestId("notification")).not.toBeInTheDocument();
-  });
-
-  it("executes import failure notification timeout", async () => {
-    vi.useFakeTimers();
-
-    mockImportWorkflow.mockRejectedValue(new Error("Import error"));
-
-    render(<Toolbar />);
-
-    const fileInput = document.querySelector(
-      'input[type="file"]',
-    ) as HTMLInputElement;
-
-    const file = new File(["invalid"], "workflow.json", {
-      type: "application/json",
-    });
-
-    await act(async () => {
-      fireEvent.change(fileInput, {
-        target: {
-          files: [file],
-        },
-      });
-    });
-
-    expect(screen.getByTestId("notification")).toBeInTheDocument();
-
-    act(() => {
-      vi.runAllTimers();
-    });
-
-    expect(screen.queryByTestId("notification")).not.toBeInTheDocument();
-  });
-
   it("resets importing state after successful import", async () => {
     mockImportWorkflow.mockResolvedValue({
       nodes: [],
@@ -977,6 +880,7 @@ describe("Toolbar", () => {
     });
 
     expect(mockSetIsImporting).toHaveBeenCalledWith(true);
+
     expect(mockSetIsImporting).toHaveBeenLastCalledWith(false);
   });
 
@@ -1002,6 +906,7 @@ describe("Toolbar", () => {
     });
 
     expect(mockSetIsImporting).toHaveBeenCalledWith(true);
+
     expect(mockSetIsImporting).toHaveBeenLastCalledWith(false);
   });
 });

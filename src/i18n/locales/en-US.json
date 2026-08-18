@@ -175,7 +175,7 @@
   "PROJECT_ANALYSIS_FINISH": "Finish",
 
   "CANVAS_CREATE_NEW_TEMPLATE": "Create New Template",
-  "CANVAS_CREATE_TEMPLATE_DESCRIPTION": "Create a template from scratch using attributes or predefined templates as a base from the left pane, customize it to your requirements, and save it as a custom template.",
+  "CANVAS_CREATE_TEMPLATE_DESCRIPTION": "Drag attributes or templates from the left panel and drop them here. Hover an attribute and click its \"+\" connector to add a new one, or drag from a \"+\" connector onto an existing attribute to wire them together.",
   "CANVAS_ADD_ATTRIBUTE": "Add Attribute",
   "CANVAS_WORKFLOW": "Workflow",
 

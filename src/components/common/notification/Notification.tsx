@@ -1,22 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { XCircle, AlertTriangle, Info, X } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import Badge from "../badge/Badge";
+import type {
+  NotificationProps,
+  NotificationType,
+} from "../../../types/commonTypes";
 
-export type NotificationType = "success" | "danger" | "warning" | "info";
-
-interface NotificationProps {
-  type: NotificationType;
-  message: string;
-  title?: string;
-  onClose?: () => void;
-  width?: number | string; // dynamic width, defaults to 400px like the Figma design
-}
-
-const SuccessIcon: React.FC<{ className?: string; size?: number }> = ({
-  className,
-  size = 14,
-}) => (
+const SuccessIcon: React.FC<{
+  className?: string;
+  size?: number;
+}> = ({ className, size = 14 }) => (
   <svg
     width={size}
     height={size}
@@ -46,17 +40,14 @@ const TYPE_CONFIG: Record<
     label: "Success",
     icon: SuccessIcon,
   },
-
   danger: {
     label: "Failure",
     icon: XCircle,
   },
-
   warning: {
     label: "Warning",
     icon: AlertTriangle,
   },
-
   info: {
     label: "Info",
     icon: Info,
@@ -69,46 +60,60 @@ const Notification: React.FC<NotificationProps> = ({
   title,
   onClose,
   width = 400,
+  duration = 6000,
 }) => {
   const { t } = useTranslation();
+
   const { label, icon: Icon } = TYPE_CONFIG[type];
+
+  useEffect(() => {
+    if (!onClose || duration <= 0) {
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      onClose();
+    }, duration);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [onClose, duration]);
 
   return (
     <div
-      style={{ width: typeof width === "number" ? `${width}px` : width }}
+      style={{
+        width: typeof width === "number" ? `${width}px` : width,
+      }}
       className="flex flex-col h-auto rounded-[10px] p-6 gap-6 bg-toast-background shadow-toast"
     >
-      <div className="flex flex-col w-full gap-4">
-        {/* Badge & Close */}
-        <div className="flex flex-row w-full items-center justify-between h-8">
-          {/* Badge/Categorical */}
-          <Badge
-            variant={type}
-            size="md"
-            fill="solid"
-            icon={<Icon size={14} />}
-          >
-            {t(`NOTIFICATION_${label.toUpperCase()}`)}
-          </Badge>
-          <X
-            onClick={onClose}
-            size={16}
-            strokeWidth={1.5}
-            className="text-text-accent cursor-pointer"
-          />
-        </div>
+      {/* Badge & Close */}
+      <div className="flex items-center justify-between">
+        <Badge variant={type} size="md" fill="solid" icon={<Icon size={14} />}>
+          {t(`${label.toUpperCase()}`)}
+        </Badge>
 
-        {/* Body content */}
-        <div className="flex flex-col w-full gap-0.5">
-          <p className="text-[16px] leading-6 font-bold m-0 text-toast-title">
-            {title ?? t(`NOTIFICATION_${label.toUpperCase()}`)}
-          </p>
-          <p
-            className={`text-[14px] leading-5 font-medium m-0 text-toast-description`}
+        {onClose && (
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Close notification"
+            className="flex items-center justify-center"
           >
-            {message}
-          </p>
-        </div>
+            <X size={16} />
+          </button>
+        )}
+      </div>
+
+      {/* Body content */}
+      <div className="flex w-full flex-col gap-0.5">
+        <p className="m-0 text-[16px] font-bold leading-6 text-toast-title">
+          {title ?? t(`${label.toUpperCase()}`)}
+        </p>
+
+        <p className="m-0 text-[14px] font-medium leading-5 text-toast-description">
+          {message}
+        </p>
       </div>
     </div>
   );

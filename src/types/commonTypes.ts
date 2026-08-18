@@ -22,9 +22,9 @@ export interface BreadcrumbProps {
 
 export const NOTIFICATION_TYPE = {
   SUCCESS: "success",
-  ERROR: "error",
   WARNING: "warning",
   INFO: "info",
+  DANGER: "danger",
 } as const;
 
 export type NotificationType =
@@ -32,10 +32,11 @@ export type NotificationType =
 
 export interface NotificationProps {
   type: NotificationType;
-  title?: string;
   message: string;
-  duration?: number;
+  title?: string;
   onClose?: () => void;
+  width?: number | string;
+  duration?: number;
 }
 
 export interface DialogProps {
