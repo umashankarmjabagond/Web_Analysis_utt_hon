@@ -24,15 +24,15 @@ const Dialog = ({
         style={{ width }}
       >
         {/* Header */}
-        <div className="flex items-start justify-between p-8 pb-6">
+        <div className="flex items-start justify-between p-10 pb-4">
           <div>
             {subtitle && (
-              <p className="mb-2 text-xs font-semibold uppercase tracking-[0.25em] text-dialog-description">
+              <p className="mb-2 text-xs font-semibold uppercase tracking-[0.25em] text-dialog-description text-[12px]">
                 {subtitle}
               </p>
             )}
 
-            <h2 className="text-4xl font-semibold text-dialog-title">
+            <h2 className="text-[24px] font-semibold text-dialog-title">
               {title}
             </h2>
           </div>
