@@ -8,7 +8,7 @@ import {
   type ExecutionItem,
 } from "../types/templateExecution";
 
-interface TemplateExecutionState {
+export interface TemplateExecutionState {
   // Workflow
   nodes: ExecutionFlowNode[];
   setNodes: (nodes: ExecutionFlowNode[]) => void;
@@ -37,6 +37,11 @@ interface TemplateExecutionState {
   // Workflow Operations
   updateNode: (nodeId: string, changes: Partial<ExecutionFlowNode>) => void;
   loadWorkflow: (nodes: ExecutionFlowNode[], edges: Edge[]) => void;
+  hasMoreWorkflows: boolean;
+  setHasMoreWorkflows: (value: boolean) => void;
+  isLoadingMoreWorkflows: boolean;
+  setIsLoadingMoreWorkflows: (value: boolean) => void;
+  appendWorkflow: (nodes: ExecutionFlowNode[], edges: Edge[]) => void;
 }
 
 export const useTemplateExecutionStore = create<TemplateExecutionState>()(
@@ -101,6 +106,20 @@ export const useTemplateExecutionStore = create<TemplateExecutionState>()(
       });
     },
 
+    hasMoreWorkflows: true,
+    isLoadingMoreWorkflows: false,
+
+    setHasMoreWorkflows: (value) => set({ hasMoreWorkflows: value }),
+    setIsLoadingMoreWorkflows: (value) =>
+      set({ isLoadingMoreWorkflows: value }),
+
+    appendWorkflow: (nodes, edges) => {
+      set((state) => {
+        state.nodes.push(...nodes);
+        state.edges.push(...edges);
+      });
+    },
+
     loadWorkflow: (nodes, edges) => {
       set((state) => {
         state.nodes = nodes;
@@ -111,6 +130,8 @@ export const useTemplateExecutionStore = create<TemplateExecutionState>()(
         state.selectedRowIds = [];
         state.isNodeDrawerOpen = false;
         state.executionAction = EXECUTION_ACTION.IDLE;
+        state.hasMoreWorkflows = true;
+        state.isLoadingMoreWorkflows = false;
       });
     },
   })),
