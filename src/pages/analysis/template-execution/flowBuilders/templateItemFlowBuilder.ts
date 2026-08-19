@@ -288,7 +288,7 @@ const createRowBoundaryContainer = (
   },
   zIndex: -1,
   draggable: false,
-  selectable: false,
+  selectable: true,
   data: {
     itemId,
   },

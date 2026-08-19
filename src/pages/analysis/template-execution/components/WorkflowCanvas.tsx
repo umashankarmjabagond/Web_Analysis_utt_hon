@@ -47,7 +47,7 @@ export default function WorkflowCanvas({
       >
         <div
           className={`overflow-auto ${showDetailsPanel ? "flex-1 min-h-0" : "h-full"}`}
-          onScroll={handleScroll}
+          // onScroll={handleScroll}
         >
           <div style={{ width: contentWidth, height: contentHeight }}>
             <ReactFlow
