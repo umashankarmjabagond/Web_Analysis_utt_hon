@@ -11,10 +11,14 @@
   "COMMON_LOADING": "جار التحميل...",
   "COMMON_SELECT": "اختر",
   "COMMON_FILTER": "تصفية",
+  "CLEAR_WORKFLOW": "مسح سير العمل",
 
   "COMMON_GOOD": "جيد",
   "COMMON_WARNING": "تحذير",
   "COMMON_ERROR": "خطأ",
+  "COMMON_SUCCESS": "نجاح",
+  "COMMON_FAILURE": "فشل",
+  "COMMON_INFO": "معلومات",
 
   "SIDEBAR_HOME": "الرئيسية",
   "SIDEBAR_WORKFLOW": "سير العمل",
@@ -97,7 +101,7 @@
   "TOOLBAR_CUSTOM_MPC_TEMPLATES": "قوالب MPC مخصصة",
   "TOOLBAR_NOTHING_TO_SAVE": "لا يوجد شيء لحفظه",
   "TOOLBAR_CREATE_WORKFLOW_BEFORE_SAVE": "يرجى إنشاء سير عمل قبل حفظ القالب.",
-  "TOOLBAR_SAVED_REGULATORY_TEMPLATE": "تم الحفظ كقالب تنظيمي",
+  "TOOLBAR_SAVED_REGULATORY": "تم الحفظ كقالب تنظيمي",
   "TOOLBAR_SAVED_MPC_TEMPLATE": "تم الحفظ كقالب MPC",
   "TOOLBAR_REGULATORY_TEMPLATE_LOCATION": "يمكنك العثور على هذا القالب في الكتالوج ضمن القوالب > القوالب التنظيمية.",
   "TOOLBAR_MPC_TEMPLATE_LOCATION": "يمكنك العثور على هذا القالب في الكتالوج ضمن القوالب > قوالب MPC.",
@@ -248,5 +252,16 @@
 
   "CONTROLLER_RESET": "إعادة تعيين {{field}}",
   "CONTROLLER_STEP": "الخطوة {{current}} من {{total}}",
-  "CONTROLLER_FINISH": "إنهاء"
+  "CONTROLLER_FINISH": "إنهاء",
+
+  "TOOLBAR_SAVED_MPC": "تم الحفظ كقالب MPC",
+  "TOOLBAR_FIND_REGULATORY": "يمكنك العثور على هذا القالب في الكتالوج ضمن القوالب > القوالب التنظيمية.",
+  "TOOLBAR_FIND_MPC": "يمكنك العثور على هذا القالب في الكتالوج ضمن القوالب > قوالب MPC.",
+
+  "TOOLBAR_IMPORT_SUCCESS": "تم الاستيراد بنجاح",
+  "TOOLBAR_WORKFLOW_IMPORTED_SUCCESSFULLY": "تم استيراد سير العمل بنجاح.",
+  "TOOLBAR_IMPORT_FAILED": "فشل الاستيراد",
+  "TOOLBAR_UNABLE_TO_IMPORT_WORKFLOW": "تعذر استيراد سير العمل.",
+  "TOOLBAR_NOTHING_TO_EXPORT": "لا يوجد شيء لتصديره",
+  "TOOLBAR_CREATE_WORKFLOW_BEFORE_EXPORTING": "يرجى إنشاء سير عمل قبل التصدير."
 }

@@ -11,10 +11,14 @@
   "COMMON_LOADING": "Загрузка...",
   "COMMON_SELECT": "Выбрать",
   "COMMON_FILTER": "Фильтр",
+  "CLEAR_WORKFLOW": "Очистить рабочий процесс",
 
   "COMMON_GOOD": "Хорошо",
   "COMMON_WARNING": "Предупреждение",
   "COMMON_ERROR": "Ошибка",
+  "COMMON_SUCCESS": "Успешно",
+  "COMMON_FAILURE": "Не удалось",
+  "COMMON_INFO": "Информация",
 
   "SIDEBAR_HOME": "Главная",
   "SIDEBAR_WORKFLOW": "Рабочий процесс",
@@ -99,7 +103,7 @@
   "TOOLBAR_CUSTOM_MPC_TEMPLATES": "Пользовательские шаблоны MPC",
   "TOOLBAR_NOTHING_TO_SAVE": "Нечего сохранять",
   "TOOLBAR_CREATE_WORKFLOW_BEFORE_SAVE": "Пожалуйста, создайте рабочий процесс перед сохранением шаблона.",
-  "TOOLBAR_SAVED_REGULATORY_TEMPLATE": "Сохранено как нормативный шаблон",
+  "TOOLBAR_SAVED_REGULATORY": "Сохранено как нормативный шаблон",
   "TOOLBAR_SAVED_MPC_TEMPLATE": "Сохранено как шаблон MPC",
   "TOOLBAR_REGULATORY_TEMPLATE_LOCATION": "Этот шаблон можно найти в Каталоге в разделе Шаблоны > Нормативные шаблоны.",
   "TOOLBAR_MPC_TEMPLATE_LOCATION": "Этот шаблон можно найти в Каталоге в разделе Шаблоны > Шаблоны MPC.",
@@ -247,5 +251,16 @@
 
   "CONTROLLER_RESET": "Сбросить {{field}}",
   "CONTROLLER_STEP": "Шаг {{current}} из {{total}}",
-  "CONTROLLER_FINISH": "Завершить"
+  "CONTROLLER_FINISH": "Завершить",
+
+  "TOOLBAR_SAVED_MPC": "Сохранено как шаблон MPC",
+  "TOOLBAR_FIND_REGULATORY": "Вы можете найти этот шаблон в Каталоге в разделе Шаблоны > Регуляторные шаблоны.",
+  "TOOLBAR_FIND_MPC": "Вы можете найти этот шаблон в Каталоге в разделе Шаблоны > Шаблоны MPC.",
+
+  "TOOLBAR_IMPORT_SUCCESS": "Импорт выполнен успешно",
+  "TOOLBAR_WORKFLOW_IMPORTED_SUCCESSFULLY": "Рабочий процесс успешно импортирован.",
+  "TOOLBAR_IMPORT_FAILED": "Ошибка импорта",
+  "TOOLBAR_UNABLE_TO_IMPORT_WORKFLOW": "Не удалось импортировать рабочий процесс.",
+  "TOOLBAR_NOTHING_TO_EXPORT": "Нечего экспортировать",
+  "TOOLBAR_CREATE_WORKFLOW_BEFORE_EXPORTING": "Пожалуйста, создайте рабочий процесс перед экспортом."
 }
