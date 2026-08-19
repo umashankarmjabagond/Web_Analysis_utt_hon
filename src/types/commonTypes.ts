@@ -100,10 +100,27 @@ export interface TabsProps {
   renderContent?: boolean;
 }
 
+
+
+
+
 export interface DonutChartProps {
   data: DonutChartItem[];
-  size?: number | undefined;
+  size?: number;
   colors: Record<string, string>;
+  className?: string;
+}
+
+
+export interface LegendItem {
+  name: string;
+  value: number;
+  fill: string;
+}
+
+export interface CustomLegendProps {
+  data: LegendItem[];
+  width: number;
 }
 
 export interface SelectOption {

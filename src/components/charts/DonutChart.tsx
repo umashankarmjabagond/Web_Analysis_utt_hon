@@ -1,41 +1,51 @@
-import { PieChart, Pie, Sector, ResponsiveContainer } from "recharts";
-import type { DonutChartProps } from "../../types/commonTypes";
+import { PieChart, Pie, Sector } from "recharts";
+import type { PieSectorDataItem } from "recharts/types/polar/Pie";
+import type { DonutChartProps ,LegendItem} from "../../types/commonTypes";
+import CustomLegend from "./CustomLegend";
+
+
+const STATUS_ORDER = ["Good", "Warning", "Error"];
+const GAP = 44;
+const LEGEND_WIDTH = 140;
 
 export default function DonutChart({
   data,
-  size = 80,
+  size = 88,
   colors,
+  className = "",
 }: DonutChartProps) {
+  const orderedData = STATUS_ORDER.map((status) =>
+    data.find((item) => item.name === status),
+  ).filter(Boolean) as typeof data;
+
+  const chartData: LegendItem[] = orderedData.map((item) => ({
+    ...item,
+    fill: colors[item.name as keyof typeof colors],
+  }));
+
   return (
     <div
-      style={{
-        width: size,
-        height: size,
-      }}
+      className={`flex items-center ${className}`}
+      style={{ width: size + GAP + LEGEND_WIDTH, gap: GAP }}
     >
-      <ResponsiveContainer width="100%" height="100%">
-        <PieChart>
+      <div style={{ width: size, height: size, flexShrink: 0 }}>
+        <PieChart width={size} height={size}>
           <Pie
-            data={data}
+            data={chartData}
             dataKey="value"
-            nameKey="name"
-            cx="50%"
-            cy="50%"
-            innerRadius={size * 0.32}
-            outerRadius={size * 0.48}
-            paddingAngle={0}
+            innerRadius={size / 2 - 10}
+            outerRadius={size / 2}
+            paddingAngle={2}
             stroke="none"
-            isAnimationActive={false}
-            shape={(props) => (
-              <Sector
-                {...props}
-                fill={colors[props.payload.name as keyof typeof colors]}
-                stroke="none"
-              />
-            )}
+            shape={(props: PieSectorDataItem) => {
+              const item = props.payload as unknown as LegendItem;
+              return <Sector {...props} fill={item.fill} />;
+            }}
           />
         </PieChart>
-      </ResponsiveContainer>
+      </div>
+
+      <CustomLegend data={chartData} width={LEGEND_WIDTH} />
     </div>
   );
 }
