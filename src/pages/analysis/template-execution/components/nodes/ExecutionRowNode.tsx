@@ -17,6 +17,7 @@ export default function ExecutionRowNode({
 
   return (
     <div
+      data-testid="execution-row"
       className={cn(
         "nodrag nopan flex h-full w-full items-start py-1.5 px-3 gap-3 rounded-[8px] border",
         checked
