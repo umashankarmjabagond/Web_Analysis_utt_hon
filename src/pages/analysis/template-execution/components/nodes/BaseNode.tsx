@@ -62,6 +62,7 @@ export default function BaseNode({ id, data, type }: NodeProps<BaseFlowNode>) {
   return (
     <div className="flex flex-col gap-2">
       <div
+        data-testid="node"
         className={cn(
           "nodrag nopan relative flex h-[30px] w-[30px] items-center justify-center rounded-[6px] border-[1.5px]",
           statusStyle.background,

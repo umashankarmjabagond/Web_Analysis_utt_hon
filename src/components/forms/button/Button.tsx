@@ -156,7 +156,7 @@ const Button: React.FC<ButtonProps> = ({
         "font-medium",
         "transition-colors duration-200",
         "cursor-pointer",
-        "active:translate-y-px",
+        // "active:translate-y-px",
         "focus-visible:outline-2",
         "focus-visible:outline-offset-2",
         "focus-visible:outline-button-focus-ring",

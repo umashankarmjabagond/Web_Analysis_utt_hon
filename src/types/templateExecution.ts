@@ -50,13 +50,84 @@ export type HandleConfig = {
 };
 
 // base edge
+export type EdgePathType = "bezier" | "smoothstep" | "straight" | "default";
+
 export type WorkflowEdgeData = {
-  pathType: "default" | "smoothstep" | "straight" | "bezier";
+  pathType: EdgePathType;
   animated?: boolean;
 };
 
 export type WorkflowEdge = Edge<WorkflowEdgeData, "workflow">;
 export type ExecutionWorkflowEdgeProps = EdgeProps<WorkflowEdge>;
+
+// edge geometry
+export type HandleCoordinates = {
+  x: number;
+  y: number;
+  position: Position;
+};
+
+export type LayoutEdge = {
+  source: string;
+  target: string;
+  sourceHandle: string | null | undefined;
+  targetHandle: string | null | undefined;
+  pathType: EdgePathType;
+};
+
+export type EdgePathResult = {
+  path: string;
+  labelX: number;
+  labelY: number;
+  offsetX: number;
+  offsetY: number;
+};
+
+export type GetHandleCoordinatesParams = {
+  nodeX: number;
+  nodeY: number;
+  nodeWidth: number;
+  nodeIconHeight: number;
+  handleId: string | null | undefined;
+};
+
+export type GetEdgePathParams = {
+  sourceX: number;
+  sourceY: number;
+  targetX: number;
+  targetY: number;
+  sourcePosition: Position;
+  targetPosition: Position;
+};
+
+// layout / bounds
+export type Bounds = {
+  minX: number;
+  minY: number;
+  width: number;
+  height: number;
+};
+
+export type PathBounds = {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+};
+
+export type PositionedNodeBounds = {
+  id: string;
+  x: number;
+  y: number;
+  width: number;
+  iconHeight: number;
+  visualHeight: number;
+};
+
+export type ExecutionRowBoundary = {
+  width: number;
+  height: number;
+};
 
 // execution header node
 type ExecutionHeaderData = {
@@ -72,6 +143,14 @@ export interface ToolbarButtonProps {
   active?: boolean;
   onClick?: () => void;
 }
+
+export const EXECUTION_VIEW_MODE = {
+  COMPACT: "compact",
+  COMFORTABLE: "comfortable",
+};
+
+export type ExecutionViewMode =
+  (typeof EXECUTION_VIEW_MODE)[keyof typeof EXECUTION_VIEW_MODE];
 
 // analysis template
 export interface TemplateExecutionProps {

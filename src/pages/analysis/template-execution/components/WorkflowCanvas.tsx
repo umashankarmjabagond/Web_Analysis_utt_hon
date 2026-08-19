@@ -1,8 +1,4 @@
-import {
-  ConnectionMode,
-  ReactFlow,
-  type NodeMouseHandler,
-} from "@xyflow/react";
+import { ConnectionMode, ReactFlow } from "@xyflow/react";
 import { useMemo } from "react";
 import { useParams } from "react-router-dom";
 
@@ -10,12 +6,7 @@ import { nodeTypes } from "./nodes/nodeTypes";
 import { edgeTypes } from "./edges/edgeTypes";
 
 import { useTemplateExecutionStore } from "../../../../store/templateExecutionStore";
-import { useWorkflowCanvasInteractions } from "../../../../hooks/useWorkflowInteractions";
-import type {
-  BaseFlowNode,
-  ExecutionFlowNode,
-  WorkflowCanvasProps,
-} from "../../../../types/templateExecution";
+import type { WorkflowCanvasProps } from "../../../../types/templateExecution";
 import { Loader2 } from "lucide-react";
 
 export default function WorkflowCanvas({
@@ -29,14 +20,6 @@ export default function WorkflowCanvas({
 
   const nodes = useTemplateExecutionStore((state) => state.nodes);
   const edges = useTemplateExecutionStore((state) => state.edges);
-
-  const { handleNodeSelection } = useWorkflowCanvasInteractions();
-
-  const onNodeClick: NodeMouseHandler<ExecutionFlowNode> = (_, node) => {
-    if (node.type === "executionHeader") return;
-    const baseNode = node as BaseFlowNode;
-    handleNodeSelection(baseNode.id, baseNode.data.status);
-  };
 
   const { contentWidth, contentHeight } = useMemo(() => {
     const mxaX = Math.max(...nodes.map((n) => n.position.x + 200), 800);
@@ -64,7 +47,7 @@ export default function WorkflowCanvas({
       >
         <div
           className={`overflow-auto ${showDetailsPanel ? "flex-1 min-h-0" : "h-full"}`}
-          onScroll={handleScroll}
+          // onScroll={handleScroll}
         >
           <div style={{ width: contentWidth, height: contentHeight }}>
             <ReactFlow
@@ -73,7 +56,6 @@ export default function WorkflowCanvas({
               edges={edges}
               nodeTypes={nodeTypes}
               edgeTypes={edgeTypes}
-              onNodeClick={onNodeClick}
               connectionMode={ConnectionMode.Loose}
               preventScrolling={false}
               panOnScroll={false}

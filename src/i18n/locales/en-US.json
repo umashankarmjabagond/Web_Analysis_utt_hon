@@ -125,12 +125,19 @@
   "NODE_WARNING_MESSAGE": "Warning message will be shown here",
   "NODE_ERROR_MESSAGE": "There are too many bad data points",
 
-  "EXECUTION_EXECUTE": "Execute",
-  "EXECUTION_PAUSE": "Pause",
+  "EXECUTION_TOOLBAR_EDIT": "Edit",
+  "EXECUTION_TOOLBAR_DELETE": "Delete",
+  "EXECUTION_TOOLBAR_COMPACT_VIEW": "Compact View",
+  "EXECUTION_TOOLBAR_COMFORTABLE_VIEW": "Comfortable View",
+  "EXECUTION_TOOLBAR_ANALYSIS_TEMPLATES": "Analysis Templates",
+
+  "EXECUTION_EXECUTE": "Execute All",
+  "EXECUTION_PAUSE": "Pause All",
+  "EXECUTION_EXECUTE_SELECTED": "Execute Selected",
+  "EXECUTION_PAUSE_SELECTED": "Pause Selected",
   "EXECUTION_START_CONFIRMATION": "Start Executing?",
   "EXECUTION_PAUSE_CONFIRMATION": "Pause execution?",
   "EXECUTION_DELETE_CONFIRMATION": "Delete Workflow?",
-  "ANALYSIS_TEMPLATES": "Analysis Templates",
 
   "CALCULATED_KPIS_TITLE": "Calculated KPIs",
   "CALCULATED_KPIS_ERRORS_TITLE": "Errors",
