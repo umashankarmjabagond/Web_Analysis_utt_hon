@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useCallback, useRef } from "react";
 import DonutChart from "../../../components/charts/DonutChart";
 import { STATUS_COLORS } from "../../../constants/constants";
 import type { StatCardProps } from "../../../types/dashboardTypes";
@@ -15,11 +15,14 @@ function formatTitle(rawTitle: string) {
 
 export default function StatCard({ data }: StatCardProps) {
   const total = data.chartData.reduce((sum, item) => sum + item.value, 0);
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const observerRef = useRef<ResizeObserver | null>(null);
 
-  useEffect(() => {
-    const el = scrollRef.current;
-    if (!el) return;
+  const setScrollRef = useCallback((el: HTMLDivElement | null) => {
+    if (!el) {
+      observerRef.current?.disconnect();
+      observerRef.current = null;
+      return;
+    }
 
     const resetIfFits = () => {
       if (el.scrollWidth <= el.clientWidth) el.scrollLeft = 0;
@@ -29,29 +32,29 @@ export default function StatCard({ data }: StatCardProps) {
     observer.observe(el);
     resetIfFits();
 
-    return () => observer.disconnect();
+    observerRef.current = observer;
   }, []);
 
   return (
-   <div className="w-full min-w-0 h-[164px] rounded-md border border-stat-card-border bg-stat-card-background px-6 py-4 overflow-hidden">
-  <div className="flex h-7 w-full min-w-0 items-center justify-between gap-2 overflow-hidden">
-    <h2
-      className="min-w-0 truncate text-[12px] font-extrabold uppercase leading-4 tracking-[2px] text-stat-card-foreground-secondary"
-      title={formatTitle(data.title)}
-    >
-      {formatTitle(data.title)}
-    </h2>
-    <span className="shrink-0 text-[20px] font-extrabold leading-7 text-stat-card-foreground">
-      {total}
-    </span>
-  </div>
+    <div className="w-full min-w-0 h-[164px] rounded-md border border-stat-card-border bg-stat-card-background px-6 py-4 overflow-hidden">
+      <div className="flex h-7 w-full min-w-0 items-center justify-between gap-2 overflow-hidden">
+        <h2
+          className="min-w-0 truncate text-[12px] font-extrabold uppercase leading-4 tracking-[2px] text-stat-card-foreground-secondary"
+          title={formatTitle(data.title)}
+        >
+          {formatTitle(data.title)}
+        </h2>
+        <span className="shrink-0 text-[20px] font-extrabold leading-7 text-stat-card-foreground">
+          {total}
+        </span>
+      </div>
 
-  <div
-    ref={scrollRef}
-    className="mt-4 w-full flex overflow-x-auto overflow-y-hidden custom-scrollbar"
-  >
-    <DonutChart data={data.chartData} size={DONUT_SIZE} colors={STATUS_COLORS} />
-  </div>
-</div>
+      <div
+        ref={setScrollRef}
+        className="mt-4 w-full flex overflow-x-auto overflow-y-hidden custom-scrollbar"
+      >
+        <DonutChart data={data.chartData} size={DONUT_SIZE} colors={STATUS_COLORS} />
+      </div>
+    </div>
   );
 }
