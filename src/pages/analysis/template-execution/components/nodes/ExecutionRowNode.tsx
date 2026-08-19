@@ -19,7 +19,7 @@ export default function ExecutionRowNode({
     <div
       data-testid="execution-row"
       className={cn(
-        "nodrag nopan flex h-full w-full items-start py-1.5 px-3 gap-3 rounded-[8px] border",
+        "nodrag nopan cursor-default flex h-full w-full items-start py-1.5 px-3 gap-3 rounded-[8px] border",
         checked
           ? "border-[#4FB3FF] bg-[#4FB3FF29]"
           : "border-[#454545] bg-[#1B1B1B]",
