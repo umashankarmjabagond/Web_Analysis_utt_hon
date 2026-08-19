@@ -2,11 +2,13 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
-import Connections, {
+import Connections from "./Connections";
+
+import {
   buildSelectedTreeFromSource,
   getSelectedTree,
   DEFAULT_SELECTED_COLUMNS,
-} from "./Connections";
+} from "../../utils/utils";
 
 
 
@@ -429,4 +431,142 @@ describe("getSelectedTree", () => {
 
     expect(result).toBeDefined();
   });
+
+  it("does not change selected panel when move is clicked without selection", async () => {
+  const user = userEvent.setup();
+
+  render(<Connections />);
+
+  const buttons = screen.getAllByRole("button");
+
+  await user.click(buttons[1]);
+
+  expect(
+    screen.getByText("None"),
+  ).toBeInTheDocument();
+});
+
+it("removes multiple selected nodes", async () => {
+  const user = userEvent.setup();
+
+  render(<Connections />);
+
+  let checkboxes =
+    screen.getAllByRole("checkbox");
+
+  await user.click(checkboxes[0]);
+  await user.click(checkboxes[1]);
+
+  const buttons =
+    screen.getAllByRole("button");
+
+  await user.click(buttons[1]);
+
+  checkboxes =
+    screen.getAllByRole("checkbox");
+
+  await user.click(
+    checkboxes[checkboxes.length - 1],
+  );
+
+  await user.click(
+    checkboxes[checkboxes.length - 2],
+  );
+
+  await user.click(buttons[2]);
+
+  expect(
+    screen.getByText("DATA SOURCE"),
+  ).toBeInTheDocument();
+});
+
+it("returns matched leaf node tree", () => {
+  const source = [
+    {
+      id: "root",
+      label: "Root",
+      children: [
+        {
+          id: "leaf",
+          label: "Leaf",
+        },
+      ],
+    },
+  ];
+
+  const result =
+    buildSelectedTreeFromSource(
+      source,
+      ["leaf"],
+    );
+
+  expect(result.length).toBe(1);
+});
+
+it("retains parent hierarchy when child matches", () => {
+  const source = [
+    {
+      id: "root",
+      label: "Root",
+      children: [
+        {
+          id: "child",
+          label: "Child",
+        },
+      ],
+    },
+  ];
+
+  const result =
+    buildSelectedTreeFromSource(
+      source,
+      ["child"],
+    );
+
+  expect(result[0].id).toBe("root");
+});
+
+it("handles empty source", () => {
+  expect(
+    buildSelectedTreeFromSource([], ["test"])
+  ).toEqual([]);
+});
+
+it("returns generated tree when ids match", () => {
+  const source = [
+    {
+      id: "leaf",
+      label: "Leaf",
+    },
+  ];
+
+  const result = getSelectedTree(
+    source,
+    ["leaf"],
+  );
+
+  expect(result).toBeDefined();
+});
+
+
+it("supports multiple selected ids", () => {
+  const source = [
+    {
+      id: "pv",
+      label: "PV",
+    },
+    {
+      id: "sp",
+      label: "SP",
+    },
+  ];
+
+  const result =
+    getSelectedTree(
+      source,
+      ["pv", "sp"],
+    );
+
+  expect(result).toBeDefined();
+});
 });

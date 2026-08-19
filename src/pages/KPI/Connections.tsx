@@ -8,106 +8,11 @@ import type { TreeNodeData } from "../../types/commonTypes";
 
 import { ChevronRight, ChevronLeft, MoveRight, X } from "lucide-react";
 
-const allColumnsData: TreeNodeData[] = [
-  {
-    id: "ds",
-    label: "DPR1 Data Preprocessing",
-    children: [
-      {
-        id: "sample",
-        label: "TimeSeriesSample",
-        children: [
-          {
-            id: "pv",
-            label: "DPR1.PV",
-          },
-          {
-            id: "mode",
-            label: "DPR1.MODE",
-          },
-          {
-            id: "op",
-            label: "DPR1.OP",
-          },
-          {
-            id: "sp",
-            label: "DPR1.SP",
-          },
-        ],
-      },
-    ],
-  },
-];
-
-export const DEFAULT_SELECTED_COLUMNS: TreeNodeData[] = [
-  {
-    id: "ds",
-    label: "DPR1 Data Preprocessing",
-    children: [
-      {
-        id: "sample",
-        label: "TimeSeriesSample",
-        children: [],
-      },
-    ],
-  },
-];
-
-export const buildSelectedTreeFromSource = (
-  sourceNodes: TreeNodeData[],
-  selectedIds: string[],
-): TreeNodeData[] => {
-  return sourceNodes
-    .map((node) => {
-      if (!node.children?.length) {
-        return selectedIds.includes(node.id) ? { ...node } : null;
-      }
-
-      const children = buildSelectedTreeFromSource(node.children, selectedIds);
-
-      if (children.length > 0) {
-        return {
-          ...node,
-          children,
-        };
-      }
-
-      return null;
-    })
-    .filter(Boolean) as TreeNodeData[];
-};
-
-export const getSelectedTree = (
-  selectedColumns: TreeNodeData[],
-  leftCheckedIds: string[],
-) => {
-  const existingIds = new Set<string>();
-
-  const collectIds = (nodes: TreeNodeData[]) => {
-    nodes.forEach((node) => {
-      if (!node.children?.length) {
-        existingIds.add(node.id);
-      }
-
-      if (node.children) {
-        collectIds(node.children);
-      }
-    });
-  };
-
-  collectIds(selectedColumns);
-
-  const mergedIds = [...existingIds, ...leftCheckedIds];
-
-  const tree = buildSelectedTreeFromSource(
-    allColumnsData,
-    mergedIds,
-  );
-
-  return tree.length > 0
-    ? tree
-    : DEFAULT_SELECTED_COLUMNS;
-};
+import {
+  allColumnsData,
+  DEFAULT_SELECTED_COLUMNS,
+  buildSelectedTreeFromSource,
+  getSelectedTree } from '../../utils/utils';
 
 export default function Connections() {
   const { t } = useTranslation();
