@@ -29,18 +29,21 @@ export const getHandleCoordinates = ({
         y: nodeY,
         position: Position.Top,
       };
+
     case "bottom":
       return {
         x: nodeX + nodeWidth / 2,
         y: nodeY + nodeIconHeight,
         position: Position.Bottom,
       };
+
     case "left":
       return {
         x: nodeX,
         y: nodeY + nodeIconHeight / 2,
         position: Position.Left,
       };
+
     case "right":
     default:
       return {
@@ -57,8 +60,10 @@ export const getPathFn = (pathType: EdgePathType) => {
   switch (pathType) {
     case "smoothstep":
       return getSmoothStepPath;
+
     case "straight":
       return getStraightPath;
+
     case "bezier":
     default:
       return getBezierPath;
