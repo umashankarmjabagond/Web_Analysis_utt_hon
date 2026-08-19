@@ -42,7 +42,7 @@ export function Tabs({
                 className={({ isActive }) =>
                   cn(
                     "px-4 py-2 border-b-2 text-sm font-medium transition-colors",
-                    isActive
+                    activeTab === item.id || isActive
                       ? selectedVariant.active
                       : selectedVariant.inactive,
                   )

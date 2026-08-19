@@ -39,8 +39,9 @@ export default function TopTabs() {
       id: "analysis-engine",
       label: t("TAB_ANALYSIS_ENGINE"),
       path: "/dashboard",
+      active: true,
     },
   ];
 
-  return <Tabs items={tabs} />;
+  return <Tabs items={tabs} activeTab="analysis-engine" />;
 }

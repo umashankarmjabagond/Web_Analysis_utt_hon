@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import type { TooltipProps } from "../../../types/commonTypes";
 import { cn } from "../../../utils/utils";
 
@@ -12,6 +13,12 @@ export default function Tooltip({
   className = "",
 }: TooltipProps) {
   const [open, setOpen] = useState(false);
+  const [position, setPosition] = useState({
+    top: 0,
+    left: 0,
+  });
+
+  const triggerRef = useRef<HTMLSpanElement>(null);
 
   const handleOnFocus = () => {
     setOpen(true);
@@ -31,61 +38,127 @@ export default function Tooltip({
 
   const PLACEMENT_STYLES = {
     top: {
-      tooltip: "bottom-full left-1/2 -translate-x-1/2 mb-2",
       arrow: "bottom-[-4px] left-1/2 -translate-x-1/2",
     },
     bottom: {
-      tooltip: "top-full left-1/2 -translate-x-1/2 mt-2",
       arrow: "top-[-4px] left-1/2 -translate-x-1/2",
     },
     left: {
-      tooltip: "right-full top-1/2 -translate-y-1/2 mr-2",
       arrow: "right-[-4px] top-1/2 -translate-y-1/2",
     },
     right: {
-      tooltip: "left-full top-1/2 -translate-y-1/2 ml-2",
       arrow: "left-[-4px] top-1/2 -translate-y-1/2",
     },
   } satisfies Record<
     NonNullable<TooltipProps["placement"]>,
     {
-      tooltip: string;
       arrow: string;
     }
   >;
 
-  if (!content || disabled) return children;
+  useEffect(() => {
+    if (!open || !triggerRef.current) return;
 
-  return (
+    const updatePosition = () => {
+      if (!triggerRef.current) return;
+
+      const rect = triggerRef.current.getBoundingClientRect();
+
+      let top = 0;
+      let left = 0;
+
+      switch (placement) {
+        case "top":
+          top = rect.top - 8;
+          left = rect.left + rect.width / 2;
+          break;
+
+        case "bottom":
+          top = rect.bottom + 8;
+          left = rect.left + rect.width / 2;
+          break;
+
+        case "left":
+          top = rect.top + rect.height / 2;
+          left = rect.left - 8;
+          break;
+
+        case "right":
+          top = rect.top + rect.height / 2;
+          left = rect.right + 8;
+          break;
+      }
+
+      setPosition({
+        top,
+        left,
+      });
+    };
+
+    updatePosition();
+
+    window.addEventListener("scroll", updatePosition, true);
+    window.addEventListener("resize", updatePosition);
+
+    return () => {
+      window.removeEventListener("scroll", updatePosition, true);
+      window.removeEventListener("resize", updatePosition);
+    };
+  }, [open, placement]);
+
+  if (!content || disabled) {
+    return children;
+  }
+
+  const tooltip = open ? (
     <div
-      className="relative inline-flex"
-      onFocus={handleOnFocus}
-      onBlur={handleOnBlur}
-      onMouseEnter={handleOnMouseEnter}
-      onMouseLeave={handleOnMouseLeave}
+      role="tooltip"
+      style={{
+        position: "fixed",
+        top: position.top,
+        left: position.left,
+        maxWidth: maxWidth ?? 300,
+        transform:
+          placement === "bottom"
+            ? "translateX(-50%)"
+            : placement === "top"
+              ? "translate(-50%, -100%)"
+              : placement === "left"
+                ? "translate(-100%, -50%)"
+                : "translateY(-50%)",
+      }}
+      className={cn(
+        "z-[99999] w-max rounded bg-tooltip-background px-2 py-2 text-[14px] font-medium text-tooltip-foreground shadow-tooltip",
+        className,
+      )}
     >
-      {children}
-      {open && (
+      {content}
+
+      {showArrow && (
         <div
-          role="tooltip"
-          style={{ maxWidth: maxWidth ?? 300 }}
           className={cn(
-            "absolute z-50 w-max rounded bg-tooltip-background px-2 py-2 text-[14px] font-medium text-tooltip-foreground shadow-tooltip",
-            PLACEMENT_STYLES[placement].tooltip,
-            className,
+            "absolute h-2 w-2 rotate-45 bg-tooltip-background",
+            PLACEMENT_STYLES[placement].arrow,
           )}
-        >
-          {content}
-          {showArrow && (
-            <div
-              className={cn(
-                "absolute h-2 w-2 rotate-45 bg-tooltip-background",
-                PLACEMENT_STYLES[placement].arrow,
-              )}
-            />
-          )}
-        </div>
+        />
       )}
     </div>
+  ) : null;
+
+  return (
+    <>
+      <span
+        ref={triggerRef}
+        className="inline-flex"
+        onMouseEnter={handleOnMouseEnter}
+        onMouseLeave={handleOnMouseLeave}
+        onFocus={handleOnFocus}
+        onBlur={handleOnBlur}
+      >
+        {children}
+      </span>
+
+      {createPortal(tooltip, document.body)}
+    </>
   );
 }

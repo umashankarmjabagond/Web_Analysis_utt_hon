@@ -174,7 +174,7 @@
   "PROJECT_ANALYSIS_FINISH": "完成",
 
   "CANVAS_CREATE_NEW_TEMPLATE": "创建新模板",
-  "CANVAS_CREATE_TEMPLATE_DESCRIPTION": "使用左侧面板中的属性或预定义模板从头创建模板，根据您的需求进行自定义，并将其保存为自定义模板。",
+  "CANVAS_CREATE_TEMPLATE_DESCRIPTION": "将属性或模板从左侧面板拖放到此处。将鼠标悬停在属性上，然后点击“+”连接器以添加新属性，或者从“+”连接器拖动到现有属性上以将它们连接起来。",
   "CANVAS_ADD_ATTRIBUTE": "添加属性",
   "CANVAS_WORKFLOW": "工作流",
 
