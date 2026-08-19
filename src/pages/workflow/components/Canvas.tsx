@@ -351,12 +351,12 @@ export default function Canvas() {
       >
         {nodes.length === 0 && (
           <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-            <div className="max-w-md text-center">
-              <h2 className="text-4xl font-medium text-app-default-border">
+            <div className="max-w-lg text-center">
+              <h2 className="text-4xl font-medium text-foreground-tertiary">
                 {t("CANVAS_CREATE_NEW_TEMPLATE")}
               </h2>
 
-              <p className="mt-4 text-base leading-6 text-app-default-border">
+              <p className="mt-4 text-base leading-6 text-foreground-tertiary">
                 {t("CANVAS_CREATE_TEMPLATE_DESCRIPTION")}
               </p>
             </div>

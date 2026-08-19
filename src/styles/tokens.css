@@ -688,6 +688,28 @@
   --dialog-title: var(--foreground);
   --dialog-description: var(--foreground-secondary);
 
+  /* Controller Configuration */
+  --controller-background: var(--dialog-background);
+  --controller-foreground: var(--dialog-foreground);
+
+  --controller-border: var(--gray-900);
+  --controller-section-background: transparent;
+
+  --controller-title: var(--foreground);
+  --controller-description: var(--foreground-secondary);
+  --controller-muted: var(--gray-400);
+
+  --controller-step-active: var(--blue-200);
+  --controller-step-completed: var(--blue-200);
+  --controller-step-inactive: var(--gray-1150);
+
+  --controller-reset-foreground: var(--foreground-secondary);
+  --controller-reset-hover-foreground: var(--foreground-strong);
+
+  --controller-radio-accent: var(--blue-200);
+
+  --controller-footer-border: var(--dialog-footer-border);
+
   /* Tree */
 
   --tree-background: transparent;
@@ -1472,6 +1494,31 @@
   --color-dialog-title: var(--dialog-title);
   --color-dialog-description: var(--dialog-description);
 
+  /* Controller Configuration */
+
+  --color-controller-background: var(--controller-background);
+  --color-controller-foreground: var(--controller-foreground);
+
+  --color-controller-border: var(--controller-border);
+  --color-controller-section-background: var(--controller-section-background);
+
+  --color-controller-title: var(--controller-title);
+  --color-controller-description: var(--controller-description);
+  --color-controller-muted: var(--controller-muted);
+
+  --color-controller-step-active: var(--controller-step-active);
+  --color-controller-step-completed: var(--controller-step-completed);
+  --color-controller-step-inactive: var(--controller-step-inactive);
+
+  --color-controller-reset-foreground: var(--controller-reset-foreground);
+  --color-controller-reset-hover-foreground: var(
+    --controller-reset-hover-foreground
+  );
+
+  --color-controller-radio-accent: var(--controller-radio-accent);
+
+  --color-controller-footer-border: var(--controller-footer-border);
+
   /* Tree */
 
   --color-tree-background: var(--tree-background);
@@ -1561,4 +1608,17 @@
   --color-scrollbar-table-border: var(--scrollbar-table-border);
   --color-scrollbar-table-thumb: var(--scrollbar-table-thumb);
   --color-scrollbar-table-thumb-hover: var(--scrollbar-table-thumb-hover);
+}
+
+
+
+
+.custom-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.custom-scrollbar::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
 }

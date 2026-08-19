@@ -18,7 +18,7 @@ const variants = {
     solid: cn(
       "bg-button-primary-solid-background",
       "border-button-primary-solid-border",
-      "text-button-primary-solid-foreground",
+      "text-foreground-inverse-secondary",
       "hover:bg-button-primary-solid-hover-background",
       "hover:border-button-primary-solid-hover-border",
       "active:bg-button-primary-solid-active-background",
@@ -163,7 +163,7 @@ const Button: React.FC<ButtonProps> = ({
         "disabled:cursor-not-allowed",
         "disabled:bg-button-disabled-background",
         "disabled:border-button-disabled-border",
-        "disabled:text-button-disabled-foreground",
+        "disabled:text-foreground-inverse-secondary",
         fullWidth && !iconOnly && "w-full",
         iconOnly ? iconOnlySizes[size] : cn("gap-1.5", sizes[size]),
         variantStyles,

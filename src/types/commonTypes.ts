@@ -22,9 +22,9 @@ export interface BreadcrumbProps {
 
 export const NOTIFICATION_TYPE = {
   SUCCESS: "success",
-  ERROR: "error",
   WARNING: "warning",
   INFO: "info",
+  DANGER: "danger",
 } as const;
 
 export type NotificationType =
@@ -32,10 +32,11 @@ export type NotificationType =
 
 export interface NotificationProps {
   type: NotificationType;
-  title?: string;
   message: string;
-  duration?: number;
+  title?: string;
   onClose?: () => void;
+  width?: number | string;
+  duration?: number;
 }
 
 export interface DialogProps {
@@ -99,10 +100,27 @@ export interface TabsProps {
   renderContent?: boolean;
 }
 
+
+
+
+
 export interface DonutChartProps {
   data: DonutChartItem[];
-  size?: number | undefined;
+  size?: number;
   colors: Record<string, string>;
+  className?: string;
+}
+
+
+export interface LegendItem {
+  name: string;
+  value: number;
+  fill: string;
+}
+
+export interface CustomLegendProps {
+  data: LegendItem[];
+  width: number;
 }
 
 export interface SelectOption {
@@ -187,6 +205,7 @@ export interface CheckboxProps extends InputHTMLAttributes<HTMLInputElement> {
   checked: boolean;
   label?: string;
   size?: number;
+  labelClassName?: string;
 }
 export type CellValue = string | number | boolean | null | undefined;
 

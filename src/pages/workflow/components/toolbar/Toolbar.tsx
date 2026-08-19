@@ -110,11 +110,6 @@ export default function Toolbar() {
 
     // Clear current workflow
     clearWorkflow();
-
-    // Hide notification
-    setTimeout(() => {
-      setShowNotification(false);
-    }, 3000);
   };
 
   const handleSaveAs = (item: { value: string; label: string }) => {
@@ -128,10 +123,6 @@ export default function Toolbar() {
       );
 
       setShowNotification(true);
-
-      setTimeout(() => {
-        setShowNotification(false);
-      }, 3000);
 
       return;
     }
@@ -153,11 +144,6 @@ export default function Toolbar() {
       setNotificationTitle("Nothing to Export");
       setNotificationMessage("Please create a workflow before exporting.");
       setShowNotification(true);
-
-      setTimeout(() => {
-        setShowNotification(false);
-      }, 3000);
-
       return;
     }
 
@@ -189,10 +175,6 @@ export default function Toolbar() {
       setNotificationTitle("Import Successful");
       setNotificationMessage("Workflow imported successfully.");
       setShowNotification(true);
-
-      setTimeout(() => {
-        setShowNotification(false);
-      }, 3000);
     } catch (error) {
       setNotificationType("warning");
       setNotificationTitle("Import Failed");
@@ -200,16 +182,15 @@ export default function Toolbar() {
         error instanceof Error ? error.message : "Unable to import workflow.",
       );
       setShowNotification(true);
-
-      setTimeout(() => {
-        setShowNotification(false);
-      }, 3000);
     } finally {
       setIsImporting(false);
     }
 
     event.target.value = "";
   };
+
+  const hasSelectedElements =
+    nodes.some((node) => node.selected) || edges.some((edge) => edge.selected);
   return (
     <>
       <div className=" flex h-12 min-h-9 w-full items-center justify-between border-b border-[#303030] bg-surface-primary px-2        ">
@@ -256,35 +237,53 @@ export default function Toolbar() {
             gap-1
           "
         >
-          <ToolbarButton title="Delete" icon={Trash2} onClick={handleDelete} />
+          <div className="flex items-center gap-4">
+            {/* Delete / Clear */}
+            <ToolbarButton
+              icon={Trash2}
+              title="Delete"
+              onClick={handleDelete}
+              disabled={!hasSelectedElements}
+              iconClassName={
+                !hasSelectedElements
+                  ? "text-toolbar-icon-disabled"
+                  : "text-white"
+              }
+            />
 
-          <ToolbarButton
-            title="Clear Workflow"
-            icon={StickyNoteX}
-            onClick={handleClear}
-            disabled={nodes.length === 0 && edges.length === 0}
-            iconClassName={
-              nodes.length === 0 && edges.length === 0
-                ? "text-toolbar-icon-disabled"
-                : "text-white"
-            }
-          />
+            <ToolbarButton
+              title="Clear Workflow"
+              icon={StickyNoteX}
+              onClick={handleClear}
+              disabled={nodes.length === 0 && edges.length === 0}
+              iconClassName={
+                nodes.length === 0 && edges.length === 0
+                  ? "text-toolbar-icon-disabled"
+                  : "text-white"
+              }
+            />
 
-          <ToolbarButton
-            title="Import Template"
-            icon={Download}
-            iconClassName="text-white"
-            onClick={handleImportClick}
-          />
+            {/* Divider */}
+            <div className="h-6 w-px bg-[#383838]" />
 
-          <ToolbarButton
-            title="Export Template"
-            icon={Upload}
-            iconClassName="text-white"
-            onClick={handleExport}
-          />
+            {/* Import / Export */}
+            <ToolbarButton
+              title="Import Template"
+              icon={Download}
+              iconClassName="text-white"
+              onClick={handleImportClick}
+            />
 
-          <div className="ml-1">
+            <ToolbarButton
+              title="Export Template"
+              icon={Upload}
+              iconClassName="text-white"
+              onClick={handleExport}
+            />
+
+            {/* Divider */}
+            <div className="h-6 w-px bg-tab-active-box" />
+
             <Dropdown
               placeholder="Save As"
               items={[
@@ -331,7 +330,7 @@ export default function Toolbar() {
       >
         <div
           className="w-full
-            flex
+            flex px-2
             flex-col
             gap-6
             text-sm
@@ -367,7 +366,11 @@ export default function Toolbar() {
               {t("COMMON_CANCEL")}
             </Button>
 
-            <Button variant="primary" onClick={handleSave}>
+            <Button
+              disabled={!templateName}
+              variant="primary"
+              onClick={handleSave}
+            >
               {t("COMMON_SAVE")}
             </Button>
           </div>
