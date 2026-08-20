@@ -4,7 +4,7 @@ import Button from "../../components/forms/button/Button";
 import Input from "../../components/forms/input/Input";
 import Select from "../../components/forms/select/Select";
 import TextArea from "../../components/forms/textarea/TextArea";
-import { Check, CircleHelp, RefreshCw } from "lucide-react";
+import { BarChart3, Calculator, Check, CircleHelp, RefreshCw } from "lucide-react";
 import { useForm } from "react-hook-form";
 import {
   propertiesSchema,
@@ -12,6 +12,8 @@ import {
 } from "../../schemas/propertiesSchema";
 import type { PropertiesProps } from "../../types/workFlowTypes";
 import { cn } from "../../utils/utils";
+import Dialog from "../../components/common/dialogue/Dialog";
+import Accordion from "../../components/forms/accordion/Accordion";
 
 const COLUMN_OPTIONS = [
   {
@@ -36,12 +38,28 @@ const COLUMN_OPTIONS = [
   },
 ];
 
+const CONNECTIONS = [
+  {
+    id: "multi-math",
+    title: "HDSC1_INFRL",
+    subtitle: "Multi Math",
+    icon: <Calculator size={16} />,
+  },
+  {
+    id: "coherency",
+    title: "HDSC1_INFRL",
+    subtitle: "Coherency",
+    icon: <BarChart3 size={16} />,
+  },
+];
 const Properties: React.FC<PropertiesProps> = ({ onCancel }) => {
   const { t } = useTranslation();
   const [badExpressionLoading, setBadExpressionLoading] = useState(false);
 
   const [replacementExpressionLoading, setReplacementExpressionLoading] =
     useState(false);
+
+  const [isHelpOpen, setIsHelpOpen] = useState(false);
 
   const {
     register,
@@ -108,6 +126,7 @@ const Properties: React.FC<PropertiesProps> = ({ onCancel }) => {
             fill="outline"
             size="medium"
             icon={<CircleHelp size={13} strokeWidth={2.2} />}
+            onClick={() => setIsHelpOpen(true)}
           >
             {t("COMMON_HELP")}
           </Button>
@@ -293,6 +312,62 @@ const Properties: React.FC<PropertiesProps> = ({ onCancel }) => {
           {t("COMMON_SAVE")}
         </Button>
       </div>
+
+      <Dialog
+        isOpen={isHelpOpen}
+        title="Connections"
+        subtitle="Inputs feeding SPA"
+        width={424}
+        variant="connections"
+        onClose={() => setIsHelpOpen(false)}
+      >
+        <div className="flex flex-col gap-3">
+          {CONNECTIONS.map((connection) => (
+            <Accordion
+              key={connection.id}
+              title={connection.title}
+              subtitle={connection.subtitle}
+              icon={connection.icon}
+              defaultOpen
+              action={
+                <Button
+                  variant="secondary"
+                  fill="outline"
+                  size="medium"
+                  className="h-[34px] min-w-[78px] rounded-[6px] px-[24px]"
+                  onClick={() => {
+                    console.log("Edit connection:", connection.id);
+                  }}
+                >
+                  Edit
+                </Button>
+              }
+            >
+              <div className="flex flex-col gap-2">
+                <span className="text-[12px] font-bold uppercase leading-4 tracking-[0.3px]  text-[var(--gray-350)]">
+                  COLUMNS PASSED TO SPA
+                </span>
+
+                <span className="text-[13px] font-medium italic leading-[19.5px] tracking-normal  text-[var(--gray-350)]">
+                  No columns selected.
+                </span>
+              </div>
+            </Accordion>
+          ))}
+
+          <div className="flex justify-end pt-2">
+            <Button
+              variant="secondary"
+              fill="outline"
+              size="medium"
+              className="h-[34px] min-w-[88px] rounded-[6px] px-[24px]"
+              onClick={() => setIsHelpOpen(false)}
+            >
+              Close
+            </Button>
+          </div>
+        </div>
+      </Dialog>
     </div>
   );
 };
