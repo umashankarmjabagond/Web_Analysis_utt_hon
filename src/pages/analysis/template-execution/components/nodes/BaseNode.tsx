@@ -10,7 +10,7 @@ import { Fragment } from "react/jsx-runtime";
 import type { CSSProperties } from "react";
 import { cn } from "../../../../../utils/utils";
 
-export default function BaseNode({ id, data, type }: NodeProps<BaseFlowNode>) {
+export default function BaseNode({ data, type }: NodeProps<BaseFlowNode>) {
   const { t } = useTranslation();
 
   const nodeMeta = NODE_TYPES[type as NodeType];
