@@ -15,7 +15,7 @@ describe("Dialog", () => {
     expect(screen.queryByText("Delete Project")).not.toBeInTheDocument();
   });
 
-  it("renders title", () => {
+  it("renders title for default variant", () => {
     render(
       <Dialog isOpen title="Delete Project" onClose={vi.fn()}>
         Content
@@ -25,7 +25,7 @@ describe("Dialog", () => {
     expect(screen.getByText("Delete Project")).toBeInTheDocument();
   });
 
-  it("renders subtitle", () => {
+  it("renders subtitle for default variant", () => {
     render(
       <Dialog
         isOpen
@@ -70,9 +70,9 @@ describe("Dialog", () => {
       </Dialog>,
     );
 
-    const button = screen.getByRole("button");
+    const closeButton = screen.getByRole("button");
 
-    await user.click(button);
+    await user.click(closeButton);
 
     expect(handleClose).toHaveBeenCalledTimes(1);
   });
@@ -88,6 +88,82 @@ describe("Dialog", () => {
 
     expect(dialog).toHaveStyle({
       width: "800px",
+    });
+  });
+
+  it("renders connections variant title and subtitle", () => {
+    render(
+      <Dialog
+        isOpen
+        title="Connections"
+        subtitle="Inputs feeding SPA"
+        variant="connections"
+        onClose={vi.fn()}
+      >
+        Connections content
+      </Dialog>,
+    );
+
+    expect(screen.getByText("Connections")).toBeInTheDocument();
+
+    expect(screen.getByText("Inputs feeding SPA")).toBeInTheDocument();
+
+    expect(screen.getByText("Connections content")).toBeInTheDocument();
+  });
+
+  it("uses default variant when variant is not provided", () => {
+    render(
+      <Dialog
+        isOpen
+        title="Default Dialog"
+        subtitle="Default subtitle"
+        onClose={vi.fn()}
+      >
+        Content
+      </Dialog>,
+    );
+
+    expect(screen.getByText("Default Dialog")).toBeInTheDocument();
+
+    expect(screen.getByText("Default subtitle")).toBeInTheDocument();
+  });
+
+  it("does not uppercase the connections subtitle", () => {
+    render(
+      <Dialog
+        isOpen
+        title="Connections"
+        subtitle="Inputs feeding SPA"
+        variant="connections"
+        onClose={vi.fn()}
+      >
+        Content
+      </Dialog>,
+    );
+
+    expect(screen.getByText("Inputs feeding SPA")).toBeInTheDocument();
+
+    expect(screen.queryByText("INPUTS FEEDING SPA")).not.toBeInTheDocument();
+  });
+
+  it("renders connections dialog with custom width", () => {
+    const { container } = render(
+      <Dialog
+        isOpen
+        title="Connections"
+        subtitle="Inputs feeding SPA"
+        variant="connections"
+        width={424}
+        onClose={vi.fn()}
+      >
+        Content
+      </Dialog>,
+    );
+
+    const dialog = container.querySelector("[style]") as HTMLElement;
+
+    expect(dialog).toHaveStyle({
+      width: "424px",
     });
   });
 });

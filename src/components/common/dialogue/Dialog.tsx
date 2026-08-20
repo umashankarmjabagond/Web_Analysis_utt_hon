@@ -9,8 +9,11 @@ const Dialog = ({
   children,
   onClose,
   width = 600,
+  variant = "default",
 }: DialogProps) => {
   if (!isOpen) return null;
+
+  const isConnections = variant === "connections";
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-dialog-overlay p-4">
@@ -24,29 +27,66 @@ const Dialog = ({
         style={{ width }}
       >
         {/* Header */}
-        <div className="flex items-start justify-between p-8 pb-6">
-          <div className="flex items-center gap-4">
-            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-[#454545] border-[1.5px] border-[#454545]">
-              <Timer
-                size={20}
-                strokeWidth={1.8}
-                className="text-foreground-secondary"
-              />
-            </div>
+        <div
+          className={cn(
+            "flex items-start justify-between",
+            isConnections ? "px-8 pb-5 pt-7" : "p-8 pb-6",
+          )}
+        >
+          {!isConnections && (
+            <div className="flex items-center gap-4">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-[#454545] border-[1.5px] border-[#454545]">
+                <Timer
+                  size={20}
+                  strokeWidth={1.8}
+                  className="text-foreground-secondary"
+                />
+              </div>
 
-            <div>
-              <h2 className="text-4xl font-semibold text-dialog-title">
+              <div>
+                <h2 className="text-4xl font-semibold text-dialog-title">
+                  {title}
+                </h2>
+
+                {subtitle && (
+                  <p className="mt-2 text-xs font-semibold uppercase tracking-[0.25em] text-dialog-description">
+                    {subtitle}
+                  </p>
+                )}
+              </div>
+            </div>
+          )}
+          {isConnections && (
+            <div className="flex flex-col">
+              <h2
+                className="
+                  text-[20px]
+                  font-extrabold
+                  leading-[30px]
+                  tracking-normal
+                  text-dialog-title
+                "
+              >
                 {title}
               </h2>
 
               {subtitle && (
-                <p className="mt-2 text-xs font-semibold uppercase tracking-[0.25em] text-dialog-description">
+                <p
+                  className="
+                    mt-0
+                    text-[12px]
+                    font-medium
+                    leading-4
+                    tracking-normal
+                    text-[var(--gray-350)]
+                    normal-case
+                  "
+                >
                   {subtitle}
                 </p>
               )}
             </div>
-          </div>
-
+          )}
           <button
             type="button"
             onClick={onClose}

@@ -46,6 +46,7 @@ export interface DialogProps {
   children: ReactNode;
   onClose: () => void;
   width?: number | string;
+  variant?: "default" | "connections";
 }
 
 export interface AccordionProps {
@@ -53,6 +54,9 @@ export interface AccordionProps {
   count?: number;
   children: ReactNode;
   defaultOpen?: boolean;
+  subtitle?: string;
+  icon?: ReactNode;
+  action?: ReactNode;
 }
 
 export interface TemplateCardProps {

@@ -206,6 +206,79 @@ describe("Properties", () => {
     expect(screen.getAllByText("Save")).toHaveLength(2);
   });
 
+  it("does not show connections dialog initially", () => {
+    render(<Properties onCancel={mockOnCancel} />);
+
+    expect(screen.queryByText("Connections")).not.toBeInTheDocument();
+  });
+  // ---------------------------------------------------------------------------
+  // Connections dialog
+  // ---------------------------------------------------------------------------
+
+  it("opens connections dialog when Help button is clicked", () => {
+    render(<Properties onCancel={mockOnCancel} />);
+
+    expect(screen.queryByText("Connections")).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByText("Help"));
+
+    expect(screen.getByText("Connections")).toBeInTheDocument();
+  });
+
+  it("renders connections dialog subtitle when Help is clicked", () => {
+    render(<Properties onCancel={mockOnCancel} />);
+
+    fireEvent.click(screen.getByText("Help"));
+
+    expect(screen.getByText("Inputs feeding SPA")).toBeInTheDocument();
+  });
+
+  it("renders both connections when Help is clicked", () => {
+    render(<Properties onCancel={mockOnCancel} />);
+
+    fireEvent.click(screen.getByText("Help"));
+
+    expect(screen.getAllByText("HDSC1_INFRL")).toHaveLength(2);
+
+    expect(screen.getByText("Multi Math")).toBeInTheDocument();
+
+    expect(screen.getByText("Coherency")).toBeInTheDocument();
+  });
+
+  it("renders Edit buttons for both connections", () => {
+    render(<Properties onCancel={mockOnCancel} />);
+
+    fireEvent.click(screen.getByText("Help"));
+
+    expect(screen.getAllByText("Edit")).toHaveLength(2);
+  });
+
+  it("renders connection content when accordions are open", () => {
+    render(<Properties onCancel={mockOnCancel} />);
+
+    fireEvent.click(screen.getByText("Help"));
+
+    expect(screen.getAllByText("COLUMNS PASSED TO SPA")).toHaveLength(2);
+
+    expect(screen.getAllByText("No columns selected.")).toHaveLength(2);
+  });
+
+  it("closes connections dialog when close button is clicked", () => {
+    render(<Properties onCancel={mockOnCancel} />);
+
+    fireEvent.click(screen.getByText("Help"));
+
+    expect(screen.getByText("Connections")).toBeInTheDocument();
+
+    const closeButton = screen.getByRole("button", {
+      name: /close/i,
+    });
+
+    fireEvent.click(closeButton);
+
+    expect(screen.queryByText("Connections")).not.toBeInTheDocument();
+  });
+
   it("renders edit columns section", () => {
     render(<Properties onCancel={mockOnCancel} />);
 
@@ -396,36 +469,36 @@ describe("Properties", () => {
   });
 
   it("keeps bad expression refresh button rendered after timeout", async () => {
-  vi.useFakeTimers();
+    vi.useFakeTimers();
 
-  render(<Properties onCancel={mockOnCancel} />);
+    render(<Properties onCancel={mockOnCancel} />);
 
-  const refreshButton = screen.getByRole("button", {
-    name: "Refresh bad data expression",
+    const refreshButton = screen.getByRole("button", {
+      name: "Refresh bad data expression",
+    });
+
+    fireEvent.click(refreshButton);
+
+    await vi.advanceTimersByTimeAsync(2000);
+
+    expect(refreshButton).toBeInTheDocument();
   });
 
-  fireEvent.click(refreshButton);
+  it("keeps replacement expression refresh button rendered after timeout", async () => {
+    vi.useFakeTimers();
 
-  await vi.advanceTimersByTimeAsync(2000);
+    render(<Properties onCancel={mockOnCancel} />);
 
-  expect(refreshButton).toBeInTheDocument();
-});
+    const refreshButton = screen.getByRole("button", {
+      name: "Refresh replacement expression",
+    });
 
-it("keeps replacement expression refresh button rendered after timeout", async () => {
-  vi.useFakeTimers();
+    fireEvent.click(refreshButton);
 
-  render(<Properties onCancel={mockOnCancel} />);
+    await vi.advanceTimersByTimeAsync(2000);
 
-  const refreshButton = screen.getByRole("button", {
-    name: "Refresh replacement expression",
+    expect(refreshButton).toBeInTheDocument();
   });
-
-  fireEvent.click(refreshButton);
-
-  await vi.advanceTimersByTimeAsync(2000);
-
-  expect(refreshButton).toBeInTheDocument();
-});
 
   // ---------------------------------------------------------------------------
   // Footer
