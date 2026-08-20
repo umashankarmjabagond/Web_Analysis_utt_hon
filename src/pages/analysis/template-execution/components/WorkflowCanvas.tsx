@@ -1,25 +1,12 @@
-import {
-  Background,
-  BackgroundVariant,
-  ConnectionMode,
-  ReactFlow,
-  type NodeMouseHandler,
-} from "@xyflow/react";
+import { ConnectionMode, ReactFlow } from "@xyflow/react";
 import { useMemo } from "react";
 import { useParams } from "react-router-dom";
 
 import { nodeTypes } from "./nodes/nodeTypes";
 import { edgeTypes } from "./edges/edgeTypes";
-import ExecutionDetailsPanel from "./ExecutionDetailsPanel";
-import ExecutionNodeDrawer from "./ExecutionNodeDrawer";
 
 import { useTemplateExecutionStore } from "../../../../store/templateExecutionStore";
-import { useWorkflowCanvasInteractions } from "../../../../hooks/useWorkflowInteractions";
-import type {
-  BaseFlowNode,
-  ExecutionFlowNode,
-  WorkflowCanvasProps,
-} from "../../../../types/templateExecution";
+import type { WorkflowCanvasProps } from "../../../../types/templateExecution";
 import { Loader2 } from "lucide-react";
 
 export default function WorkflowCanvas({
@@ -33,14 +20,6 @@ export default function WorkflowCanvas({
 
   const nodes = useTemplateExecutionStore((state) => state.nodes);
   const edges = useTemplateExecutionStore((state) => state.edges);
-
-  const { handleNodeSelection } = useWorkflowCanvasInteractions();
-
-  const onNodeClick: NodeMouseHandler<ExecutionFlowNode> = (_, node) => {
-    if (node.type === "executionHeader") return;
-    const baseNode = node as BaseFlowNode;
-    handleNodeSelection(baseNode.id, baseNode.data.status);
-  };
 
   const { contentWidth, contentHeight } = useMemo(() => {
     const mxaX = Math.max(...nodes.map((n) => n.position.x + 200), 800);
@@ -77,7 +56,6 @@ export default function WorkflowCanvas({
               edges={edges}
               nodeTypes={nodeTypes}
               edgeTypes={edgeTypes}
-              onNodeClick={onNodeClick}
               connectionMode={ConnectionMode.Loose}
               preventScrolling={false}
               panOnScroll={false}
@@ -91,32 +69,19 @@ export default function WorkflowCanvas({
               fitView={false}
               defaultViewport={{ x: 0, y: 0, zoom: 1 }}
               proOptions={{ hideAttribution: true }}
-            >
-              <Background
-                color="var(--surface-elevated)"
-                size={3}
-                variant={BackgroundVariant.Dots}
-                gap={25}
-              />
-            </ReactFlow>
-          </div>
+            />
 
-          {isLoadingMore && (
-            <div className="pointer-events-none absolute bottom-4 left-1/2 z-50 flex -translate-x-1/2 items-center gap-2 rounded-md bg-app-primary px-3 py-2 text-sm text-app-text-primary shadow-lg">
-              <Loader2 className="h-4 w-4 animate-spin" />
-              <span>Loading more rows...</span>
-            </div>
-          )}
+            {isLoadingMore && (
+              <div className="pointer-events-none absolute inset-0 z-50 flex items-center justify-center bg-surface/50">
+                <div className="flex items-center gap-2 rounded-md  px-3 py-2 text-base text-foreground-accent shadow-lg">
+                  <Loader2 size={16} className="h-4 w-4 animate-spin" />
+                  <span>Loading more rows...</span>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
-
-        {showDetailsPanel && (
-          <div className="h-[60%] overflow-y-auto flex flex-col">
-            <ExecutionDetailsPanel />
-          </div>
-        )}
       </div>
-
-      <ExecutionNodeDrawer />
     </>
   );
 }

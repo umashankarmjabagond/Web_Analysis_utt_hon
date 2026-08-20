@@ -11,10 +11,14 @@
   "COMMON_LOADING": "Загрузка...",
   "COMMON_SELECT": "Выбрать",
   "COMMON_FILTER": "Фильтр",
+  "CLEAR_WORKFLOW": "Очистить рабочий процесс",
 
   "COMMON_GOOD": "Хорошо",
   "COMMON_WARNING": "Предупреждение",
   "COMMON_ERROR": "Ошибка",
+  "COMMON_SUCCESS": "Успешно",
+  "COMMON_FAILURE": "Не удалось",
+  "COMMON_INFO": "Информация",
 
   "SIDEBAR_HOME": "Главная",
   "SIDEBAR_WORKFLOW": "Рабочий процесс",
@@ -99,7 +103,7 @@
   "TOOLBAR_CUSTOM_MPC_TEMPLATES": "Пользовательские шаблоны MPC",
   "TOOLBAR_NOTHING_TO_SAVE": "Нечего сохранять",
   "TOOLBAR_CREATE_WORKFLOW_BEFORE_SAVE": "Пожалуйста, создайте рабочий процесс перед сохранением шаблона.",
-  "TOOLBAR_SAVED_REGULATORY_TEMPLATE": "Сохранено как нормативный шаблон",
+  "TOOLBAR_SAVED_REGULATORY": "Сохранено как нормативный шаблон",
   "TOOLBAR_SAVED_MPC_TEMPLATE": "Сохранено как шаблон MPC",
   "TOOLBAR_REGULATORY_TEMPLATE_LOCATION": "Этот шаблон можно найти в Каталоге в разделе Шаблоны > Нормативные шаблоны.",
   "TOOLBAR_MPC_TEMPLATE_LOCATION": "Этот шаблон можно найти в Каталоге в разделе Шаблоны > Шаблоны MPC.",
@@ -127,12 +131,19 @@
   "NODE_WARNING_MESSAGE": "Здесь будет показано предупреждающее сообщение",
   "NODE_ERROR_MESSAGE": "Слишком много некорректных точек данных",
 
-  "EXECUTION_EXECUTE": "Выполнить",
-  "EXECUTION_PAUSE": "Пауза",
+  "EXECUTION_TOOLBAR_EDIT": "Редактировать",
+  "EXECUTION_TOOLBAR_DELETE": "Удалить",
+  "EXECUTION_TOOLBAR_COMPACT_VIEW": "Компактный вид",
+  "EXECUTION_TOOLBAR_COMFORTABLE_VIEW": "Удобный вид",
+  "EXECUTION_TOOLBAR_ANALYSIS_TEMPLATES": "Шаблоны анализа",
+
+  "EXECUTION_EXECUTE": "Выполнить все",
+  "EXECUTION_PAUSE": "Приостановить все",
+  "EXECUTION_EXECUTE_SELECTED": "Выполнить выбранные",
+  "EXECUTION_PAUSE_SELECTED": "Приостановить выбранные",
   "EXECUTION_START_CONFIRMATION": "Начать выполнение?",
   "EXECUTION_PAUSE_CONFIRMATION": "Приостановить выполнение?",
   "EXECUTION_DELETE_CONFIRMATION": "Удалить рабочий процесс?",
-  "ANALYSIS_TEMPLATES": "Шаблоны анализа",
 
   "CALCULATED_KPIS_TITLE": "Рассчитанные KPI",
   "CALCULATED_KPIS_ERRORS_TITLE": "Ошибки",
@@ -254,5 +265,16 @@
   "CONNECTIONS_DATA_SOURCE": "Источник данных",
   "CONNECTIONS_SELECT_INPUTS_MESSAGE": "Пожалуйста, выберите входные данные для передачи из",
   "CONNECTIONS_DATA_PREPROCESSING_TITLE": "ПРЕДВАРИТЕЛЬНАЯ ОБРАБОТКА ДАННЫХ",
-  "CONNECTIONS_DATA_SOURCE_TITLE": "ИСТОЧНИК ДАННЫХ"
+  "CONNECTIONS_DATA_SOURCE_TITLE": "ИСТОЧНИК ДАННЫХ",
+  
+  "TOOLBAR_SAVED_MPC": "Сохранено как шаблон MPC",
+  "TOOLBAR_FIND_REGULATORY": "Вы можете найти этот шаблон в Каталоге в разделе Шаблоны > Регуляторные шаблоны.",
+  "TOOLBAR_FIND_MPC": "Вы можете найти этот шаблон в Каталоге в разделе Шаблоны > Шаблоны MPC.",
+
+  "TOOLBAR_IMPORT_SUCCESS": "Импорт выполнен успешно",
+  "TOOLBAR_WORKFLOW_IMPORTED_SUCCESSFULLY": "Рабочий процесс успешно импортирован.",
+  "TOOLBAR_IMPORT_FAILED": "Ошибка импорта",
+  "TOOLBAR_UNABLE_TO_IMPORT_WORKFLOW": "Не удалось импортировать рабочий процесс.",
+  "TOOLBAR_NOTHING_TO_EXPORT": "Нечего экспортировать",
+  "TOOLBAR_CREATE_WORKFLOW_BEFORE_EXPORTING": "Пожалуйста, создайте рабочий процесс перед экспортом."
 }

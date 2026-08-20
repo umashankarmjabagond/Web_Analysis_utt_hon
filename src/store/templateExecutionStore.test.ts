@@ -266,4 +266,23 @@ describe("templateExecutionStore", () => {
     expect(state.hasMoreWorkflows).toBe(true);
     expect(state.isLoadingMoreWorkflows).toBe(false);
   });
+
+  it("replaces existing workflow nodes and edges when loading workflow", () => {
+    useTemplateExecutionStore.setState({
+      nodes: [{ id: "old-node" }] as never,
+      edges: [{ id: "old-edge" }] as never,
+    });
+
+    const nodes = [{ id: "new-node" }];
+    const edges = [{ id: "new-edge" }];
+
+    useTemplateExecutionStore
+      .getState()
+      .loadWorkflow(nodes as never, edges as never);
+
+    const state = useTemplateExecutionStore.getState();
+
+    expect(state.nodes).toEqual(nodes);
+    expect(state.edges).toEqual(edges);
+  });
 });

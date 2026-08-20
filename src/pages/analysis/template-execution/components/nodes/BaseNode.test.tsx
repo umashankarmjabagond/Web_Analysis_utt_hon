@@ -1,382 +1,158 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import BaseNode from "./BaseNode";
+import type { NodeStatus } from "../../../../../types/templateExecution";
 
-const mockHandleNodeSelection = vi.fn();
-
-let mockSelectedNodeIds: string[] = [];
-
-/**
- * -------------------------------------------------------
- * Mock i18next
- * -------------------------------------------------------
- *
- * BaseNode uses:
- *
- *   t("NODE_WARNING_MESSAGE")
- *   t("NODE_ERROR_MESSAGE")
- *
- * We don't want to initialize the complete i18next
- * configuration for this unit test.
- */
 vi.mock("react-i18next", () => ({
   useTranslation: () => ({
-    t: (key: string) => {
-      const translations: Record<string, string> = {
-        NODE_WARNING_MESSAGE: "Warning message will be shown here",
-
-        NODE_ERROR_MESSAGE: "There are too many bad data points",
-      };
-
-      return translations[key] ?? key;
-    },
+    t: (key: string) => key,
   }),
 }));
 
-/**
- * -------------------------------------------------------
- * Mock template execution store
- * -------------------------------------------------------
- */
-vi.mock("../../../../../store/templateExecutionStore", () => ({
-  useTemplateExecutionStore: vi.fn((selector) =>
-    selector({
-      selectedNodeIds: mockSelectedNodeIds,
-    }),
-  ),
-}));
-
-/**
- * -------------------------------------------------------
- * Mock workflow interactions
- * -------------------------------------------------------
- */
-vi.mock("../../../../../hooks/useWorkflowInteractions", () => ({
-  useWorkflowCanvasInteractions: () => ({
-    handleNodeSelection: mockHandleNodeSelection,
-  }),
-}));
-
-/**
- * -------------------------------------------------------
- * Mock Tooltip
- * -------------------------------------------------------
- */
-vi.mock("../../../../../components/common/tooltip/Tooltip", () => ({
-  default: ({
-    children,
-    content,
-    disabled,
-  }: {
-    children: React.ReactNode;
-    content?: string | null;
-    disabled?: boolean;
-  }) => (
-    <div
-      data-testid="tooltip"
-      data-content={content ?? ""}
-      data-disabled={String(disabled)}
-    >
-      {children}
-    </div>
-  ),
-}));
-
-/**
- * -------------------------------------------------------
- * Mock Checkbox
- * -------------------------------------------------------
- */
-vi.mock("../../../../../components/forms/checkbox/CheckBox", () => ({
-  default: ({
-    onChange,
-    onClick,
-    checked,
-  }: {
-    onChange?: () => void;
-    onClick?: (e: { stopPropagation: () => void }) => void;
-    checked?: boolean;
-  }) => (
-    <>
-      <button
-        data-testid="checkbox-change"
-        data-checked={String(checked)}
-        onClick={onChange}
-      >
-        change
-      </button>
-
-      <button
-        data-testid="checkbox-click"
-        onClick={() =>
-          onClick?.({
-            stopPropagation: vi.fn(),
-          })
-        }
-      >
-        click
-      </button>
-    </>
-  ),
-}));
-
-/**
- * -------------------------------------------------------
- * Mock React Flow
- * -------------------------------------------------------
- */
-vi.mock("@xyflow/react", async () => {
-  const actual =
-    await vi.importActual<typeof import("@xyflow/react")>("@xyflow/react");
-
-  return {
-    ...actual,
-
-    Position: {
-      Top: "top",
-      Right: "right",
-      Bottom: "bottom",
-      Left: "left",
-    },
-
-    Handle: ({ id, type }: { id: string; type: string }) => (
-      <div data-testid="handle" data-id={id} data-type={type} />
-    ),
-  };
-});
-
-/**
- * -------------------------------------------------------
- * Mock node configuration
- * -------------------------------------------------------
- */
 vi.mock("./nodeConfig", () => ({
   NODE_TYPES: {
-    testNode: {
-      icon: ({ size }: { size?: number }) => (
-        <div data-testid="node-icon" data-size={String(size ?? "")} />
+    base: {
+      icon: ({ size, className }: { size?: number; className: string }) => (
+        <div
+          data-testid="node-icon"
+          data-size={String(size ?? "")}
+          className={className}
+        />
       ),
     },
   },
 }));
 
-/**
- * -------------------------------------------------------
- * Create test node
- * -------------------------------------------------------
- */
-const createNode = (
-  status: "default" | "success" | "warning" | "error" = "default",
-) =>
-  ({
-    id: "node-1",
-    type: "testNode",
+vi.mock("@xyflow/react", () => ({
+  Position: {
+    Top: "top",
+    Right: "right",
+    Bottom: "bottom",
+    Left: "left",
+  },
 
-    data: {
-      label: "Test Node",
-      status,
-    },
+  Handle: ({
+    id,
+    type,
+    position,
+  }: {
+    id: string;
+    type: string;
+    position: string;
+  }) => (
+    <div
+      data-testid="handle"
+      data-id={id}
+      data-type={type}
+      data-position={position}
+    />
+  ),
+}));
 
-    dragging: false,
-    zIndex: 0,
-    selectable: true,
-    deletable: true,
-    selected: false,
-    draggable: true,
-  }) as Parameters<typeof BaseNode>[0];
+const createNode = (status: NodeStatus = "default") => ({
+  id: "node-1",
+  type: "base",
+  data: {
+    label: "Test Node",
+    status,
+  },
+  dragging: false,
+  zIndex: 0,
+  selectable: true,
+  deletable: true,
+  selected: false,
+  draggable: true,
+  isConnectable: true,
+  positionAbsoluteX: 0,
+  positionAbsoluteY: 0,
+});
 
-/**
- * =======================================================
- * TESTS
- * =======================================================
- */
 describe("BaseNode", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-
-    mockSelectedNodeIds = [];
   });
 
-  /**
-   * -----------------------------------------------------
-   * Label
-   * -----------------------------------------------------
-   */
-  it("renders label", () => {
+  it("renders node label", () => {
     render(<BaseNode {...createNode()} />);
 
     expect(screen.getByText("Test Node")).toBeInTheDocument();
   });
 
-  /**
-   * -----------------------------------------------------
-   * Icon
-   * -----------------------------------------------------
-   */
-  it("renders icon", () => {
+  it("renders node icon", () => {
     render(<BaseNode {...createNode()} />);
 
     expect(screen.getByTestId("node-icon")).toBeInTheDocument();
   });
 
-  /**
-   * -----------------------------------------------------
-   * Checkbox
-   * -----------------------------------------------------
-   */
-  it("renders checkbox", () => {
+  it("renders target and source handles for all four positions", () => {
     render(<BaseNode {...createNode()} />);
 
-    expect(screen.getByTestId("checkbox-change")).toBeInTheDocument();
+    const handles = screen.getAllByTestId("handle");
+
+    expect(handles).toHaveLength(8);
+
+    expect(
+      handles.filter((handle) => handle.getAttribute("data-type") === "target"),
+    ).toHaveLength(4);
+
+    expect(
+      handles.filter((handle) => handle.getAttribute("data-type") === "source"),
+    ).toHaveLength(4);
   });
 
-  /**
-   * -----------------------------------------------------
-   * Checkbox selection
-   * -----------------------------------------------------
-   */
-  it("calls handleNodeSelection when checkbox changes", () => {
-    render(<BaseNode {...createNode("success")} />);
-
-    fireEvent.click(screen.getByTestId("checkbox-change"));
-
-    expect(mockHandleNodeSelection).toHaveBeenCalledWith("node-1", "success");
-  });
-
-  /**
-   * -----------------------------------------------------
-   * Handles
-   * -----------------------------------------------------
-   */
-  it("renders handles", () => {
+  it("renders handles on all positions", () => {
     render(<BaseNode {...createNode()} />);
 
-    expect(screen.getAllByTestId("handle")).toHaveLength(8);
+    const handles = screen.getAllByTestId("handle");
+
+    expect(
+      handles.filter(
+        (handle) => handle.getAttribute("data-position") === "top",
+      ),
+    ).toHaveLength(2);
+
+    expect(
+      handles.filter(
+        (handle) => handle.getAttribute("data-position") === "right",
+      ),
+    ).toHaveLength(2);
+
+    expect(
+      handles.filter(
+        (handle) => handle.getAttribute("data-position") === "bottom",
+      ),
+    ).toHaveLength(2);
+
+    expect(
+      handles.filter(
+        (handle) => handle.getAttribute("data-position") === "left",
+      ),
+    ).toHaveLength(2);
   });
 
-  /**
-   * -----------------------------------------------------
-   * Selected node checkbox
-   * -----------------------------------------------------
-   */
-  it("marks checkbox checked when node is selected", () => {
-    mockSelectedNodeIds = ["node-1"];
-
-    render(<BaseNode {...createNode()} />);
-
-    expect(screen.getByTestId("checkbox-change")).toHaveAttribute(
-      "data-checked",
-      "true",
-    );
-  });
-
-  /**
-   * -----------------------------------------------------
-   * Selected node tooltip
-   * -----------------------------------------------------
-   */
-  it("disables tooltip when node is selected", () => {
-    mockSelectedNodeIds = ["node-1"];
-
-    render(<BaseNode {...createNode()} />);
-
-    expect(screen.getByTestId("tooltip")).toHaveAttribute(
-      "data-disabled",
-      "true",
-    );
-  });
-
-  /**
-   * -----------------------------------------------------
-   * Warning tooltip
-   * -----------------------------------------------------
-   */
-  it("shows warning tooltip message", () => {
-    render(<BaseNode {...createNode("warning")} />);
-
-    expect(screen.getByTestId("tooltip")).toHaveAttribute(
-      "data-content",
-      "Warning message will be shown here",
-    );
-  });
-
-  /**
-   * -----------------------------------------------------
-   * Error tooltip
-   * -----------------------------------------------------
-   */
-  it("shows error tooltip message", () => {
-    render(<BaseNode {...createNode("error")} />);
-
-    expect(screen.getByTestId("tooltip")).toHaveAttribute(
-      "data-content",
-      "There are too many bad data points",
-    );
-  });
-
-  /**
-   * -----------------------------------------------------
-   * Default tooltip
-   * -----------------------------------------------------
-   */
-  it("shows no tooltip message for default status", () => {
-    render(<BaseNode {...createNode("default")} />);
-
-    expect(screen.getByTestId("tooltip")).toHaveAttribute("data-content", "");
-  });
-
-  /**
-   * -----------------------------------------------------
-   * Success status
-   * -----------------------------------------------------
-   */
-  it("renders success status node", () => {
-    render(<BaseNode {...createNode("success")} />);
-
-    expect(screen.getByText("Test Node")).toBeInTheDocument();
-  });
-
-  /**
-   * -----------------------------------------------------
-   * Missing node metadata
-   * -----------------------------------------------------
-   */
   it("returns null when node type metadata is missing", () => {
     const { container } = render(
-      <BaseNode
-        {...({
-          id: "node-1",
-          type: "unknownType",
-
-          data: {
-            label: "Unknown",
-            status: "default",
-          },
-
-          dragging: false,
-          zIndex: 0,
-          selectable: true,
-          deletable: true,
-          selected: false,
-          draggable: true,
-        } as Parameters<typeof BaseNode>[0])}
-      />,
+      <BaseNode {...createNode()} type="unknownType" />,
     );
 
     expect(container.firstChild).toBeNull();
   });
 
-  /**
-   * -----------------------------------------------------
-   * Checkbox click propagation
-   * -----------------------------------------------------
-   */
-  it("stops propagation when checkbox is clicked", () => {
-    render(<BaseNode {...createNode()} />);
+  it.each([
+    ["default", "bg-[#2E2E2E]", "border-[#454545]", "text-[#909090]"],
+    ["success", "bg-[#0A150A]", "border-[#68D560]", "text-[#68D560]"],
+    ["warning", "bg-[#FF96401A]", "border-[#FF9640]", "text-[#FF9640]"],
+    ["error", "bg-[#FF52471A]", "border-[#FF5247]", "text-[#FF5247]"],
+  ] as const)(
+    "renders correct styles for %s status",
+    (status, background, border, iconColor) => {
+      render(<BaseNode {...createNode(status)} />);
+      const node = screen.getByTestId("node");
+      expect(node).toHaveClass(background, border);
 
-    fireEvent.click(screen.getByTestId("checkbox-click"));
-
-    expect(screen.getByTestId("checkbox-click")).toBeInTheDocument();
-  });
+      const icon = screen.getByTestId("node-icon");
+      expect(icon).toHaveClass("shrink-0", iconColor);
+    },
+  );
 });

@@ -3,9 +3,11 @@ import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 import {
   EXECUTION_ACTION,
+  EXECUTION_VIEW_MODE,
   type ExecutionAction,
   type ExecutionFlowNode,
   type ExecutionItem,
+  type ExecutionViewMode,
 } from "../types/templateExecution";
 
 export interface TemplateExecutionState {
@@ -19,6 +21,9 @@ export interface TemplateExecutionState {
   // Context
   selectedExecutionItem: ExecutionItem | null; // Unit or Asset
   setSelectedExecutionItem: (item: ExecutionItem) => void;
+
+  executionViewMode: ExecutionViewMode;
+  setExecutionViewMode: (viewMode: ExecutionViewMode) => void;
 
   // Selection
   selectedNodeIds: string[];
@@ -49,6 +54,7 @@ export const useTemplateExecutionStore = create<TemplateExecutionState>()(
     nodes: [],
     edges: [],
     selectedExecutionItem: null,
+    executionViewMode: EXECUTION_VIEW_MODE.COMPACT,
     selectedNodeIds: [],
     selectedRowIds: [],
     executionAction: EXECUTION_ACTION.IDLE,
@@ -60,6 +66,12 @@ export const useTemplateExecutionStore = create<TemplateExecutionState>()(
     setSelectedExecutionItem: (item) => {
       set((state) => {
         state.selectedExecutionItem = item;
+      });
+    },
+
+    setExecutionViewMode: (viewMode) => {
+      set((state) => {
+        state.executionViewMode = viewMode;
       });
     },
 

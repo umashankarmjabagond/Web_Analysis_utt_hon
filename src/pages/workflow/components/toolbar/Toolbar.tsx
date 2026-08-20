@@ -116,11 +116,9 @@ export default function Toolbar() {
     if (nodes.length === 0) {
       setNotificationType("warning");
 
-      setNotificationTitle("Nothing to Save");
+      setNotificationTitle(t("TOOLBAR_NOTHING_TO_SAVE"));
 
-      setNotificationMessage(
-        "Please create a workflow before saving the template.",
-      );
+      setNotificationMessage(t("TOOLBAR_CREATE_WORKFLOW_BEFORE_SAVE"));
 
       setShowNotification(true);
 
@@ -141,8 +139,9 @@ export default function Toolbar() {
   const handleExport = () => {
     if (nodes.length === 0) {
       setNotificationType("warning");
-      setNotificationTitle("Nothing to Export");
-      setNotificationMessage("Please create a workflow before exporting.");
+      setNotificationTitle(t("TOOLBAR_NOTHING_TO_EXPORT"));
+
+      setNotificationMessage(t("TOOLBAR_CREATE_WORKFLOW_BEFORE_EXPORTING"));
       setShowNotification(true);
       return;
     }
@@ -172,14 +171,16 @@ export default function Toolbar() {
       setEdges(workflow.edges);
 
       setNotificationType("success");
-      setNotificationTitle("Import Successful");
-      setNotificationMessage("Workflow imported successfully.");
+      setNotificationTitle(t("TOOLBAR_IMPORT_SUCCESS"));
+      setNotificationMessage(t("TOOLBAR_WORKFLOW_IMPORTED_SUCCESSFULLY"));
       setShowNotification(true);
     } catch (error) {
       setNotificationType("warning");
-      setNotificationTitle("Import Failed");
+      setNotificationTitle(t("TOOLBAR_IMPORT_FAILED"));
       setNotificationMessage(
-        error instanceof Error ? error.message : "Unable to import workflow.",
+        error instanceof Error
+          ? error.message
+          : t("TOOLBAR_UNABLE_TO_IMPORT_WORKFLOW"),
       );
       setShowNotification(true);
     } finally {
@@ -241,7 +242,7 @@ export default function Toolbar() {
             {/* Delete / Clear */}
             <ToolbarButton
               icon={Trash2}
-              title="Delete"
+              title={t("COMMON_DELETE")}
               onClick={handleDelete}
               disabled={!hasSelectedElements}
               iconClassName={
@@ -252,7 +253,7 @@ export default function Toolbar() {
             />
 
             <ToolbarButton
-              title="Clear Workflow"
+              title={t("CLEAR_WORKFLOW")}
               icon={StickyNoteX}
               onClick={handleClear}
               disabled={nodes.length === 0 && edges.length === 0}
@@ -268,14 +269,14 @@ export default function Toolbar() {
 
             {/* Import / Export */}
             <ToolbarButton
-              title="Import Template"
+              title={t("TOOLBAR_IMPORT_TEMPLATE")}
               icon={Download}
               iconClassName="text-white"
               onClick={handleImportClick}
             />
 
             <ToolbarButton
-              title="Export Template"
+              title={t("TOOLBAR_EXPORT_TEMPLATE")}
               icon={Upload}
               iconClassName="text-white"
               onClick={handleExport}
@@ -285,20 +286,21 @@ export default function Toolbar() {
             <div className="h-6 w-px bg-tab-active-box" />
 
             <Dropdown
-              placeholder="Save As"
+              className="w-auto"
+              placeholder={t("TOOLBAR_SAVE_AS")}
               items={[
                 {
-                  label: "Custom Regulatory Template",
+                  label: t("TOOLBAR_CUSTOM_REGULATORY_TEMPLATE"),
                   value: "regulatory",
                 },
                 {
-                  label: "Custom MPC Templates",
+                  label: t("TOOLBAR_CUSTOM_MPC_TEMPLATES"),
                   value: "mpc",
                 },
               ]}
               onSelect={handleSaveAs}
               menuClassName={cn(
-                "w-[280px]",
+                "w-auto",
                 "overflow-hidden rounded-md",
                 "bg-dropdown-background",
                 "shadow-dropdown",
@@ -326,10 +328,9 @@ export default function Toolbar() {
             : t("TOOLBAR_MPC_TEMPLATE")
         }
         onClose={() => setIsSaveDialogOpen(false)}
-        width={420}
       >
         <div
-          className="w-full
+          className="w-auto
             flex px-2
             flex-col
             gap-6

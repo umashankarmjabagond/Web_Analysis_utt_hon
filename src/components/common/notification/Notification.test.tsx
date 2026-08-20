@@ -8,10 +8,10 @@ vi.mock("react-i18next", () => ({
   useTranslation: () => ({
     t: (key: string) => {
       const translations: Record<string, string> = {
-        SUCCESS: "Success",
-        FAILURE: "Failure",
-        WARNING: "Warning",
-        INFO: "Info",
+        COMMON_SUCCESS: "Success",
+        COMMON_FAILURE: "Failed",
+        COMMON_WARNING: "Warning",
+        COMMON_INFO: "Info",
       };
 
       return translations[key] ?? key;
@@ -29,6 +29,7 @@ describe("Notification", () => {
     );
 
     expect(screen.getAllByText("Success")).toHaveLength(2);
+
     expect(
       screen.getByText("Operation completed successfully"),
     ).toBeInTheDocument();
@@ -58,7 +59,7 @@ describe("Notification", () => {
   it("renders failure notification", () => {
     render(<Notification type="danger" message="Something went wrong" />);
 
-    expect(screen.getAllByText("Failure")).toHaveLength(2);
+    expect(screen.getAllByText("Failed")).toHaveLength(2);
     expect(screen.getByText("Something went wrong")).toBeInTheDocument();
   });
 

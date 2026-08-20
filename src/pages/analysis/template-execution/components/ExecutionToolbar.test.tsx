@@ -1,31 +1,17 @@
-import {
-  render,
-  screen,
-  fireEvent,
-} from "@testing-library/react";
-import {
-  beforeEach,
-  describe,
-  expect,
-  it,
-  vi,
-} from "vitest";
-
-import ExecutionToolbar from "./ExecutionToolbar";
-import { ROUTES } from "../../../../constants/routes/routesConstant";
-
+import { fireEvent, render, screen } from "@testing-library/react";
+import FlowExecutionToolbar from "./ExecutionToolbar";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import type { ReactNode } from "react";
 import {
   EXECUTION_ACTION,
+  EXECUTION_VIEW_MODE,
   type ExecutionAction,
+  type ExecutionViewMode,
 } from "../../../../types/templateExecution";
+import { ROUTES } from "../../../../constants/routes/routesConstant";
+import i18n from "../../../../i18n/index";
 
-import type { ReactNode } from "react";
-
-const mockNavigate = vi.fn();
-const mockSetExecutionAction = vi.fn();
-
-let mockExecutionAction: ExecutionAction =
-  EXECUTION_ACTION.IDLE;
+const { t } = i18n;
 
 let mockSelectedExecutionItem:
   | {
@@ -33,304 +19,304 @@ let mockSelectedExecutionItem:
       type?: string;
     }
   | undefined = {
-  name: "Test Asset",
-  type: "asset",
+  name: "Test Template",
+  type: "UNIT",
 };
 
+let mockSelectedRowIds: string[] = [];
+let mockExecutionAction: ExecutionAction = EXECUTION_ACTION.IDLE;
+const mockSetExecutionAction = vi.fn();
+
+const mockConfirm = vi.fn();
+vi.stubGlobal("confirm", mockConfirm);
+
+let executionViewMode: ExecutionViewMode = EXECUTION_VIEW_MODE.COMPACT;
+const mockSetExecutionViewMode = vi.fn((mode: ExecutionViewMode) => {
+  executionViewMode = mode;
+});
+
+const mockNavigate = vi.fn();
 vi.mock("react-router-dom", () => ({
-  useNavigate: () =>
-    mockNavigate,
+  useNavigate: () => mockNavigate,
 }));
 
-vi.mock(
-  "../../../../store/templateExecutionStore",
-  () => ({
-    useTemplateExecutionStore:
-      vi.fn((selector) =>
-        selector({
-          selectedExecutionItem:
-            mockSelectedExecutionItem,
-          executionAction:
-            mockExecutionAction,
-          setExecutionAction:
-            mockSetExecutionAction,
-        }),
-      ),
-  }),
-);
+vi.mock("../../../../store/templateExecutionStore", () => ({
+  useTemplateExecutionStore: vi.fn((selector) =>
+    selector({
+      selectedExecutionItem: mockSelectedExecutionItem,
+      selectedRowIds: mockSelectedRowIds,
+      executionAction: mockExecutionAction,
+      setExecutionAction: mockSetExecutionAction,
+      executionViewMode,
+      setExecutionViewMode: mockSetExecutionViewMode,
+    }),
+  ),
+}));
 
-vi.mock(
-  "../../../../components/common/badge/Badge",
-  () => ({
-    default: ({
-      children,
-    }: {
-      children: ReactNode;
-    }) => (
-      <div data-testid="badge">
-        {children}
-      </div>
-    ),
-  }),
-);
+vi.mock("../../../../components/common/badge/Badge", () => ({
+  default: ({ children }: { children: ReactNode }) => (
+    <div data-testid="badge">{children}</div>
+  ),
+}));
 
-vi.mock(
-  "./ToolbarExecutionButton",
-  () => ({
-    default: ({
-      label,
-      onClick,
-      active,
-    }: {
-      label: string;
-      onClick: () => void;
-      active?: boolean;
-    }) => (
-      <button
-        data-testid={`btn-${label}`}
-        data-active={String(active)}
-        onClick={onClick}
-      >
-        {label}
-      </button>
-    ),
-  }),
-);
+describe("ExecutionToolbar", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
 
-describe(
-  "ExecutionToolbar",
-  () => {
-    beforeEach(() => {
-      vi.clearAllMocks();
+    mockSelectedRowIds = [];
+    mockExecutionAction = EXECUTION_ACTION.IDLE;
+    executionViewMode = EXECUTION_VIEW_MODE.COMPACT;
 
-      mockExecutionAction =
-        EXECUTION_ACTION.IDLE;
+    mockSelectedExecutionItem = {
+      name: "Test Template",
+      type: "UNIT",
+    };
 
-      mockSelectedExecutionItem =
-        {
-          name: "Test Asset",
-          type: "asset",
-        };
+    vi.useRealTimers();
+  });
 
-      vi.stubGlobal(
-        "confirm",
-        vi.fn(),
-      );
+  it("renders the execution toolbar", () => {
+    render(<FlowExecutionToolbar />);
+  });
+
+  it("renders the name", () => {
+    render(<FlowExecutionToolbar />);
+
+    expect(screen.getByText("Test Template")).toBeInTheDocument();
+  });
+
+  it("renders badge with type", () => {
+    render(<FlowExecutionToolbar />);
+
+    expect(screen.getByTestId("badge")).toHaveTextContent("UNIT");
+  });
+
+  it("does not render badge when type is undefined", () => {
+    mockSelectedExecutionItem = {
+      name: "Test Template",
+    };
+
+    render(<FlowExecutionToolbar />);
+
+    expect(screen.queryByTestId("badge")).not.toBeInTheDocument();
+  });
+
+  it("renders the Execute All button", () => {
+    render(<FlowExecutionToolbar />);
+    expect(
+      screen.getByRole("button", { name: t("EXECUTION_EXECUTE") }),
+    ).toBeInTheDocument();
+  });
+
+  it("renders the Pause All button", () => {
+    render(<FlowExecutionToolbar />);
+    expect(
+      screen.getByRole("button", { name: t("EXECUTION_PAUSE") }),
+    ).toBeInTheDocument();
+  });
+
+  it("renders the Edit button", () => {
+    render(<FlowExecutionToolbar />);
+    expect(
+      screen.getByRole("button", { name: t("EXECUTION_TOOLBAR_EDIT") }),
+    ).toBeInTheDocument();
+  });
+
+  it("renders the Delete button", () => {
+    render(<FlowExecutionToolbar />);
+    expect(
+      screen.getByRole("button", { name: t("EXECUTION_TOOLBAR_DELETE") }),
+    ).toBeInTheDocument();
+  });
+
+  it("renders the segmented tab compact view button", () => {
+    render(<FlowExecutionToolbar />);
+    expect(
+      screen.getByRole("button", { name: t("EXECUTION_TOOLBAR_COMPACT_VIEW") }),
+    ).toBeInTheDocument();
+  });
+
+  it("renders the segmented tab comfortable view button", () => {
+    render(<FlowExecutionToolbar />);
+    expect(
+      screen.getByRole("button", {
+        name: t("EXECUTION_TOOLBAR_COMFORTABLE_VIEW"),
+      }),
+    ).toBeInTheDocument();
+  });
+
+  it("renders the analysis templates button", () => {
+    render(<FlowExecutionToolbar />);
+    expect(
+      screen.getByRole("button", {
+        name: t("EXECUTION_TOOLBAR_ANALYSIS_TEMPLATES"),
+      }),
+    ).toBeInTheDocument();
+  });
+
+  it("shows Execute Selected when rows are selected", () => {
+    mockSelectedRowIds = ["row-1"];
+    render(<FlowExecutionToolbar />);
+    expect(
+      screen.getByRole("button", {
+        name: `${t("EXECUTION_EXECUTE_SELECTED")} (1)`,
+      }),
+    ).toBeInTheDocument();
+  });
+
+  it("shows Pause Selected when rows are selected", () => {
+    mockSelectedRowIds = ["row-1"];
+    render(<FlowExecutionToolbar />);
+    expect(
+      screen.getByRole("button", {
+        name: `${t("EXECUTION_PAUSE_SELECTED")} (1)`,
+      }),
+    ).toBeInTheDocument();
+  });
+
+  it("execute all rows", () => {
+    render(<FlowExecutionToolbar />);
+    const executeButton = screen.getByRole("button", {
+      name: t("EXECUTION_EXECUTE"),
     });
 
-    it("renders execution item name", () => {
-      render(
-        <ExecutionToolbar />,
-      );
+    fireEvent.click(executeButton);
+    expect(mockSetExecutionAction).toHaveBeenCalledWith(
+      EXECUTION_ACTION.EXECUTE,
+    );
+    expect(mockConfirm).toHaveBeenCalled();
+  });
 
-      expect(
-        screen.getByText(
-          "Test Asset",
-        ),
-      ).toBeInTheDocument();
+  it("executes selected rows", () => {
+    mockSelectedRowIds = ["row-1"];
+
+    render(<FlowExecutionToolbar />);
+
+    const executeSelectedButton = screen.getByRole("button", {
+      name: `${t("EXECUTION_EXECUTE_SELECTED")} (1)`,
     });
 
-    it("renders badge with type", () => {
-      render(
-        <ExecutionToolbar />,
-      );
+    fireEvent.click(executeSelectedButton);
+    expect(mockSetExecutionAction).toHaveBeenCalledWith(
+      EXECUTION_ACTION.EXECUTE,
+    );
+    expect(mockConfirm).toHaveBeenCalled();
+  });
 
-      expect(
-        screen.getByTestId(
-          "badge",
-        ),
-      ).toHaveTextContent(
-        "ASSET",
-      );
+  it("pause all rows", () => {
+    render(<FlowExecutionToolbar />);
+    const pauseButton = screen.getByRole("button", {
+      name: t("EXECUTION_PAUSE"),
     });
 
-    it("does not render badge when type is undefined", () => {
-      mockSelectedExecutionItem =
-        {
-          name: "Test Asset",
-        };
+    fireEvent.click(pauseButton);
+    expect(mockSetExecutionAction).toHaveBeenCalledWith(EXECUTION_ACTION.PAUSE);
+    expect(mockConfirm).toHaveBeenCalledWith(t("EXECUTION_PAUSE_CONFIRMATION"));
+  });
 
-      render(
-        <ExecutionToolbar />,
-      );
+  it("pauses selected rows", () => {
+    mockSelectedRowIds = ["row-1"];
 
-      expect(
-        screen.queryByTestId(
-          "badge",
-        ),
-      ).not.toBeInTheDocument();
+    render(<FlowExecutionToolbar />);
+
+    const pauseSelectedButton = screen.getByRole("button", {
+      name: `${t("EXECUTION_PAUSE_SELECTED")} (1)`,
     });
 
-    it("handles execute action", () => {
-      render(
-        <ExecutionToolbar />,
-      );
+    fireEvent.click(pauseSelectedButton);
+    expect(mockSetExecutionAction).toHaveBeenCalledWith(EXECUTION_ACTION.PAUSE);
+    expect(mockConfirm).toHaveBeenCalledWith(t("EXECUTION_PAUSE_CONFIRMATION"));
+  });
 
-      fireEvent.click(
-        screen.getByTestId(
-          "btn-EXECUTION_EXECUTE",
-        ),
-      );
-
-      expect(
-        mockSetExecutionAction,
-      ).toHaveBeenCalledWith(
-        EXECUTION_ACTION.EXECUTE,
-      );
-
-      expect(
-        confirm,
-      ).toHaveBeenCalled();
+  it("opens the edit confirmation", () => {
+    render(<FlowExecutionToolbar />);
+    const editButton = screen.getByRole("button", {
+      name: t("EXECUTION_TOOLBAR_EDIT"),
     });
 
-    it("handles pause action", () => {
-      render(
-        <ExecutionToolbar />,
-      );
+    fireEvent.click(editButton);
+    expect(mockConfirm).toHaveBeenCalledWith(t("EXECUTION_EDIT_CONFIRMATION"));
+  });
 
-      fireEvent.click(
-        screen.getByTestId(
-          "btn-EXECUTION_PAUSE",
-        ),
-      );
+  it("deletes the execution item", () => {
+    vi.useFakeTimers();
 
-      expect(
-        mockSetExecutionAction,
-      ).toHaveBeenCalledWith(
-        EXECUTION_ACTION.PAUSE,
-      );
-
-      expect(
-        confirm,
-      ).toHaveBeenCalled();
+    render(<FlowExecutionToolbar />);
+    const deleteButton = screen.getByRole("button", {
+      name: t("EXECUTION_TOOLBAR_DELETE"),
     });
 
-    it("handles delete action", () => {
-      vi.useFakeTimers();
+    fireEvent.click(deleteButton);
+    expect(mockSetExecutionAction).toHaveBeenCalledWith(
+      EXECUTION_ACTION.DELETE,
+    );
 
-      render(
-        <ExecutionToolbar />,
-      );
+    expect(mockConfirm).toHaveBeenCalledWith(
+      t("EXECUTION_DELETE_CONFIRMATION"),
+    );
 
-      fireEvent.click(
-        screen.getByTestId(
-          "btn-COMMON_DELETE",
-        ),
-      );
+    vi.advanceTimersByTime(1000);
 
-      expect(
-        mockSetExecutionAction,
-      ).toHaveBeenCalledWith(
-        EXECUTION_ACTION.DELETE,
-      );
+    expect(mockSetExecutionAction).toHaveBeenCalledWith(EXECUTION_ACTION.IDLE);
 
-      expect(
-        confirm,
-      ).toHaveBeenCalled();
+    vi.useRealTimers();
+  });
 
-      vi.advanceTimersByTime(
-        1000,
-      );
+  it("changes the execution view mode to comfortable view", () => {
+    render(<FlowExecutionToolbar />);
 
-      expect(
-        mockSetExecutionAction,
-      ).toHaveBeenCalledWith(
-        EXECUTION_ACTION.IDLE,
-      );
-
-      vi.useRealTimers();
+    const comfortableViewButton = screen.getByRole("button", {
+      name: t("EXECUTION_TOOLBAR_COMFORTABLE_VIEW"),
     });
 
-    it("shows execute as active", () => {
-      mockExecutionAction =
-        EXECUTION_ACTION.EXECUTE;
+    fireEvent.click(comfortableViewButton);
 
-      render(
-        <ExecutionToolbar />,
-      );
+    expect(mockSetExecutionViewMode).toHaveBeenCalledWith(
+      EXECUTION_VIEW_MODE.COMFORTABLE,
+    );
+  });
 
-      expect(
-        screen.getByTestId(
-          "btn-EXECUTION_EXECUTE",
-        ),
-      ).toHaveAttribute(
-        "data-active",
-        "true",
-      );
+  it("changes the execution view mode to compact view", () => {
+    executionViewMode = EXECUTION_VIEW_MODE.COMFORTABLE;
+
+    render(<FlowExecutionToolbar />);
+
+    const compactViewButton = screen.getByRole("button", {
+      name: t("EXECUTION_TOOLBAR_COMPACT_VIEW"),
     });
 
-    it("shows pause as active", () => {
-      mockExecutionAction =
-        EXECUTION_ACTION.PAUSE;
+    fireEvent.click(compactViewButton);
 
-      render(
-        <ExecutionToolbar />,
-      );
+    expect(mockSetExecutionViewMode).toHaveBeenCalledWith(
+      EXECUTION_VIEW_MODE.COMPACT,
+    );
+  });
 
-      expect(
-        screen.getByTestId(
-          "btn-EXECUTION_PAUSE",
-        ),
-      ).toHaveAttribute(
-        "data-active",
-        "true",
-      );
+  it("navigates to workflow page", () => {
+    render(<FlowExecutionToolbar />);
+
+    const analysisTemplatesButton = screen.getByRole("button", {
+      name: t("EXECUTION_TOOLBAR_ANALYSIS_TEMPLATES"),
     });
 
-    it("shows delete as active", () => {
-      mockExecutionAction =
-        EXECUTION_ACTION.DELETE;
+    fireEvent.click(analysisTemplatesButton);
 
-      render(
-        <ExecutionToolbar />,
-      );
+    expect(mockNavigate).toHaveBeenCalledWith(ROUTES.WORKFLOW);
+  });
 
-      expect(
-        screen.getByTestId(
-          "btn-COMMON_DELETE",
-        ),
-      ).toHaveAttribute(
-        "data-active",
-        "true",
-      );
-    });
+  it("marks the active execution view mode as pressed", () => {
+    executionViewMode = EXECUTION_VIEW_MODE.COMPACT;
 
-    it("navigates to workflow page", () => {
-      render(
-        <ExecutionToolbar />,
-      );
+    render(<FlowExecutionToolbar />);
 
-      fireEvent.click(
-        screen.getByRole(
-          "button",
-          {
-            name:
-              "ANALYSIS_TEMPLATES",
-          },
-        ),
-      );
+    expect(
+      screen.getByRole("button", { name: t("EXECUTION_TOOLBAR_COMPACT_VIEW") }),
+    ).toHaveAttribute("aria-pressed", "true");
 
-      expect(
-        mockNavigate,
-      ).toHaveBeenCalledWith(
-        ROUTES.WORKFLOW,
-      );
-    });
-
-    it("renders when selectedExecutionItem is undefined", () => {
-      mockSelectedExecutionItem =
-        undefined;
-
-      render(
-        <ExecutionToolbar />,
-      );
-
-      expect(
-        screen.getByRole("button", {
-          name:
-            "ANALYSIS_TEMPLATES",
-        }),
-      ).toBeInTheDocument();
-    });
-  },
-);
+    expect(
+      screen.getByRole("button", {
+        name: t("EXECUTION_TOOLBAR_COMFORTABLE_VIEW"),
+      }),
+    ).toHaveAttribute("aria-pressed", "false");
+  });
+});

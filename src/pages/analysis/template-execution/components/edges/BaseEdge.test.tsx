@@ -1,51 +1,34 @@
 import { render, screen } from "@testing-library/react";
-import {
-  describe,
-  expect,
-  it,
-  vi,
-} from "vitest";
-
-import ExecutionWorkflowEdge from "./BaseEdge";
-
-import type { ExecutionWorkflowEdgeProps } from "../../../../../types/templateExecution";
-
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { Position } from "@xyflow/react";
+import ExecutionWorkflowEdge from "./BaseEdge";
+import type { ExecutionWorkflowEdgeProps } from "../../../../../types/templateExecution";
+import { getPathFn } from "../../flowBuilders/edgeGeometry";
+import type React from "react";
 
 vi.mock("@xyflow/react", () => ({
   BaseEdge: ({
     id,
     path,
-    markerEnd,
+    style,
   }: {
     id: string;
     path: string;
-    markerEnd?: string;
+    style: React.CSSProperties;
   }) => (
     <div
       data-testid="base-edge"
       data-id={id}
       data-path={path}
-      data-marker={markerEnd}
+      data-stroke={style.stroke}
+      data-stroke-width={style.strokeWidth}
     />
   ),
+  Position: { Left: "left", Right: "right" },
+}));
 
-  getBezierPath: vi.fn(
-    () => ["bezier-path"],
-  ),
-
-  getSmoothStepPath: vi.fn(
-    () => ["smooth-path"],
-  ),
-
-  getStraightPath: vi.fn(
-    () => ["straight-path"],
-  ),
-
-  Position: {
-    Left: "left",
-    Right: "right",
-  },
+vi.mock("../../flowBuilders/edgeGeometry", () => ({
+  getPathFn: vi.fn(() => vi.fn(() => ["mocked-path"])),
 }));
 
 const defaultProps: ExecutionWorkflowEdgeProps = {
@@ -56,9 +39,8 @@ const defaultProps: ExecutionWorkflowEdgeProps = {
   sourceY: 0,
   targetX: 100,
   targetY: 100,
-  sourcePosition: Position.Right,
-  targetPosition: Position.Left,
-  markerEnd: "arrow",
+  sourcePosition: Position.Left,
+  targetPosition: Position.Right,
   selected: false,
   animated: false,
   data: {
@@ -66,139 +48,48 @@ const defaultProps: ExecutionWorkflowEdgeProps = {
   },
 };
 
+describe("ExecutionWorkflowEdge", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
 
-describe(
-  "ExecutionWorkflowEdge",
-  () => {
-    it("renders BaseEdge", () => {
-      render(
-        <ExecutionWorkflowEdge
-          {...defaultProps}
-          data={{
-            pathType: "bezier",
-          }}
-        />,
-      );
+  it("renders BaseEdge with the calculated path", () => {
+    render(<ExecutionWorkflowEdge {...defaultProps} />);
 
-      expect(
-        screen.getByTestId(
-          "base-edge",
-        ),
-      ).toBeInTheDocument();
-    });
+    const edge = screen.getByTestId("base-edge");
 
-    it("uses bezier path", () => {
-      render(
-        <ExecutionWorkflowEdge
-          {...defaultProps}
-          data={{
-            pathType: "bezier",
-          }}
-        />,
-      );
+    expect(edge).toBeInTheDocument();
+    expect(edge).toHaveAttribute("data-id", "edge-1");
+    expect(edge).toHaveAttribute("data-path", "mocked-path");
+  });
 
-      expect(
-        screen.getByTestId(
-          "base-edge",
-        ),
-      ).toHaveAttribute(
-        "data-path",
-        "bezier-path",
-      );
-    });
+  it("uses the pathType from data", () => {
+    render(
+      <ExecutionWorkflowEdge
+        {...defaultProps}
+        data={{ pathType: "smoothstep" }}
+      />,
+    );
 
-    it("uses smoothstep path", () => {
-      render(
-        <ExecutionWorkflowEdge
-          {...defaultProps}
-          data={{
-            pathType:
-              "smoothstep",
-          }}
-        />,
-      );
+    expect(getPathFn).toHaveBeenCalledWith("smoothstep");
+    expect(screen.getByTestId("base-edge")).toHaveAttribute(
+      "data-path",
+      "mocked-path",
+    );
+  });
 
-      expect(
-        screen.getByTestId(
-          "base-edge",
-        ),
-      ).toHaveAttribute(
-        "data-path",
-        "smooth-path",
-      );
-    });
+  it("uses default pathType when data is undefined", () => {
+    render(<ExecutionWorkflowEdge {...defaultProps} data={undefined} />);
 
-    it("uses straight path", () => {
-      render(
-        <ExecutionWorkflowEdge
-          {...defaultProps}
-          data={{
-            pathType:
-              "straight",
-          }}
-        />,
-      );
+    expect(getPathFn).toHaveBeenCalledWith("default");
+  });
 
-      expect(
-        screen.getByTestId(
-          "base-edge",
-        ),
-      ).toHaveAttribute(
-        "data-path",
-        "straight-path",
-      );
-    });
+  it("passes the edge style to BaseEdge", () => {
+    render(<ExecutionWorkflowEdge {...defaultProps} />);
 
-    it("uses default pathType when data is undefined", () => {
-  render(
-    <ExecutionWorkflowEdge
-      {...defaultProps}
-      data={undefined}
-    />,
-  );
+    const edge = screen.getByTestId("base-edge");
 
-  expect(
-    screen.getByTestId(
-      "base-edge",
-    ),
-  ).toHaveAttribute(
-    "data-path",
-    "bezier-path",
-  );
+    expect(edge).toHaveAttribute("data-stroke", "var(--edge-default)");
+    expect(edge).toHaveAttribute("data-stroke-width", "1");
+  });
 });
-
-    it("passes id to BaseEdge", () => {
-      render(
-        <ExecutionWorkflowEdge
-          {...defaultProps}
-        />,
-      );
-
-      expect(
-        screen.getByTestId(
-          "base-edge",
-        ),
-      ).toHaveAttribute(
-        "data-id",
-        "edge-1",
-      );
-    });
-
-    it("passes markerEnd to BaseEdge", () => {
-      render(
-        <ExecutionWorkflowEdge
-          {...defaultProps}
-        />,
-      );
-
-      expect(
-        screen.getByTestId(
-          "base-edge",
-        ),
-      ).toHaveAttribute(
-        "data-marker",
-        "arrow",
-      );
-    });
-  },
-);

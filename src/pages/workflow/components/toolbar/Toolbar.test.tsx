@@ -1,10 +1,33 @@
-import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
-import { render, screen, fireEvent, act } from "@testing-library/react";
-import type { ReactNode } from "react";
+import { describe, expect, it, beforeEach, vi } from "vitest";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import {
+  forwardRef,
+  type ChangeEvent,
+  type ComponentType,
+  type InputHTMLAttributes,
+  type ReactNode,
+} from "react";
 
 import Toolbar from "./Toolbar";
 
+import type { WorkflowNode } from "../../../../types/workFlowTypes";
+
+import { exportWorkflow, importWorkflow } from "../../../../utils/utils";
+
+import { ROUTES } from "../../../../constants/routes/routesConstant";
+
+import type { Edge } from "@xyflow/react";
+
+/* Constants                                                                  */
+
+const MOCK_UUID = "123e4567-e89b-12d3-a456-426614174000";
+
+/* Mocks                                                                      */
+
 const mockNavigate = vi.fn();
+
+const mockExportWorkflow = vi.mocked(exportWorkflow);
+const mockImportWorkflow = vi.mocked(importWorkflow);
 
 const mockDeleteSelectedNodes = vi.fn();
 const mockDeleteSelectedEdges = vi.fn();
@@ -13,248 +36,347 @@ const mockSetNodes = vi.fn();
 const mockSetEdges = vi.fn();
 const mockSetIsImporting = vi.fn();
 
-const mockExportWorkflow = vi.fn();
-const mockImportWorkflow = vi.fn();
-
-const mockStore: {
-  nodes: Array<{
-    id: string;
-    selected?: boolean;
-  }>;
-  edges: Array<{
-    id: string;
-    selected?: boolean;
-  }>;
-  deleteSelectedNodes: typeof mockDeleteSelectedNodes;
-  deleteSelectedEdges: typeof mockDeleteSelectedEdges;
-  clearWorkflow: typeof mockClearWorkflow;
-  setNodes: typeof mockSetNodes;
-  setEdges: typeof mockSetEdges;
-  setIsImporting: typeof mockSetIsImporting;
-} = {
-  nodes: [],
-  edges: [],
+const mockToolbarStore = {
+  nodes: [] as WorkflowNode[],
+  edges: [] as Edge[],
+  setNodes: mockSetNodes,
+  setEdges: mockSetEdges,
   deleteSelectedNodes: mockDeleteSelectedNodes,
   deleteSelectedEdges: mockDeleteSelectedEdges,
   clearWorkflow: mockClearWorkflow,
-  setNodes: mockSetNodes,
-  setEdges: mockSetEdges,
   setIsImporting: mockSetIsImporting,
 };
+
+const mockDropdownSelect = vi.fn();
 
 vi.mock("react-router-dom", () => ({
   useNavigate: () => mockNavigate,
 }));
 
+vi.mock("../../../../store/workflowStore", () => ({
+  useWorkflowStore: () => mockToolbarStore,
+}));
+
+vi.mock("../../../../utils/utils", async () => {
+  const actual = await vi.importActual<
+    typeof import("../../../../utils/utils")
+  >("../../../../utils/utils");
+
+  return {
+    ...actual,
+    exportWorkflow: vi.fn(),
+    importWorkflow: vi.fn(),
+  };
+});
+
+/* Translation                                                                */
+
 vi.mock("react-i18next", () => ({
   useTranslation: () => ({
-    t: (key: string) => key,
+    t: (key: string): string => {
+      const translations: Record<string, string> = {
+        NEW_TEMPLATE: "New Template",
+
+        COMMON_DELETE: "Delete",
+        COMMON_CANCEL: "Cancel",
+        COMMON_SAVE: "Save",
+        COMMON_WARNING: "Warning",
+
+        CLEAR_WORKFLOW: "Clear Workflow",
+
+        TOOLBAR_IMPORT_TEMPLATE: "Import Template",
+        TOOLBAR_EXPORT_TEMPLATE: "Export Template",
+        TOOLBAR_SAVE_AS: "Save As",
+
+        TOOLBAR_CUSTOM_REGULATORY_TEMPLATE: "Custom Regulatory Template",
+        TOOLBAR_CUSTOM_MPC_TEMPLATES: "Custom MPC Template",
+
+        TOOLBAR_REGULATORY_TEMPLATE: "Regulatory Template",
+        TOOLBAR_MPC_TEMPLATE: "MPC Template",
+
+        TOOLBAR_TEMPLATE_NAME: "Template Name",
+        TOOLBAR_ADD_TEMPLATE_NAME: "Add Template Name",
+
+        TOOLBAR_SAVED_REGULATORY: "Saved as Regulatory Template",
+        TOOLBAR_SAVED_MPC: "Saved as MPC Template",
+
+        TOOLBAR_FIND_REGULATORY:
+          "You can find this template in the Catalog under Templates > Regulatory Templates.",
+
+        TOOLBAR_FIND_MPC:
+          "You can find this template in the Catalog under Templates > MPC Templates.",
+
+        TOOLBAR_NOTHING_TO_SAVE: "Nothing to Save",
+
+        TOOLBAR_CREATE_WORKFLOW_BEFORE_SAVE:
+          "Please create a workflow before saving the template.",
+
+        TOOLBAR_NOTHING_TO_EXPORT: "Nothing to Export",
+
+        TOOLBAR_CREATE_WORKFLOW_BEFORE_EXPORTING:
+          "Please create a workflow before exporting.",
+
+        TOOLBAR_IMPORT_SUCCESS: "Import Successful",
+
+        TOOLBAR_WORKFLOW_IMPORTED_SUCCESSFULLY:
+          "Workflow imported successfully.",
+
+        TOOLBAR_IMPORT_FAILED: "Import Failed",
+
+        TOOLBAR_UNABLE_TO_IMPORT_WORKFLOW: "Unable to import workflow.",
+      };
+
+      return translations[key] ?? key;
+    },
   }),
 }));
 
-vi.mock("../../../../store/workflowStore", () => ({
-  useWorkflowStore: () => mockStore,
-}));
+/* ToolbarButton mock                                                         */
 
-vi.mock("../../../../utils/utils", () => ({
-  cn: (...classes: Array<string | false | null | undefined>) =>
-    classes.filter(Boolean).join(" "),
-
-  exportWorkflow: (...args: unknown[]) => {
-    mockExportWorkflow(...args);
-  },
-
-  importWorkflow: (...args: unknown[]) => {
-    return mockImportWorkflow(...args);
-  },
-}));
+interface MockToolbarButtonProps {
+  title: string;
+  onClick?: () => void;
+  disabled?: boolean;
+  icon?: ComponentType;
+}
 
 vi.mock("./ToolbarButton", () => ({
-  default: ({
-    title,
-    onClick,
-    disabled = false,
-  }: {
-    title: string;
-    onClick?: () => void;
-    disabled?: boolean;
-  }) => (
-    <button type="button" onClick={onClick} disabled={disabled}>
+  default: ({ title, onClick, disabled }: MockToolbarButtonProps) => (
+    <button
+      type="button"
+      title={title}
+      aria-label={title}
+      disabled={disabled}
+      onClick={onClick}
+      data-testid={`toolbar-button-${title}`}
+    >
       {title}
     </button>
   ),
 }));
 
+/* Dropdown mock                                                              */
+
+interface DropdownItem {
+  value: string;
+  label: string;
+}
+
+interface MockDropdownProps {
+  placeholder?: string;
+  items?: DropdownItem[];
+  onSelect?: (item: DropdownItem) => void;
+}
+
 vi.mock("../../../../components/forms/dropdown/Dropdown", () => ({
-  default: ({
-    onSelect,
-  }: {
-    onSelect: (item: { value: string; label: string }) => void;
-  }) => (
-    <div>
-      <button
-        type="button"
-        onClick={() =>
-          onSelect({
-            value: "regulatory",
-            label: "Custom Regulatory Template",
-          })
-        }
-      >
-        Regulatory Save
+  default: ({ placeholder, items = [], onSelect }: MockDropdownProps) => (
+    <div data-testid="dropdown">
+      <button type="button" onClick={() => mockDropdownSelect()}>
+        {placeholder}
       </button>
 
-      <button
-        type="button"
-        onClick={() =>
-          onSelect({
-            value: "mpc",
-            label: "Custom MPC Templates",
-          })
-        }
-      >
-        MPC Save
-      </button>
+      <div>
+        {items.map((item) => (
+          <button
+            type="button"
+            key={item.value}
+            data-testid={`dropdown-${item.value}`}
+            onClick={() => onSelect?.(item)}
+          >
+            {item.label}
+          </button>
+        ))}
+      </div>
     </div>
   ),
 }));
+
+/* Dialog mock                                                                */
+
+interface MockDialogProps {
+  isOpen?: boolean;
+  title?: string;
+  subtitle?: string;
+  onClose?: () => void;
+  children?: ReactNode;
+}
 
 vi.mock("../../../../components/common/dialogue/Dialog", () => ({
   default: ({
     isOpen,
     title,
-    children,
+    subtitle,
     onClose,
-  }: {
-    isOpen: boolean;
-    title: string;
-    children: ReactNode;
-    onClose?: () => void;
-    width?: number;
-    subtitle?: string;
-  }) =>
-    isOpen ? (
-      <div data-testid="dialog">
-        <h2>{title}</h2>
+    children,
+  }: MockDialogProps) => {
+    if (!isOpen) {
+      return null;
+    }
 
-        <button type="button" onClick={onClose} data-testid="dialog-close">
+    return (
+      <div role="dialog">
+        <div>{subtitle}</div>
+
+        <div>{title}</div>
+
+        <button type="button" aria-label="Close dialog" onClick={onClose}>
           Close
         </button>
 
         {children}
       </div>
-    ) : null,
+    );
+  },
 }));
 
-vi.mock("../../../../components/forms/input/Input", () => {
-  const MockInput = ({
-    label,
-    value,
-    onChange,
-    ...props
-  }: {
-    label?: string;
-    value?: string;
-    onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
-    [key: string]: unknown;
-  }) => (
-    <input aria-label={label} value={value} onChange={onChange} {...props} />
-  );
+/* Input mock                                                                 */
 
-  return {
-    default: MockInput,
-  };
-});
+interface MockInputProps extends Omit<
+  InputHTMLAttributes<HTMLInputElement>,
+  "onChange"
+> {
+  label?: string;
+  onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
+}
+
+vi.mock("../../../../components/forms/input/Input", () => ({
+  default: forwardRef<HTMLInputElement, MockInputProps>(
+    ({ label, onChange, ...props }, ref) => (
+      <label>
+        {label && <span>{label}</span>}
+
+        <input ref={ref} {...props} onChange={onChange} />
+      </label>
+    ),
+  ),
+}));
+
+/* Button mock                                                                */
+
+interface MockButtonProps {
+  children?: ReactNode;
+  onClick?: () => void;
+  disabled?: boolean;
+}
 
 vi.mock("../../../../components/forms/button/Button", () => ({
-  default: ({
-    children,
-    onClick,
-    disabled = false,
-  }: {
-    children: ReactNode;
-    onClick?: () => void;
-    disabled?: boolean;
-  }) => (
+  default: ({ children, onClick, disabled }: MockButtonProps) => (
     <button type="button" onClick={onClick} disabled={disabled}>
       {children}
     </button>
   ),
 }));
 
-/*
- * Mock Notification while preserving the important behavior
- * used by Toolbar:
- *
- * - renders title/message
- * - exposes onClose
- * - automatically closes after 6000ms
- */
-vi.mock("../../../../components/common/notification/Notification", () => ({
-  default: ({
-    title,
-    message,
-    onClose,
-  }: {
-    title: string;
-    message: string;
-    onClose?: () => void;
-    type?: "success" | "warning" | "danger" | "info";
-    duration?: number;
-  }) => (
-    <div data-testid="notification">
-      <div>{title}</div>
-      <div>{message}</div>
+/* Notification mock                                                          */
 
-      <button type="button" data-testid="notification-close" onClick={onClose}>
-        Close
-      </button>
+interface MockNotificationProps {
+  type: "success" | "warning";
+  title: string;
+  message: string;
+  onClose?: () => void;
+}
+
+vi.mock("../../../../components/common/notification/Notification", () => ({
+  default: ({ type, title, message, onClose }: MockNotificationProps) => (
+    <div role="alert" data-testid="notification">
+      <span data-testid="notification-type">{type}</span>
+
+      <span data-testid="notification-title">{title}</span>
+
+      <span data-testid="notification-message">{message}</span>
+
+      {onClose && (
+        <button type="button" onClick={onClose} aria-label="Close notification">
+          Close
+        </button>
+      )}
     </div>
   ),
 }));
+
+/* Test helpers                                                               */
+
+const createNode = (selected = false): WorkflowNode =>
+  ({
+    id: "node-1",
+    type: "default",
+    position: {
+      x: 0,
+      y: 0,
+    },
+    selected,
+    data: {},
+  }) as WorkflowNode;
+
+const createEdge = (selected = false): Edge => ({
+  id: "edge-1",
+  source: "node-1",
+  target: "node-2",
+  selected,
+});
+
+const renderToolbar = () => render(<Toolbar />);
+
+const setWorkflow = (nodes: WorkflowNode[], edges: Edge[] = []) => {
+  mockToolbarStore.nodes = nodes;
+  mockToolbarStore.edges = edges;
+};
+
+const getToolbarButton = (name: string) =>
+  screen.getByRole("button", {
+    name,
+  });
+
+/* Tests                                                                      */
 
 describe("Toolbar", () => {
   beforeEach(() => {
     vi.clearAllMocks();
 
-    mockStore.nodes = [];
-    mockStore.edges = [];
+    mockToolbarStore.nodes = [];
+    mockToolbarStore.edges = [];
+
+    localStorage.clear();
 
     mockImportWorkflow.mockReset();
     mockExportWorkflow.mockReset();
 
-    Storage.prototype.getItem = vi.fn(() => "[]");
-    Storage.prototype.setItem = vi.fn();
-
-    vi.stubGlobal("crypto", {
-      randomUUID: () => "mock-id",
+    Object.defineProperty(crypto, "randomUUID", {
+      configurable: true,
+      value: vi.fn(() => MOCK_UUID),
     });
   });
 
-  afterEach(() => {
-    vi.useRealTimers();
-  });
+  /* Basic rendering                                                        */
 
   it("renders toolbar title", () => {
-    render(<Toolbar />);
+    renderToolbar();
 
-    expect(screen.getByText("NEW_TEMPLATE")).toBeInTheDocument();
+    expect(screen.getByText("New Template")).toBeInTheDocument();
   });
 
   it("renders all toolbar buttons", () => {
-    render(<Toolbar />);
+    renderToolbar();
 
-    expect(screen.getByText("Delete")).toBeInTheDocument();
+    expect(getToolbarButton("Delete")).toBeInTheDocument();
 
-    expect(screen.getByText("Clear Workflow")).toBeInTheDocument();
+    expect(getToolbarButton("Clear Workflow")).toBeInTheDocument();
 
-    expect(screen.getByText("Export Template")).toBeInTheDocument();
+    expect(getToolbarButton("Import Template")).toBeInTheDocument();
 
-    expect(screen.getByText("Import Template")).toBeInTheDocument();
+    expect(getToolbarButton("Export Template")).toBeInTheDocument();
+
+    expect(
+      screen.getByRole("button", {
+        name: "Back",
+      }),
+    ).toBeInTheDocument();
   });
 
+  /* Navigation                                                             */
+
   it("navigates back when back button is clicked", () => {
-    render(<Toolbar />);
+    renderToolbar();
 
     fireEvent.click(
       screen.getByRole("button", {
@@ -262,474 +384,509 @@ describe("Toolbar", () => {
       }),
     );
 
-    expect(mockNavigate).toHaveBeenCalledTimes(1);
+    expect(mockNavigate).toHaveBeenCalledWith(ROUTES.DASHBOARD);
+  });
+
+  /* Delete                                                                 */
+
+  it("disables delete when nothing is selected", () => {
+    setWorkflow([createNode(false)], [createEdge(false)]);
+
+    renderToolbar();
+
+    expect(getToolbarButton("Delete")).toBeDisabled();
+  });
+
+  it("enables delete when a node is selected", () => {
+    setWorkflow([createNode(true)], [createEdge(false)]);
+
+    renderToolbar();
+
+    expect(getToolbarButton("Delete")).toBeEnabled();
+  });
+
+  it("enables delete when an edge is selected", () => {
+    setWorkflow([createNode(false)], [createEdge(true)]);
+
+    renderToolbar();
+
+    expect(getToolbarButton("Delete")).toBeEnabled();
   });
 
   it("calls delete handlers", () => {
-    mockStore.nodes = [
-      {
-        id: "node-1",
-        selected: true,
-      },
-    ];
+    setWorkflow([createNode(true)], [createEdge(false)]);
 
-    mockStore.edges = [];
+    renderToolbar();
 
-    render(<Toolbar />);
-
-    const deleteButton = screen.getByRole("button", {
-      name: "Delete",
-    });
-
-    expect(deleteButton).not.toBeDisabled();
-
-    fireEvent.click(deleteButton);
+    fireEvent.click(getToolbarButton("Delete"));
 
     expect(mockDeleteSelectedEdges).toHaveBeenCalledTimes(1);
 
     expect(mockDeleteSelectedNodes).toHaveBeenCalledTimes(1);
   });
 
+  /* Clear workflow                                                         */
+
   it("disables clear workflow when workflow is empty", () => {
-    mockStore.nodes = [];
-    mockStore.edges = [];
+    setWorkflow([], []);
 
-    render(<Toolbar />);
+    renderToolbar();
 
-    const clearButton = screen.getByRole("button", {
-      name: "Clear Workflow",
-    });
-
-    expect(clearButton).toBeDisabled();
+    expect(getToolbarButton("Clear Workflow")).toBeDisabled();
   });
 
   it("enables clear workflow when nodes are present", () => {
-    mockStore.nodes = [
-      {
-        id: "node-1",
-      },
-    ];
+    setWorkflow([createNode(false)], []);
 
-    mockStore.edges = [];
+    renderToolbar();
 
-    render(<Toolbar />);
-
-    const clearButton = screen.getByRole("button", {
-      name: "Clear Workflow",
-    });
-
-    expect(clearButton).not.toBeDisabled();
+    expect(getToolbarButton("Clear Workflow")).toBeEnabled();
   });
 
   it("enables clear workflow when edges are present", () => {
-    mockStore.nodes = [];
+    setWorkflow([], [createEdge(false)]);
 
-    mockStore.edges = [
-      {
-        id: "edge-1",
-      },
-    ];
+    renderToolbar();
 
-    render(<Toolbar />);
-
-    const clearButton = screen.getByRole("button", {
-      name: "Clear Workflow",
-    });
-
-    expect(clearButton).not.toBeDisabled();
+    expect(getToolbarButton("Clear Workflow")).toBeEnabled();
   });
 
   it("clears workflow when clear workflow is clicked", () => {
-    mockStore.nodes = [
-      {
-        id: "node-1",
-      },
-    ];
+    setWorkflow([createNode(false)], []);
 
-    render(<Toolbar />);
+    renderToolbar();
 
-    fireEvent.click(
-      screen.getByRole("button", {
-        name: "Clear Workflow",
-      }),
-    );
+    fireEvent.click(getToolbarButton("Clear Workflow"));
 
     expect(mockClearWorkflow).toHaveBeenCalledTimes(1);
   });
 
   it("does not clear workflow when workflow is empty", () => {
-    mockStore.nodes = [];
-    mockStore.edges = [];
+    setWorkflow([], []);
 
-    render(<Toolbar />);
+    renderToolbar();
 
-    const clearButton = screen.getByRole("button", {
-      name: "Clear Workflow",
-    });
-
-    expect(clearButton).toBeDisabled();
+    expect(getToolbarButton("Clear Workflow")).toBeDisabled();
 
     expect(mockClearWorkflow).not.toHaveBeenCalled();
   });
 
+  /* Save As                                                                 */
+
   it("shows warning notification when workflow is empty", () => {
-    mockStore.nodes = [];
-    mockStore.edges = [];
+    setWorkflow([], []);
 
-    render(<Toolbar />);
+    renderToolbar();
 
-    fireEvent.click(screen.getByText("Regulatory Save"));
+    fireEvent.click(screen.getByTestId("dropdown-regulatory"));
 
-    expect(screen.getByText("Nothing to Save")).toBeInTheDocument();
+    expect(screen.getByRole("alert")).toBeInTheDocument();
 
-    expect(
-      screen.getByText("Please create a workflow before saving the template."),
-    ).toBeInTheDocument();
+    expect(screen.getByTestId("notification-type")).toHaveTextContent(
+      "warning",
+    );
+
+    expect(screen.getByTestId("notification-title")).toHaveTextContent(
+      "Nothing to Save",
+    );
+
+    expect(screen.getByTestId("notification-message")).toHaveTextContent(
+      "Please create a workflow before saving the template.",
+    );
   });
 
   it("opens regulatory save dialog", () => {
-    mockStore.nodes = [
-      {
-        id: "1",
-      },
-    ];
+    setWorkflow([createNode(false)], []);
 
-    render(<Toolbar />);
+    renderToolbar();
 
-    fireEvent.click(screen.getByText("Regulatory Save"));
+    fireEvent.click(screen.getByTestId("dropdown-regulatory"));
 
-    expect(screen.getByTestId("dialog")).toBeInTheDocument();
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
 
-    expect(screen.getByText("TOOLBAR_REGULATORY_TEMPLATE")).toBeInTheDocument();
+    expect(screen.getByText("Regulatory Template")).toBeInTheDocument();
   });
 
   it("opens mpc save dialog", () => {
-    mockStore.nodes = [
-      {
-        id: "1",
-      },
-    ];
+    setWorkflow([createNode(false)], []);
 
-    render(<Toolbar />);
+    renderToolbar();
 
-    fireEvent.click(screen.getByText("MPC Save"));
+    fireEvent.click(screen.getByTestId("dropdown-mpc"));
 
-    expect(screen.getByTestId("dialog")).toBeInTheDocument();
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
 
-    expect(screen.getByText("TOOLBAR_MPC_TEMPLATE")).toBeInTheDocument();
+    expect(screen.getByText("MPC Template")).toBeInTheDocument();
   });
 
   it("prefills generated template name", () => {
-    mockStore.nodes = [
-      {
-        id: "1",
-      },
-    ];
+    setWorkflow([createNode(false)], []);
 
-    render(<Toolbar />);
+    localStorage.setItem(
+      "workflowTemplates",
+      JSON.stringify([
+        {
+          id: "existing",
+          name: "Existing",
+        },
+      ]),
+    );
 
-    fireEvent.click(screen.getByText("Regulatory Save"));
+    renderToolbar();
 
-    expect(screen.getByDisplayValue("Custom_1")).toBeInTheDocument();
+    fireEvent.click(screen.getByTestId("dropdown-regulatory"));
+
+    expect(screen.getByDisplayValue("Custom_2")).toBeInTheDocument();
   });
 
   it("updates template name", () => {
-    mockStore.nodes = [
-      {
-        id: "1",
-      },
-    ];
+    setWorkflow([createNode(false)], []);
 
-    render(<Toolbar />);
+    renderToolbar();
 
-    fireEvent.click(screen.getByText("Regulatory Save"));
+    fireEvent.click(screen.getByTestId("dropdown-regulatory"));
 
-    const input = screen.getByLabelText("TOOLBAR_TEMPLATE_NAME");
+    const input = screen.getByDisplayValue("Custom_1");
 
     fireEvent.change(input, {
       target: {
-        value: "My Custom Template",
+        value: "My Template",
       },
     });
 
-    expect(screen.getByDisplayValue("My Custom Template")).toBeInTheDocument();
+    expect(screen.getByDisplayValue("My Template")).toBeInTheDocument();
   });
 
   it("closes dialog when cancel is clicked", () => {
-    mockStore.nodes = [
-      {
-        id: "1",
-      },
-    ];
+    setWorkflow([createNode(false)], []);
 
-    render(<Toolbar />);
+    renderToolbar();
 
-    fireEvent.click(screen.getByText("Regulatory Save"));
+    fireEvent.click(screen.getByTestId("dropdown-regulatory"));
 
-    fireEvent.click(screen.getByText("COMMON_CANCEL"));
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
 
-    expect(screen.queryByTestId("dialog")).not.toBeInTheDocument();
+    fireEvent.click(
+      screen.getByRole("button", {
+        name: "Cancel",
+      }),
+    );
+
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
   });
 
   it("closes dialog using dialog onClose", () => {
-    mockStore.nodes = [
-      {
-        id: "1",
-      },
-    ];
+    setWorkflow([createNode(false)], []);
 
-    render(<Toolbar />);
+    renderToolbar();
 
-    fireEvent.click(screen.getByText("Regulatory Save"));
+    fireEvent.click(screen.getByTestId("dropdown-regulatory"));
 
-    fireEvent.click(screen.getByTestId("dialog-close"));
+    fireEvent.click(
+      screen.getByRole("button", {
+        name: "Close dialog",
+      }),
+    );
 
-    expect(screen.queryByTestId("dialog")).not.toBeInTheDocument();
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
   });
 
+  /* Save                                                                   */
+
   it("saves regulatory template", () => {
-    mockStore.nodes = [
-      {
-        id: "1",
+    setWorkflow([createNode(false)], []);
+
+    renderToolbar();
+
+    fireEvent.click(screen.getByTestId("dropdown-regulatory"));
+
+    const input = screen.getByDisplayValue("Custom_1");
+
+    fireEvent.change(input, {
+      target: {
+        value: "Regulatory Test",
       },
-    ];
+    });
 
-    render(<Toolbar />);
+    fireEvent.click(
+      screen.getByRole("button", {
+        name: "Save",
+      }),
+    );
 
-    fireEvent.click(screen.getByText("Regulatory Save"));
+    const templates = JSON.parse(
+      localStorage.getItem("workflowTemplates") ?? "[]",
+    ) as Array<{
+      id: string;
+      name: string;
+      type: string;
+      createdAt: string;
+    }>;
 
-    fireEvent.click(screen.getByText("COMMON_SAVE"));
+    expect(templates).toHaveLength(1);
 
-    expect(localStorage.setItem).toHaveBeenCalled();
+    expect(templates[0]).toMatchObject({
+      id: MOCK_UUID,
+      name: "Regulatory Test",
+      type: "regulatory",
+    });
 
     expect(mockClearWorkflow).toHaveBeenCalledTimes(1);
   });
 
   it("shows regulatory success notification", () => {
-    mockStore.nodes = [
-      {
-        id: "1",
+    setWorkflow([createNode(false)], []);
+
+    renderToolbar();
+
+    fireEvent.click(screen.getByTestId("dropdown-regulatory"));
+
+    fireEvent.change(screen.getByDisplayValue("Custom_1"), {
+      target: {
+        value: "Regulatory Test",
       },
-    ];
+    });
 
-    render(<Toolbar />);
+    fireEvent.click(
+      screen.getByRole("button", {
+        name: "Save",
+      }),
+    );
 
-    fireEvent.click(screen.getByText("Regulatory Save"));
+    expect(screen.getByTestId("notification-title")).toHaveTextContent(
+      "Saved as Regulatory Template",
+    );
 
-    fireEvent.click(screen.getByText("COMMON_SAVE"));
-
-    expect(screen.getByText("TOOLBAR_SAVED_REGULATORY")).toBeInTheDocument();
-
-    expect(screen.getByText("TOOLBAR_FIND_REGULATORY")).toBeInTheDocument();
-  });
-
-  it("shows mpc success notification", () => {
-    mockStore.nodes = [
-      {
-        id: "1",
-      },
-    ];
-
-    render(<Toolbar />);
-
-    fireEvent.click(screen.getByText("MPC Save"));
-
-    fireEvent.click(screen.getByText("COMMON_SAVE"));
-
-    expect(screen.getByText("TOOLBAR_SAVED_MPC")).toBeInTheDocument();
-
-    expect(screen.getByText("TOOLBAR_FIND_MPC")).toBeInTheDocument();
-  });
-
-  it("renders notification component", () => {
-    mockStore.nodes = [
-      {
-        id: "1",
-      },
-    ];
-
-    render(<Toolbar />);
-
-    fireEvent.click(screen.getByText("Regulatory Save"));
-
-    fireEvent.click(screen.getByText("COMMON_SAVE"));
-
-    expect(screen.getByTestId("notification")).toBeInTheDocument();
-  });
-
-  it("creates template using randomUUID", () => {
-    mockStore.nodes = [
-      {
-        id: "1",
-      },
-    ];
-
-    render(<Toolbar />);
-
-    fireEvent.click(screen.getByText("Regulatory Save"));
-
-    fireEvent.click(screen.getByText("COMMON_SAVE"));
-
-    expect(localStorage.setItem).toHaveBeenCalledWith(
-      "workflowTemplates",
-      expect.stringContaining("mock-id"),
+    expect(screen.getByTestId("notification-message")).toHaveTextContent(
+      "You can find this template in the Catalog under Templates > Regulatory Templates.",
     );
   });
 
+  it("shows mpc success notification", () => {
+    setWorkflow([createNode(false)], []);
+
+    renderToolbar();
+
+    fireEvent.click(screen.getByTestId("dropdown-mpc"));
+
+    fireEvent.change(screen.getByDisplayValue("Custom_1"), {
+      target: {
+        value: "MPC Test",
+      },
+    });
+
+    fireEvent.click(
+      screen.getByRole("button", {
+        name: "Save",
+      }),
+    );
+
+    expect(screen.getByTestId("notification-title")).toHaveTextContent(
+      "Saved as MPC Template",
+    );
+
+    expect(screen.getByTestId("notification-message")).toHaveTextContent(
+      "You can find this template in the Catalog under Templates > MPC Templates.",
+    );
+  });
+
+  it("renders notification component", () => {
+    setWorkflow([], []);
+
+    renderToolbar();
+
+    fireEvent.click(screen.getByTestId("dropdown-regulatory"));
+
+    expect(screen.getByRole("alert")).toBeInTheDocument();
+  });
+
+  it("creates template using randomUUID", () => {
+    setWorkflow([createNode(false)], []);
+
+    renderToolbar();
+
+    fireEvent.click(screen.getByTestId("dropdown-regulatory"));
+
+    fireEvent.change(screen.getByDisplayValue("Custom_1"), {
+      target: {
+        value: "Test Template",
+      },
+    });
+
+    fireEvent.click(
+      screen.getByRole("button", {
+        name: "Save",
+      }),
+    );
+
+    expect(crypto.randomUUID).toHaveBeenCalledTimes(1);
+  });
+
   it("loads existing templates before creating template", () => {
-    Storage.prototype.getItem = vi.fn(() =>
+    localStorage.setItem(
+      "workflowTemplates",
       JSON.stringify([
         {
-          id: "existing",
-          name: "Template1",
+          id: "1",
+          name: "Template One",
+        },
+        {
+          id: "2",
+          name: "Template Two",
         },
       ]),
     );
 
-    mockStore.nodes = [
-      {
-        id: "1",
-      },
-    ];
+    setWorkflow([createNode(false)], []);
 
-    render(<Toolbar />);
+    renderToolbar();
 
-    fireEvent.click(screen.getByText("Regulatory Save"));
+    fireEvent.click(screen.getByTestId("dropdown-regulatory"));
 
-    expect(screen.getByDisplayValue("Custom_2")).toBeInTheDocument();
+    expect(screen.getByDisplayValue("Custom_3")).toBeInTheDocument();
   });
 
   it("uses empty array fallback when localStorage returns null", () => {
-    Storage.prototype.getItem = vi.fn(() => null);
+    setWorkflow([createNode(false)], []);
 
-    mockStore.nodes = [
-      {
-        id: "1",
-      },
-    ];
+    renderToolbar();
 
-    render(<Toolbar />);
-
-    fireEvent.click(screen.getByText("Regulatory Save"));
+    fireEvent.click(screen.getByTestId("dropdown-regulatory"));
 
     expect(screen.getByDisplayValue("Custom_1")).toBeInTheDocument();
   });
 
   it("uses empty array fallback while saving when localStorage returns null", () => {
-    Storage.prototype.getItem = vi.fn(() => null);
+    setWorkflow([createNode(false)], []);
 
-    mockStore.nodes = [
-      {
-        id: "1",
+    renderToolbar();
+
+    fireEvent.click(screen.getByTestId("dropdown-regulatory"));
+
+    fireEvent.change(screen.getByDisplayValue("Custom_1"), {
+      target: {
+        value: "Test Template",
       },
-    ];
+    });
 
-    render(<Toolbar />);
+    fireEvent.click(
+      screen.getByRole("button", {
+        name: "Save",
+      }),
+    );
 
-    fireEvent.click(screen.getByText("Regulatory Save"));
+    const templates = JSON.parse(
+      localStorage.getItem("workflowTemplates") ?? "[]",
+    ) as Array<{
+      name: string;
+    }>;
 
-    fireEvent.click(screen.getByText("COMMON_SAVE"));
+    expect(templates).toHaveLength(1);
 
-    expect(localStorage.setItem).toHaveBeenCalled();
+    expect(templates[0]?.name).toBe("Test Template");
   });
 
   it("closes notification when notification onClose is triggered", () => {
-    mockStore.nodes = [
-      {
-        id: "1",
-      },
-    ];
+    setWorkflow([], []);
 
-    render(<Toolbar />);
+    renderToolbar();
 
-    fireEvent.click(screen.getByText("Regulatory Save"));
+    fireEvent.click(screen.getByTestId("dropdown-regulatory"));
 
-    fireEvent.click(screen.getByText("COMMON_SAVE"));
+    expect(screen.getByRole("alert")).toBeInTheDocument();
 
-    fireEvent.click(screen.getByTestId("notification-close"));
+    fireEvent.click(
+      screen.getByRole("button", {
+        name: "Close notification",
+      }),
+    );
 
-    expect(screen.queryByTestId("notification")).not.toBeInTheDocument();
+    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
   });
 
-  // --------------------------------------------------
-  // EXPORT TESTS
-  // --------------------------------------------------
+  /* Export                                                                 */
 
   it("shows warning notification when exporting empty workflow", () => {
-    mockStore.nodes = [];
-    mockStore.edges = [];
+    setWorkflow([], []);
 
-    render(<Toolbar />);
+    renderToolbar();
 
-    fireEvent.click(screen.getByText("Export Template"));
+    fireEvent.click(getToolbarButton("Export Template"));
 
-    expect(screen.getByText("Nothing to Export")).toBeInTheDocument();
+    expect(screen.getByRole("alert")).toBeInTheDocument();
 
-    expect(
-      screen.getByText("Please create a workflow before exporting."),
-    ).toBeInTheDocument();
+    expect(screen.getByTestId("notification-type")).toHaveTextContent(
+      "warning",
+    );
+
+    expect(screen.getByTestId("notification-title")).toHaveTextContent(
+      "Nothing to Export",
+    );
+
+    expect(screen.getByTestId("notification-message")).toHaveTextContent(
+      "Please create a workflow before exporting.",
+    );
 
     expect(mockExportWorkflow).not.toHaveBeenCalled();
   });
 
   it("exports workflow when nodes are present", () => {
-    mockStore.nodes = [
-      {
-        id: "node-1",
-      },
-    ];
+    const nodes = [createNode(false)];
 
-    mockStore.edges = [
-      {
-        id: "edge-1",
-      },
-    ];
+    const edges = [createEdge(false)];
 
-    render(<Toolbar />);
+    setWorkflow(nodes, edges);
 
-    fireEvent.click(screen.getByText("Export Template"));
+    renderToolbar();
+
+    fireEvent.click(getToolbarButton("Export Template"));
 
     expect(mockExportWorkflow).toHaveBeenCalledTimes(1);
 
     expect(mockExportWorkflow).toHaveBeenCalledWith(
-      mockStore.nodes,
-      mockStore.edges,
+      nodes,
+      edges,
       "workflow.json",
     );
   });
 
-  // --------------------------------------------------
-  // IMPORT TESTS
-  // --------------------------------------------------
+  /* Import                                                                  */
 
   it("opens file picker when import template is clicked", () => {
-    const clickSpy = vi
-      .spyOn(HTMLInputElement.prototype, "click")
-      .mockImplementation(() => {});
+    setWorkflow([], []);
 
-    render(<Toolbar />);
+    renderToolbar();
 
-    fireEvent.click(screen.getByText("Import Template"));
+    const fileInput = document.querySelector('input[type="file"]');
 
-    expect(clickSpy).toHaveBeenCalledTimes(1);
+    expect(fileInput).not.toBeNull();
+
+    const clickSpy = vi.spyOn(HTMLInputElement.prototype, "click");
+
+    fireEvent.click(getToolbarButton("Import Template"));
+
+    expect(clickSpy).toHaveBeenCalled();
 
     clickSpy.mockRestore();
+
+    expect(fileInput).toBeInTheDocument();
   });
 
   it("does nothing when no import file is selected", async () => {
-    render(<Toolbar />);
+    renderToolbar();
 
-    const fileInput = document.querySelector(
-      'input[type="file"]',
-    ) as HTMLInputElement;
+    const fileInput = document.querySelector('input[type="file"]');
 
-    await act(async () => {
-      fireEvent.change(fileInput, {
-        target: {
-          files: [],
-          value: "",
-        },
-      });
+    expect(fileInput).not.toBeNull();
+
+    if (!(fileInput instanceof HTMLInputElement)) {
+      throw new Error("File input was not found");
+    }
+
+    fireEvent.change(fileInput, {
+      target: {
+        files: [],
+      },
     });
 
     expect(mockSetIsImporting).not.toHaveBeenCalled();
@@ -738,175 +895,170 @@ describe("Toolbar", () => {
   });
 
   it("imports workflow successfully", async () => {
-    const importedWorkflow = {
-      nodes: [
-        {
-          id: "imported-node",
-        },
-      ],
-      edges: [
-        {
-          id: "imported-edge",
-        },
-      ],
-    };
-
-    mockImportWorkflow.mockResolvedValue(importedWorkflow);
-
-    render(<Toolbar />);
-
-    const fileInput = document.querySelector(
-      'input[type="file"]',
-    ) as HTMLInputElement;
-
-    const file = new File(
-      [
-        JSON.stringify({
-          nodes: importedWorkflow.nodes,
-          edges: importedWorkflow.edges,
-        }),
-      ],
-      "workflow.json",
-      {
-        type: "application/json",
-      },
-    );
-
-    await act(async () => {
-      fireEvent.change(fileInput, {
-        target: {
-          files: [file],
-        },
-      });
-    });
-
-    expect(mockSetIsImporting).toHaveBeenCalledWith(true);
-
-    expect(mockImportWorkflow).toHaveBeenCalledTimes(1);
-
-    expect(mockImportWorkflow).toHaveBeenCalledWith(file);
-
-    expect(mockSetNodes).toHaveBeenCalledWith(importedWorkflow.nodes);
-
-    expect(mockSetEdges).toHaveBeenCalledWith(importedWorkflow.edges);
-
-    expect(mockSetIsImporting).toHaveBeenLastCalledWith(false);
-
-    expect(screen.getByText("Import Successful")).toBeInTheDocument();
-
-    expect(
-      screen.getByText("Workflow imported successfully."),
-    ).toBeInTheDocument();
-  });
-
-  it("shows import failed notification when import throws an Error", async () => {
-    mockImportWorkflow.mockRejectedValue(new Error("Invalid workflow file"));
-
-    render(<Toolbar />);
-
-    const fileInput = document.querySelector(
-      'input[type="file"]',
-    ) as HTMLInputElement;
-
-    const file = new File(["invalid workflow"], "workflow.json", {
+    const file = new File(['{"nodes":[],"edges":[]}'], "workflow.json", {
       type: "application/json",
     });
 
-    await act(async () => {
-      fireEvent.change(fileInput, {
-        target: {
-          files: [file],
-        },
-      });
+    const importedNodes = [createNode(false)];
+
+    const importedEdges = [createEdge(false)];
+
+    mockImportWorkflow.mockResolvedValue({
+      nodes: importedNodes,
+      edges: importedEdges,
     });
 
-    expect(screen.getByText("Import Failed")).toBeInTheDocument();
+    renderToolbar();
 
-    expect(screen.getByText("Invalid workflow file")).toBeInTheDocument();
+    const fileInput = document.querySelector('input[type="file"]');
+
+    if (!(fileInput instanceof HTMLInputElement)) {
+      throw new Error("File input was not found");
+    }
+
+    fireEvent.change(fileInput, {
+      target: {
+        files: [file],
+      },
+    });
+
+    await waitFor(() => {
+      expect(mockImportWorkflow).toHaveBeenCalledWith(file);
+    });
 
     expect(mockSetIsImporting).toHaveBeenCalledWith(true);
+
+    expect(mockSetNodes).toHaveBeenCalledWith(importedNodes);
+
+    expect(mockSetEdges).toHaveBeenCalledWith(importedEdges);
+
+    expect(mockSetIsImporting).toHaveBeenLastCalledWith(false);
+
+    expect(screen.getByTestId("notification-title")).toHaveTextContent(
+      "Import Successful",
+    );
+  });
+
+  it("shows import failed notification when import throws an Error", async () => {
+    const file = new File(["invalid"], "workflow.json", {
+      type: "application/json",
+    });
+
+    mockImportWorkflow.mockRejectedValue(new Error("Invalid workflow"));
+
+    renderToolbar();
+
+    const fileInput = document.querySelector('input[type="file"]');
+
+    if (!(fileInput instanceof HTMLInputElement)) {
+      throw new Error("File input was not found");
+    }
+
+    fireEvent.change(fileInput, {
+      target: {
+        files: [file],
+      },
+    });
+
+    await waitFor(() => {
+      expect(screen.getByTestId("notification-title")).toHaveTextContent(
+        "Import Failed",
+      );
+    });
+
+    expect(screen.getByTestId("notification-message")).toHaveTextContent(
+      "Invalid workflow",
+    );
 
     expect(mockSetIsImporting).toHaveBeenLastCalledWith(false);
   });
 
   it("shows default import error when a non-Error is thrown", async () => {
-    mockImportWorkflow.mockRejectedValue("invalid file");
-
-    render(<Toolbar />);
-
-    const fileInput = document.querySelector(
-      'input[type="file"]',
-    ) as HTMLInputElement;
-
-    const file = new File(["invalid workflow"], "workflow.json", {
+    const file = new File(["invalid"], "workflow.json", {
       type: "application/json",
     });
 
-    await act(async () => {
-      fireEvent.change(fileInput, {
-        target: {
-          files: [file],
-        },
-      });
+    mockImportWorkflow.mockRejectedValue("something went wrong");
+
+    renderToolbar();
+
+    const fileInput = document.querySelector('input[type="file"]');
+
+    if (!(fileInput instanceof HTMLInputElement)) {
+      throw new Error("File input was not found");
+    }
+
+    fireEvent.change(fileInput, {
+      target: {
+        files: [file],
+      },
     });
 
-    expect(screen.getByText("Import Failed")).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByTestId("notification-title")).toHaveTextContent(
+        "Import Failed",
+      );
+    });
 
-    expect(screen.getByText("Unable to import workflow.")).toBeInTheDocument();
+    expect(screen.getByTestId("notification-message")).toHaveTextContent(
+      "Unable to import workflow.",
+    );
+
+    expect(mockSetIsImporting).toHaveBeenLastCalledWith(false);
   });
 
   it("resets importing state after successful import", async () => {
+    const file = new File(["{}"], "workflow.json", {
+      type: "application/json",
+    });
+
     mockImportWorkflow.mockResolvedValue({
       nodes: [],
       edges: [],
     });
 
-    render(<Toolbar />);
+    renderToolbar();
 
-    const fileInput = document.querySelector(
-      'input[type="file"]',
-    ) as HTMLInputElement;
+    const fileInput = document.querySelector('input[type="file"]');
 
+    if (!(fileInput instanceof HTMLInputElement)) {
+      throw new Error("File input was not found");
+    }
+
+    fireEvent.change(fileInput, {
+      target: {
+        files: [file],
+      },
+    });
+
+    await waitFor(() => {
+      expect(mockSetIsImporting).toHaveBeenLastCalledWith(false);
+    });
+  });
+
+  it("resets importing state after failed import", async () => {
     const file = new File(["{}"], "workflow.json", {
       type: "application/json",
     });
 
-    await act(async () => {
-      fireEvent.change(fileInput, {
-        target: {
-          files: [file],
-        },
-      });
-    });
-
-    expect(mockSetIsImporting).toHaveBeenCalledWith(true);
-
-    expect(mockSetIsImporting).toHaveBeenLastCalledWith(false);
-  });
-
-  it("resets importing state after failed import", async () => {
     mockImportWorkflow.mockRejectedValue(new Error("Import failed"));
 
-    render(<Toolbar />);
+    renderToolbar();
 
-    const fileInput = document.querySelector(
-      'input[type="file"]',
-    ) as HTMLInputElement;
+    const fileInput = document.querySelector('input[type="file"]');
 
-    const file = new File(["invalid"], "workflow.json", {
-      type: "application/json",
+    if (!(fileInput instanceof HTMLInputElement)) {
+      throw new Error("File input was not found");
+    }
+
+    fireEvent.change(fileInput, {
+      target: {
+        files: [file],
+      },
     });
 
-    await act(async () => {
-      fireEvent.change(fileInput, {
-        target: {
-          files: [file],
-        },
-      });
+    await waitFor(() => {
+      expect(mockSetIsImporting).toHaveBeenLastCalledWith(false);
     });
-
-    expect(mockSetIsImporting).toHaveBeenCalledWith(true);
-
-    expect(mockSetIsImporting).toHaveBeenLastCalledWith(false);
   });
 });

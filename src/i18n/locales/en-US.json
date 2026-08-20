@@ -11,10 +11,14 @@
   "COMMON_LOADING": "Loading...",
   "COMMON_SELECT": "Select",
   "COMMON_FILTER": "Filter",
+  "CLEAR_WORKFLOW": "Clear Workflow",
 
   "COMMON_GOOD": "Good",
   "COMMON_WARNING": "Warning",
   "COMMON_ERROR": "Error",
+  "COMMON_SUCCESS": "Success",
+  "COMMON_FAILURE": "Failed",
+  "COMMON_INFO": "Info",
 
   "SIDEBAR_HOME": "Home",
   "SIDEBAR_WORKFLOW": "Workflow",
@@ -101,7 +105,6 @@
   "TOOLBAR_SAVED_MPC": "Saved as MPC Template",
   "TOOLBAR_FIND_REGULATORY": "You can find this template in the Catalog under Templates > Regulatory Templates.",
   "TOOLBAR_FIND_MPC": "You can find this template in the Catalog under Templates > MPC Templates.",
-  "TOOLBAR_SAVE_AS_TITLE": "SAVE AS",
   "TOOLBAR_REGULATORY_TEMPLATE": "Regulatory Template",
   "TOOLBAR_MPC_TEMPLATE": "MPC Template",
   "TOOLBAR_TEMPLATE_NAME": "Template Name",
@@ -125,12 +128,19 @@
   "NODE_WARNING_MESSAGE": "Warning message will be shown here",
   "NODE_ERROR_MESSAGE": "There are too many bad data points",
 
-  "EXECUTION_EXECUTE": "Execute",
-  "EXECUTION_PAUSE": "Pause",
+  "EXECUTION_TOOLBAR_EDIT": "Edit",
+  "EXECUTION_TOOLBAR_DELETE": "Delete",
+  "EXECUTION_TOOLBAR_COMPACT_VIEW": "Compact View",
+  "EXECUTION_TOOLBAR_COMFORTABLE_VIEW": "Comfortable View",
+  "EXECUTION_TOOLBAR_ANALYSIS_TEMPLATES": "Analysis Templates",
+
+  "EXECUTION_EXECUTE": "Execute All",
+  "EXECUTION_PAUSE": "Pause All",
+  "EXECUTION_EXECUTE_SELECTED": "Execute Selected",
+  "EXECUTION_PAUSE_SELECTED": "Pause Selected",
   "EXECUTION_START_CONFIRMATION": "Start Executing?",
   "EXECUTION_PAUSE_CONFIRMATION": "Pause execution?",
   "EXECUTION_DELETE_CONFIRMATION": "Delete Workflow?",
-  "ANALYSIS_TEMPLATES": "Analysis Templates",
 
   "CALCULATED_KPIS_TITLE": "Calculated KPIs",
   "CALCULATED_KPIS_ERRORS_TITLE": "Errors",
@@ -258,5 +268,12 @@
   "CONNECTIONS_DATA_SOURCE": "Data Source",
   "CONNECTIONS_SELECT_INPUTS_MESSAGE": "Please select the inputs to be given from",
   "CONNECTIONS_DATA_PREPROCESSING_TITLE": "DATA PREPROCESSING",
-  "CONNECTIONS_DATA_SOURCE_TITLE": "DATA SOURCE"
+  "CONNECTIONS_DATA_SOURCE_TITLE": "DATA SOURCE",
+  
+  "TOOLBAR_IMPORT_SUCCESS": "Import Successful",
+  "TOOLBAR_WORKFLOW_IMPORTED_SUCCESSFULLY": "Workflow imported successfully.",
+  "TOOLBAR_IMPORT_FAILED": "Import Failed",
+  "TOOLBAR_UNABLE_TO_IMPORT_WORKFLOW": "Unable to import workflow.",
+  "TOOLBAR_NOTHING_TO_EXPORT": "Nothing to Export",
+  "TOOLBAR_CREATE_WORKFLOW_BEFORE_EXPORTING": "Please create a workflow before exporting."
 }

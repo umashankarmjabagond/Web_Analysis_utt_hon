@@ -11,10 +11,14 @@
   "COMMON_LOADING": "جار التحميل...",
   "COMMON_SELECT": "اختر",
   "COMMON_FILTER": "تصفية",
+  "CLEAR_WORKFLOW": "مسح سير العمل",
 
   "COMMON_GOOD": "جيد",
   "COMMON_WARNING": "تحذير",
   "COMMON_ERROR": "خطأ",
+  "COMMON_SUCCESS": "نجاح",
+  "COMMON_FAILURE": "فشل",
+  "COMMON_INFO": "معلومات",
 
   "SIDEBAR_HOME": "الرئيسية",
   "SIDEBAR_WORKFLOW": "سير العمل",
@@ -97,7 +101,7 @@
   "TOOLBAR_CUSTOM_MPC_TEMPLATES": "قوالب MPC مخصصة",
   "TOOLBAR_NOTHING_TO_SAVE": "لا يوجد شيء لحفظه",
   "TOOLBAR_CREATE_WORKFLOW_BEFORE_SAVE": "يرجى إنشاء سير عمل قبل حفظ القالب.",
-  "TOOLBAR_SAVED_REGULATORY_TEMPLATE": "تم الحفظ كقالب تنظيمي",
+  "TOOLBAR_SAVED_REGULATORY": "تم الحفظ كقالب تنظيمي",
   "TOOLBAR_SAVED_MPC_TEMPLATE": "تم الحفظ كقالب MPC",
   "TOOLBAR_REGULATORY_TEMPLATE_LOCATION": "يمكنك العثور على هذا القالب في الكتالوج ضمن القوالب > القوالب التنظيمية.",
   "TOOLBAR_MPC_TEMPLATE_LOCATION": "يمكنك العثور على هذا القالب في الكتالوج ضمن القوالب > قوالب MPC.",
@@ -124,12 +128,19 @@
   "NODE_WARNING_MESSAGE": "ستظهر رسالة التحذير هنا",
   "NODE_ERROR_MESSAGE": "هناك عدد كبير جدًا من نقاط البيانات السيئة",
 
-  "EXECUTION_EXECUTE": "تنفيذ",
-  "EXECUTION_PAUSE": "إيقاف مؤقت",
+  "EXECUTION_TOOLBAR_EDIT": "تحرير",
+  "EXECUTION_TOOLBAR_DELETE": "حذف",
+  "EXECUTION_TOOLBAR_COMPACT_VIEW": "العرض المضغوط",
+  "EXECUTION_TOOLBAR_COMFORTABLE_VIEW": "العرض المريح",
+  "EXECUTION_TOOLBAR_ANALYSIS_TEMPLATES": "قوالب التحليل",
+
+  "EXECUTION_EXECUTE": "تنفيذ الكل",
+  "EXECUTION_PAUSE": "إيقاف الكل مؤقتًا",
+  "EXECUTION_EXECUTE_SELECTED": "تنفيذ المحدد",
+  "EXECUTION_PAUSE_SELECTED": "إيقاف المحدد مؤقتًا",
   "EXECUTION_START_CONFIRMATION": "هل تريد بدء التنفيذ؟",
   "EXECUTION_PAUSE_CONFIRMATION": "هل تريد إيقاف التنفيذ مؤقتًا؟",
   "EXECUTION_DELETE_CONFIRMATION": "هل تريد حذف سير العمل؟",
-  "ANALYSIS_TEMPLATES": "قوالب التحليل",
 
   "CALCULATED_KPIS_TITLE": "مؤشرات الأداء المحسوبة",
   "CALCULATED_KPIS_ERRORS_TITLE": "الأخطاء",
@@ -255,5 +266,16 @@
   "CONNECTIONS_DATA_SOURCE": "مصدر البيانات",
   "CONNECTIONS_SELECT_INPUTS_MESSAGE": "يرجى تحديد المدخلات المراد تمريرها من",
   "CONNECTIONS_DATA_PREPROCESSING_TITLE": "المعالجة المسبقة للبيانات",
-  "CONNECTIONS_DATA_SOURCE_TITLE": "مصدر البيانات"
+  "CONNECTIONS_DATA_SOURCE_TITLE": "مصدر البيانات",
+  
+  "TOOLBAR_SAVED_MPC": "تم الحفظ كقالب MPC",
+  "TOOLBAR_FIND_REGULATORY": "يمكنك العثور على هذا القالب في الكتالوج ضمن القوالب > القوالب التنظيمية.",
+  "TOOLBAR_FIND_MPC": "يمكنك العثور على هذا القالب في الكتالوج ضمن القوالب > قوالب MPC.",
+
+  "TOOLBAR_IMPORT_SUCCESS": "تم الاستيراد بنجاح",
+  "TOOLBAR_WORKFLOW_IMPORTED_SUCCESSFULLY": "تم استيراد سير العمل بنجاح.",
+  "TOOLBAR_IMPORT_FAILED": "فشل الاستيراد",
+  "TOOLBAR_UNABLE_TO_IMPORT_WORKFLOW": "تعذر استيراد سير العمل.",
+  "TOOLBAR_NOTHING_TO_EXPORT": "لا يوجد شيء لتصديره",
+  "TOOLBAR_CREATE_WORKFLOW_BEFORE_EXPORTING": "يرجى إنشاء سير عمل قبل التصدير."
 }
