@@ -14,7 +14,25 @@ import {
 
 vi.mock("react-i18next", () => ({
   useTranslation: () => ({
-    t: (key: string) => key,
+    t: (key: string) => {
+      const translations: Record<string, string> = {
+        CONNECTIONS_CONFIGURE_INPUT_COLUMNS:
+          "Configure Input Columns",
+        CONNECTIONS_DATA_PREPROCESSING:
+          "Data Preprocessing",
+        CONNECTIONS_DATA_SOURCE:
+          "Data Source",
+        CONNECTIONS_SELECT_INPUTS_MESSAGE:
+          "Please select the inputs",
+        CONNECTIONS_DATA_PREPROCESSING_TITLE:
+          "DATA PREPROCESSING",
+        CONNECTIONS_DATA_SOURCE_TITLE:
+          "DATA SOURCE",
+        COMMON_CLOSE: "Close",
+      };
+
+      return translations[key] ?? key;
+    },
   }),
 }));
 
@@ -56,8 +74,8 @@ describe("Connections", () => {
 
     expect(
       screen.getByRole("button", {
-        name: "COMMON_CLOSE",
-      }),
+  name: "Close",
+}),
     ).toBeInTheDocument();
   });
 

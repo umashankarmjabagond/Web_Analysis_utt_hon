@@ -28,7 +28,7 @@
         <div
           className={cn(
             "flex min-h-10 items-center rounded-sm px-2 hover:bg-tree-node-hover-background",
-            isChecked && "bg-tree-node-selected-background",
+            isChecked && "bg-tree-node-hover-background text-accordion-list-count",
           )}
         >
           <div
@@ -56,7 +56,7 @@
 
             {hasChildren ? (
               level === 0 ? (
-                <BookText size={14} className="shrink-0 text-primary" />
+                <BookText size={14} className="shrink-0 text-accordion-list-count" />
               ) : (
                 <FolderOpen size={14} className="shrink-0 text-primary" />
               )

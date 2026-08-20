@@ -248,5 +248,12 @@
 
   "CONTROLLER_RESET": "إعادة تعيين {{field}}",
   "CONTROLLER_STEP": "الخطوة {{current}} من {{total}}",
-  "CONTROLLER_FINISH": "إنهاء"
+  "CONTROLLER_FINISH": "إنهاء",
+
+  "CONNECTIONS_CONFIGURE_INPUT_COLUMNS": "تكوين أعمدة الإدخال",
+  "CONNECTIONS_DATA_PREPROCESSING": "المعالجة المسبقة للبيانات",
+  "CONNECTIONS_DATA_SOURCE": "مصدر البيانات",
+  "CONNECTIONS_SELECT_INPUTS_MESSAGE": "يرجى تحديد المدخلات المراد تمريرها من",
+  "CONNECTIONS_DATA_PREPROCESSING_TITLE": "المعالجة المسبقة للبيانات",
+  "CONNECTIONS_DATA_SOURCE_TITLE": "مصدر البيانات"
 }

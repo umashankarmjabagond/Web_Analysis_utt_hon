@@ -44,6 +44,8 @@
   --gray-1700: #1b1b1b;
   --gray-1750: #383838;
   --gray-1800: #2e2e2e;
+  --gray-1850: #868686;
+  --gray-1900: #454545;
 
   /* White  */
   --white-50: #ffffff;
@@ -153,6 +155,7 @@
   --foreground-accent: var(--blue-200); /* #64C3FF */
   --foreground-inverse: var(--black-100);
   --foreground-inverse-secondary: var(--gray-1200); /* #303030 */
+  --foreground-text: var(--gray-1850); /* #868686 */
 
   /* Border */
   --border-default: var(--gray-600); /* #707070 */
@@ -167,6 +170,7 @@
   --border-inverse: var(--white-400); /* #F0F0F0 */
   --border-surface: var(--gray-1200); /* #303030 */
   --border-black: var(--black-100); /* #000000 */
+  --border-gray: var(--gray-1900); /* #454545 */
 
   /* Selection */
   --selection-background: var(--navy-200); /* #0b4872 */
@@ -830,6 +834,7 @@
   --color-foreground-accent: var(--foreground-accent);
   --color-foreground-inverse: var(--foreground-inverse);
   --color-foreground-inverse-secondary: var(--foreground-inverse-secondary);
+  --color-foreground-text: var(--foreground-text);
 
   /* Border */
   --color-border-default: var(--border-default);
@@ -842,6 +847,7 @@
   --color-border-inverse: var(--border-inverse);
   --color-border-surface: var(--border-surface);
   --color-border-black: var(--border-black);
+  --color-border-gray: var(--border-gray);
 
   /* Selection */
   --color-selection-indicator: var(--selection-indicator);

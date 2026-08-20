@@ -245,5 +245,12 @@
 
   "CONTROLLER_RESET": "{{field}} zurücksetzen",
   "CONTROLLER_STEP": "Schritt {{current}} von {{total}}",
-  "CONTROLLER_FINISH": "Fertig"
+  "CONTROLLER_FINISH": "Fertig",
+
+  "CONNECTIONS_CONFIGURE_INPUT_COLUMNS": "Eingabespalten konfigurieren",
+  "CONNECTIONS_DATA_PREPROCESSING": "Datenvorverarbeitung",
+  "CONNECTIONS_DATA_SOURCE": "Datenquelle",
+  "CONNECTIONS_SELECT_INPUTS_MESSAGE": "Bitte wählen Sie die Eingaben aus, die von",
+  "CONNECTIONS_DATA_PREPROCESSING_TITLE": "DATENVORVERARBEITUNG",
+  "CONNECTIONS_DATA_SOURCE_TITLE": "DATENQUELLE"
 }

@@ -12,7 +12,8 @@ import {
   allColumnsData,
   DEFAULT_SELECTED_COLUMNS,
   buildSelectedTreeFromSource,
-  getSelectedTree } from '../../utils/utils';
+  getSelectedTree,
+} from "../../utils/utils";
 
 export default function Connections() {
   const { t } = useTranslation();
@@ -21,8 +22,9 @@ export default function Connections() {
 
   const [rightCheckedIds, setRightCheckedIds] = useState<string[]>([]);
 
-const [selectedColumns, setSelectedColumns] =
-  useState<TreeNodeData[]>(DEFAULT_SELECTED_COLUMNS);
+  const [selectedColumns, setSelectedColumns] = useState<TreeNodeData[]>(
+    DEFAULT_SELECTED_COLUMNS,
+  );
 
   const toggleLeftCheck = (id: string) => {
     setLeftCheckedIds((prev) =>
@@ -37,15 +39,10 @@ const [selectedColumns, setSelectedColumns] =
   };
 
   const moveToSelected = () => {
-  setSelectedColumns(
-    getSelectedTree(
-      selectedColumns,
-      leftCheckedIds,
-    ),
-  );
+    setSelectedColumns(getSelectedTree(selectedColumns, leftCheckedIds));
 
-  setLeftCheckedIds([]);
-};
+    setLeftCheckedIds([]);
+  };
 
   const removeFromSelected = () => {
     const remainingIds: string[] = [];
@@ -79,10 +76,10 @@ const [selectedColumns, setSelectedColumns] =
       <div className="pb-4 h-[102px] px-10 pt-10 gap-3">
         <div className="flex items-center justify-between h-[30px]">
           <h2 className="font-bold h-[30px] text-[20px] leading-[30px] tracking-[0px] text-text-primary">
-            Configure Input Columns
+            {t("CONNECTIONS_CONFIGURE_INPUT_COLUMNS")}
           </h2>
 
-          <button
+          <Button
             type="button"
             aria-label={t("COMMON_CLOSE")}
             className="
@@ -90,48 +87,49 @@ const [selectedColumns, setSelectedColumns] =
     items-center justify-center p-2
     text-drawer-close-foreground
     transition-colors
+    bg-background border border-background
     hover:bg-drawer-close-hover-background
-    hover:text-drawer-close-hover-foreground
+    hover:border-background
   "
           >
             <X size={14} strokeWidth={2} />
-          </button>
+          </Button>
         </div>
 
         <div className="mt-2 flex items-center text-sm text-muted-foreground h-4">
-          <span className="h-4 text-[12px] leading-4 font-medium tracking-[0px] text-default-border">
-            Data Preprocessing
+          <span className="h-4 text-[12px] leading-4 font-medium tracking-[0px] text-foreground-tertiary">
+            {t("CONNECTIONS_DATA_PREPROCESSING")}
           </span>
 
           <MoveRight size={14} className="mx-2" />
 
-          <span className="h-4 text-[12px] leading-4 font-medium tracking-[0px] text-default-border">
-            Data Source
+          <span className="h-4 text-[12px] leading-4 font-medium tracking-[0px] text-foreground-tertiary">
+            {t("CONNECTIONS_DATA_SOURCE")}
           </span>
         </div>
       </div>
 
       {/* Scrollable Content */}
       <div className="flex flex-1 flex-col px-10 py-4 min-h-0">
-        <p className="mt-4 mb-6 text-muted-foreground h-5 text-[13px] leading-[19.5px] font-medium tracking-[0px]">
-          Please select the inputs to be given from{" "}
-          <strong>"Data Preprocessing"</strong> to{" "}
-          <strong>"Data Source"</strong>.
+        <p className="mt-4 mb-6 text-foreground-text h-5 text-[13px] leading-[19.5px] font-medium tracking-[0px]">
+          {t("CONNECTIONS_SELECT_INPUTS_MESSAGE")}{" "}
+          <strong className="text-foreground">"{t("CONNECTIONS_DATA_PREPROCESSING")}"</strong> to{" "}
+          <strong className="text-foreground">"{t("CONNECTIONS_DATA_SOURCE")}"</strong>.
         </p>
 
         {/* Panel Titles */}
         <div className="grid grid-cols-[1fr_40px_1fr] gap-6 mb-2">
           <div className="h-[16px]">
-            <h3 className="h-4 text-[12px] leading-4 font-bold uppercase tracking-[0.3px] text-default-border">
-              DATA PREPROCESSING
+            <h3 className="h-4 text-[12px] leading-4 font-bold uppercase tracking-[0.3px] text-foreground-tertiary">
+              {t("CONNECTIONS_DATA_PREPROCESSING_TITLE")}
             </h3>
           </div>
 
           <div />
 
           <div className="h-[16px]">
-            <h3 className="h-4 text-[12px] leading-4 font-bold uppercase tracking-[0.3px] text-default-border">
-              DATA SOURCE
+            <h3 className="h-4 text-[12px] leading-4 font-bold uppercase tracking-[0.3px] text-foreground-tertiary">
+              {t("CONNECTIONS_DATA_SOURCE_TITLE")}
             </h3>
           </div>
         </div>
@@ -153,6 +151,7 @@ const [selectedColumns, setSelectedColumns] =
           {/* Middle Buttons */}
           <div className="flex w-[40px] flex-col items-center justify-center gap-6">
             <Button
+            className="text-control-light bg-background border border-border-gray hover:border-border-default hover:bg-background active:border-border-default active:bg-background"
               variant="secondary"
               fill="outline"
               iconOnly
@@ -161,6 +160,7 @@ const [selectedColumns, setSelectedColumns] =
             />
 
             <Button
+            className="text-control-light bg-background border border-border-gray hover:border-border-default hover:bg-background active:border-border-default active:bg-background"
               variant="secondary"
               fill="outline"
               iconOnly
@@ -194,11 +194,11 @@ const [selectedColumns, setSelectedColumns] =
 
       {/* Footer */}
       <div className="mt-4 flex justify-end gap-3 border-border-default px-10">
-        <Button variant="secondary" fill="outline">
+        <Button variant="secondary" fill="outline" className="h-[34px] w-[97px]">
           Cancel
         </Button>
 
-        <Button variant="primary">Finish</Button>
+        <Button variant="primary" className="h-[34px] w-[97px]">Finish</Button>
       </div>
     </div>
   );
