@@ -4,6 +4,7 @@ import { renderHook } from "@testing-library/react";
 import { useWorkflowCanvasInteractions } from "./useWorkflowInteractions";
 import {
   EXECUTION_ACTION,
+  EXECUTION_VIEW_MODE,
   type ExecutionFlowNode,
   type ExecutionItem,
 } from "../types/templateExecution";
@@ -20,42 +21,59 @@ describe("useWorkflowCanvasInteractions", () => {
   const toggleSelectedNode = vi.fn();
   const setNodeDrawerOpen = vi.fn();
 
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   const createMockStore = (
     selectedNodeIds: string[] = [],
   ): TemplateExecutionState => ({
     nodes: [] as ExecutionFlowNode[],
-
     setNodes: vi.fn(),
+
     edges: [],
     setEdges: vi.fn(),
+
     selectedExecutionItem: null as ExecutionItem | null,
     setSelectedExecutionItem: vi.fn(),
+
+    executionViewMode: EXECUTION_VIEW_MODE.COMPACT,
+    setExecutionViewMode: vi.fn(),
+
     selectedNodeIds,
     toggleSelectedNode,
+
     selectedRowIds: [],
     toggleSelectedRow: vi.fn(),
+
     isNodeDrawerOpen: false,
     setNodeDrawerOpen,
+
     executionAction: EXECUTION_ACTION.IDLE,
     setExecutionAction: vi.fn(),
+
     updateNode: vi.fn(),
     loadWorkflow: vi.fn(),
+
     hasMoreWorkflows: true,
     setHasMoreWorkflows: vi.fn(),
+
     isLoadingMoreWorkflows: false,
     setIsLoadingMoreWorkflows: vi.fn(),
+
     appendWorkflow: vi.fn(),
   });
 
-  it("toggles selected node", () => {
-    vi.mocked(useTemplateExecutionStore).mockImplementation((selector) =>
-      selector(createMockStore()),
-    );
+  const mockStore = (selectedNodeIds: string[] = []) => {
+    const state = createMockStore(selectedNodeIds);
 
+    vi.mocked(useTemplateExecutionStore).mockImplementation((selector) =>
+      selector(state),
+    );
+  };
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mockStore();
+  });
+
+  it("toggles selected node", () => {
     const { result } = renderHook(() => useWorkflowCanvasInteractions());
 
     result.current.handleNodeSelection("node-1", "success");
@@ -64,58 +82,40 @@ describe("useWorkflowCanvasInteractions", () => {
   });
 
   it("does not open drawer for warning status", () => {
-    vi.mocked(useTemplateExecutionStore).mockImplementation((selector) =>
-      selector(createMockStore()),
-    );
-
     const { result } = renderHook(() => useWorkflowCanvasInteractions());
 
     result.current.handleNodeSelection("node-1", "warning");
 
     expect(toggleSelectedNode).toHaveBeenCalledWith("node-1");
-
     expect(setNodeDrawerOpen).not.toHaveBeenCalled();
   });
 
   it("does not open drawer for error status", () => {
-    vi.mocked(useTemplateExecutionStore).mockImplementation((selector) =>
-      selector(createMockStore()),
-    );
-
     const { result } = renderHook(() => useWorkflowCanvasInteractions());
 
     result.current.handleNodeSelection("node-1", "error");
 
     expect(toggleSelectedNode).toHaveBeenCalledWith("node-1");
-
     expect(setNodeDrawerOpen).not.toHaveBeenCalled();
   });
 
   it("does not open drawer when node is already selected", () => {
-    vi.mocked(useTemplateExecutionStore).mockImplementation((selector) =>
-      selector(createMockStore(["node-1"])),
-    );
+    mockStore(["node-1"]);
 
     const { result } = renderHook(() => useWorkflowCanvasInteractions());
 
     result.current.handleNodeSelection("node-1", "success");
 
     expect(toggleSelectedNode).toHaveBeenCalledWith("node-1");
-
     expect(setNodeDrawerOpen).not.toHaveBeenCalled();
   });
 
   it("opens drawer for unselected success node", () => {
-    vi.mocked(useTemplateExecutionStore).mockImplementation((selector) =>
-      selector(createMockStore()),
-    );
-
     const { result } = renderHook(() => useWorkflowCanvasInteractions());
 
     result.current.handleNodeSelection("node-1", "success");
 
     expect(toggleSelectedNode).toHaveBeenCalledWith("node-1");
-
     expect(setNodeDrawerOpen).toHaveBeenCalledWith(true);
   });
 });
