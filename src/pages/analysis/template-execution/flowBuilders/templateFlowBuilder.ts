@@ -13,10 +13,12 @@ const CANVAS_LAYOUT = {
   rowTop: 24,
 };
 
+type TemplateCanvasResult = WorkflowData & { nextY: number };
+
 export const buildTemplateCanvas = (
   workflows: TemplateExecutionWorkflow[],
-  startIndex = 0,
-): WorkflowData => {
+  startY = CANVAS_LAYOUT.rowTop,
+): TemplateCanvasResult => {
   const PREPEND_HEADER = true;
 
   const rows = workflows.map((workflow) =>
@@ -37,7 +39,7 @@ export const buildTemplateCanvas = (
   const nodes: ExecutionFlowNode[] = [];
   const edges: Edge[] = [];
 
-  let offsetY = CANVAS_LAYOUT.rowTop;
+  let offsetY = startY;
 
   rows.forEach((row) => {
     const rowNode = row.nodes.find((node) => node.type === "executionRow");
@@ -76,5 +78,6 @@ export const buildTemplateCanvas = (
   return {
     nodes,
     edges,
+    nextY: offsetY,
   };
 };

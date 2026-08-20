@@ -10,10 +10,14 @@
   "COMMON_CLOSE": "Schließen",
   "COMMON_LOADING": "Wird geladen...",
   "COMMON_SELECT": "Auswählen",
+  "CLEAR_WORKFLOW": "Workflow löschen",
 
   "COMMON_GOOD": "Gut",
   "COMMON_WARNING": "Warnung",
   "COMMON_ERROR": "Fehler",
+  "COMMON_SUCCESS": "Erfolg",
+  "COMMON_FAILURE": "Fehlgeschlagen",
+  "COMMON_INFO": "Info",
 
   "SIDEBAR_HOME": "Startseite",
   "SIDEBAR_WORKFLOW": "Workflow",
@@ -98,7 +102,7 @@
   "TOOLBAR_CUSTOM_MPC_TEMPLATES": "Benutzerdefinierte MPC-Vorlagen",
   "TOOLBAR_NOTHING_TO_SAVE": "Nichts zu speichern",
   "TOOLBAR_CREATE_WORKFLOW_BEFORE_SAVE": "Bitte erstellen Sie einen Workflow, bevor Sie die Vorlage speichern.",
-  "TOOLBAR_SAVED_REGULATORY_TEMPLATE": "Als Regelungsvorlage gespeichert",
+  "TOOLBAR_SAVED_REGULATORY": "Als Regelungsvorlage gespeichert",
   "TOOLBAR_SAVED_MPC_TEMPLATE": "Als MPC-Vorlage gespeichert",
   "TOOLBAR_REGULATORY_TEMPLATE_LOCATION": "Sie finden diese Vorlage im Katalog unter Vorlagen > Regelungsvorlagen.",
   "TOOLBAR_MPC_TEMPLATE_LOCATION": "Sie finden diese Vorlage im Katalog unter Vorlagen > MPC-Vorlagen.",
@@ -252,5 +256,16 @@
 
   "CONTROLLER_RESET": "{{field}} zurücksetzen",
   "CONTROLLER_STEP": "Schritt {{current}} von {{total}}",
-  "CONTROLLER_FINISH": "Fertig"
+  "CONTROLLER_FINISH": "Fertig",
+
+  "TOOLBAR_SAVED_MPC": "Als MPC-Vorlage gespeichert",
+  "TOOLBAR_FIND_REGULATORY": "Sie finden diese Vorlage im Katalog unter Vorlagen > Regulatorische Vorlagen.",
+  "TOOLBAR_FIND_MPC": "Sie finden diese Vorlage im Katalog unter Vorlagen > MPC-Vorlagen.",
+
+  "TOOLBAR_IMPORT_SUCCESS": "Import erfolgreich",
+  "TOOLBAR_WORKFLOW_IMPORTED_SUCCESSFULLY": "Workflow erfolgreich importiert.",
+  "TOOLBAR_IMPORT_FAILED": "Import fehlgeschlagen",
+  "TOOLBAR_UNABLE_TO_IMPORT_WORKFLOW": "Workflow konnte nicht importiert werden.",
+  "TOOLBAR_NOTHING_TO_EXPORT": "Nichts zu exportieren",
+  "TOOLBAR_CREATE_WORKFLOW_BEFORE_EXPORTING": "Bitte erstellen Sie einen Workflow, bevor Sie ihn exportieren."
 }

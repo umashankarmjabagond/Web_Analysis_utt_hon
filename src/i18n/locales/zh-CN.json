@@ -11,10 +11,14 @@
   "COMMON_LOADING": "加载中...",
   "COMMON_SELECT": "选择",
   "COMMON_FILTER": "筛选",
+  "CLEAR_WORKFLOW": "清除工作流程",
 
   "COMMON_GOOD": "正常",
   "COMMON_WARNING": "警告",
   "COMMON_ERROR": "错误",
+  "COMMON_SUCCESS": "成功",
+  "COMMON_FAILURE": "失败",
+  "COMMON_INFO": "信息",
 
   "SIDEBAR_HOME": "首页",
   "SIDEBAR_WORKFLOW": "工作流",
@@ -98,7 +102,7 @@
   "TOOLBAR_CUSTOM_MPC_TEMPLATES": "自定义 MPC 模板",
   "TOOLBAR_NOTHING_TO_SAVE": "没有可保存的内容",
   "TOOLBAR_CREATE_WORKFLOW_BEFORE_SAVE": "请先创建工作流，然后再保存模板。",
-  "TOOLBAR_SAVED_REGULATORY_TEMPLATE": "已保存为调节模板",
+  "TOOLBAR_SAVED_REGULATORY": "已保存为调节模板",
   "TOOLBAR_SAVED_MPC_TEMPLATE": "已保存为 MPC 模板",
   "TOOLBAR_REGULATORY_TEMPLATE_LOCATION": "您可以在目录中的模板 > 调节模板下找到此模板。",
   "TOOLBAR_MPC_TEMPLATE_LOCATION": "您可以在目录中的模板 > MPC 模板下找到此模板。",
@@ -257,5 +261,16 @@
 
   "CONTROLLER_RESET": "重置 {{field}}",
   "CONTROLLER_STEP": "步骤 {{current}} / {{total}}",
-  "CONTROLLER_FINISH": "完成"
+  "CONTROLLER_FINISH": "完成",
+
+  "TOOLBAR_SAVED_MPC": "已保存为 MPC 模板",
+  "TOOLBAR_FIND_REGULATORY": "您可以在目录中的模板 > 调节模板下找到此模板。",
+  "TOOLBAR_FIND_MPC": "您可以在目录中的模板 > MPC 模板下找到此模板。",
+
+  "TOOLBAR_IMPORT_SUCCESS": "导入成功",
+  "TOOLBAR_WORKFLOW_IMPORTED_SUCCESSFULLY": "工作流程导入成功。",
+  "TOOLBAR_IMPORT_FAILED": "导入失败",
+  "TOOLBAR_UNABLE_TO_IMPORT_WORKFLOW": "无法导入工作流程。",
+  "TOOLBAR_NOTHING_TO_EXPORT": "Нет данных для экспорта",
+  "TOOLBAR_CREATE_WORKFLOW_BEFORE_EXPORTING": "Пожалуйста, создайте рабочий процесс перед экспортом。"
 }

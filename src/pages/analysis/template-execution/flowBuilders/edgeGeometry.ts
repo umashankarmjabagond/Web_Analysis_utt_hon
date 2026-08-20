@@ -57,8 +57,10 @@ export const getPathFn = (pathType: EdgePathType) => {
   switch (pathType) {
     case "smoothstep":
       return getSmoothStepPath;
+
     case "straight":
       return getStraightPath;
+
     case "bezier":
     default:
       return getBezierPath;

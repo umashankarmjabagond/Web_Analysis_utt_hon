@@ -37,19 +37,19 @@ const TYPE_CONFIG: Record<
   }
 > = {
   success: {
-    label: "Success",
+    label: "COMMON_SUCCESS",
     icon: SuccessIcon,
   },
   danger: {
-    label: "Failure",
+    label: "COMMON_FAILURE",
     icon: XCircle,
   },
   warning: {
-    label: "Warning",
+    label: "COMMON_WARNING",
     icon: AlertTriangle,
   },
   info: {
-    label: "Info",
+    label: "COMMON_INFO",
     icon: Info,
   },
 };
