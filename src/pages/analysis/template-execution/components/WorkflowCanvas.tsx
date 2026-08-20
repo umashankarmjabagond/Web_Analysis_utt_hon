@@ -47,7 +47,7 @@ export default function WorkflowCanvas({
       >
         <div
           className={`overflow-auto ${showDetailsPanel ? "flex-1 min-h-0" : "h-full"}`}
-          // onScroll={handleScroll}
+          onScroll={handleScroll}
         >
           <div style={{ width: contentWidth, height: contentHeight }}>
             <ReactFlow
@@ -70,14 +70,16 @@ export default function WorkflowCanvas({
               defaultViewport={{ x: 0, y: 0, zoom: 1 }}
               proOptions={{ hideAttribution: true }}
             />
-          </div>
 
-          {isLoadingMore && (
-            <div className="pointer-events-none absolute bottom-4 left-1/2 z-50 flex -translate-x-1/2 items-center gap-2 rounded-md bg-app-primary px-3 py-2 text-sm text-app-text-primary shadow-lg">
-              <Loader2 className="h-4 w-4 animate-spin" />
-              <span>Loading more rows...</span>
-            </div>
-          )}
+            {isLoadingMore && (
+              <div className="pointer-events-none absolute inset-0 z-50 flex items-center justify-center bg-surface/50">
+                <div className="flex items-center gap-2 rounded-md  px-3 py-2 text-base text-foreground-accent shadow-lg">
+                  <Loader2 size={16} className="h-4 w-4 animate-spin" />
+                  <span>Loading more rows...</span>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </>
