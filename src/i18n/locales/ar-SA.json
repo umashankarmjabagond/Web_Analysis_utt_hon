@@ -261,6 +261,13 @@
   "CONTROLLER_STEP": "الخطوة {{current}} من {{total}}",
   "CONTROLLER_FINISH": "إنهاء",
 
+  "CONNECTIONS_CONFIGURE_INPUT_COLUMNS": "تكوين أعمدة الإدخال",
+  "CONNECTIONS_DATA_PREPROCESSING": "المعالجة المسبقة للبيانات",
+  "CONNECTIONS_DATA_SOURCE": "مصدر البيانات",
+  "CONNECTIONS_SELECT_INPUTS_MESSAGE": "يرجى تحديد المدخلات المراد تمريرها من",
+  "CONNECTIONS_DATA_PREPROCESSING_TITLE": "المعالجة المسبقة للبيانات",
+  "CONNECTIONS_DATA_SOURCE_TITLE": "مصدر البيانات",
+  
   "TOOLBAR_SAVED_MPC": "تم الحفظ كقالب MPC",
   "TOOLBAR_FIND_REGULATORY": "يمكنك العثور على هذا القالب في الكتالوج ضمن القوالب > القوالب التنظيمية.",
   "TOOLBAR_FIND_MPC": "يمكنك العثور على هذا القالب في الكتالوج ضمن القوالب > قوالب MPC.",
