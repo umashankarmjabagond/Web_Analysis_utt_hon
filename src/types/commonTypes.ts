@@ -9,6 +9,23 @@ import type {
 import type { DonutChartItem } from "./dashboardTypes";
 import type { LucideIcon } from "lucide-react";
 
+export interface ConnectionTreeProps {
+  nodes: TreeNodeData[];
+  checkedIds: string[];
+  onCheck: (id: string) => void;
+  showCheckbox?: boolean;
+}
+
+export interface ConnectionTreeNodeProps {
+  node: TreeNodeData;
+  level: number;
+  expandedIds: Set<string>;
+  checkedIds: string[];
+  onToggle: (id: string) => void;
+  onCheck: (id: string) => void;
+  showCheckbox?: boolean;
+}
+
 export interface BreadcrumbItem {
   id: string;
   label: string;
