@@ -6,8 +6,14 @@ import { nodeTypes } from "./nodes/nodeTypes";
 import { edgeTypes } from "./edges/edgeTypes";
 
 import { useTemplateExecutionStore } from "../../../../store/templateExecutionStore";
-import type { WorkflowCanvasProps } from "../../../../types/templateExecution";
+import type {
+  BaseFlowNode,
+  ExecutionFlowNode,
+  WorkflowCanvasProps,
+} from "../../../../types/templateExecution";
 import { Loader2 } from "lucide-react";
+import { useWorkflowCanvasInteractions } from "../../../../hooks/useWorkflowInteractions";
+import NodeModal from "./NodeModal";
 
 export default function WorkflowCanvas({
   executionContext,
@@ -20,6 +26,8 @@ export default function WorkflowCanvas({
 
   const nodes = useTemplateExecutionStore((state) => state.nodes);
   const edges = useTemplateExecutionStore((state) => state.edges);
+
+  const { handleNodeClick } = useWorkflowCanvasInteractions();
 
   const { contentWidth, contentHeight } = useMemo(() => {
     const mxaX = Math.max(...nodes.map((n) => n.position.x + 200), 800);
@@ -40,6 +48,14 @@ export default function WorkflowCanvas({
     }
   };
 
+  const onNodeClick = (_event: React.MouseEvent, node: ExecutionFlowNode) => {
+    if (node.type === "executionHeader" || node.type === "executionRow") return;
+
+    const baseNode = node as BaseFlowNode;
+
+    handleNodeClick(baseNode);
+  };
+
   return (
     <>
       <div
@@ -56,6 +72,7 @@ export default function WorkflowCanvas({
               edges={edges}
               nodeTypes={nodeTypes}
               edgeTypes={edgeTypes}
+              onNodeClick={onNodeClick}
               connectionMode={ConnectionMode.Loose}
               preventScrolling={false}
               panOnScroll={false}
@@ -82,6 +99,8 @@ export default function WorkflowCanvas({
           </div>
         </div>
       </div>
+
+      <NodeModal />
     </>
   );
 }
