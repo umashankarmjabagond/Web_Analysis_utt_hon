@@ -9,11 +9,13 @@ const Dialog = ({
   children,
   onClose,
   width = 600,
-  variant = "default",
+  className,
+  titleClassName,
+  subtitleClassName,
+  headerClassName,
+  closeButtonClassName,
 }: DialogProps) => {
   if (!isOpen) return null;
-
-  const isConnections = variant === "connections";
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-dialog-overlay p-4">
@@ -23,74 +25,56 @@ const Dialog = ({
           "border border-dialog-border",
           "bg-[#111111] text-dialog-foreground",
           "shadow-dialog-shadow",
+          className,
         )}
         style={{ width }}
       >
         {/* Header */}
         <div
           className={cn(
-            "flex items-start justify-between",
-            isConnections ? "px-8 pb-5 pt-7" : "p-8 pb-6",
+            "flex items-start justify-between p-8 pb-6",
+            headerClassName,
           )}
         >
-          {!isConnections && (
-            <div className="flex items-center gap-4">
-              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-[#454545] border-[1.5px] border-[#454545]">
-                <Timer
-                  size={20}
-                  strokeWidth={1.8}
-                  className="text-foreground-secondary"
-                />
-              </div>
-
-              <div>
-                <h2 className="text-4xl font-semibold text-dialog-title">
-                  {title}
-                </h2>
-
-                {subtitle && (
-                  <p className="mt-2 text-xs font-semibold uppercase tracking-[0.25em] text-dialog-description">
-                    {subtitle}
-                  </p>
-                )}
-              </div>
+          <div className="flex items-center gap-4">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-[#454545] border-[1.5px] border-[#454545]">
+              <Timer
+                size={20}
+                strokeWidth={1.8}
+                className="text-foreground-secondary"
+              />
             </div>
-          )}
-          {isConnections && (
-            <div className="flex flex-col">
+
+            <div>
               <h2
-                className="
-                  text-[20px]
-                  font-extrabold
-                  leading-[30px]
-                  tracking-normal
-                  text-dialog-title
-                "
+                className={cn(
+                  "text-4xl font-semibold text-dialog-title",
+                  titleClassName,
+                )}
               >
                 {title}
               </h2>
 
               {subtitle && (
                 <p
-                  className="
-                    mt-0
-                    text-[12px]
-                    font-medium
-                    leading-4
-                    tracking-normal
-                    text-[var(--gray-350)]
-                    normal-case
-                  "
+                  className={cn(
+                    "mt-2 text-xs font-semibold uppercase tracking-[0.25em] text-dialog-description",
+                    subtitleClassName,
+                  )}
                 >
                   {subtitle}
                 </p>
               )}
             </div>
-          )}
+          </div>
+
           <button
             type="button"
             onClick={onClose}
-            className="flex cursor-pointer items-center justify-center rounded-md p-2 text-foreground-secondary transition-colors hover:bg-surface-hover hover:text-foreground-strong"
+            className={cn(
+              "flex cursor-pointer items-center justify-center rounded-md p-2 text-foreground-secondary transition-colors hover:bg-surface-hover hover:text-foreground-strong",
+              closeButtonClassName,
+            )}
           >
             <X size={22} />
           </button>
