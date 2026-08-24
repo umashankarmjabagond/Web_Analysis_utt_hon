@@ -279,6 +279,51 @@ describe("Properties", () => {
     expect(screen.queryByText("Connections")).not.toBeInTheDocument();
   });
 
+  it("renders connections dialog without the default icon", () => {
+    render(<Properties onCancel={mockOnCancel} />);
+
+    fireEvent.click(screen.getByText("Help"));
+
+    const dialogTitle = screen.getByRole("heading", {
+      name: "Connections",
+    });
+
+    expect(dialogTitle).toBeInTheDocument();
+
+    // The Connections dialog uses showIcon={false},
+    // so the Timer icon should not be rendered.
+    expect(screen.queryByTestId("dialog-default-icon")).not.toBeInTheDocument();
+  });
+
+  it("renders Connections dialog with custom title styling", () => {
+    render(<Properties onCancel={mockOnCancel} />);
+
+    fireEvent.click(screen.getByText("Help"));
+
+    const title = screen.getByRole("heading", {
+      name: "Connections",
+    });
+
+    expect(title.className).toContain("text-[20px]");
+
+    expect(title.className).toContain("font-extrabold");
+
+    expect(title.className).toContain("leading-[30px]");
+  });
+
+  it("renders Connections dialog subtitle with custom styling", () => {
+    render(<Properties onCancel={mockOnCancel} />);
+
+    fireEvent.click(screen.getByText("Help"));
+
+    const subtitle = screen.getByText("Inputs feeding SPA");
+
+    expect(subtitle.className).toContain("text-[12px]");
+
+    expect(subtitle.className).toContain("font-medium");
+
+    expect(subtitle.className).toContain("normal-case");
+  });
   it("renders edit columns section", () => {
     render(<Properties onCancel={mockOnCancel} />);
 

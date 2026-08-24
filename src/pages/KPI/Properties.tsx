@@ -324,6 +324,7 @@ const Properties: React.FC<PropertiesProps> = ({ onCancel }) => {
         title="Connections"
         subtitle="Inputs feeding SPA"
         width={424}
+        showIcon={false}
         onClose={() => setIsHelpOpen(false)}
         titleClassName="text-[20px] font-extrabold leading-[30px] tracking-normal text-dialog-title"
         subtitleClassName="mt-0 text-[12px] font-medium leading-4 tracking-normal normal-case text-[var(--gray-350)]"

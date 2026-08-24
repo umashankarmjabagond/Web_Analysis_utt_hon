@@ -9,11 +9,13 @@ const Dialog = ({
   children,
   onClose,
   width = 600,
+  showIcon = true,
   className,
   titleClassName,
   subtitleClassName,
   headerClassName,
   closeButtonClassName,
+  closeIcon,
 }: DialogProps) => {
   if (!isOpen) return null;
 
@@ -36,14 +38,18 @@ const Dialog = ({
             headerClassName,
           )}
         >
-          <div className="flex items-center gap-4">
-            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-[#454545] border-[1.5px] border-[#454545]">
-              <Timer
-                size={20}
-                strokeWidth={1.8}
-                className="text-foreground-secondary"
-              />
-            </div>
+          <div
+            className={cn("flex items-center", showIcon ? "gap-4" : "gap-0")}
+          >
+            {showIcon && (
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md border-[1.5px] border-[#454545] bg-[#454545]">
+                <Timer
+                  size={20}
+                  strokeWidth={1.8}
+                  className="text-foreground-secondary"
+                />
+              </div>
+            )}
 
             <div>
               <h2
@@ -76,7 +82,7 @@ const Dialog = ({
               closeButtonClassName,
             )}
           >
-            <X size={22} />
+            {closeIcon ?? <X size={22} />}
           </button>
         </div>
 

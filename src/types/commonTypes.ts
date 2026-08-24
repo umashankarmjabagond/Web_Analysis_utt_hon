@@ -46,11 +46,13 @@ export interface DialogProps {
   children: ReactNode;
   onClose: () => void;
   width?: number | string;
+  showIcon?: boolean;
   className?: string;
   titleClassName?: string;
   subtitleClassName?: string;
   headerClassName?: string;
   closeButtonClassName?: string;
+  closeIcon?: ReactNode;
 }
 
 export interface AccordionProps {
