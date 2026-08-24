@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Monitor, Pen, TextAlignJustify, Trash2, Workflow } from "lucide-react";
+import { Monitor, Pen, TextAlignJustify, Trash2, Workflow, X } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
@@ -17,8 +17,6 @@ import { cn } from "../../../../utils/utils";
 import Connections from "../../../../pages/KPI/Connections";
 
 import Dialog from "../../../../components/common/dialogue/Dialog";
-
-import { X } from "lucide-react";
 
 const VIEW_MODES = [
   {
@@ -216,9 +214,9 @@ export default function FlowExecutionToolbar() {
   title={t("CONNECTIONS_CONFIGURE_INPUT_COLUMNS")}
   subtitle={`${t("CONNECTIONS_DATA_PREPROCESSING")} → ${t("FILTER_DATA_SOURCE")}`}
   width={750}
-  variant="connections"
+  showIcon={false}
   className="bg-surface-primary"
-  headerClassName="h-[102px] px-10 pt-10 pb-4"
+  headerClassName="h-[102px] px-8 pt-10 pb-4"
   titleClassName="h-[30px] text-[20px] font-bold leading-[30px] tracking-[0px] text-text-primary"
   subtitleClassName="text-[12px] font-medium leading-4 tracking-[0px] text-foreground-tertiary"
   closeButtonClassName="

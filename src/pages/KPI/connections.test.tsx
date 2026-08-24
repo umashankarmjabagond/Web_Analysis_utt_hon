@@ -310,6 +310,8 @@ it("unchecks a right panel checkbox when clicked twice", async () => {
 
   await user.click(checkboxes[0]);
 
+  screen.debug();
+
   const buttons =
     screen.getAllByRole("button");
 
@@ -693,12 +695,12 @@ it("removes selected node from right panel", async () => {
 ).toBeInTheDocument();
 });
 
-it("removes selected node from right panel", async () => {
+it("covers toggleRightCheck remove branch", async () => {
   const user = userEvent.setup();
 
   render(<Connections />);
 
-  const checkboxes =
+  let checkboxes =
     screen.getAllByRole("checkbox");
 
   await user.click(checkboxes[0]);
@@ -708,19 +710,19 @@ it("removes selected node from right panel", async () => {
 
   await user.click(buttons[0]);
 
-  const updatedCheckboxes =
-    screen.getAllByRole("checkbox");
+  checkboxes =
+    screen.getAllByRole("checkbox") as HTMLInputElement[];
 
   const rightCheckbox =
-    updatedCheckboxes[updatedCheckboxes.length - 1];
+    checkboxes[checkboxes.length - 1];
 
   await user.click(rightCheckbox);
 
-  await user.click(buttons[1]);
+  expect(rightCheckbox).toBeChecked();
 
-  expect(
-    screen.getByText("Data Source"),
-  ).toBeInTheDocument();
+  await user.click(rightCheckbox);
+
+  expect(rightCheckbox).not.toBeChecked();
 });
 
 });
