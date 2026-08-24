@@ -60,7 +60,7 @@ export default function BaseNode({ data, type }: NodeProps<BaseFlowNode>) {
   };
 
   return (
-    <div className="flex flex-col gap-2 items-center">
+    <div className="flex w-[30px] flex-col gap-2 items-center">
       <div
         data-testid="node"
         className={cn(

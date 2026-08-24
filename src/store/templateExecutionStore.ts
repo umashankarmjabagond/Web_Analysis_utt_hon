@@ -26,8 +26,8 @@ export interface TemplateExecutionState {
   setExecutionViewMode: (viewMode: ExecutionViewMode) => void;
 
   // Selection
-  selectedNodeIds: string[];
-  toggleSelectedNode: (nodeId: string) => void;
+  selectedNodeId: string | null;
+  setSelectedNodeId: (nodeId: string | null) => void;
 
   selectedRowIds: string[];
   toggleSelectedRow: (rowId: string) => void;
@@ -55,7 +55,7 @@ export const useTemplateExecutionStore = create<TemplateExecutionState>()(
     edges: [],
     selectedExecutionItem: null,
     executionViewMode: EXECUTION_VIEW_MODE.COMPACT,
-    selectedNodeIds: [],
+    selectedNodeId: null,
     selectedRowIds: [],
     executionAction: EXECUTION_ACTION.IDLE,
     isNodeDrawerOpen: false,
@@ -94,15 +94,9 @@ export const useTemplateExecutionStore = create<TemplateExecutionState>()(
       });
     },
 
-    toggleSelectedNode: (nodeId) => {
+    setSelectedNodeId: (nodeId) => {
       set((state) => {
-        const index = state.selectedNodeIds.indexOf(nodeId);
-
-        if (index >= 0) {
-          state.selectedNodeIds.splice(index, 1);
-        } else {
-          state.selectedNodeIds.push(nodeId);
-        }
+        state.selectedNodeId = nodeId;
       });
     },
 
@@ -138,7 +132,7 @@ export const useTemplateExecutionStore = create<TemplateExecutionState>()(
         state.edges = edges;
 
         // Reset transient UI state
-        state.selectedNodeIds = [];
+        state.selectedNodeId = null;
         state.selectedRowIds = [];
         state.isNodeDrawerOpen = false;
         state.executionAction = EXECUTION_ACTION.IDLE;
