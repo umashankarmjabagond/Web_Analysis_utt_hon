@@ -15,17 +15,21 @@ describe("Dialog", () => {
     expect(screen.queryByText("Delete Project")).not.toBeInTheDocument();
   });
 
-  it("renders title for default variant", () => {
+  it("renders title", () => {
     render(
       <Dialog isOpen title="Delete Project" onClose={vi.fn()}>
         Content
       </Dialog>,
     );
 
-    expect(screen.getByText("Delete Project")).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", {
+        name: "Delete Project",
+      }),
+    ).toBeInTheDocument();
   });
 
-  it("renders subtitle for default variant", () => {
+  it("renders subtitle when provided", () => {
     render(
       <Dialog
         isOpen
@@ -91,69 +95,12 @@ describe("Dialog", () => {
     });
   });
 
-  it("renders connections variant title and subtitle", () => {
-    render(
-      <Dialog
-        isOpen
-        title="Connections"
-        subtitle="Inputs feeding SPA"
-        variant="connections"
-        onClose={vi.fn()}
-      >
-        Connections content
-      </Dialog>,
-    );
-
-    expect(screen.getByText("Connections")).toBeInTheDocument();
-
-    expect(screen.getByText("Inputs feeding SPA")).toBeInTheDocument();
-
-    expect(screen.getByText("Connections content")).toBeInTheDocument();
-  });
-
-  it("uses default variant when variant is not provided", () => {
-    render(
-      <Dialog
-        isOpen
-        title="Default Dialog"
-        subtitle="Default subtitle"
-        onClose={vi.fn()}
-      >
-        Content
-      </Dialog>,
-    );
-
-    expect(screen.getByText("Default Dialog")).toBeInTheDocument();
-
-    expect(screen.getByText("Default subtitle")).toBeInTheDocument();
-  });
-
-  it("does not uppercase the connections subtitle", () => {
-    render(
-      <Dialog
-        isOpen
-        title="Connections"
-        subtitle="Inputs feeding SPA"
-        variant="connections"
-        onClose={vi.fn()}
-      >
-        Content
-      </Dialog>,
-    );
-
-    expect(screen.getByText("Inputs feeding SPA")).toBeInTheDocument();
-
-    expect(screen.queryByText("INPUTS FEEDING SPA")).not.toBeInTheDocument();
-  });
-
-  it("renders connections dialog with custom width", () => {
+  it("applies custom dialog className", () => {
     const { container } = render(
       <Dialog
         isOpen
         title="Connections"
-        subtitle="Inputs feeding SPA"
-        variant="connections"
-        width={424}
+        className="custom-dialog"
         onClose={vi.fn()}
       >
         Content
@@ -162,8 +109,141 @@ describe("Dialog", () => {
 
     const dialog = container.querySelector("[style]") as HTMLElement;
 
-    expect(dialog).toHaveStyle({
-      width: "424px",
+    expect(dialog.className).toContain("custom-dialog");
+  });
+
+  it("applies custom title className", () => {
+    render(
+      <Dialog
+        isOpen
+        title="Connections"
+        titleClassName="connections-title"
+        onClose={vi.fn()}
+      >
+        Content
+      </Dialog>,
+    );
+
+    const title = screen.getByRole("heading", {
+      name: "Connections",
     });
+
+    expect(title.className).toContain("connections-title");
+  });
+
+  it("applies custom subtitle className", () => {
+    render(
+      <Dialog
+        isOpen
+        title="Connections"
+        subtitle="Inputs feeding SPA"
+        subtitleClassName="connections-subtitle"
+        onClose={vi.fn()}
+      >
+        Content
+      </Dialog>,
+    );
+
+    const subtitle = screen.getByText("Inputs feeding SPA");
+
+    expect(subtitle.className).toContain("connections-subtitle");
+  });
+
+  it("applies custom header className", () => {
+    const { container } = render(
+      <Dialog
+        isOpen
+        title="Connections"
+        headerClassName="connections-header"
+        onClose={vi.fn()}
+      >
+        Content
+      </Dialog>,
+    );
+
+    const header = container.querySelector(".connections-header");
+
+    expect(header).toBeInTheDocument();
+  });
+
+  it("applies custom close button className", () => {
+    render(
+      <Dialog
+        isOpen
+        title="Connections"
+        closeButtonClassName="connections-close"
+        onClose={vi.fn()}
+      >
+        Content
+      </Dialog>,
+    );
+
+    const closeButton = screen.getByRole("button");
+
+    expect(closeButton.className).toContain("connections-close");
+  });
+
+  it("renders custom close icon when closeIcon is provided", () => {
+    render(
+      <Dialog
+        isOpen
+        title="Connections"
+        closeIcon={<span data-testid="custom-close-icon">Close</span>}
+        onClose={vi.fn()}
+      >
+        Content
+      </Dialog>,
+    );
+
+    expect(screen.getByTestId("custom-close-icon")).toBeInTheDocument();
+  });
+
+  it("renders default X icon when closeIcon is not provided", () => {
+    const { container } = render(
+      <Dialog isOpen title="Connections" onClose={vi.fn()}>
+        Content
+      </Dialog>,
+    );
+
+    // lucide X renders an SVG inside the close button
+    const closeButton = screen.getByRole("button");
+
+    expect(closeButton.querySelector("svg")).toBeInTheDocument();
+
+    expect(
+      container.querySelector('[data-testid="custom-close-icon"]'),
+    ).not.toBeInTheDocument();
+  });
+
+  it("supports Connections-style customization without a variant", () => {
+    render(
+      <Dialog
+        isOpen
+        title="Connections"
+        subtitle="Inputs feeding SPA"
+        width={424}
+        showIcon={false}
+        titleClassName="text-[20px] font-extrabold leading-[30px]"
+        subtitleClassName="text-[12px] font-medium leading-4 normal-case"
+        headerClassName="px-8 pb-5 pt-7"
+        closeButtonClassName="mt-1"
+        closeIcon={<span data-testid="connections-close-icon">X</span>}
+        onClose={vi.fn()}
+      >
+        Connections content
+      </Dialog>,
+    );
+
+    expect(
+      screen.getByRole("heading", {
+        name: "Connections",
+      }),
+    ).toBeInTheDocument();
+
+    expect(screen.getByText("Inputs feeding SPA")).toBeInTheDocument();
+
+    expect(screen.getByText("Connections content")).toBeInTheDocument();
+
+    expect(screen.getByTestId("connections-close-icon")).toBeInTheDocument();
   });
 });

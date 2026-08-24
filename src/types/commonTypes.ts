@@ -63,7 +63,13 @@ export interface DialogProps {
   children: ReactNode;
   onClose: () => void;
   width?: number | string;
-  variant?: "default" | "connections";
+  showIcon?: boolean;
+  className?: string;
+  titleClassName?: string;
+  subtitleClassName?: string;
+  headerClassName?: string;
+  closeButtonClassName?: string;
+  closeIcon?: ReactNode;
 }
 
 export interface AccordionProps {
@@ -121,17 +127,12 @@ export interface TabsProps {
   renderContent?: boolean;
 }
 
-
-
-
-
 export interface DonutChartProps {
   data: DonutChartItem[];
   size?: number;
   colors: Record<string, string>;
   className?: string;
 }
-
 
 export interface LegendItem {
   name: string;
