@@ -16,19 +16,19 @@ vi.mock("react-i18next", () => ({
   useTranslation: () => ({
     t: (key: string) => {
       const translations: Record<string, string> = {
-        CONNECTIONS_CONFIGURE_INPUT_COLUMNS:
-          "Configure Input Columns",
-        CONNECTIONS_DATA_PREPROCESSING:
-          "Data Preprocessing",
-        CONNECTIONS_DATA_SOURCE:
-          "Data Source",
         CONNECTIONS_SELECT_INPUTS_MESSAGE:
           "Please select the inputs",
-        CONNECTIONS_DATA_PREPROCESSING_TITLE:
-          "DATA PREPROCESSING",
-        CONNECTIONS_DATA_SOURCE_TITLE:
-          "DATA SOURCE",
-        COMMON_CLOSE: "Close",
+
+        CONNECTIONS_DATA_PREPROCESSING:
+          "Data Preprocessing",
+
+        FILTER_DATA_SOURCE: "Data Source",
+
+        CONNECTIONS_TO: "to",
+
+        COMMON_CANCEL: "Cancel",
+
+        PROJECT_ANALYSIS_FINISH: "Finish",
       };
 
       return translations[key] ?? key;
@@ -37,24 +37,16 @@ vi.mock("react-i18next", () => ({
 }));
 
 describe("Connections", () => {
-  it("renders page title", () => {
-    render(<Connections />);
-
-    expect(
-      screen.getByText("Configure Input Columns"),
-    ).toBeInTheDocument();
-  });
-
   it("renders panel headings", () => {
     render(<Connections />);
 
     expect(
-      screen.getByText("DATA PREPROCESSING"),
-    ).toBeInTheDocument();
+  screen.getByText("Data Preprocessing"),
+).toBeInTheDocument();
 
-    expect(
-      screen.getByText("DATA SOURCE"),
-    ).toBeInTheDocument();
+expect(
+  screen.getByText("Data Source"),
+).toBeInTheDocument();
   });
 
   it("renders footer buttons", () => {
@@ -69,16 +61,6 @@ describe("Connections", () => {
     ).toBeInTheDocument();
   });
 
-  it("renders close button", () => {
-    render(<Connections />);
-
-    expect(
-      screen.getByRole("button", {
-  name: "Close",
-}),
-    ).toBeInTheDocument();
-  });
-
   it("renders instruction text", () => {
     render(<Connections />);
 
@@ -86,18 +68,6 @@ describe("Connections", () => {
       screen.getByText(
         /Please select the inputs/i,
       ),
-    ).toBeInTheDocument();
-  });
-
-  it("renders breadcrumb text", () => {
-    render(<Connections />);
-
-    expect(
-      screen.getByText("Data Preprocessing"),
-    ).toBeInTheDocument();
-
-    expect(
-      screen.getByText("Data Source"),
     ).toBeInTheDocument();
   });
 
@@ -213,12 +183,12 @@ describe("Connections", () => {
   await user.click(buttons[1]);
 
   expect(
-    screen.getAllByText("DPR1.PV"),
-  ).toHaveLength(2);
+  screen.getByText("DPR1.PV"),
+).toBeInTheDocument();
 
-  expect(
-    screen.getAllByText("DPR1.MODE"),
-  ).toHaveLength(2);
+expect(
+  screen.getByText("DPR1.MODE"),
+).toBeInTheDocument();
 });
 
   it("removes None after moving data", async () => {
@@ -278,8 +248,8 @@ describe("Connections", () => {
     await user.click(buttons[2]);
 
     expect(
-      screen.getByText("DATA SOURCE"),
-    ).toBeInTheDocument();
+  screen.getByText("Data Source"),
+).toBeInTheDocument();
   });
 
   it("moves and removes a node", async () => {
@@ -308,8 +278,8 @@ describe("Connections", () => {
     await user.click(buttons[2]);
 
     expect(
-      screen.getByText("DATA SOURCE"),
-    ).toBeInTheDocument();
+  screen.getByText("Data Source"),
+).toBeInTheDocument();
   });
 
   it("unchecks a left checkbox when clicked twice", async () => {
@@ -378,8 +348,8 @@ it("keeps selected items when remove is clicked without selecting right checkbox
   await user.click(buttons[2]);
 
   expect(
-    screen.getAllByText("DPR1.PV"),
-  ).toHaveLength(2);
+  screen.getByText("DPR1.PV"),
+).toBeInTheDocument();
 });
 });
 
@@ -457,7 +427,7 @@ describe("getSelectedTree", () => {
 
   const buttons = screen.getAllByRole("button");
 
-  await user.click(buttons[1]);
+  await user.click(buttons[0]);
 
   expect(
     screen.getByText("None"),
@@ -494,8 +464,8 @@ it("removes multiple selected nodes", async () => {
   await user.click(buttons[2]);
 
   expect(
-    screen.getByText("DATA SOURCE"),
-  ).toBeInTheDocument();
+  screen.getByText("Data Source"),
+).toBeInTheDocument();
 });
 
 it("returns matched leaf node tree", () => {
@@ -587,4 +557,170 @@ it("supports multiple selected ids", () => {
 
   expect(result).toBeDefined();
 });
+
+it("calls onClose when Cancel is clicked", async () => {
+  const user = userEvent.setup();
+
+  const onClose = vi.fn();
+
+  render(<Connections onClose={onClose} />);
+
+  await user.click(
+    screen.getByText("Cancel"),
+  );
+
+  expect(onClose).toHaveBeenCalledTimes(1);
+});
+
+it("renders Finish button", () => {
+  render(<Connections />);
+
+  expect(
+    screen.getByText("Finish"),
+  ).toBeInTheDocument();
+});
+
+it("renders preprocessing text in instruction", () => {
+  render(<Connections />);
+
+  expect(
+    screen.getAllByText(
+      "Data Preprocessing",
+    ).length,
+  ).toBeGreaterThan(0);
+});
+
+it("renders data source text in instruction", () => {
+  render(<Connections />);
+
+  expect(
+    screen.getAllByText(
+      "Data Source",
+    ).length,
+  ).toBeGreaterThan(0);
+});
+
+it("renders transfer buttons", () => {
+  render(<Connections />);
+
+  const buttons =
+    screen.getAllByRole("button");
+
+  expect(buttons.length).toBeGreaterThan(2);
+});
+
+it("clears left checkbox selection after move", async () => {
+  const user = userEvent.setup();
+
+  render(<Connections />);
+
+  const checkboxes =
+    screen.getAllByRole("checkbox");
+
+  await user.click(checkboxes[0]);
+
+  expect(checkboxes[0]).toBeChecked();
+
+  const buttons =
+    screen.getAllByRole("button");
+
+  await user.click(buttons[0]);
+
+  expect(checkboxes[0]).not.toBeChecked();
+});
+
+it("covers toggleRightCheck add and remove branches", async () => {
+  const user = userEvent.setup();
+
+  render(<Connections />);
+
+  const checkboxes = screen.getAllByRole("checkbox");
+
+  await user.click(checkboxes[0]);
+
+  const buttons = screen.getAllByRole("button");
+
+  // move right
+  await user.click(buttons[0]);
+
+  const updatedCheckboxes =
+    screen.getAllByRole("checkbox");
+
+  const checkedBox = updatedCheckboxes.find(
+  (checkbox) => {
+    return !(checkbox as HTMLInputElement).disabled;
+  },
+);
+
+  expect(checkedBox).toBeDefined();
+
+  await user.click(checkedBox!);
+
+  expect(checkedBox).toBeChecked();
+
+  await user.click(checkedBox!);
+
+  expect(checkedBox).not.toBeChecked();
+});
+
+it("removes selected node from right panel", async () => {
+  const user = userEvent.setup();
+
+  render(<Connections />);
+
+  const checkboxes =
+    screen.getAllByRole("checkbox");
+
+  await user.click(checkboxes[0]);
+
+  const buttons =
+    screen.getAllByRole("button");
+
+  await user.click(buttons[0]);
+
+  const allCheckboxes =
+    screen.getAllByRole("checkbox");
+
+  const rightCheckbox =
+    allCheckboxes[allCheckboxes.length - 1];
+
+  await user.click(rightCheckbox);
+
+  await user.click(buttons[1]);
+
+  expect(
+  screen.getByText("Data Source"),
+).toBeInTheDocument();
+});
+
+it("removes selected node from right panel", async () => {
+  const user = userEvent.setup();
+
+  render(<Connections />);
+
+  const checkboxes =
+    screen.getAllByRole("checkbox");
+
+  await user.click(checkboxes[0]);
+
+  const buttons =
+    screen.getAllByRole("button");
+
+  await user.click(buttons[0]);
+
+  const updatedCheckboxes =
+    screen.getAllByRole("checkbox");
+
+  const rightCheckbox =
+    updatedCheckboxes[updatedCheckboxes.length - 1];
+
+  await user.click(rightCheckbox);
+
+  await user.click(buttons[1]);
+
+  expect(
+    screen.getByText("Data Source"),
+  ).toBeInTheDocument();
+});
+
 });

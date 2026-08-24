@@ -262,10 +262,8 @@
 
   "CONNECTIONS_CONFIGURE_INPUT_COLUMNS": "Настройка входных столбцов",
   "CONNECTIONS_DATA_PREPROCESSING": "Предварительная обработка данных",
-  "CONNECTIONS_DATA_SOURCE": "Источник данных",
   "CONNECTIONS_SELECT_INPUTS_MESSAGE": "Пожалуйста, выберите входные данные для передачи из",
-  "CONNECTIONS_DATA_PREPROCESSING_TITLE": "ПРЕДВАРИТЕЛЬНАЯ ОБРАБОТКА ДАННЫХ",
-  "CONNECTIONS_DATA_SOURCE_TITLE": "ИСТОЧНИК ДАННЫХ",
+  "CONNECTIONS_TO": "в",
   
   "TOOLBAR_SAVED_MPC": "Сохранено как шаблон MPC",
   "TOOLBAR_FIND_REGULATORY": "Вы можете найти этот шаблон в Каталоге в разделе Шаблоны > Регуляторные шаблоны.",
