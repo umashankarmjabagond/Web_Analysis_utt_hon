@@ -1,31 +1,33 @@
 import { useTemplateExecutionStore } from "../store/templateExecutionStore";
-import type { NodeStatus } from "../types/templateExecution";
+import type { BaseFlowNode } from "../types/templateExecution";
 
 export function useWorkflowCanvasInteractions() {
-  const selectedNodeIds = useTemplateExecutionStore(
-    (state) => state.selectedNodeIds,
-  );
-  const toggleSelectedNode = useTemplateExecutionStore(
-    (state) => state.toggleSelectedNode,
+  const setSelectedNodeId = useTemplateExecutionStore(
+    (state) => state.setSelectedNodeId,
   );
 
   const setNodeDrawerOpen = useTemplateExecutionStore(
     (state) => state.setNodeDrawerOpen,
   );
 
-  const handleNodeSelection = (nodeId: string, status: NodeStatus) => {
-    const checked = selectedNodeIds.includes(nodeId);
-    toggleSelectedNode(nodeId);
+  const handleNodeClick = (node: BaseFlowNode) => {
+    const { id, data } = node;
 
-    if (status === "warning" || status === "error") {
+    if (data.status === "warning" || data.status === "error") {
       return;
     }
 
-    if (checked) return;
+    setSelectedNodeId(id);
     setNodeDrawerOpen(true);
   };
 
+  const handleNodeDrawerClose = () => {
+    setNodeDrawerOpen(false);
+    setSelectedNodeId(null);
+  };
+
   return {
-    handleNodeSelection,
+    handleNodeClick,
+    handleNodeDrawerClose,
   };
 }
