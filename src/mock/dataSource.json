@@ -1,0 +1,148 @@
+{
+  "dataSourceConfiguration": {
+    "dataSources": [
+      {
+        "id": "none",
+        "name": "None"
+      },
+      {
+        "id": "testfile",
+        "name": "Testfile"
+      }
+    ],
+    "controllerTypes": [
+      {
+        "id": "regulatory",
+        "name": "Regulatory"
+      },
+      {
+        "id": "mpc",
+        "name": "MPC"
+      }
+    ],
+    "templateTypes": {
+      "regulatory": [
+        {
+          "id": "standalone-controller",
+          "name": "Standalone Controller"
+        },
+        {
+          "id": "cascade",
+          "name": "Cascade"
+        },
+        {
+          "id": "instrument",
+          "name": "Instrument"
+        },
+        {
+          "id": "analyzers",
+          "name": "Analyzers"
+        }
+      ],
+      "mpc": [
+        {
+          "id": "rmpct",
+          "name": "RMPCT"
+        },
+        {
+          "id": "dmc",
+          "name": "DMC"
+        },
+        {
+          "id": "generic-apc",
+          "name": "Generic APC"
+        },
+        {
+          "id": "inferentials",
+          "name": "Inferentials"
+        }
+      ]
+    },
+    "tagDefinitions": {
+      "regulatory": {
+        "standalone-controller": [
+          {
+            "id": "mode",
+            "columnName": "Mode",
+            "extension": ".MODE"
+          },
+          {
+            "id": "pv",
+            "columnName": "PV",
+            "extension": ".PV"
+          },
+          {
+            "id": "op",
+            "columnName": "OP",
+            "extension": ".OP"
+          },
+          {
+            "id": "sp",
+            "columnName": "SP",
+            "extension": ".SP"
+          },
+          {
+            "id": "required-flag",
+            "columnName": "Required Flag",
+            "extension": ".REQ"
+          },
+          {
+            "id": "time-selected",
+            "columnName": "TimeSelected",
+            "extension": ".TIMESEL"
+          },
+          {
+            "id": "disposability",
+            "columnName": "Disposability",
+            "extension": ".DISP"
+          },
+          {
+            "id": "saturation",
+            "columnName": "Saturation",
+            "extension": ".SAT"
+          },
+          {
+            "id": "disturbance-variable",
+            "columnName": "Disturbance Variable",
+            "extension": ".DV"
+          },
+          {
+            "id": "selector-output",
+            "columnName": "Selector Output",
+            "extension": ".SEL"
+          },
+          {
+            "id": "pv-status",
+            "columnName": "PV Status",
+            "extension": ".PVSTATUS"
+          },
+          {
+            "id": "opcda-gain",
+            "columnName": "OPCDA Gain",
+            "extension": ".GAIN"
+          },
+          {
+            "id": "opcda-integral-time",
+            "columnName": "OPCDA Integral Time",
+            "extension": ".TI"
+          },
+          {
+            "id": "opcda-derivative-time",
+            "columnName": "OPCDA Derivative Time",
+            "extension": ".TD"
+          },
+          {
+            "id": "opcda-derivative-filter",
+            "columnName": "OPCDA Derivative Filter",
+            "extension": ".DFILT"
+          },
+          {
+            "id": "opcda-pv-filter",
+            "columnName": "OPCDA PV Filter",
+            "extension": ".PVFILT"
+          }
+        ]
+      }
+    }
+  }
+}
