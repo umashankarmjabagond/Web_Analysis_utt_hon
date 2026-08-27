@@ -153,6 +153,8 @@
   "COMMON_NONE": "Keine",
 
   "PROPERTIES_DATA_PREPROCESSING_WIZARD": "Assistent zur Datenvorverarbeitung",
+  "PROPERTIES_DPR_TITLE": "DPR",
+  "PROPERTIES_DPR_SUBTITLE_LABEL": "Datenvorverarbeitung",
   "PROPERTIES_EDIT_COLUMNS_EXPRESSIONS": "Bearbeiten Sie die Ausdrücke der Spalten, die Sie vorverarbeiten möchten",
   "PROPERTIES_EDIT_EXPRESSIONS": "Bearbeiten Sie die Ausdrücke, die Sie vorverarbeiten möchten",
   "PROPERTIES_THRESHOLD": "Schwellenwert",

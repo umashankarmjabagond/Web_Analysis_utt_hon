@@ -1,16 +1,22 @@
 import { Timer, X } from "lucide-react";
+import type { ReactNode } from "react";
 import type { DialogProps } from "../../../types/commonTypes";
 import { cn } from "../../../utils/utils";
+
+interface DialogPropsExtended extends DialogProps {
+  icon?: ReactNode;
+}
 
 const Dialog = ({
   isOpen,
   title,
   subtitle,
+  icon,
   children,
   onClose,
   width = 600,
   variant = "default",
-}: DialogProps) => {
+}: DialogPropsExtended) => {
   if (!isOpen) return null;
 
   const isConnections = variant === "connections";
@@ -36,11 +42,13 @@ const Dialog = ({
           {!isConnections && (
             <div className="flex items-center gap-4">
               <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-[#454545] border-[1.5px] border-[#454545]">
-                <Timer
-                  size={20}
-                  strokeWidth={1.8}
-                  className="text-foreground-secondary"
-                />
+                {icon ?? (
+                  <Timer
+                    size={20}
+                    strokeWidth={1.8}
+                    className="text-foreground-secondary"
+                  />
+                )}
               </div>
 
               <div>
@@ -56,37 +64,29 @@ const Dialog = ({
               </div>
             </div>
           )}
-          {isConnections && (
-            <div className="flex flex-col">
-              <h2
-                className="
-                  text-[20px]
-                  font-extrabold
-                  leading-[30px]
-                  tracking-normal
-                  text-dialog-title
-                "
-              >
-                {title}
-              </h2>
 
-              {subtitle && (
-                <p
-                  className="
-                    mt-0
-                    text-[12px]
-                    font-medium
-                    leading-4
-                    tracking-normal
-                    text-[var(--gray-350)]
-                    normal-case
-                  "
-                >
-                  {subtitle}
-                </p>
+          {isConnections && (
+            <div className="flex items-center gap-3">
+              {icon && (
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-surface-elevated">
+                  {icon}
+                </div>
               )}
+
+              <div className="flex flex-col">
+                <h2 className="text-[20px] font-extrabold leading-[30px] tracking-normal text-dialog-title">
+                  {title}
+                </h2>
+
+                {subtitle && (
+                  <p className="mt-0 text-[12px] font-medium leading-4 tracking-normal text-[var(--gray-350)] normal-case">
+                    {subtitle}
+                  </p>
+                )}
+              </div>
             </div>
           )}
+
           <button
             type="button"
             onClick={onClose}

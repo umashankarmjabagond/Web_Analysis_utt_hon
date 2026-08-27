@@ -25,7 +25,6 @@ import { createColumnHelper } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
 // import DialogDataPreprocessing from "./components/DialogDataPreprocessing";
 
-
 const statCards: StatCardData[] = [
   {
     title: "DASHBOARD_TOTAL_UNITS",
@@ -291,7 +290,7 @@ const warningColumnHelper = createColumnHelper<WarningRow>();
 
 export default function Dashboard() {
   const { t } = useTranslation();
-  const [isDprDialogOpen, setIsDprDialogOpen] = useState(false);      //added
+  const [isDprDialogOpen, setIsDprDialogOpen] = useState(false); //added
 
   const statusColumns = [
     statusColumnHelper.accessor("unitName", {
@@ -379,16 +378,9 @@ export default function Dashboard() {
           className="px-2 py-1 text-xs font-medium h-6 rounded-2xl"
         >
           {t("DASHBOARD_AREA")}
-
-
-        </Badge> */}
-
-        
+           </Badge> */}
         {/* AREA is now a button that opens the DPR dialog */}
-        <button
-          type="button"
-          onClick={() => setIsDprDialogOpen(true)}
-        >
+        <button type="button" onClick={() => setIsDprDialogOpen(true)}>
           <Badge
             variant="info"
             fill="outline"
@@ -396,7 +388,7 @@ export default function Dashboard() {
           >
             {t("DASHBOARD_AREA")}
           </Badge>
-          </button>
+        </button>
       </div>
 
       <div className="mt-4 flex flex-col gap-4 xl:flex-row">
@@ -467,14 +459,12 @@ export default function Dashboard() {
             </>
           }
         />
-      {/* </div>
+        {/* </div>
       
     </div>
   );
 } */}
-
-
-</div>
+      </div>
       {/* </div> */}
 
       <DialogDataPreprocessing

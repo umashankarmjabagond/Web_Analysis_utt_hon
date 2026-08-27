@@ -1,9 +1,13 @@
 import { useState } from "react";
-import { CircleHelp, RotateCw } from "lucide-react";
+import { CircleHelp, Grid2x2, RotateCw } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import Dialog from "../../../components/common/dialogue/Dialog";
 import Button from "../../../components/forms/button/Button";
+import Input from "../../../components/forms/input/Input";
+import TextArea from "../../../components/forms/textarea/TextArea";
+import Select from "../../../components/forms/select/Select";
+import { cn } from "../../../utils/utils";
 
 interface DialogDataPreprocessingProps {
   isOpen: boolean;
@@ -35,397 +39,259 @@ const DialogDataPreprocessing = ({
 }: DialogDataPreprocessingProps) => {
   const { t } = useTranslation();
 
-  const [selectedColumn, setSelectedColumn] =
-    useState<string>("HDS2.MODE");
-
-  const [warningThreshold, setWarningThreshold] =
-    useState<string>("100");
-
-  const [abortThreshold, setAbortThreshold] =
-    useState<string>("100");
-
-  const [referenceColumns, setReferenceColumns] =
-    useState<string>("");
-
-  const [badDataExpression, setBadDataExpression] =
-    useState<string>("");
-
+  const [selectedColumn, setSelectedColumn] = useState<string>("HDS2.MODE");
+  const [warningThreshold, setWarningThreshold] = useState<string>("100");
+  const [abortThreshold, setAbortThreshold] = useState<string>("100");
+  const [referenceColumn, setReferenceColumn] = useState<string>("HDS2.MODE");
+  const [badDataExpression, setBadDataExpression] = useState<string>("");
   const [replacementExpression, setReplacementExpression] =
     useState<string>("");
 
+  const [isBadDataRefreshing, setIsBadDataRefreshing] = useState(false);
+  const [isReplacementRefreshing, setIsReplacementRefreshing] = useState(false);
+
   const groupPrefix = selectedColumn.split(".")[0];
 
-  const handleResetBadData = () => {
-    setBadDataExpression("");
-  };
-
-  const handleResetReplacement = () => {
-    setReplacementExpression("");
-  };
-
-  const handleApplyToAll = () => {
-    // TODO: Apply current settings to all columns
-  };
-
+  const handleApplyToAll = () => {};
   const handleSave = () => {
     // TODO: Save DPR configuration
     onClose();
   };
 
+  const handleRefreshBadData = () => {
+    setIsBadDataRefreshing(true);
+    setBadDataExpression("");
+    setTimeout(() => {
+      setIsBadDataRefreshing(false);
+    }, 2000);
+  };
+
+  const handleRefreshReplacement = () => {
+    setIsReplacementRefreshing(true);
+    setReplacementExpression("");
+    setTimeout(() => {
+      setIsReplacementRefreshing(false);
+    }, 2000);
+  };
+
   return (
     <Dialog
       isOpen={isOpen}
-      title={
-        <span className="flex items-center gap-3">
-          {/* DPR Icon */}
-          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[8px] bg-[#3A3A3A]">
-            <svg
-              width="12"
-              height="11"
-              viewBox="0 0 12 11"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <rect
-                x="0.5"
-                y="0.5"
-                width="5"
-                height="4"
-                rx="0.5"
-                stroke="#F0F0F0"
-              />
-              <rect
-                x="6.5"
-                y="0.5"
-                width="5"
-                height="4"
-                rx="0.5"
-                stroke="#F0F0F0"
-              />
-              <rect
-                x="0.5"
-                y="6.5"
-                width="5"
-                height="4"
-                rx="0.5"
-                stroke="#F0F0F0"
-              />
-              <rect
-                x="6.5"
-                y="6.5"
-                width="5"
-                height="4"
-                rx="0.5"
-                stroke="#F0F0F0"
-              />
-            </svg>
-          </span>
-
-          {/* Title */}
-          <span className="flex flex-col leading-tight">
-            <span className="text-[20px] font-extrabold leading-[30px] text-dialog-title">
-              {t("DPR_TITLE", "DPR")}
-            </span>
-
-            <span className="text-[12px] font-medium leading-4 text-[var(--gray-350)]">
-              {t("DPR_SUBTITLE", "Data Preprocessing")} · {groupPrefix}
-            </span>
-          </span>
-        </span>
-      }
+      title={t("DPR_TITLE", "DPR")}
+      subtitle={`${t("DPR_SUBTITLE", "Data Preprocessing")} · ${groupPrefix}`}
+      icon={<Grid2x2 size={16} strokeWidth={2} className="text-foreground" />}
       width={750}
       onClose={onClose}
       variant="connections"
     >
-      {/* Main DPR Container */}
-      <div className="dark flex h-[520px] flex-col">
-        {/* =========================
-            BODY
-        ========================== */}
-        <div className="flex min-h-0 flex-1 items-stretch overflow-hidden">
-          {/* =========================
-              LEFT PANEL
-          ========================== */}
-          <div className="flex w-[224px] shrink-0 flex-col">
-            {/* Heading */}
-            <p className="mb-2 text-xs font-medium leading-4 text-[var(--color-text-primary)]">
-              {t(
-                "DPR_LEFT_HEADING",
-                "Edit the expressions of columns you wish to preprocess",
-              )}
-            </p>
+      <div className="flex w-full items-start gap-5">
+        {/* LEFT PANEL */}
+        <div className="flex w-[224px] flex-none shrink-0 flex-col gap-2">
+          <p className="w-[224px] break-words text-xs font-medium leading-5 text-foreground">
+            {t("PROPERTIES_EDIT_COLUMNS_EXPRESSIONS")}
+          </p>
 
-            {/* Column List */}
-            <div className="min-h-0 flex-1 overflow-hidden rounded-[5px] border border-[#4A4A4A]">
-              <div className="dpr-scrollbar-hidden h-full overflow-y-auto">
-                {columns.map((column) => {
-                  const isSelected = selectedColumn === column;
+          <div className="h-[619px] w-[224px] flex-none overflow-hidden rounded-[5px] border border-table-border">
+            <div className="h-full overflow-y-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+              {columns.map((column) => {
+                const isSelected = selectedColumn === column;
 
-                  return (
-                    <button
-                      key={column}
-                      type="button"
-                      onClick={() => setSelectedColumn(column)}
-                      className="flex h-[39.5px] w-full items-center justify-between border-b border-[#3F3F3F] px-3 text-left text-[13px] last:border-b-0"
-                      style={{
-                        backgroundColor: isSelected
-                          ? "#30383D"
-                          : "transparent",
-                        color: isSelected
-                          ? "#64C3FF"
-                          : "#E4E4E4",
-                      }}
+                return (
+                  <button
+                    key={column}
+                    type="button"
+                    onClick={() => setSelectedColumn(column)}
+                    className={`flex w-[214px] items-center justify-between border-b border-table-border px-3 py-2 text-left last:border-b-0 ${
+                      isSelected ? "bg-surface-hover" : "bg-transparent"
+                    }`}
+                  >
+                    <span
+                      className={`min-w-0 truncate text-[13px] font-medium leading-[19.5px] ${
+                        isSelected
+                          ? "text-accordion-list-count"
+                          : "text-foreground-secondary"
+                      }`}
                     >
-                      <span className="truncate">
-                        {column}
-                      </span>
-
-                      {isSelected && (
-                        <span className="ml-2 shrink-0 font-bold text-[#64C3FF]">
-                          ✓
-                        </span>
-                      )}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-
-          {/* =========================
-              DIVIDER
-          ========================== */}
-          <div className="mx-4 w-px shrink-0 bg-[#454545]" />
-
-          {/* =========================
-              RIGHT PANEL
-          ========================== */}
-          <div className="flex min-w-0 flex-1 flex-col">
-            <div className="dpr-scrollbar-hidden min-w-0 flex-1 overflow-y-auto">
-              {/* Heading */}
-              <p className="mb-4 text-xs font-medium leading-4 text-[var(--color-text-primary)]">
-                {t(
-                  "DPR_RIGHT_HEADING",
-                  "Edit the expressions you wish to preprocess",
-                )}
-              </p>
-
-              {/* =========================
-                  THRESHOLD
-              ========================== */}
-              <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.3px] text-[#B5B5B5]">
-                {t("DPR_THRESHOLD", "Threshold")}
-              </p>
-
-              <div className="mb-5 grid grid-cols-2 gap-3">
-                {/* Warning Threshold */}
-                <div>
-                  <label className="mb-1 block text-xs text-[var(--color-text-primary)]">
-                    {t(
-                      "DPR_WARNING_THRESHOLD",
-                      "Warning Threshold %",
-                    )}
-                  </label>
-
-                  <input
-                    type="text"
-                    value={warningThreshold}
-                    onChange={(event) =>
-                      setWarningThreshold(event.target.value)
-                    }
-                    className="h-8 w-full rounded-[6px] border border-[#454545] bg-[#2E2E2E] px-2.5 text-[13px] text-[#F0F0F0] outline-none focus:border-[#64C3FF]"
-                  />
-                </div>
-
-                {/* Abort Threshold */}
-                <div>
-                  <label className="mb-1 block text-xs text-[var(--color-text-primary)]">
-                    {t(
-                      "DPR_ABORT_THRESHOLD",
-                      "Abort Threshold %",
-                    )}
-                  </label>
-
-                  <input
-                    type="text"
-                    value={abortThreshold}
-                    onChange={(event) =>
-                      setAbortThreshold(event.target.value)
-                    }
-                    className="h-8 w-full rounded-[6px] border border-[#454545] bg-[#2E2E2E] px-2.5 text-[13px] text-[#F0F0F0] outline-none focus:border-[#64C3FF]"
-                  />
-                </div>
-              </div>
-
-              {/* =========================
-                  EXPRESSIONS
-              ========================== */}
-              <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.3px] text-[#B5B5B5]">
-                {t("DPR_EXPRESSIONS", "Expressions")}
-              </p>
-
-              {/* Reference Columns */}
-              <div className="mb-4">
-                <label className="mb-1 block text-xs text-[var(--color-text-primary)]">
-                  {t(
-                    "DPR_REFERENCE_COLUMNS",
-                    "Reference Columns",
-                  )}
-                </label>
-
-                <select
-                  value={referenceColumns}
-                  onChange={(event) =>
-                    setReferenceColumns(event.target.value)
-                  }
-                  className="h-8 w-full cursor-pointer rounded-[6px] border border-[#454545] bg-[#2E2E2E] px-2.5 text-[13px] text-[#F0F0F0] outline-none focus:border-[#64C3FF]"
-                >
-                  <option value="">
-                    {t("SELECT_PLACEHOLDER", "Select")}
-                  </option>
-
-                  {columns.map((column) => (
-                    <option key={column} value={column}>
                       {column}
-                    </option>
-                  ))}
-                </select>
-              </div>
+                    </span>
 
-              {/* Bad Data Expression */}
-              <div className="mb-4">
-                <label className="mb-1 block text-xs text-[var(--color-text-primary)]">
-                  {t(
-                    "DPR_BAD_DATA_EXPRESSION",
-                    "Bad Data Expression",
-                  )}
-                </label>
-
-                <div className="flex items-start gap-2">
-                  <textarea
-                    value={badDataExpression}
-                    onChange={(event) =>
-                      setBadDataExpression(event.target.value)
-                    }
-                    rows={3}
-                    className="min-h-[66px] flex-1 resize-none rounded-[6px] border border-[#454545] bg-[#2E2E2E] p-2.5 text-[13px] text-[#F0F0F0] outline-none focus:border-[#64C3FF]"
-                  />
-
-                  <button
-                    type="button"
-                    onClick={handleResetBadData}
-                    className="flex h-8 w-8 min-w-8 shrink-0 items-center justify-center rounded-[6px] border border-[#454545] bg-transparent p-0"
-                  >
-                    <RotateCw
-                      size={14}
-                      strokeWidth={1.5}
-                      className="text-[#D0D0D0]"
-                    />
+                    {isSelected && (
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 12 12"
+                        fill="none"
+                        className="ml-2 shrink-0 text-accordion-list-count"
+                      >
+                        <path
+                          d="M2 6L4.8 8.8L10 3"
+                          stroke="currentColor"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    )}
                   </button>
-                </div>
-              </div>
-
-              {/* Replacement Expression */}
-              <div>
-                <label className="mb-1 block text-xs text-[var(--color-text-primary)]">
-                  {t(
-                    "DPR_REPLACEMENT_EXPRESSION",
-                    "Replacement Expression",
-                  )}
-                </label>
-
-                <div className="flex items-start gap-2">
-                  <textarea
-                    value={replacementExpression}
-                    onChange={(event) =>
-                      setReplacementExpression(event.target.value)
-                    }
-                    rows={4}
-                    className="min-h-[79px] flex-1 resize-none rounded-[6px] border border-[#454545] bg-[#2E2E2E] p-2.5 text-[13px] text-[#F0F0F0] outline-none focus:border-[#64C3FF]"
-                  />
-
-                  <button
-                    type="button"
-                    onClick={handleResetReplacement}
-                    className="flex h-8 w-8 min-w-8 shrink-0 items-center justify-center rounded-[6px] border border-[#454545] bg-transparent p-0"
-                  >
-                    <RotateCw
-                      size={14}
-                      strokeWidth={1.5}
-                      className="text-[#D0D0D0]"
-                    />
-                  </button>
-                </div>
-              </div>
+                );
+              })}
             </div>
           </div>
         </div>
 
-        {/* =========================
-            FOOTER
-        ========================== */}
-        <div className="flex shrink-0 items-center justify-between pt-3">
-          {/* Help */}
-          <Button
-            size="small"
-            variant="secondary"
-            icon={
-              <CircleHelp
-                size={16}
-                strokeWidth={1.5}
+        <div className="h-[619px] w-px flex-none shrink-0 self-stretch bg-table-border" />
+
+        {/* RIGHT PANEL */}
+        <div className="flex w-[401px] min-w-0 flex-none shrink-0 flex-col gap-3 pt-4">
+          <p className="w-full break-words text-xs font-medium leading-4 text-foreground">
+            {t("PROPERTIES_EDIT_EXPRESSIONS")}
+          </p>
+
+          <div>
+            <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.3px] text-foreground-tertiary">
+              {t("PROPERTIES_THRESHOLD", "Threshold")}
+            </p>
+
+            <div className="grid grid-cols-2 gap-3">
+              <Input
+                label={t("PROPERTIES_WARNING_THRESHOLD", "Warning Threshold %")}
+                value={warningThreshold}
+                onChange={(event) => setWarningThreshold(event.target.value)}
               />
-            }
-          >
-            {t("COMMON_HELP", "Help")}
-          </Button>
 
-          {/* Right Buttons */}
-          <div className="flex items-center gap-2">
-            <Button
-              size="small"
-              variant="secondary"
-              onClick={handleApplyToAll}
-              className="!min-w-[112px]"
-            >
-              {t("APPLY_TO_ALL", "Apply to All")}
-            </Button>
+              <Input
+                label={t("PROPERTIES_ABORT_THRESHOLD", "Abort Threshold %")}
+                value={abortThreshold}
+                onChange={(event) => setAbortThreshold(event.target.value)}
+              />
+            </div>
+          </div>
 
-            <Button
-              size="small"
-              variant="secondary"
-              onClick={onClose}
-              className="!min-w-[80px]"
-            >
-              {t("BUTTON_CANCEL", "Cancel")}
-            </Button>
+          <div>
+            <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.3px] text-foreground-tertiary">
+              {t("PROPERTIES_EXPRESSION", "Expression")}
+            </p>
 
-            <Button
-              size="small"
-              variant="primary"
-              onClick={handleSave}
-              className="!min-w-[70px]"
-            >
-              {t("BUTTON_SAVE", "Save")}
-            </Button>
+            <div className="mb-4">
+              <label className="mb-1 block text-xs font-medium leading-4 text-foreground">
+                {t("PROPERTIES_REFERENCE_COLUMN", "Reference Column")}
+              </label>
+              <Select
+                value={referenceColumn}
+                onChange={(event) => setReferenceColumn(event.target.value)}
+                options={columns.map((column) => ({
+                  value: column,
+                  label: column,
+                }))}
+                fullWidth
+              />
+            </div>
+
+            <div className="mb-4">
+              <div className="flex items-start gap-2">
+                <TextArea
+                  label={t(
+                    "PROPERTIES_BAD_DATA_EXPRESSION",
+                    "Bad Data Expression",
+                  )}
+                  placeholder={t(
+                    "PROPERTIES_BAD_DATA_EXPRESSION_PLACEHOLDER",
+                    "Enter bad data expression...",
+                  )}
+                  value={badDataExpression}
+                  onChange={(event) => setBadDataExpression(event.target.value)}
+                  rows={3}
+                  className="h-[81px]"
+                />
+
+                <RotateCw
+                  size={16}
+                  strokeWidth={2}
+                  className={cn(
+                    "mt-6 cursor-pointer",
+                    isBadDataRefreshing
+                      ? "pointer-events-none animate-spin"
+                      : "hover:rotate-90",
+                  )}
+                  onClick={handleRefreshBadData}
+                />
+              </div>
+            </div>
+
+            <div>
+              <div className="flex items-start gap-2">
+                <TextArea
+                  label={t(
+                    "PROPERTIES_REPLACEMENT_EXPRESSION",
+                    "Replacement Expression",
+                  )}
+                  placeholder={t(
+                    "PROPERTIES_REPLACEMENT_EXPRESSION_PLACEHOLDER",
+                    "Enter replacement expression...",
+                  )}
+                  value={replacementExpression}
+                  onChange={(event) =>
+                    setReplacementExpression(event.target.value)
+                  }
+                  rows={4}
+                  className="h-[100px]"
+                />
+
+                <RotateCw
+                  size={16}
+                  strokeWidth={2}
+                  className={cn(
+                    "mt-6 cursor-pointer",
+                    isReplacementRefreshing
+                      ? "pointer-events-none animate-spin"
+                      : "hover:rotate-90",
+                  )}
+                  onClick={handleRefreshReplacement}
+                />
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Hide Scrollbar */}
-      <style>
-        {`
-          .dpr-scrollbar-hidden {
-            scrollbar-width: none;
-            -ms-overflow-style: none;
-          }
+      <div className="mt-4 flex w-full shrink-0 items-center justify-between">
+        <Button
+          size="small"
+          variant="secondary"
+          icon={<CircleHelp size={16} strokeWidth={1.5} />}
+        >
+          {t("COMMON_HELP", "Help")}
+        </Button>
 
-          .dpr-scrollbar-hidden::-webkit-scrollbar {
-            display: none;
-            width: 0;
-            height: 0;
-          }
-        `}
-      </style>
+        <div className="flex items-center gap-2">
+          <Button
+            size="small"
+            variant="secondary"
+            onClick={handleApplyToAll}
+            className="!min-w-[112px]"
+          >
+            {t("COMMON_APPLY_TO_ALL", "Apply to All")}
+          </Button>
+
+          <Button
+            size="small"
+            variant="secondary"
+            onClick={onClose}
+            className="!min-w-[80px]"
+          >
+            {t("COMMON_CANCEL", "Cancel")}
+          </Button>
+
+          <Button
+            size="small"
+            variant="primary"
+            onClick={handleSave}
+            className="!min-w-[70px]"
+          >
+            {t("COMMON_SAVE", "Save")}
+          </Button>
+        </div>
+      </div>
     </Dialog>
   );
 };

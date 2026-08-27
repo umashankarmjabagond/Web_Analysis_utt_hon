@@ -156,6 +156,8 @@
   "STATUS_RUNNING": "قيد التشغيل",
   "COMMON_NONE": "لا يوجد",
   "PROPERTIES_DATA_PREPROCESSING_WIZARD": "معالج معالجة البيانات المسبقة",
+  "PROPERTIES_DPR_TITLE": "DPR",
+  "PROPERTIES_DPR_SUBTITLE_LABEL": "معالجة البيانات مسبقًا",
   "PROPERTIES_EDIT_COLUMNS_EXPRESSIONS": "تحرير تعبيرات الأعمدة التي تريد معالجتها مسبقًا",
   "PROPERTIES_EDIT_EXPRESSIONS": "تحرير التعبيرات التي تريد معالجتها مسبقًا",
   "PROPERTIES_THRESHOLD": "الحد",
