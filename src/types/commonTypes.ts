@@ -9,6 +9,23 @@ import type {
 import type { DonutChartItem } from "./dashboardTypes";
 import type { LucideIcon } from "lucide-react";
 
+export interface ConnectionTreeProps {
+  nodes: TreeNodeData[];
+  checkedIds: string[];
+  onCheck: (id: string) => void;
+  showCheckbox?: boolean;
+}
+
+export interface ConnectionTreeNodeProps {
+  node: TreeNodeData;
+  level: number;
+  expandedIds: Set<string>;
+  checkedIds: string[];
+  onToggle: (id: string) => void;
+  onCheck: (id: string) => void;
+  showCheckbox?: boolean;
+}
+
 export interface BreadcrumbItem {
   id: string;
   label: string;
@@ -46,8 +63,14 @@ export interface DialogProps {
   children: ReactNode;
   onClose: () => void;
   width?: number | string;
-  variant?: "default" | "connections";
+  showIcon?: boolean;
   icon?: ReactNode;
+  className?: string;
+  titleClassName?: string;
+  subtitleClassName?: string;
+  headerClassName?: string;
+  closeButtonClassName?: string;
+  closeIcon?: ReactNode;
 }
 
 export interface AccordionProps {

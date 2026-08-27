@@ -1,7 +1,11 @@
 import { beforeEach, describe, expect, it } from "vitest";
 
 import { useTemplateExecutionStore } from "./templateExecutionStore";
-import { EXECUTION_ACTION } from "../types/templateExecution";
+
+import {
+  EXECUTION_ACTION,
+  EXECUTION_VIEW_MODE,
+} from "../types/templateExecution";
 
 describe("templateExecutionStore", () => {
   beforeEach(() => {
@@ -9,7 +13,7 @@ describe("templateExecutionStore", () => {
       nodes: [],
       edges: [],
       selectedExecutionItem: null,
-      selectedNodeIds: [],
+      selectedNodeId: null,
       selectedRowIds: [],
       executionAction: EXECUTION_ACTION.IDLE,
       isNodeDrawerOpen: false,
@@ -115,24 +119,6 @@ describe("templateExecutionStore", () => {
         id: "node-1",
       },
     ]);
-  });
-
-  it("adds selected node when not already selected", () => {
-    useTemplateExecutionStore.getState().toggleSelectedNode("node-1");
-
-    expect(useTemplateExecutionStore.getState().selectedNodeIds).toEqual([
-      "node-1",
-    ]);
-  });
-
-  it("removes selected node when already selected", () => {
-    useTemplateExecutionStore.setState({
-      selectedNodeIds: ["node-1"],
-    });
-
-    useTemplateExecutionStore.getState().toggleSelectedNode("node-1");
-
-    expect(useTemplateExecutionStore.getState().selectedNodeIds).toEqual([]);
   });
 
   it("adds selected row when not already selected", () => {
@@ -246,7 +232,7 @@ describe("templateExecutionStore", () => {
 
   it("resets UI state when loading workflow", () => {
     useTemplateExecutionStore.setState({
-      selectedNodeIds: ["node-1"],
+      selectedNodeId: "node-1",
       selectedRowIds: ["row-1"],
       isNodeDrawerOpen: true,
       executionAction: EXECUTION_ACTION.EXECUTE,
@@ -258,7 +244,7 @@ describe("templateExecutionStore", () => {
 
     const state = useTemplateExecutionStore.getState();
 
-    expect(state.selectedNodeIds).toEqual([]);
+    expect(state.selectedNodeId).toBeNull();
     expect(state.selectedRowIds).toEqual([]);
     expect(state.isNodeDrawerOpen).toBe(false);
     expect(state.executionAction).toBe(EXECUTION_ACTION.IDLE);
@@ -284,5 +270,31 @@ describe("templateExecutionStore", () => {
 
     expect(state.nodes).toEqual(nodes);
     expect(state.edges).toEqual(edges);
+  });
+
+  it("sets selected node id", () => {
+    useTemplateExecutionStore.getState().setSelectedNodeId("node-1");
+
+    expect(useTemplateExecutionStore.getState().selectedNodeId).toBe("node-1");
+  });
+
+  it("clears selected node id", () => {
+    useTemplateExecutionStore.setState({
+      selectedNodeId: "node-1",
+    });
+
+    useTemplateExecutionStore.getState().setSelectedNodeId(null);
+
+    expect(useTemplateExecutionStore.getState().selectedNodeId).toBeNull();
+  });
+
+  it("sets execution view mode", () => {
+    useTemplateExecutionStore
+      .getState()
+      .setExecutionViewMode(EXECUTION_VIEW_MODE.COMFORTABLE);
+
+    expect(useTemplateExecutionStore.getState().executionViewMode).toBe(
+      EXECUTION_VIEW_MODE.COMFORTABLE,
+    );
   });
 });

@@ -1,40 +1,132 @@
 import {
-  ArrowDownToLine,
-  ArrowUpFromLine,
-  Calculator,
-  Database,
-  Funnel,
-} from "lucide-react";
+  CDIcon,
+  COHIcon,
+  CTRLIcon,
+  DPRIcon,
+  DSIcon,
+  ExpMath,
+  MMathIcon,
+  NormalIcon,
+  OIIcon,
+  PAIcon,
+  SPAIcon,
+  SSIcon,
+  VSIcon,
+  XCP1Icon,
+  XCRIcon,
+  XOPIcon,
+} from "./nodeIcons";
 
-export const NODE_TYPES = {
+export const NODE_CONFIG = {
   dataSource: {
-    label: "Data Source",
-    description: "Reads data from an external source",
-    icon: Database,
-    category: "Input",
+    name: "Data Source",
+    shortName: "DS",
+    category: "Data Manipulation",
+    icon: DSIcon,
   },
-  dataSink: {
-    label: "Data Sink",
-    description: "Writes processed data to a destination",
-    icon: ArrowDownToLine,
-    category: "Output",
+
+  dataPreprocessor: {
+    name: "Data Preprocessor",
+    shortName: "DPR",
+    category: "Data Manipulation",
+    icon: DPRIcon,
   },
-  dataPreprocessing: {
-    label: "Data Preprocessing",
-    description: "Cleans and transforms incoming data",
-    icon: Funnel,
-    category: "Processing",
+
+  expMath: {
+    name: "Expression Math",
+    shortName: "ExpMath",
+    category: "Math",
+    icon: ExpMath,
   },
-  math: {
-    label: "Math",
-    description: "Performs mathematical operations",
-    icon: Calculator,
-    category: "Processing",
+
+  controller: {
+    name: "Controller",
+    shortName: "CTRL",
+    category: "PID Monitoring",
+    icon: CTRLIcon,
   },
-  sorter: {
-    label: "Sorter",
-    description: "Sorts records based on configured fields",
-    icon: ArrowUpFromLine,
-    category: "Processing",
+
+  pa: {
+    name: "PA",
+    shortName: "PA",
+    category: "PID Monitoring",
+    icon: PAIcon,
+  },
+
+  multiMath: {
+    name: "Multi-Math",
+    shortName: "MMath",
+    category: "Math",
+    icon: MMathIcon,
+  },
+
+  coherency: {
+    name: "Coherency",
+    shortName: "COH",
+    category: "Statistics",
+    icon: COHIcon,
+  },
+
+  spectrumAnalysis: {
+    name: "Spectrum Analysis",
+    shortName: "SPA",
+    category: "Statistics",
+    icon: SPAIcon,
+  },
+
+  valveStiction: {
+    name: "Valve Stiction",
+    shortName: "VS",
+    category: "PID Monitoring",
+    icon: VSIcon,
+  },
+
+  diagnosis: {
+    name: "Diagnosis",
+    shortName: "CD",
+    category: "PID Monitoring",
+    icon: CDIcon,
+  },
+
+  oscillationIndex: {
+    name: "Oscillation Index",
+    shortName: "OI",
+    category: "PID Monitoring",
+    icon: OIIcon,
+  },
+
+  crossCorrelation: {
+    name: "Cross Correlation",
+    shortName: "XCR",
+    category: "Statistics",
+    icon: XCRIcon,
+  },
+
+  crossSpectrum: {
+    name: "Cross Spectrum",
+    shortName: "XCP1",
+    category: "Statistics",
+    icon: XCP1Icon,
+  },
+
+  xop: {
+    name: "XOP",
+    shortName: "XOP",
+    category: "APC Monitoring",
+    icon: XOPIcon,
+  },
+
+  selectorSwitch: {
+    name: "Selector Switch",
+    shortName: "SS",
+    category: "Math",
+    icon: SSIcon,
+  },
+
+  normal: {
+    name: "Normal",
+    shortName: "NORMAL",
+    category: "Math",
+    icon: NormalIcon,
   },
 } as const;

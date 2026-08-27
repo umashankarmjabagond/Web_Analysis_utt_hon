@@ -1,5 +1,5 @@
 import type { Edge, EdgeProps, Node, Position } from "@xyflow/react";
-import type { NODE_TYPES } from "../pages/analysis/template-execution/components/nodes/nodeConfig";
+import type { NODE_CONFIG } from "../pages/analysis/template-execution/components/nodes/nodeConfig";
 
 // service types
 export type ExecutionFlowNode = BaseFlowNode | ExecutionHeaderFlowNode;
@@ -31,7 +31,7 @@ export interface CreateExecutionHeaderNodeProps {
 }
 
 // analysis template execution nodes types
-export type NodeType = keyof typeof NODE_TYPES;
+export type NodeType = keyof typeof NODE_CONFIG;
 
 // analysis template execution nodes status types
 export type NodeStatus = "default" | "success" | "warning" | "error";

@@ -1,6 +1,6 @@
 import { Handle, Position, type NodeProps } from "@xyflow/react";
 import { useTranslation } from "react-i18next";
-import { NODE_TYPES } from "./nodeConfig";
+import { NODE_CONFIG } from "./nodeConfig";
 import type {
   BaseFlowNode,
   HandleConfig,
@@ -13,7 +13,7 @@ import { cn } from "../../../../../utils/utils";
 export default function BaseNode({ data, type }: NodeProps<BaseFlowNode>) {
   const { t } = useTranslation();
 
-  const nodeMeta = NODE_TYPES[type as NodeType];
+  const nodeMeta = NODE_CONFIG[type as NodeType];
   if (!nodeMeta) return null;
 
   const Icon = nodeMeta.icon;
@@ -60,7 +60,7 @@ export default function BaseNode({ data, type }: NodeProps<BaseFlowNode>) {
   };
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex w-[30px] flex-col gap-2 items-center">
       <div
         data-testid="node"
         className={cn(
@@ -69,7 +69,11 @@ export default function BaseNode({ data, type }: NodeProps<BaseFlowNode>) {
           statusStyle.border,
         )}
       >
-        <Icon size={13} className={cn("shrink-0", statusStyle.icon)} />
+        <Icon
+          width={18}
+          height={18}
+          className={cn("shrink-0", statusStyle.icon)}
+        />
 
         {HANDLE_CONFIG.map((handle) => (
           <Fragment key={handle.id}>
@@ -90,7 +94,7 @@ export default function BaseNode({ data, type }: NodeProps<BaseFlowNode>) {
         ))}
       </div>
       <span className="w-max text-center text-[12px] leading-[15px] font-medium text-foreground">
-        {t(data.label)}
+        {t(nodeMeta.shortName)}
       </span>
     </div>
   );

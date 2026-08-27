@@ -18,11 +18,11 @@ vi.mock("../store/templateExecutionStore", () => ({
 }));
 
 describe("useWorkflowCanvasInteractions", () => {
-  const toggleSelectedNode = vi.fn();
+  const setSelectedNodeId = vi.fn();
   const setNodeDrawerOpen = vi.fn();
 
   const createMockStore = (
-    selectedNodeIds: string[] = [],
+    selectedNodeId: string | null = null,
   ): TemplateExecutionState => ({
     nodes: [] as ExecutionFlowNode[],
     setNodes: vi.fn(),
@@ -36,8 +36,8 @@ describe("useWorkflowCanvasInteractions", () => {
     executionViewMode: EXECUTION_VIEW_MODE.COMPACT,
     setExecutionViewMode: vi.fn(),
 
-    selectedNodeIds,
-    toggleSelectedNode,
+    selectedNodeId: selectedNodeId ?? null,
+    setSelectedNodeId,
 
     selectedRowIds: [],
     toggleSelectedRow: vi.fn(),
@@ -60,8 +60,8 @@ describe("useWorkflowCanvasInteractions", () => {
     appendWorkflow: vi.fn(),
   });
 
-  const mockStore = (selectedNodeIds: string[] = []) => {
-    const state = createMockStore(selectedNodeIds);
+  const mockStore = (selectedNodeId: string | null = null) => {
+    const state = createMockStore(selectedNodeId);
 
     vi.mocked(useTemplateExecutionStore).mockImplementation((selector) =>
       selector(state),
@@ -73,49 +73,70 @@ describe("useWorkflowCanvasInteractions", () => {
     mockStore();
   });
 
-  it("toggles selected node", () => {
+  it("opens drawer for success node", () => {
     const { result } = renderHook(() => useWorkflowCanvasInteractions());
 
-    result.current.handleNodeSelection("node-1", "success");
+    result.current.handleNodeClick({
+      id: "node-1",
+      data: {
+        status: "success",
+      },
+    } as never);
 
-    expect(toggleSelectedNode).toHaveBeenCalledWith("node-1");
+    expect(setSelectedNodeId).toHaveBeenCalledWith("node-1");
+    expect(setNodeDrawerOpen).toHaveBeenCalledWith(true);
   });
 
   it("does not open drawer for warning status", () => {
     const { result } = renderHook(() => useWorkflowCanvasInteractions());
 
-    result.current.handleNodeSelection("node-1", "warning");
+    result.current.handleNodeClick({
+      id: "node-1",
+      data: {
+        status: "warning",
+      },
+    } as never);
 
-    expect(toggleSelectedNode).toHaveBeenCalledWith("node-1");
+    expect(setSelectedNodeId).not.toHaveBeenCalled();
+    expect(setNodeDrawerOpen).not.toHaveBeenCalled();
     expect(setNodeDrawerOpen).not.toHaveBeenCalled();
   });
 
   it("does not open drawer for error status", () => {
     const { result } = renderHook(() => useWorkflowCanvasInteractions());
 
-    result.current.handleNodeSelection("node-1", "error");
+    result.current.handleNodeClick({
+      id: "node-1",
+      data: {
+        status: "error",
+      },
+    } as never);
 
-    expect(toggleSelectedNode).toHaveBeenCalledWith("node-1");
+    expect(setSelectedNodeId).not.toHaveBeenCalled();
+    expect(setNodeDrawerOpen).not.toHaveBeenCalled();
     expect(setNodeDrawerOpen).not.toHaveBeenCalled();
   });
 
-  it("does not open drawer when node is already selected", () => {
-    mockStore(["node-1"]);
-
+  it("opens drawer for success node", () => {
     const { result } = renderHook(() => useWorkflowCanvasInteractions());
 
-    result.current.handleNodeSelection("node-1", "success");
+    result.current.handleNodeClick({
+      id: "node-1",
+      data: {
+        status: "success",
+      },
+    } as never);
 
-    expect(toggleSelectedNode).toHaveBeenCalledWith("node-1");
-    expect(setNodeDrawerOpen).not.toHaveBeenCalled();
-  });
-
-  it("opens drawer for unselected success node", () => {
-    const { result } = renderHook(() => useWorkflowCanvasInteractions());
-
-    result.current.handleNodeSelection("node-1", "success");
-
-    expect(toggleSelectedNode).toHaveBeenCalledWith("node-1");
+    expect(setSelectedNodeId).toHaveBeenCalledWith("node-1");
     expect(setNodeDrawerOpen).toHaveBeenCalledWith(true);
+  });
+
+  it("closes drawer and clears selected node", () => {
+    const { result } = renderHook(() => useWorkflowCanvasInteractions());
+
+    result.current.handleNodeDrawerClose();
+
+    expect(setNodeDrawerOpen).toHaveBeenCalledWith(false);
+    expect(setSelectedNodeId).toHaveBeenCalledWith(null);
   });
 });

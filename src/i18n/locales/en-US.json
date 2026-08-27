@@ -265,6 +265,11 @@
   "CONTROLLER_STEP": "Step {{current}} of {{total}}",
   "CONTROLLER_FINISH": "Finish",
 
+  "CONNECTIONS_CONFIGURE_INPUT_COLUMNS": "Configure Input Columns",
+  "CONNECTIONS_DATA_PREPROCESSING": "Data Preprocessing",
+  "CONNECTIONS_SELECT_INPUTS_MESSAGE": "Please select the inputs to be given from",
+  "CONNECTIONS_TO": "to",
+  
   "TOOLBAR_IMPORT_SUCCESS": "Import Successful",
   "TOOLBAR_WORKFLOW_IMPORTED_SUCCESSFULLY": "Workflow imported successfully.",
   "TOOLBAR_IMPORT_FAILED": "Import Failed",

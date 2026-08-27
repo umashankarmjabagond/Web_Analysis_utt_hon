@@ -4,7 +4,13 @@ import Button from "../../components/forms/button/Button";
 import Input from "../../components/forms/input/Input";
 import Select from "../../components/forms/select/Select";
 import TextArea from "../../components/forms/textarea/TextArea";
-import { BarChart3, Calculator, Check, CircleHelp, RefreshCw } from "lucide-react";
+import {
+  BarChart3,
+  Calculator,
+  Check,
+  CircleHelp,
+  RefreshCw,
+} from "lucide-react";
 import { useForm } from "react-hook-form";
 import {
   propertiesSchema,
@@ -318,8 +324,11 @@ const Properties: React.FC<PropertiesProps> = ({ onCancel }) => {
         title="Connections"
         subtitle="Inputs feeding SPA"
         width={424}
-        variant="connections"
+        showIcon={false}
         onClose={() => setIsHelpOpen(false)}
+        titleClassName="text-[20px] font-extrabold leading-[30px] tracking-normal text-dialog-title"
+        subtitleClassName="mt-0 text-[12px] font-medium leading-4 tracking-normal normal-case text-[var(--gray-350)]"
+        headerClassName="px-8 pb-5 pt-7"
       >
         <div className="flex flex-col gap-3">
           {CONNECTIONS.map((connection) => (

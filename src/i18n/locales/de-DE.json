@@ -260,6 +260,11 @@
   "CONTROLLER_STEP": "Schritt {{current}} von {{total}}",
   "CONTROLLER_FINISH": "Fertig",
 
+  "CONNECTIONS_CONFIGURE_INPUT_COLUMNS": "Eingabespalten konfigurieren",
+  "CONNECTIONS_DATA_PREPROCESSING": "Datenvorverarbeitung",
+  "CONNECTIONS_SELECT_INPUTS_MESSAGE": "Bitte wählen Sie die Eingaben aus, die von",
+  "CONNECTIONS_TO": "nach",
+  
   "TOOLBAR_SAVED_MPC": "Als MPC-Vorlage gespeichert",
   "TOOLBAR_FIND_REGULATORY": "Sie finden diese Vorlage im Katalog unter Vorlagen > Regulatorische Vorlagen.",
   "TOOLBAR_FIND_MPC": "Sie finden diese Vorlage im Katalog unter Vorlagen > MPC-Vorlagen.",
