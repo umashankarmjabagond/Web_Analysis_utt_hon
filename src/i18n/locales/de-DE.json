@@ -155,6 +155,7 @@
   "PROPERTIES_DATA_PREPROCESSING_WIZARD": "Assistent zur Datenvorverarbeitung",
   "PROPERTIES_DPR_TITLE": "DPR",
   "PROPERTIES_DPR_SUBTITLE_LABEL": "Datenvorverarbeitung",
+  "PROPERTIES_THRESHOLD_PLACEHOLDER": "100",
   "PROPERTIES_EDIT_COLUMNS_EXPRESSIONS": "Bearbeiten Sie die Ausdrücke der Spalten, die Sie vorverarbeiten möchten",
   "PROPERTIES_EDIT_EXPRESSIONS": "Bearbeiten Sie die Ausdrücke, die Sie vorverarbeiten möchten",
   "PROPERTIES_THRESHOLD": "Schwellenwert",
@@ -264,7 +265,7 @@
   "CONNECTIONS_DATA_PREPROCESSING": "Datenvorverarbeitung",
   "CONNECTIONS_SELECT_INPUTS_MESSAGE": "Bitte wählen Sie die Eingaben aus, die von",
   "CONNECTIONS_TO": "nach",
-  
+
   "TOOLBAR_SAVED_MPC": "Als MPC-Vorlage gespeichert",
   "TOOLBAR_FIND_REGULATORY": "Sie finden diese Vorlage im Katalog unter Vorlagen > Regulatorische Vorlagen.",
   "TOOLBAR_FIND_MPC": "Sie finden diese Vorlage im Katalog unter Vorlagen > MPC-Vorlagen.",

@@ -157,6 +157,7 @@
   "PROPERTIES_DATA_PREPROCESSING_WIZARD": "Мастер предварительной обработки данных",
   "PROPERTIES_DPR_TITLE": "DPR",
   "PROPERTIES_DPR_SUBTITLE_LABEL": "Предварительная обработка данных",
+  "PROPERTIES_THRESHOLD_PLACEHOLDER": "100",
   "PROPERTIES_EDIT_COLUMNS_EXPRESSIONS": "Измените выражения столбцов, которые необходимо предварительно обработать",
   "PROPERTIES_EDIT_EXPRESSIONS": "Измените выражения, которые необходимо предварительно обработать",
   "PROPERTIES_THRESHOLD": "Пороговое значение",
@@ -266,7 +267,7 @@
   "CONNECTIONS_DATA_PREPROCESSING": "Предварительная обработка данных",
   "CONNECTIONS_SELECT_INPUTS_MESSAGE": "Пожалуйста, выберите входные данные для передачи из",
   "CONNECTIONS_TO": "в",
-  
+
   "TOOLBAR_SAVED_MPC": "Сохранено как шаблон MPC",
   "TOOLBAR_FIND_REGULATORY": "Вы можете найти этот шаблон в Каталоге в разделе Шаблоны > Регуляторные шаблоны.",
   "TOOLBAR_FIND_MPC": "Вы можете найти этот шаблон в Каталоге в разделе Шаблоны > Шаблоны MPC.",

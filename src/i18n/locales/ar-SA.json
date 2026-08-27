@@ -175,6 +175,7 @@
   "PROJECT_ANALYSIS_TITLE": "المشروع والتحليل",
   "PROJECT_ANALYSIS_CHOOSE_PROJECT": "اختر مشروعًا",
   "PROJECT_ANALYSIS_NEW": "جديد",
+  "PROPERTIES_THRESHOLD_PLACEHOLDER": "100",
   "PROJECT_ANALYSIS_CLONE": "استنساخ",
   "PROJECT_ANALYSIS_SERVER": "الخادم",
   "PROJECT_ANALYSIS_INPUT_TEXT": "أدخل النص",
@@ -267,7 +268,7 @@
   "CONNECTIONS_DATA_PREPROCESSING": "المعالجة المسبقة للبيانات",
   "CONNECTIONS_SELECT_INPUTS_MESSAGE": "يرجى تحديد المدخلات المراد تمريرها من",
   "CONNECTIONS_TO": "إلى",
-  
+
   "TOOLBAR_SAVED_MPC": "تم الحفظ كقالب MPC",
   "TOOLBAR_FIND_REGULATORY": "يمكنك العثور على هذا القالب في الكتالوج ضمن القوالب > القوالب التنظيمية.",
   "TOOLBAR_FIND_MPC": "يمكنك العثور على هذا القالب في الكتالوج ضمن القوالب > قوالب MPC.",
