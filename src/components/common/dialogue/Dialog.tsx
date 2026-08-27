@@ -1,11 +1,6 @@
 import { Timer, X } from "lucide-react";
-import type { ReactNode } from "react";
 import type { DialogProps } from "../../../types/commonTypes";
 import { cn } from "../../../utils/utils";
-
-interface DialogPropsExtended extends DialogProps {
-  icon?: ReactNode;
-}
 
 const Dialog = ({
   isOpen,
@@ -16,7 +11,7 @@ const Dialog = ({
   onClose,
   width = 600,
   variant = "default",
-}: DialogPropsExtended) => {
+}: DialogProps) => {
   if (!isOpen) return null;
 
   const isConnections = variant === "connections";

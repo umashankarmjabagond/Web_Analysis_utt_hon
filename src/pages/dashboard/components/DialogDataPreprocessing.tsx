@@ -8,11 +8,7 @@ import Input from "../../../components/forms/input/Input";
 import TextArea from "../../../components/forms/textarea/TextArea";
 import Select from "../../../components/forms/select/Select";
 import { cn } from "../../../utils/utils";
-
-interface DialogDataPreprocessingProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
+import type { DialogDataPreprocessingProps } from "../../../types/commonTypes";
 
 const columns = [
   "HDS2.MODE",

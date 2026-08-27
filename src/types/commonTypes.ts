@@ -47,6 +47,7 @@ export interface DialogProps {
   onClose: () => void;
   width?: number | string;
   variant?: "default" | "connections";
+  icon?: ReactNode;
 }
 
 export interface AccordionProps {
@@ -104,17 +105,12 @@ export interface TabsProps {
   renderContent?: boolean;
 }
 
-
-
-
-
 export interface DonutChartProps {
   data: DonutChartItem[];
   size?: number;
   colors: Record<string, string>;
   className?: string;
 }
-
 
 export interface LegendItem {
   name: string;
@@ -230,4 +226,9 @@ export interface DropdownProps {
   className?: string;
   menuClassName?: string;
   itemClassName?: string;
+}
+
+export interface DialogDataPreprocessingProps {
+  isOpen: boolean;
+  onClose: () => void;
 }
