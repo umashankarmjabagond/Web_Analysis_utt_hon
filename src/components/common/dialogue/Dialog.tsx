@@ -1,4 +1,4 @@
-import { X } from "lucide-react";
+import { Timer, X } from "lucide-react";
 import type { DialogProps } from "../../../types/commonTypes";
 import { cn } from "../../../utils/utils";
 
@@ -10,7 +10,6 @@ const Dialog = ({
   onClose,
   width = 600,
   showIcon = true,
-  icon,
   className,
   titleClassName,
   subtitleClassName,
@@ -44,7 +43,11 @@ const Dialog = ({
           >
             {showIcon && (
               <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md border-[1.5px] border-[#454545] bg-[#454545]">
-                {icon}
+                <Timer
+                  size={20}
+                  strokeWidth={1.8}
+                  className="text-foreground-secondary"
+                />
               </div>
             )}
 
@@ -61,25 +64,13 @@ const Dialog = ({
               {subtitle && (
                 <p
                   className={cn(
-                    "mt-2 text-xs font-semibold uppercase tracking-[0.25em] text-dialog-description",
+                    "mt-2 text-xs font-semibold tracking-[0.25em] text-dialog-description",
                     subtitleClassName,
                   )}
                 >
                   {subtitle}
                 </p>
               )}
-
-              <div className="flex flex-col">
-                <h2 className="text-[20px] font-extrabold leading-[30px] tracking-normal text-dialog-title">
-                  {title}
-                </h2>
-
-                {subtitle && (
-                  <p className="mt-0 text-[12px] font-medium leading-4 tracking-normal text-[var(--gray-350)] normal-case">
-                    {subtitle}
-                  </p>
-                )}
-              </div>
             </div>
           </div>
 
