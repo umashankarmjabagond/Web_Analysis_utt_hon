@@ -11,12 +11,22 @@ vi.mock("react-i18next", () => ({
 }));
 
 vi.mock("./nodeConfig", () => ({
-  NODE_TYPES: {
+  NODE_CONFIG: {
     base: {
-      icon: ({ size, className }: { size?: number; className: string }) => (
+      shortName: "Test Node",
+      icon: ({
+        width,
+        height,
+        className,
+      }: {
+        width?: number;
+        height?: number;
+        className?: string;
+      }) => (
         <div
           data-testid="node-icon"
-          data-size={String(size ?? "")}
+          data-width={String(width ?? "")}
+          data-height={String(height ?? "")}
           className={className}
         />
       ),
