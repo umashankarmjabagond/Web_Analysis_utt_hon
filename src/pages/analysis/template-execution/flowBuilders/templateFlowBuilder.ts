@@ -1,5 +1,5 @@
 import type { Edge } from "@xyflow/react";
-import { buildTemplateItemFlow } from "./templateItemFlowBuilder";
+
 import {
   EXECUTION_VIEW_MODE,
   type ExecutionFlowNode,
@@ -7,10 +7,16 @@ import {
   type TemplateExecutionWorkflow,
   type WorkflowData,
 } from "../../../../types/templateExecution";
+
 import { buildCompactTemplateItemFlow } from "./compactLayoutBuilder";
+
 import { CANVAS_LAYOUT, ROW_GAP } from "./layoutConstants";
 
-type TemplateCanvasResult = WorkflowData & { nextY: number };
+import { buildComfortableTemplateItemFlow } from "./comfortableLayoutBuilder";
+
+type TemplateCanvasResult = WorkflowData & {
+  nextY: number;
+};
 
 export const buildTemplateCanvas = (
   workflows: TemplateExecutionWorkflow[],
@@ -22,7 +28,7 @@ export const buildTemplateCanvas = (
   const buildRow =
     executionViewMode === EXECUTION_VIEW_MODE.COMPACT
       ? buildCompactTemplateItemFlow
-      : buildTemplateItemFlow;
+      : buildComfortableTemplateItemFlow;
 
   const rows = workflows.map((workflow) =>
     buildRow(workflow.itemId, workflow.workflow, PREPEND_HEADER),
@@ -32,6 +38,11 @@ export const buildTemplateCanvas = (
     .map((row) => row.nodes.find((node) => node.type === "executionRow"))
     .filter((node): node is ExecutionFlowNode => node !== undefined);
 
+  /**
+   * Every row is normalized to the widest row.
+   *
+   * This keeps the right border aligned for all rows.
+   */
   const maxRowWidth = Math.max(
     ...rowNodes.map((row) =>
       typeof row.style?.width === "number" ? row.style.width : 0,
@@ -46,6 +57,7 @@ export const buildTemplateCanvas = (
 
   rows.forEach((row) => {
     const rowNode = row.nodes.find((node) => node.type === "executionRow");
+
     if (!rowNode) {
       return;
     }
@@ -60,19 +72,24 @@ export const buildTemplateCanvas = (
 
       return {
         ...node,
+
         position: {
           ...node.position,
+
           x: CANVAS_LAYOUT.rowLeft,
           y: offsetY,
         },
+
         style: {
           ...node.style,
+
           width: maxRowWidth,
         },
       };
     });
 
     nodes.push(...positionedNodes);
+
     edges.push(...row.edges);
 
     offsetY += rowHeight + ROW_GAP;
