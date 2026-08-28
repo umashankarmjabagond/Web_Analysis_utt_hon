@@ -68,6 +68,7 @@ export interface DialogProps {
   titleClassName?: string;
   subtitleClassName?: string;
   headerClassName?: string;
+  bodyClassName?: string;
   closeButtonClassName?: string;
   closeIcon?: ReactNode;
 }

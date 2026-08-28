@@ -101,6 +101,10 @@ export interface WorkflowNodeData extends Record<string, unknown> {
   label: string;
   element: BackendElement;
   catalogId?: string;
+  onNodeInsert?: (request: {
+    nodeId: string;
+    direction: "top" | "right" | "bottom" | "left";
+  }) => void;
 }
 
 export type WorkflowNode = Node<WorkflowNodeData>;

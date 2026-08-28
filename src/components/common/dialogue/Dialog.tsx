@@ -14,6 +14,7 @@ const Dialog = ({
   titleClassName,
   subtitleClassName,
   headerClassName,
+  bodyClassName,
   closeButtonClassName,
   closeIcon,
 }: DialogProps) => {
@@ -87,7 +88,7 @@ const Dialog = ({
         </div>
 
         {/* Scrollable Body */}
-        <div className="flex-1 px-8 pb-8">{children}</div>
+        <div className={cn( "min-h-0 flex-1 overflow-y-auto, px-8 pb-8", bodyClassName)}>{children}</div>
       </div>
     </div>
   );
