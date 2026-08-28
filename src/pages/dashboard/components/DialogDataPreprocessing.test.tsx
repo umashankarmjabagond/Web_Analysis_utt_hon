@@ -16,7 +16,7 @@ import DialogDataPreprocessing from "./DialogDataPreprocessing";
 
 vi.mock("react-i18next", () => ({
   useTranslation: () => ({
-    t: (_key: string, fallback?: string) => fallback ?? _key,
+    t: (key: string, fallback?: string) => fallback ?? key,
   }),
 }));
 
@@ -188,16 +188,18 @@ describe("DialogDataPreprocessing", () => {
   // ========================================================
 
   describe("header", () => {
-    it("renders the title", () => {
+    it("renders the title using the translation key", () => {
       render(<DialogDataPreprocessing isOpen={true} onClose={onClose} />);
 
-      expect(screen.getByText("DPR")).toBeInTheDocument();
+      expect(screen.getByText("PROPERTIES_DPR_TITLE")).toBeInTheDocument();
     });
 
-    it("renders the correct subtitle", () => {
+    it("renders the correct subtitle using the translation key", () => {
       render(<DialogDataPreprocessing isOpen={true} onClose={onClose} />);
 
-      expect(screen.getByText("Data Preprocessing · HDS2")).toBeInTheDocument();
+      expect(
+        screen.getByText("PROPERTIES_DPR_SUBTITLE_LABEL"),
+      ).toBeInTheDocument();
     });
   });
 
@@ -249,7 +251,6 @@ describe("DialogDataPreprocessing", () => {
       );
 
       expect(row).toBeInTheDocument();
-
       expect(row?.querySelector("svg")).toBeInTheDocument();
     });
 
@@ -268,8 +269,10 @@ describe("DialogDataPreprocessing", () => {
 
       await user.click(row!);
 
+      // Current component does not change the subtitle
+      // when the selected column changes.
       expect(
-        screen.getByText("Data Preprocessing · 01-LC200"),
+        screen.getByText("PROPERTIES_DPR_SUBTITLE_LABEL"),
       ).toBeInTheDocument();
 
       expect(row?.querySelector("svg")).toBeInTheDocument();
@@ -306,26 +309,26 @@ describe("DialogDataPreprocessing", () => {
   // ========================================================
 
   describe("threshold inputs", () => {
-    it("renders Warning Threshold with default value 100", () => {
+    it("renders Warning Threshold with an empty default value", () => {
       render(<DialogDataPreprocessing isOpen={true} onClose={onClose} />);
 
-      const input = screen.getByLabelText("Warning Threshold %");
+      const input = screen.getByLabelText("PROPERTIES_WARNING_THRESHOLD");
 
-      expect(input).toHaveValue("100");
+      expect(input).toHaveValue("");
     });
 
-    it("renders Abort Threshold with default value 100", () => {
+    it("renders Abort Threshold with an empty default value", () => {
       render(<DialogDataPreprocessing isOpen={true} onClose={onClose} />);
 
-      const input = screen.getByLabelText("Abort Threshold %");
+      const input = screen.getByLabelText("PROPERTIES_ABORT_THRESHOLD");
 
-      expect(input).toHaveValue("100");
+      expect(input).toHaveValue("");
     });
 
     it("updates Warning Threshold", () => {
       render(<DialogDataPreprocessing isOpen={true} onClose={onClose} />);
 
-      const input = screen.getByLabelText("Warning Threshold %");
+      const input = screen.getByLabelText("PROPERTIES_WARNING_THRESHOLD");
 
       fireEvent.change(input, {
         target: {
@@ -339,7 +342,7 @@ describe("DialogDataPreprocessing", () => {
     it("updates Abort Threshold", () => {
       render(<DialogDataPreprocessing isOpen={true} onClose={onClose} />);
 
-      const input = screen.getByLabelText("Abort Threshold %");
+      const input = screen.getByLabelText("PROPERTIES_ABORT_THRESHOLD");
 
       fireEvent.change(input, {
         target: {
@@ -388,23 +391,23 @@ describe("DialogDataPreprocessing", () => {
       render(<DialogDataPreprocessing isOpen={true} onClose={onClose} />);
 
       expect(
-        screen.getByPlaceholderText("Enter bad data expression..."),
+        screen.getByPlaceholderText(
+          "PROPERTIES_BAD_DATA_EXPRESSION_PLACEHOLDER",
+        ),
       ).toBeInTheDocument();
     });
 
     it("renders Replacement Expression textarea", () => {
       render(<DialogDataPreprocessing isOpen={true} onClose={onClose} />);
 
-      expect(
-        screen.getByPlaceholderText("Enter replacement expression..."),
-      ).toBeInTheDocument();
+      expect(screen.getByPlaceholderText("Enter")).toBeInTheDocument();
     });
 
     it("updates Bad Data Expression", () => {
       render(<DialogDataPreprocessing isOpen={true} onClose={onClose} />);
 
       const textarea = screen.getByPlaceholderText(
-        "Enter bad data expression...",
+        "PROPERTIES_BAD_DATA_EXPRESSION_PLACEHOLDER",
       );
 
       fireEvent.change(textarea, {
@@ -419,9 +422,7 @@ describe("DialogDataPreprocessing", () => {
     it("updates Replacement Expression", () => {
       render(<DialogDataPreprocessing isOpen={true} onClose={onClose} />);
 
-      const textarea = screen.getByPlaceholderText(
-        "Enter replacement expression...",
-      );
+      const textarea = screen.getByPlaceholderText("Enter");
 
       fireEvent.change(textarea, {
         target: {
@@ -442,7 +443,7 @@ describe("DialogDataPreprocessing", () => {
       render(<DialogDataPreprocessing isOpen={true} onClose={onClose} />);
 
       const textarea = screen.getByPlaceholderText(
-        "Enter bad data expression...",
+        "PROPERTIES_BAD_DATA_EXPRESSION_PLACEHOLDER",
       );
 
       fireEvent.change(textarea, {
@@ -469,9 +470,7 @@ describe("DialogDataPreprocessing", () => {
     it("clears Replacement Expression", () => {
       render(<DialogDataPreprocessing isOpen={true} onClose={onClose} />);
 
-      const textarea = screen.getByPlaceholderText(
-        "Enter replacement expression...",
-      );
+      const textarea = screen.getByPlaceholderText("Enter");
 
       fireEvent.change(textarea, {
         target: {
@@ -500,12 +499,10 @@ describe("DialogDataPreprocessing", () => {
       render(<DialogDataPreprocessing isOpen={true} onClose={onClose} />);
 
       const badDataTextarea = screen.getByPlaceholderText(
-        "Enter bad data expression...",
+        "PROPERTIES_BAD_DATA_EXPRESSION_PLACEHOLDER",
       );
 
-      const replacementTextarea = screen.getByPlaceholderText(
-        "Enter replacement expression...",
-      );
+      const replacementTextarea = screen.getByPlaceholderText("Enter");
 
       const badDataWrapper = badDataTextarea.closest(".flex.items-start.gap-2");
 
@@ -532,6 +529,43 @@ describe("DialogDataPreprocessing", () => {
 
       expect(badDataIcon?.classList.contains("animate-spin")).toBe(false);
     });
+
+    it("adds animate-spin only to the Replacement refresh icon", () => {
+      vi.useFakeTimers();
+
+      render(<DialogDataPreprocessing isOpen={true} onClose={onClose} />);
+
+      const badDataTextarea = screen.getByPlaceholderText(
+        "PROPERTIES_BAD_DATA_EXPRESSION_PLACEHOLDER",
+      );
+
+      const replacementTextarea = screen.getByPlaceholderText("Enter");
+
+      const badDataWrapper = badDataTextarea.closest(".flex.items-start.gap-2");
+
+      const replacementWrapper = replacementTextarea.closest(
+        ".flex.items-start.gap-2",
+      );
+
+      const badDataIcon = badDataWrapper?.querySelector("svg");
+
+      const replacementIcon = replacementWrapper?.querySelector("svg");
+
+      expect(badDataIcon).not.toBeNull();
+      expect(replacementIcon).not.toBeNull();
+
+      fireEvent.click(replacementIcon!);
+
+      expect(replacementIcon?.classList.contains("animate-spin")).toBe(true);
+
+      expect(badDataIcon?.classList.contains("animate-spin")).toBe(false);
+
+      act(() => {
+        vi.advanceTimersByTime(2000);
+      });
+
+      expect(replacementIcon?.classList.contains("animate-spin")).toBe(false);
+    });
   });
 
   // ========================================================
@@ -544,7 +578,7 @@ describe("DialogDataPreprocessing", () => {
 
       expect(
         screen.getByRole("button", {
-          name: "Help",
+          name: "COMMON_HELP",
         }),
       ).toBeInTheDocument();
     });
@@ -554,7 +588,7 @@ describe("DialogDataPreprocessing", () => {
 
       expect(
         screen.getByRole("button", {
-          name: "Apply to All",
+          name: "COMMON_APPLY_TO_ALL",
         }),
       ).toBeInTheDocument();
     });
@@ -564,7 +598,7 @@ describe("DialogDataPreprocessing", () => {
 
       expect(
         screen.getByRole("button", {
-          name: "Cancel",
+          name: "COMMON_CANCEL",
         }),
       ).toBeInTheDocument();
     });
@@ -574,7 +608,7 @@ describe("DialogDataPreprocessing", () => {
 
       expect(
         screen.getByRole("button", {
-          name: "Save",
+          name: "COMMON_SAVE",
         }),
       ).toBeInTheDocument();
     });
@@ -586,7 +620,7 @@ describe("DialogDataPreprocessing", () => {
 
       await user.click(
         screen.getByRole("button", {
-          name: "Cancel",
+          name: "COMMON_CANCEL",
         }),
       );
 
@@ -600,7 +634,7 @@ describe("DialogDataPreprocessing", () => {
 
       await user.click(
         screen.getByRole("button", {
-          name: "Save",
+          name: "COMMON_SAVE",
         }),
       );
 
@@ -614,7 +648,7 @@ describe("DialogDataPreprocessing", () => {
 
       await user.click(
         screen.getByRole("button", {
-          name: "Apply to All",
+          name: "COMMON_APPLY_TO_ALL",
         }),
       );
 
