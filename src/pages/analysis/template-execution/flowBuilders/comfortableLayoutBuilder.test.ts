@@ -1,5 +1,4 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import type { Edge } from "@xyflow/react";
 
 import { buildComfortableTemplateItemFlow } from "./comfortableLayoutBuilder";
 
