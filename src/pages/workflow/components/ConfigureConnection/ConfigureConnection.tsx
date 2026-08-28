@@ -2,10 +2,10 @@ import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ArrowRight } from "lucide-react";
 
-import Button from "../../components/forms/button/Button";
-import ConnectionTree from "../../components/common/tree/ConnectionTree";
+import Button from "../../../../components/forms/button/Button";
+import ConnectionTree from "../../../../components/common/tree/ConnectionTree";
 
-import { allColumnsData, buildSelectedTreeFromSource } from "../../utils/utils";
+import { allColumnsData, buildSelectedTreeFromSource } from "../../../../utils/utils";
 
 type ConnectionsProps = {
   onClose?: () => void;
@@ -29,7 +29,7 @@ const getAllLeafIds = (nodes: typeof allColumnsData): string[] => {
   return ids;
 };
 
-export default function Connections({ onClose }: ConnectionsProps) {
+export default function ConfigureConnection({ onClose }: ConnectionsProps) {
   const { t } = useTranslation();
 
   const [selectedIds, setSelectedIds] = useState<string[]>([]);

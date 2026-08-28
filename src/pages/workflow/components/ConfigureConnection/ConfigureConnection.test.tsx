@@ -2,13 +2,12 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
-import Connections from "./Connections";
-
 import {
   buildSelectedTreeFromSource,
   getSelectedTree,
   DEFAULT_SELECTED_COLUMNS,
-} from "../../utils/utils";
+} from "../../../../utils/utils";
+import ConfigureConnection from "./ConfigureConnection";
 
 vi.mock("react-i18next", () => ({
   useTranslation: () => ({
@@ -30,7 +29,7 @@ vi.mock("react-i18next", () => ({
 
 describe("Connections", () => {
   it("renders panel headings", () => {
-    render(<Connections />);
+    render(<ConfigureConnection />);
 
     expect(screen.getByText("Data Preprocessing")).toBeInTheDocument();
 
@@ -38,7 +37,7 @@ describe("Connections", () => {
   });
 
   it("renders footer buttons", () => {
-    render(<Connections />);
+    render(<ConfigureConnection/>);
 
     expect(screen.getByText("Cancel")).toBeInTheDocument();
 
@@ -46,13 +45,13 @@ describe("Connections", () => {
   });
 
   it("renders instruction text", () => {
-    render(<Connections />);
+    render(<ConfigureConnection/>);
 
     expect(screen.getByText(/Choose which/i)).toBeInTheDocument();
   });
 
   it("renders hierarchy nodes", () => {
-    render(<Connections />);
+    render(<ConfigureConnection/>);
 
     expect(screen.getByText("DPR1.PV")).toBeInTheDocument();
 
@@ -60,13 +59,13 @@ describe("Connections", () => {
   });
 
   it("shows None initially", () => {
-    render(<Connections />);
+    render(<ConfigureConnection/>);
 
     expect(screen.getByText("No inputs shared yet.")).toBeInTheDocument();
   });
 
   it("renders all leaf nodes", () => {
-    render(<Connections />);
+    render(<ConfigureConnection/>);
 
     expect(screen.getByText("DPR1.PV")).toBeInTheDocument();
 
@@ -78,7 +77,7 @@ describe("Connections", () => {
   });
 
   it("renders checkboxes", () => {
-    render(<Connections />);
+    render(<ConfigureConnection/>);
 
     expect(screen.getAllByRole("checkbox").length).toBeGreaterThan(0);
   });
@@ -86,7 +85,7 @@ describe("Connections", () => {
   it("selects a left checkbox", async () => {
     const user = userEvent.setup();
 
-    render(<Connections />);
+    render(<ConfigureConnection/>);
 
     const checkboxes = screen.getAllByRole("checkbox");
 
@@ -98,7 +97,7 @@ describe("Connections", () => {
   it("removes None after moving data", async () => {
     const user = userEvent.setup();
 
-    render(<Connections />);
+    render(<ConfigureConnection/>);
 
     const checkboxes = screen.getAllByRole("checkbox");
 
@@ -114,7 +113,7 @@ describe("Connections", () => {
   it("does not crash when remove is clicked without selection", async () => {
     const user = userEvent.setup();
 
-    render(<Connections />);
+    render(<ConfigureConnection/>);
 
     const buttons = screen.getAllByRole("button");
 
@@ -126,7 +125,7 @@ describe("Connections", () => {
   it("moves and removes a node", async () => {
     const user = userEvent.setup();
 
-    render(<Connections />);
+    render(<ConfigureConnection/>);
 
     let checkboxes = screen.getAllByRole("checkbox");
 
@@ -150,7 +149,7 @@ describe("Connections", () => {
   it("unchecks a left checkbox when clicked twice", async () => {
     const user = userEvent.setup();
 
-    render(<Connections />);
+    render(<ConfigureConnection/>);
 
     const checkbox = screen.getAllByRole("checkbox")[0];
 
@@ -166,7 +165,7 @@ describe("Connections", () => {
   it("keeps selected items when remove is clicked without selecting right checkbox", async () => {
     const user = userEvent.setup();
 
-    render(<Connections />);
+    render(<ConfigureConnection/>);
 
     const checkboxes = screen.getAllByRole("checkbox");
 
@@ -245,7 +244,7 @@ describe("getSelectedTree", () => {
   it("removes multiple selected nodes", async () => {
     const user = userEvent.setup();
 
-    render(<Connections />);
+    render(<ConfigureConnection/>);
 
     let checkboxes = screen.getAllByRole("checkbox");
 
@@ -344,7 +343,7 @@ describe("getSelectedTree", () => {
 
     const onClose = vi.fn();
 
-    render(<Connections onClose={onClose} />);
+    render(<ConfigureConnection onClose={onClose} />);
 
     await user.click(screen.getByText("Cancel"));
 
@@ -352,25 +351,25 @@ describe("getSelectedTree", () => {
   });
 
   it("renders Finish button", () => {
-    render(<Connections />);
+    render(<ConfigureConnection/>);
 
     expect(screen.getByText("Finish")).toBeInTheDocument();
   });
 
   it("renders preprocessing text in instruction", () => {
-    render(<Connections />);
+    render(<ConfigureConnection/>);
 
     expect(screen.getAllByText("Data Preprocessing").length).toBeGreaterThan(0);
   });
 
   it("renders data source text in instruction", () => {
-    render(<Connections />);
+    render(<ConfigureConnection/>);
 
     expect(screen.getAllByText("Data Source").length).toBeGreaterThan(0);
   });
 
   it("renders transfer buttons", () => {
-    render(<Connections />);
+    render(<ConfigureConnection/>);
 
     const buttons = screen.getAllByRole("button");
 
@@ -380,7 +379,7 @@ describe("getSelectedTree", () => {
   it("selects all nodes when Select All is clicked", async () => {
     const user = userEvent.setup();
 
-    render(<Connections />);
+    render(<ConfigureConnection/>);
 
     const selectAllButton = screen.getByText("Select All");
 
@@ -396,7 +395,7 @@ describe("getSelectedTree", () => {
   it("clears all selected nodes when Clear All is clicked", async () => {
     const user = userEvent.setup();
 
-    render(<Connections />);
+    render(<ConfigureConnection/>);
 
     await user.click(screen.getByText("Select All"));
 
@@ -414,7 +413,7 @@ describe("getSelectedTree", () => {
   it("shows Clear All when everything is selected", async () => {
     const user = userEvent.setup();
 
-    render(<Connections />);
+    render(<ConfigureConnection/>);
 
     await user.click(screen.getByText("Select All"));
 
@@ -433,7 +432,7 @@ describe("getSelectedTree", () => {
       };
     });
 
-    const { default: EmptyConnections } = await import("./Connections");
+    const { default: EmptyConnections } = await import("./ConfigureConnection");
 
     render(<EmptyConnections />);
 

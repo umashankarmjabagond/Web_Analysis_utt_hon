@@ -4,7 +4,7 @@ import Drawer from "../../../../components/drawer/Drawer";
 import KpiTable from "../../../KPI/KpiTable";
 import CalculatedKpisAndErrors from "../../../KPI/CalculatedKpisAndErrors";
 import Properties from "../../../KPI/Properties";
-import Connections from "../../../KPI/Connections";
+import Connections from "../../../workflow/components/ConfigureConnection/ConfigureConnection";
 import { useTranslation } from "react-i18next";
 export default function ExecutionDetailsPanel() {
   const { t } = useTranslation();

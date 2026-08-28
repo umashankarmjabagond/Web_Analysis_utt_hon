@@ -4,7 +4,7 @@ import Drawer from "../../../../components/drawer/Drawer";
 import KpiTable from "../../../KPI/KpiTable";
 import CalculatedKpisAndErrors from "../../../KPI/CalculatedKpisAndErrors";
 import Properties from "../../../KPI/Properties";
-import Connections from "../../../KPI/Connections";
+import Connections from "../../../workflow/components/ConfigureConnection/ConfigureConnection";
 import { useTemplateExecutionStore } from "../../../../store/templateExecutionStore";
 import { Tabs } from "../../../../components/common/tabs/Tabs";
 
