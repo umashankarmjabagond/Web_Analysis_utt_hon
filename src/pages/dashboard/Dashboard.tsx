@@ -1,6 +1,20 @@
+// import Badge from "../../components/common/badge/Badge";
+// import Select from "../../components/forms/select/Select";
+// import TableCard from "../../components/tables/TableCard";
+// import type {
+//   StatCardData,
+//   StatusSummaryRow,
+//   WarningRow,
+// } from "../../types/dashboardTypes";
+// import StatCard from "./components/StatCard";
+// import { createColumnHelper } from "@tanstack/react-table";
+// import { useTranslation } from "react-i18next";
+
+import { useState } from "react";
 import Badge from "../../components/common/badge/Badge";
 import Select from "../../components/forms/select/Select";
 import TableCard from "../../components/tables/TableCard";
+import DialogDataPreprocessing from "./components/DialogDataPreprocessing";
 import type {
   StatCardData,
   StatusSummaryRow,
@@ -9,6 +23,7 @@ import type {
 import StatCard from "./components/StatCard";
 import { createColumnHelper } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
+// import DialogDataPreprocessing from "./components/DialogDataPreprocessing";
 
 const statCards: StatCardData[] = [
   {
@@ -275,6 +290,7 @@ const warningColumnHelper = createColumnHelper<WarningRow>();
 
 export default function Dashboard() {
   const { t } = useTranslation();
+  const [isDprDialogOpen, setIsDprDialogOpen] = useState(false); //added
 
   const statusColumns = [
     statusColumnHelper.accessor("unitName", {
@@ -356,13 +372,23 @@ export default function Dashboard() {
           {t("DASHBOARD_POWER_BOILER")}
         </h1>
 
-        <Badge
+        {/* <Badge
           variant="info"
           fill="outline"
           className="px-2 py-1 text-xs font-medium h-6 rounded-2xl"
         >
           {t("DASHBOARD_AREA")}
-        </Badge>
+           </Badge> */}
+        {/* AREA is now a button that opens the DPR dialog */}
+        <button type="button" onClick={() => setIsDprDialogOpen(true)}>
+          <Badge
+            variant="info"
+            fill="outline"
+            className="px-2 py-1 text-xs font-medium h-6 rounded-2xl"
+          >
+            {t("DASHBOARD_AREA")}
+          </Badge>
+        </button>
       </div>
 
       <div className="mt-4 flex flex-col gap-4 xl:flex-row">
@@ -433,7 +459,18 @@ export default function Dashboard() {
             </>
           }
         />
+        {/* </div>
+      
+    </div>
+  );
+} */}
       </div>
+      {/* </div> */}
+
+      <DialogDataPreprocessing
+        isOpen={isDprDialogOpen}
+        onClose={() => setIsDprDialogOpen(false)}
+      />
     </div>
   );
 }
