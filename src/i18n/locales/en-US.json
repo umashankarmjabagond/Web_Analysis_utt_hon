@@ -298,8 +298,8 @@
 
   "CONNECTIONS_CONFIGURE_INPUT_COLUMNS": "Configure Input Columns",
   "CONNECTIONS_DATA_PREPROCESSING": "Data Preprocessing",
-  "CONNECTIONS_SELECT_INPUTS_MESSAGE": "Please select the inputs to be given from",
-  "CONNECTIONS_TO": "to",
+  "CONNECTIONS_MESSAGE_PREFIX": "Choose which",
+  "CONNECTIONS_MESSAGE_SUFFIX": "outputs are to be shared as inputs to",
 
   "TOOLBAR_IMPORT_SUCCESS": "Import Successful",
   "TOOLBAR_WORKFLOW_IMPORTED_SUCCESSFULLY": "Workflow imported successfully.",

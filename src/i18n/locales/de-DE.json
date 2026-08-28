@@ -264,8 +264,8 @@
 
   "CONNECTIONS_CONFIGURE_INPUT_COLUMNS": "Eingabespalten konfigurieren",
   "CONNECTIONS_DATA_PREPROCESSING": "Datenvorverarbeitung",
-  "CONNECTIONS_SELECT_INPUTS_MESSAGE": "Bitte wählen Sie die Eingaben aus, die von",
-  "CONNECTIONS_TO": "nach",
+  "CONNECTIONS_MESSAGE_PREFIX": "Bitte wählen Sie aus, welche",
+  "CONNECTIONS_MESSAGE_SUFFIX": "Ausgaben als Eingaben an",
 
   "TOOLBAR_SAVED_MPC": "Als MPC-Vorlage gespeichert",
   "TOOLBAR_FIND_REGULATORY": "Sie finden diese Vorlage im Katalog unter Vorlagen > Regulatorische Vorlagen.",
