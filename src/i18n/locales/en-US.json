@@ -160,7 +160,6 @@
   "PROPERTIES_DATA_PREPROCESSING_WIZARD": "Data Preprocessing Wizard",
   "PROPERTIES_DPR_TITLE": "DPR",
   "PROPERTIES_DPR_SUBTITLE_LABEL": "Data Preprocessing",
-  "PROPERTIES_THRESHOLD_PLACEHOLDER": "100",
   "PROPERTIES_EDIT_COLUMNS_EXPRESSIONS": "Edit the expressions of columns you wish to preprocess",
   "PROPERTIES_EDIT_EXPRESSIONS": "Edit the expressions you wish to preprocess",
   "PROPERTIES_THRESHOLD": "Threshold",
@@ -174,6 +173,8 @@
   "PROPERTIES_REPLACEMENT_EXPRESSION": "Replacement Expression",
   "PROPERTIES_REPLACEMENT_EXPRESSION_PLACEHOLDER": "Enter replacement expression...",
   "PROPERTIES_REFRESH_REPLACEMENT_EXPRESSION": "Refresh replacement expression",
+  "PROPERTIES_SELECTED_COLUMN": "SELECTED COLUMN",
+  "Enter": "Enter",
 
   "PROJECT_ANALYSIS_TITLE": "Project and Analysis",
   "PROJECT_ANALYSIS_CHOOSE_PROJECT": "Choose a project",

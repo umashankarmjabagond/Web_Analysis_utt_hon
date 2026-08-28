@@ -172,10 +172,12 @@
   "PROPERTIES_REPLACEMENT_EXPRESSION_PLACEHOLDER": "أدخل تعبير الاستبدال...",
   "PROPERTIES_REFRESH_REPLACEMENT_EXPRESSION": "تحديث تعبير الاستبدال",
 
+  "PROPERTIES_SELECTED_COLUMN": "العمود المحدد",
+  "Enter": "أدخل",
+
   "PROJECT_ANALYSIS_TITLE": "المشروع والتحليل",
   "PROJECT_ANALYSIS_CHOOSE_PROJECT": "اختر مشروعًا",
   "PROJECT_ANALYSIS_NEW": "جديد",
-  "PROPERTIES_THRESHOLD_PLACEHOLDER": "100",
   "PROJECT_ANALYSIS_CLONE": "استنساخ",
   "PROJECT_ANALYSIS_SERVER": "الخادم",
   "PROJECT_ANALYSIS_INPUT_TEXT": "أدخل النص",

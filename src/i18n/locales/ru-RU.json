@@ -157,7 +157,6 @@
   "PROPERTIES_DATA_PREPROCESSING_WIZARD": "Мастер предварительной обработки данных",
   "PROPERTIES_DPR_TITLE": "DPR",
   "PROPERTIES_DPR_SUBTITLE_LABEL": "Предварительная обработка данных",
-  "PROPERTIES_THRESHOLD_PLACEHOLDER": "100",
   "PROPERTIES_EDIT_COLUMNS_EXPRESSIONS": "Измените выражения столбцов, которые необходимо предварительно обработать",
   "PROPERTIES_EDIT_EXPRESSIONS": "Измените выражения, которые необходимо предварительно обработать",
   "PROPERTIES_THRESHOLD": "Пороговое значение",
@@ -171,6 +170,9 @@
   "PROPERTIES_REPLACEMENT_EXPRESSION": "Выражение замены",
   "PROPERTIES_REPLACEMENT_EXPRESSION_PLACEHOLDER": "Введите выражение замены...",
   "PROPERTIES_REFRESH_REPLACEMENT_EXPRESSION": "Обновить выражение замены",
+
+  "PROPERTIES_SELECTED_COLUMN": "ВЫБРАННЫЙ СТОЛБЕЦ",
+  "Enter": "Введите",
 
   "PROJECT_ANALYSIS_TITLE": "Проект и анализ",
   "PROJECT_ANALYSIS_CHOOSE_PROJECT": "Выберите проект",

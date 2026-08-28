@@ -6,27 +6,16 @@ import Dialog from "../../../components/common/dialogue/Dialog";
 import Button from "../../../components/forms/button/Button";
 import Input from "../../../components/forms/input/Input";
 import TextArea from "../../../components/forms/textarea/TextArea";
-import Select from "../../../components/forms/select/Select";
 import { cn } from "../../../utils/utils";
 import type { DialogDataPreprocessingProps } from "../../../types/commonTypes";
 
 const columns = [
-  "HDS2.MODE",
-  "HDS2.OP",
-  "HDS2.PV",
-  "HDS2.SP",
-  "01-LC200.MODE",
-  "01-LC200.OP",
-  "01-LC200.PV",
-  "01-LC200.SP",
-  "02-PC237.MODE",
-  "02-PC237.OP",
-  "02-PC237.PV",
-  "02-PC237.SP",
-  "03-TC274.MODE",
-  "03-TC274.OP",
-  "03-TC274.PV",
-  "03-TC274.SP",
+  { key: "MODE", label: "Mode (.MODE)" },
+  { key: "OP", label: "OP (.OP)" },
+  { key: "PV", label: "PV (.PV)" },
+  { key: "SP", label: "SP (.SP)" },
+  { key: "REQ", label: "Required Flag (.REQ)" },
+  { key: "TM", label: "Test (.TM)" },
 ];
 
 const DialogDataPreprocessing = ({
@@ -35,10 +24,9 @@ const DialogDataPreprocessing = ({
 }: DialogDataPreprocessingProps) => {
   const { t } = useTranslation();
 
-  const [selectedColumn, setSelectedColumn] = useState<string>("HDS2.MODE");
+  const [selectedColumn, setSelectedColumn] = useState<string>("MODE");
   const [warningThreshold, setWarningThreshold] = useState<string>("");
   const [abortThreshold, setAbortThreshold] = useState<string>("");
-  const [referenceColumn, setReferenceColumn] = useState<string>("HDS2.MODE");
   const [badDataExpression, setBadDataExpression] = useState<string>("");
   const [replacementExpression, setReplacementExpression] =
     useState<string>("");
@@ -46,6 +34,9 @@ const DialogDataPreprocessing = ({
   const [isBadDataRefreshing, setIsBadDataRefreshing] = useState(false);
   const [isReplacementRefreshing, setIsReplacementRefreshing] = useState(false);
 
+  const selectedColumnLabel = columns.find(
+    (column) => column.key === selectedColumn,
+  )!.label;
   const handleApplyToAll = () => {};
 
   const handleSave = () => {
@@ -73,32 +64,30 @@ const DialogDataPreprocessing = ({
   return (
     <Dialog
       isOpen={isOpen}
-      title={t("PROPERTIES_DPR_TITLE")}
-      subtitle={`${t("PROPERTIES_DPR_SUBTITLE_LABEL")} `}
-      icon={<Grid2x2 size={16} strokeWidth={2} className="text-foreground" />}
+      title={t("Data Preprocessing (DPP)")}
+      icon={<Grid2x2 size={14} strokeWidth={2} className="text-foreground" />}
       width={750}
       onClose={onClose}
-      headerClassName="px-8 pt-7 pb-5"
-      titleClassName="text-[20px] font-extrabold leading-[30px] tracking-normal"
-      subtitleClassName="mt-0 text-[12px] font-medium leading-4 tracking-normal normal-case"
+      headerClassName="px-6 py-4"
+      titleClassName="text-[15px] font-semibold leading-5 tracking-normal"
     >
-      <div className="flex w-full items-start gap-5">
+      <div className="flex w-full items-stretch gap-5">
         <div className="flex w-[224px] flex-none shrink-0 flex-col gap-2">
           <p className="w-[224px] break-words text-xs font-medium leading-5 text-foreground">
             {t("PROPERTIES_EDIT_COLUMNS_EXPRESSIONS")}
           </p>
 
-          <div className="h-[619px] w-[224px] flex-none overflow-hidden rounded-[5px] border border-table-border">
-            <div className="h-full overflow-y-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+          <div className="h-full w-[224px] flex-1 overflow-hidden rounded-[5px] border border-table-border">
+            <div className="h-full overflow-y-auto [scrollbar-width:none] [-ms-ovwqwq;;erflow-style:none] [&::-webkit-scrollbar]:hidden">
               {columns.map((column) => {
-                const isSelected = selectedColumn === column;
+                const isSelected = selectedColumn === column.key;
 
                 return (
                   <button
-                    key={column}
+                    key={column.key}
                     type="button"
-                    onClick={() => setSelectedColumn(column)}
-                    className={`flex w-[214px] items-center justify-between border-b border-table-border px-3 py-2 text-left last:border-b-0 ${
+                    onClick={() => setSelectedColumn(column.key)}
+                    className={`flex w-full items-center justify-between border-b border-table-border px-3 py-2 text-left last:border-b-0 ${
                       isSelected ? "bg-surface-hover" : "bg-transparent"
                     }`}
                   >
@@ -109,7 +98,7 @@ const DialogDataPreprocessing = ({
                           : "text-foreground-secondary"
                       }`}
                     >
-                      {column}
+                      {column.label}
                     </span>
 
                     {isSelected && (
@@ -136,12 +125,21 @@ const DialogDataPreprocessing = ({
           </div>
         </div>
 
-        <div className="h-[619px] w-px flex-none shrink-0 self-stretch bg-table-border" />
+        <div className="w-px flex-none shrink-0 self-stretch bg-table-border" />
 
-        <div className="flex h-[619px] w-[401px] min-w-0 flex-none shrink-0 flex-col gap-3 pr-1">
+        <div className="flex w-[401px] min-w-0 flex-none shrink-0 flex-col gap-3 pr-1">
           <p className="w-full break-words text-xs font-medium leading-4 text-foreground">
             {t("PROPERTIES_EDIT_EXPRESSIONS")}
           </p>
+
+          <div className="rounded-[6px] border border-table-border px-3 py-2">
+            <p className="mb-1 text-[11px] font-semibold uppercase tracking-[0.3px] text-foreground-tertiary">
+              SELECTED COLUMN
+            </p>
+            <span className="text-[13px] font-semibold text-accordion-list-count">
+              {selectedColumnLabel}
+            </span>
+          </div>
 
           <div>
             <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.3px] text-foreground-tertiary">
@@ -169,22 +167,6 @@ const DialogDataPreprocessing = ({
             <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.3px] text-foreground-tertiary">
               {t("PROPERTIES_EXPRESSION")}
             </p>
-
-            <div className="mb-4">
-              <label className="mb-1 block text-xs font-medium leading-4 text-foreground">
-                {t("PROPERTIES_REFERENCE_COLUMN")}
-              </label>
-
-              <Select
-                value={referenceColumn}
-                onChange={(event) => setReferenceColumn(event.target.value)}
-                options={columns.map((column) => ({
-                  value: column,
-                  label: column,
-                }))}
-                fullWidth
-              />
-            </div>
 
             <div className="mb-4">
               <div className="flex items-start gap-2">

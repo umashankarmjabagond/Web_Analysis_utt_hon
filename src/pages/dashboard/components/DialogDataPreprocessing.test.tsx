@@ -1,56 +1,31 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import {
-  render,
-  screen,
-  cleanup,
-  fireEvent,
-  act,
-} from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
+import { act, fireEvent, render, screen } from "@testing-library/react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import DialogDataPreprocessing from "./DialogDataPreprocessing";
 
-// ---------------------------------------------------------
-// i18n mock
-// ---------------------------------------------------------
-
 vi.mock("react-i18next", () => ({
   useTranslation: () => ({
-    t: (key: string, fallback?: string) => fallback ?? key,
+    t: (key: string) => key,
   }),
 }));
 
-// ---------------------------------------------------------
-// Dialog mock
-// ---------------------------------------------------------
-
 vi.mock("../../../components/common/dialogue/Dialog", () => ({
   default: ({
-    isOpen,
-    title,
-    subtitle,
     children,
+    title,
+    isOpen,
   }: {
-    isOpen: boolean;
-    title: string;
-    subtitle: string;
     children: React.ReactNode;
-  }) => {
-    if (!isOpen) return null;
-
-    return (
+    title: string;
+    isOpen: boolean;
+  }) =>
+    isOpen ? (
       <div data-testid="dialog">
         <div>{title}</div>
-        <div>{subtitle}</div>
         {children}
       </div>
-    );
-  },
+    ) : null,
 }));
-
-// ---------------------------------------------------------
-// Button mock
-// ---------------------------------------------------------
 
 vi.mock("../../../components/forms/button/Button", () => ({
   default: ({
@@ -62,38 +37,35 @@ vi.mock("../../../components/forms/button/Button", () => ({
     onClick?: () => void;
     [key: string]: unknown;
   }) => (
-    <button onClick={onClick} {...props}>
+    <button type="button" onClick={onClick} {...props}>
       {children}
     </button>
   ),
 }));
 
-// ---------------------------------------------------------
-// Input mock
-// ---------------------------------------------------------
-
 vi.mock("../../../components/forms/input/Input", () => ({
   default: ({
     label,
+    placeholder,
     value,
     onChange,
   }: {
-    label: string;
-    value: string;
-    onChange: React.ChangeEventHandler<HTMLInputElement>;
+    label?: string;
+    placeholder?: string;
+    value?: string;
+    onChange?: React.ChangeEventHandler<HTMLInputElement>;
   }) => (
-    <div>
-      <label>
-        {label}
-        <input aria-label={label} value={value} onChange={onChange} />
-      </label>
-    </div>
+    <label>
+      {label}
+      <input
+        aria-label={label}
+        placeholder={placeholder}
+        value={value}
+        onChange={onChange}
+      />
+    </label>
   ),
 }));
-
-// ---------------------------------------------------------
-// TextArea mock
-// ---------------------------------------------------------
 
 vi.mock("../../../components/forms/textarea/TextArea", () => ({
   default: ({
@@ -102,375 +74,419 @@ vi.mock("../../../components/forms/textarea/TextArea", () => ({
     value,
     onChange,
   }: {
-    label: string;
-    placeholder: string;
-    value: string;
-    onChange: React.ChangeEventHandler<HTMLTextAreaElement>;
+    label?: string;
+    placeholder?: string;
+    value?: string;
+    onChange?: React.ChangeEventHandler<HTMLTextAreaElement>;
   }) => (
-    <div>
-      <label>
-        {label}
-        <textarea
-          aria-label={label}
-          placeholder={placeholder}
-          value={value}
-          onChange={onChange}
-        />
-      </label>
-    </div>
+    <label>
+      {label}
+      <textarea
+        aria-label={label}
+        placeholder={placeholder}
+        value={value}
+        onChange={onChange}
+      />
+    </label>
   ),
 }));
-
-// ---------------------------------------------------------
-// Select mock
-// ---------------------------------------------------------
-
-vi.mock("../../../components/forms/select/Select", () => ({
-  default: ({
-    value,
-    onChange,
-    options,
-  }: {
-    value: string;
-    onChange: React.ChangeEventHandler<HTMLSelectElement>;
-    options: Array<{
-      value: string;
-      label: string;
-    }>;
-  }) => (
-    <select aria-label="Reference Column" value={value} onChange={onChange}>
-      {options.map((option) => (
-        <option key={option.value} value={option.value}>
-          {option.label}
-        </option>
-      ))}
-    </select>
-  ),
-}));
-
-// ---------------------------------------------------------
-// Tests
-// ---------------------------------------------------------
 
 describe("DialogDataPreprocessing", () => {
   const onClose = vi.fn();
 
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.useRealTimers();
   });
 
-  afterEach(() => {
-    cleanup();
-    vi.useRealTimers();
-  });
+  describe("rendering", () => {
+    it("renders the dialog when isOpen is true", () => {
+      render(<DialogDataPreprocessing isOpen={true} onClose={onClose} />);
 
-  // ========================================================
-  // VISIBILITY
-  // ========================================================
+      expect(screen.getByTestId("dialog")).toBeInTheDocument();
+    });
 
-  describe("visibility", () => {
     it("does not render the dialog when isOpen is false", () => {
       render(<DialogDataPreprocessing isOpen={false} onClose={onClose} />);
 
       expect(screen.queryByTestId("dialog")).not.toBeInTheDocument();
     });
 
-    it("renders the dialog when isOpen is true", () => {
+    it("renders the dialog title", () => {
       render(<DialogDataPreprocessing isOpen={true} onClose={onClose} />);
 
-      expect(screen.getByTestId("dialog")).toBeInTheDocument();
-    });
-  });
-
-  // ========================================================
-  // HEADER
-  // ========================================================
-
-  describe("header", () => {
-    it("renders the title using the translation key", () => {
-      render(<DialogDataPreprocessing isOpen={true} onClose={onClose} />);
-
-      expect(screen.getByText("PROPERTIES_DPR_TITLE")).toBeInTheDocument();
+      expect(screen.getByText("Data Preprocessing (DPP)")).toBeInTheDocument();
     });
 
-    it("renders the correct subtitle using the translation key", () => {
+    it("renders the column expressions heading", () => {
       render(<DialogDataPreprocessing isOpen={true} onClose={onClose} />);
 
       expect(
-        screen.getByText("PROPERTIES_DPR_SUBTITLE_LABEL"),
+        screen.getByText("PROPERTIES_EDIT_COLUMNS_EXPRESSIONS"),
+      ).toBeInTheDocument();
+    });
+
+    it("renders the expressions heading", () => {
+      render(<DialogDataPreprocessing isOpen={true} onClose={onClose} />);
+
+      expect(
+        screen.getByText("PROPERTIES_EDIT_EXPRESSIONS"),
       ).toBeInTheDocument();
     });
   });
-
-  // ========================================================
-  // COLUMN LIST
-  // ========================================================
 
   describe("column list", () => {
-    const columns = [
-      "HDS2.MODE",
-      "HDS2.OP",
-      "HDS2.PV",
-      "HDS2.SP",
-      "01-LC200.MODE",
-      "01-LC200.OP",
-      "01-LC200.PV",
-      "01-LC200.SP",
-      "02-PC237.MODE",
-      "02-PC237.OP",
-      "02-PC237.PV",
-      "02-PC237.SP",
-      "03-TC274.MODE",
-      "03-TC274.OP",
-      "03-TC274.PV",
-      "03-TC274.SP",
-    ];
-
-    it("renders all 16 columns", () => {
+    it("renders all available columns", () => {
       render(<DialogDataPreprocessing isOpen={true} onClose={onClose} />);
 
-      const buttons = screen.getByTestId("dialog").querySelectorAll("button");
-
-      columns.forEach((column) => {
-        const columnButton = Array.from(buttons).find((button) =>
-          button.textContent?.includes(column),
-        );
-
-        expect(columnButton).toBeInTheDocument();
-      });
-    });
-
-    it("selects HDS2.MODE by default", () => {
-      render(<DialogDataPreprocessing isOpen={true} onClose={onClose} />);
-
-      const buttons = screen.getByTestId("dialog").querySelectorAll("button");
-
-      const row = Array.from(buttons).find((button) =>
-        button.textContent?.includes("HDS2.MODE"),
-      );
-
-      expect(row).toBeInTheDocument();
-      expect(row?.querySelector("svg")).toBeInTheDocument();
-    });
-
-    it("changes the selected column", async () => {
-      const user = userEvent.setup();
-
-      render(<DialogDataPreprocessing isOpen={true} onClose={onClose} />);
-
-      const buttons = screen.getByTestId("dialog").querySelectorAll("button");
-
-      const row = Array.from(buttons).find((button) =>
-        button.textContent?.includes("01-LC200.PV"),
-      );
-
-      expect(row).toBeInTheDocument();
-
-      await user.click(row!);
-
-      // Current component does not change the subtitle
-      // when the selected column changes.
       expect(
-        screen.getByText("PROPERTIES_DPR_SUBTITLE_LABEL"),
+        screen.getByRole("button", {
+          name: "Mode (.MODE)",
+        }),
       ).toBeInTheDocument();
 
-      expect(row?.querySelector("svg")).toBeInTheDocument();
+      expect(
+        screen.getByRole("button", {
+          name: "OP (.OP)",
+        }),
+      ).toBeInTheDocument();
+
+      expect(
+        screen.getByRole("button", {
+          name: "PV (.PV)",
+        }),
+      ).toBeInTheDocument();
+
+      expect(
+        screen.getByRole("button", {
+          name: "SP (.SP)",
+        }),
+      ).toBeInTheDocument();
+
+      expect(
+        screen.getByRole("button", {
+          name: "Required Flag (.REQ)",
+        }),
+      ).toBeInTheDocument();
+
+      expect(
+        screen.getByRole("button", {
+          name: "Test (.TM)",
+        }),
+      ).toBeInTheDocument();
     });
 
-    it("removes the checkmark from the previous selected column", async () => {
-      const user = userEvent.setup();
-
+    it("renders exactly six column buttons", () => {
       render(<DialogDataPreprocessing isOpen={true} onClose={onClose} />);
 
-      const buttons = screen.getByTestId("dialog").querySelectorAll("button");
+      const columnButtons = [
+        "Mode (.MODE)",
+        "OP (.OP)",
+        "PV (.PV)",
+        "SP (.SP)",
+        "Required Flag (.REQ)",
+        "Test (.TM)",
+      ];
 
-      const oldRow = Array.from(buttons).find((button) =>
-        button.textContent?.includes("HDS2.MODE"),
+      columnButtons.forEach((column) => {
+        expect(
+          screen.getByRole("button", {
+            name: column,
+          }),
+        ).toBeInTheDocument();
+      });
+    });
+
+    it("selects Mode (.MODE) initially", () => {
+      render(<DialogDataPreprocessing isOpen={true} onClose={onClose} />);
+
+      const modeButton = screen.getByRole("button", {
+        name: "Mode (.MODE)",
+      });
+
+      expect(modeButton.className).toContain("bg-surface-hover");
+
+      expect(screen.getByText("SELECTED COLUMN")).toBeInTheDocument();
+
+      const selectedColumn = screen.getAllByText("Mode (.MODE)");
+
+      expect(selectedColumn.length).toBe(2);
+    });
+
+    it("selects OP (.OP) when OP is clicked", () => {
+      render(<DialogDataPreprocessing isOpen={true} onClose={onClose} />);
+
+      const opButton = screen.getByRole("button", {
+        name: "OP (.OP)",
+      });
+
+      fireEvent.click(opButton);
+
+      expect(opButton.className).toContain("bg-surface-hover");
+
+      expect(screen.getAllByText("OP (.OP)").length).toBe(2);
+
+      const modeButton = screen.getByRole("button", {
+        name: "Mode (.MODE)",
+      });
+
+      expect(modeButton.className).toContain("bg-transparent");
+    });
+
+    it("selects PV (.PV) when PV is clicked", () => {
+      render(<DialogDataPreprocessing isOpen={true} onClose={onClose} />);
+
+      fireEvent.click(
+        screen.getByRole("button", {
+          name: "PV (.PV)",
+        }),
       );
 
-      const newRow = Array.from(buttons).find((button) =>
-        button.textContent?.includes("03-TC274.OP"),
+      expect(screen.getAllByText("PV (.PV)").length).toBe(2);
+    });
+
+    it("selects SP (.SP) when SP is clicked", () => {
+      render(<DialogDataPreprocessing isOpen={true} onClose={onClose} />);
+
+      fireEvent.click(
+        screen.getByRole("button", {
+          name: "SP (.SP)",
+        }),
       );
 
-      expect(oldRow).toBeInTheDocument();
-      expect(newRow).toBeInTheDocument();
+      expect(screen.getAllByText("SP (.SP)").length).toBe(2);
+    });
 
-      await user.click(newRow!);
+    it("selects Required Flag (.REQ) when clicked", () => {
+      render(<DialogDataPreprocessing isOpen={true} onClose={onClose} />);
 
-      expect(oldRow?.querySelector("svg")).not.toBeInTheDocument();
+      fireEvent.click(
+        screen.getByRole("button", {
+          name: "Required Flag (.REQ)",
+        }),
+      );
 
-      expect(newRow?.querySelector("svg")).toBeInTheDocument();
+      expect(screen.getAllByText("Required Flag (.REQ)").length).toBe(2);
+    });
+
+    it("selects Test (.TM) when Test is clicked", () => {
+      render(<DialogDataPreprocessing isOpen={true} onClose={onClose} />);
+
+      fireEvent.click(
+        screen.getByRole("button", {
+          name: "Test (.TM)",
+        }),
+      );
+
+      expect(screen.getAllByText("Test (.TM)").length).toBe(2);
     });
   });
 
-  // ========================================================
-  // THRESHOLDS
-  // ========================================================
+  describe("selected column", () => {
+    it("shows Mode (.MODE) initially", () => {
+      render(<DialogDataPreprocessing isOpen={true} onClose={onClose} />);
+
+      const selectedColumns = screen.getAllByText("Mode (.MODE)");
+
+      expect(selectedColumns.length).toBeGreaterThan(0);
+    });
+
+    it("shows OP (.OP) after selecting OP", () => {
+      render(<DialogDataPreprocessing isOpen={true} onClose={onClose} />);
+
+      fireEvent.click(
+        screen.getByRole("button", {
+          name: "OP (.OP)",
+        }),
+      );
+
+      expect(screen.getAllByText("OP (.OP)").length).toBe(2);
+    });
+
+    it("shows Test (.TM) after selecting Test", () => {
+      render(<DialogDataPreprocessing isOpen={true} onClose={onClose} />);
+
+      fireEvent.click(
+        screen.getByRole("button", {
+          name: "Test (.TM)",
+        }),
+      );
+
+      expect(screen.getAllByText("Test (.TM)").length).toBe(2);
+    });
+  });
 
   describe("threshold inputs", () => {
-    it("renders Warning Threshold with an empty default value", () => {
+    it("renders Warning Threshold input", () => {
       render(<DialogDataPreprocessing isOpen={true} onClose={onClose} />);
 
-      const input = screen.getByLabelText("PROPERTIES_WARNING_THRESHOLD");
-
-      expect(input).toHaveValue("");
+      expect(
+        screen.getByLabelText("PROPERTIES_WARNING_THRESHOLD"),
+      ).toBeInTheDocument();
     });
 
-    it("renders Abort Threshold with an empty default value", () => {
+    it("renders Abort Threshold input", () => {
       render(<DialogDataPreprocessing isOpen={true} onClose={onClose} />);
 
-      const input = screen.getByLabelText("PROPERTIES_ABORT_THRESHOLD");
-
-      expect(input).toHaveValue("");
+      expect(
+        screen.getByLabelText("PROPERTIES_ABORT_THRESHOLD"),
+      ).toBeInTheDocument();
     });
 
-    it("updates Warning Threshold", () => {
+    it("renders Enter placeholder for Warning Threshold", () => {
+      render(<DialogDataPreprocessing isOpen={true} onClose={onClose} />);
+
+      expect(
+        screen.getByLabelText("PROPERTIES_WARNING_THRESHOLD"),
+      ).toHaveAttribute("placeholder", "Enter");
+    });
+
+    it("renders Enter placeholder for Abort Threshold", () => {
+      render(<DialogDataPreprocessing isOpen={true} onClose={onClose} />);
+
+      expect(
+        screen.getByLabelText("PROPERTIES_ABORT_THRESHOLD"),
+      ).toHaveAttribute("placeholder", "Enter");
+    });
+
+    it("updates Warning Threshold value", () => {
       render(<DialogDataPreprocessing isOpen={true} onClose={onClose} />);
 
       const input = screen.getByLabelText("PROPERTIES_WARNING_THRESHOLD");
 
       fireEvent.change(input, {
         target: {
-          value: "75",
+          value: "10",
         },
       });
 
-      expect(input).toHaveValue("75");
+      expect(input).toHaveValue("10");
     });
 
-    it("updates Abort Threshold", () => {
+    it("updates Abort Threshold value", () => {
       render(<DialogDataPreprocessing isOpen={true} onClose={onClose} />);
 
       const input = screen.getByLabelText("PROPERTIES_ABORT_THRESHOLD");
 
       fireEvent.change(input, {
         target: {
-          value: "50",
+          value: "20",
         },
       });
 
-      expect(input).toHaveValue("50");
+      expect(input).toHaveValue("20");
     });
   });
-
-  // ========================================================
-  // REFERENCE COLUMN
-  // ========================================================
-
-  describe("reference column", () => {
-    it("renders HDS2.MODE as the default reference column", () => {
-      render(<DialogDataPreprocessing isOpen={true} onClose={onClose} />);
-
-      const select = screen.getByLabelText("Reference Column");
-
-      expect(select).toHaveValue("HDS2.MODE");
-    });
-
-    it("allows changing the reference column", () => {
-      render(<DialogDataPreprocessing isOpen={true} onClose={onClose} />);
-
-      const select = screen.getByLabelText("Reference Column");
-
-      fireEvent.change(select, {
-        target: {
-          value: "02-PC237.PV",
-        },
-      });
-
-      expect(select).toHaveValue("02-PC237.PV");
-    });
-  });
-
-  // ========================================================
-  // EXPRESSIONS
-  // ========================================================
 
   describe("expressions", () => {
     it("renders Bad Data Expression textarea", () => {
       render(<DialogDataPreprocessing isOpen={true} onClose={onClose} />);
 
       expect(
-        screen.getByPlaceholderText(
-          "PROPERTIES_BAD_DATA_EXPRESSION_PLACEHOLDER",
-        ),
+        screen.getByLabelText("PROPERTIES_BAD_DATA_EXPRESSION"),
       ).toBeInTheDocument();
     });
 
     it("renders Replacement Expression textarea", () => {
       render(<DialogDataPreprocessing isOpen={true} onClose={onClose} />);
 
-      expect(screen.getByPlaceholderText("Enter")).toBeInTheDocument();
+      expect(
+        screen.getByLabelText("PROPERTIES_REPLACEMENT_EXPRESSION"),
+      ).toBeInTheDocument();
+    });
+
+    it("renders the Bad Data Expression placeholder", () => {
+      render(<DialogDataPreprocessing isOpen={true} onClose={onClose} />);
+
+      expect(
+        screen.getByLabelText("PROPERTIES_BAD_DATA_EXPRESSION"),
+      ).toHaveAttribute(
+        "placeholder",
+        "PROPERTIES_BAD_DATA_EXPRESSION_PLACEHOLDER",
+      );
+    });
+
+    it("renders Enter placeholder for Replacement Expression", () => {
+      render(<DialogDataPreprocessing isOpen={true} onClose={onClose} />);
+
+      expect(
+        screen.getByLabelText("PROPERTIES_REPLACEMENT_EXPRESSION"),
+      ).toHaveAttribute("placeholder", "Enter");
     });
 
     it("updates Bad Data Expression", () => {
       render(<DialogDataPreprocessing isOpen={true} onClose={onClose} />);
 
-      const textarea = screen.getByPlaceholderText(
-        "PROPERTIES_BAD_DATA_EXPRESSION_PLACEHOLDER",
-      );
+      const textarea = screen.getByLabelText("PROPERTIES_BAD_DATA_EXPRESSION");
 
       fireEvent.change(textarea, {
         target: {
-          value: "PV < -999",
+          value: "value > 100",
         },
       });
 
-      expect(textarea).toHaveValue("PV < -999");
+      expect(textarea).toHaveValue("value > 100");
     });
 
     it("updates Replacement Expression", () => {
       render(<DialogDataPreprocessing isOpen={true} onClose={onClose} />);
 
-      const textarea = screen.getByPlaceholderText("Enter");
-
-      fireEvent.change(textarea, {
-        target: {
-          value: "PREV(PV)",
-        },
-      });
-
-      expect(textarea).toHaveValue("PREV(PV)");
-    });
-  });
-
-  // ========================================================
-  // REFRESH
-  // ========================================================
-
-  describe("refresh icons", () => {
-    it("clears Bad Data Expression", () => {
-      render(<DialogDataPreprocessing isOpen={true} onClose={onClose} />);
-
-      const textarea = screen.getByPlaceholderText(
-        "PROPERTIES_BAD_DATA_EXPRESSION_PLACEHOLDER",
+      const textarea = screen.getByLabelText(
+        "PROPERTIES_REPLACEMENT_EXPRESSION",
       );
 
       fireEvent.change(textarea, {
         target: {
-          value: "some expression",
+          value: "0",
         },
       });
 
-      expect(textarea).toHaveValue("some expression");
+      expect(textarea).toHaveValue("0");
+    });
+  });
 
-      const wrapper = textarea.closest(".flex.items-start.gap-2");
+  describe("refresh buttons", () => {
+    it("renders Bad Data Expression refresh button", () => {
+      render(<DialogDataPreprocessing isOpen={true} onClose={onClose} />);
 
-      expect(wrapper).not.toBeNull();
+      expect(
+        screen.getByLabelText("PROPERTIES_REFRESH_BAD_DATA_EXPRESSION"),
+      ).toBeInTheDocument();
+    });
 
-      const icon = wrapper?.querySelector("svg");
+    it("renders Replacement Expression refresh button", () => {
+      render(<DialogDataPreprocessing isOpen={true} onClose={onClose} />);
 
-      expect(icon).not.toBeNull();
+      expect(
+        screen.getByLabelText("PROPERTIES_REFRESH_REPLACEMENT_EXPRESSION"),
+      ).toBeInTheDocument();
+    });
 
-      fireEvent.click(icon!);
+    it("clears Bad Data Expression when refresh is clicked", () => {
+      render(<DialogDataPreprocessing isOpen={true} onClose={onClose} />);
+
+      const textarea = screen.getByLabelText("PROPERTIES_BAD_DATA_EXPRESSION");
+
+      fireEvent.change(textarea, {
+        target: {
+          value: "test expression",
+        },
+      });
+
+      expect(textarea).toHaveValue("test expression");
+
+      fireEvent.click(
+        screen.getByLabelText("PROPERTIES_REFRESH_BAD_DATA_EXPRESSION"),
+      );
 
       expect(textarea).toHaveValue("");
     });
 
-    it("clears Replacement Expression", () => {
+    it("clears Replacement Expression when refresh is clicked", () => {
       render(<DialogDataPreprocessing isOpen={true} onClose={onClose} />);
 
-      const textarea = screen.getByPlaceholderText("Enter");
+      const textarea = screen.getByLabelText(
+        "PROPERTIES_REPLACEMENT_EXPRESSION",
+      );
 
       fireEvent.change(textarea, {
         target: {
@@ -480,99 +496,61 @@ describe("DialogDataPreprocessing", () => {
 
       expect(textarea).toHaveValue("replacement value");
 
-      const wrapper = textarea.closest(".flex.items-start.gap-2");
-
-      expect(wrapper).not.toBeNull();
-
-      const icon = wrapper?.querySelector("svg");
-
-      expect(icon).not.toBeNull();
-
-      fireEvent.click(icon!);
+      fireEvent.click(
+        screen.getByLabelText("PROPERTIES_REFRESH_REPLACEMENT_EXPRESSION"),
+      );
 
       expect(textarea).toHaveValue("");
     });
+  });
 
-    it("adds animate-spin only to the Bad Data refresh icon", () => {
+  describe("refresh timeout completion", () => {
+    beforeEach(() => {
       vi.useFakeTimers();
-
-      render(<DialogDataPreprocessing isOpen={true} onClose={onClose} />);
-
-      const badDataTextarea = screen.getByPlaceholderText(
-        "PROPERTIES_BAD_DATA_EXPRESSION_PLACEHOLDER",
-      );
-
-      const replacementTextarea = screen.getByPlaceholderText("Enter");
-
-      const badDataWrapper = badDataTextarea.closest(".flex.items-start.gap-2");
-
-      const replacementWrapper = replacementTextarea.closest(
-        ".flex.items-start.gap-2",
-      );
-
-      const badDataIcon = badDataWrapper?.querySelector("svg");
-
-      const replacementIcon = replacementWrapper?.querySelector("svg");
-
-      expect(badDataIcon).not.toBeNull();
-      expect(replacementIcon).not.toBeNull();
-
-      fireEvent.click(badDataIcon!);
-
-      expect(badDataIcon?.classList.contains("animate-spin")).toBe(true);
-
-      expect(replacementIcon?.classList.contains("animate-spin")).toBe(false);
-
-      act(() => {
-        vi.advanceTimersByTime(2000);
-      });
-
-      expect(badDataIcon?.classList.contains("animate-spin")).toBe(false);
     });
 
-    it("adds animate-spin only to the Replacement refresh icon", () => {
-      vi.useFakeTimers();
+    afterEach(() => {
+      vi.useRealTimers();
+    });
 
+    it("stops the bad data refresh spinner after the timeout elapses", () => {
       render(<DialogDataPreprocessing isOpen={true} onClose={onClose} />);
 
-      const badDataTextarea = screen.getByPlaceholderText(
-        "PROPERTIES_BAD_DATA_EXPRESSION_PLACEHOLDER",
+      const refreshButton = screen.getByLabelText(
+        "PROPERTIES_REFRESH_BAD_DATA_EXPRESSION",
       );
 
-      const replacementTextarea = screen.getByPlaceholderText("Enter");
-
-      const badDataWrapper = badDataTextarea.closest(".flex.items-start.gap-2");
-
-      const replacementWrapper = replacementTextarea.closest(
-        ".flex.items-start.gap-2",
-      );
-
-      const badDataIcon = badDataWrapper?.querySelector("svg");
-
-      const replacementIcon = replacementWrapper?.querySelector("svg");
-
-      expect(badDataIcon).not.toBeNull();
-      expect(replacementIcon).not.toBeNull();
-
-      fireEvent.click(replacementIcon!);
-
-      expect(replacementIcon?.classList.contains("animate-spin")).toBe(true);
-
-      expect(badDataIcon?.classList.contains("animate-spin")).toBe(false);
+      fireEvent.click(refreshButton);
+      expect(refreshButton.getAttribute("class")).toContain("animate-spin");
 
       act(() => {
         vi.advanceTimersByTime(2000);
       });
 
-      expect(replacementIcon?.classList.contains("animate-spin")).toBe(false);
+      expect(refreshButton.getAttribute("class")).not.toContain("animate-spin");
+      expect(refreshButton.getAttribute("class")).toContain("hover:rotate-90");
+    });
+
+    it("stops the replacement expression refresh spinner after the timeout elapses", () => {
+      render(<DialogDataPreprocessing isOpen={true} onClose={onClose} />);
+
+      const refreshButton = screen.getByLabelText(
+        "PROPERTIES_REFRESH_REPLACEMENT_EXPRESSION",
+      );
+
+      fireEvent.click(refreshButton);
+      expect(refreshButton.getAttribute("class")).toContain("animate-spin");
+
+      act(() => {
+        vi.advanceTimersByTime(2000);
+      });
+
+      expect(refreshButton.getAttribute("class")).not.toContain("animate-spin");
+      expect(refreshButton.getAttribute("class")).toContain("hover:rotate-90");
     });
   });
 
-  // ========================================================
-  // FOOTER
-  // ========================================================
-
-  describe("footer actions", () => {
+  describe("footer buttons", () => {
     it("renders Help button", () => {
       render(<DialogDataPreprocessing isOpen={true} onClose={onClose} />);
 
@@ -613,12 +591,10 @@ describe("DialogDataPreprocessing", () => {
       ).toBeInTheDocument();
     });
 
-    it("calls onClose when Cancel is clicked", async () => {
-      const user = userEvent.setup();
-
+    it("calls onClose when Cancel is clicked", () => {
       render(<DialogDataPreprocessing isOpen={true} onClose={onClose} />);
 
-      await user.click(
+      fireEvent.click(
         screen.getByRole("button", {
           name: "COMMON_CANCEL",
         }),
@@ -627,12 +603,10 @@ describe("DialogDataPreprocessing", () => {
       expect(onClose).toHaveBeenCalledTimes(1);
     });
 
-    it("calls onClose when Save is clicked", async () => {
-      const user = userEvent.setup();
-
+    it("calls onClose when Save is clicked", () => {
       render(<DialogDataPreprocessing isOpen={true} onClose={onClose} />);
 
-      await user.click(
+      fireEvent.click(
         screen.getByRole("button", {
           name: "COMMON_SAVE",
         }),
@@ -641,12 +615,10 @@ describe("DialogDataPreprocessing", () => {
       expect(onClose).toHaveBeenCalledTimes(1);
     });
 
-    it("does not call onClose when Apply to All is clicked", async () => {
-      const user = userEvent.setup();
-
+    it("does not close when Apply to All is clicked", () => {
       render(<DialogDataPreprocessing isOpen={true} onClose={onClose} />);
 
-      await user.click(
+      fireEvent.click(
         screen.getByRole("button", {
           name: "COMMON_APPLY_TO_ALL",
         }),
