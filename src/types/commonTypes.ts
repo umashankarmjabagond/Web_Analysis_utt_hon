@@ -14,16 +14,20 @@ export interface ConnectionTreeProps {
   checkedIds: string[];
   onCheck: (id: string) => void;
   showCheckbox?: boolean;
+
+  showShared?: boolean;
+  onRemove?: (id: string) => void;
+  rightPanel?: boolean;
 }
 
 export interface ConnectionTreeNodeProps {
   node: TreeNodeData;
-  level: number;
-  expandedIds: Set<string>;
   checkedIds: string[];
-  onToggle: (id: string) => void;
   onCheck: (id: string) => void;
   showCheckbox?: boolean;
+  showShared?: boolean;
+  onRemove?: (id: string) => void;
+  rightPanel?: boolean;
 }
 
 export interface BreadcrumbItem {
@@ -64,6 +68,7 @@ export interface DialogProps {
   onClose: () => void;
   width?: number | string;
   showIcon?: boolean;
+  icon?: ReactNode;
   className?: string;
   titleClassName?: string;
   subtitleClassName?: string;
@@ -249,4 +254,9 @@ export interface DropdownProps {
   className?: string;
   menuClassName?: string;
   itemClassName?: string;
+}
+
+export interface DialogDataPreprocessingProps {
+  isOpen: boolean;
+  onClose: () => void;
 }

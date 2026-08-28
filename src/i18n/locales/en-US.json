@@ -158,6 +158,8 @@
   "COMMON_NONE": "None",
 
   "PROPERTIES_DATA_PREPROCESSING_WIZARD": "Data Preprocessing Wizard",
+  "PROPERTIES_DPR_TITLE": "DPR",
+  "PROPERTIES_DPR_SUBTITLE_LABEL": "Data Preprocessing",
   "PROPERTIES_EDIT_COLUMNS_EXPRESSIONS": "Edit the expressions of columns you wish to preprocess",
   "PROPERTIES_EDIT_EXPRESSIONS": "Edit the expressions you wish to preprocess",
   "PROPERTIES_THRESHOLD": "Threshold",
@@ -171,6 +173,8 @@
   "PROPERTIES_REPLACEMENT_EXPRESSION": "Replacement Expression",
   "PROPERTIES_REPLACEMENT_EXPRESSION_PLACEHOLDER": "Enter replacement expression...",
   "PROPERTIES_REFRESH_REPLACEMENT_EXPRESSION": "Refresh replacement expression",
+  "PROPERTIES_SELECTED_COLUMN": "SELECTED COLUMN",
+  "Enter": "Enter",
 
   "PROJECT_ANALYSIS_TITLE": "Project and Analysis",
   "PROJECT_ANALYSIS_CHOOSE_PROJECT": "Choose a project",
@@ -294,8 +298,8 @@
 
   "CONNECTIONS_CONFIGURE_INPUT_COLUMNS": "Configure Input Columns",
   "CONNECTIONS_DATA_PREPROCESSING": "Data Preprocessing",
-  "CONNECTIONS_SELECT_INPUTS_MESSAGE": "Please select the inputs to be given from",
-  "CONNECTIONS_TO": "to",
+  "CONNECTIONS_MESSAGE_PREFIX": "Choose which",
+  "CONNECTIONS_MESSAGE_SUFFIX": "outputs are to be shared as inputs to",
 
   "TOOLBAR_IMPORT_SUCCESS": "Import Successful",
   "TOOLBAR_WORKFLOW_IMPORTED_SUCCESSFULLY": "Workflow imported successfully.",

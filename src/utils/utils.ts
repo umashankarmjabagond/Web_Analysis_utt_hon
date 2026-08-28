@@ -101,14 +101,9 @@ export const getSelectedTree = (
 
   const mergedIds = [...existingIds, ...leftCheckedIds];
 
-  const tree = buildSelectedTreeFromSource(
-    allColumnsData,
-    mergedIds,
-  );
+  const tree = buildSelectedTreeFromSource(allColumnsData, mergedIds);
 
-  return tree.length > 0
-    ? tree
-    : DEFAULT_SELECTED_COLUMNS;
+  return tree.length > 0 ? tree : DEFAULT_SELECTED_COLUMNS;
 };
 
 export function prepareWorkflowForCanvas(
