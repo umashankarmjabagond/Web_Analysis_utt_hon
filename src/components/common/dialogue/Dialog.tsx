@@ -25,7 +25,7 @@ const Dialog = ({
         className={cn(
           "relative flex max-h-[90vh] flex-col overflow-hidden rounded-xl",
           "border border-dialog-border",
-          "bg-[#111111] text-dialog-foreground",
+          "bg-[#1b1b1b] text-dialog-foreground",
           "shadow-dialog-shadow",
           className,
         )}

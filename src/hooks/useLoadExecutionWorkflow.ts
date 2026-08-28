@@ -6,6 +6,7 @@ import {
   getTemplateExecutionWorkflows,
 } from "../services/analysisTemplateExecution/templateExecutionService.ts";
 import { buildTemplateCanvas } from "../pages/analysis/template-execution/flowBuilders/templateFlowBuilder.ts";
+import type { ExecutionViewMode } from "../types/templateExecution.ts";
 
 const PAGE_SIZE = 10;
 
@@ -22,6 +23,11 @@ export const useLoadExecutionWorkflow = (
   // Selection
   const setSelectedExecutionItem = useTemplateExecutionStore(
     (state) => state.setSelectedExecutionItem,
+  );
+
+  // view mode
+  const executionViewMode = useTemplateExecutionStore(
+    (state) => state.executionViewMode,
   );
 
   // Pagination state
@@ -50,6 +56,7 @@ export const useLoadExecutionWorkflow = (
 
       const { response, canvas } = await fetchWorkflows(
         templateId,
+        executionViewMode,
         offset,
         startY,
       );
@@ -66,6 +73,7 @@ export const useLoadExecutionWorkflow = (
   }, [
     templateId,
     itemId,
+    executionViewMode,
     isLoadingMore,
     hasMore,
     appendWorkflow,
@@ -91,7 +99,12 @@ export const useLoadExecutionWorkflow = (
       setIsLoadingMore(true);
 
       try {
-        const { response, canvas } = await fetchWorkflows(templateId, 0);
+        const { response, canvas } = await fetchWorkflows(
+          templateId,
+          executionViewMode,
+          0,
+          undefined,
+        );
 
         setSelectedExecutionItem(response.template);
         loadWorkflow(canvas.nodes, canvas.edges); // resets hasMore/isLoadingMore
@@ -107,13 +120,14 @@ export const useLoadExecutionWorkflow = (
 
     loadInitial();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [templateId, itemId]);
+  }, [templateId, itemId, executionViewMode]);
 
   return { loadMore, hasMore, isLoadingMore };
 };
 
 const fetchWorkflows = async (
   templateId: string,
+  executionViewMode: ExecutionViewMode,
   offset: number,
   startY?: number,
 ) => {
@@ -122,7 +136,11 @@ const fetchWorkflows = async (
     limit: PAGE_SIZE,
   });
 
-  const canvas = buildTemplateCanvas(response.workflows, startY);
+  const canvas = buildTemplateCanvas(
+    response.workflows,
+    executionViewMode,
+    startY,
+  );
 
   return { response, canvas };
 };

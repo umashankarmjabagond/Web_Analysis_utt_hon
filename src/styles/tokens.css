@@ -46,6 +46,7 @@
   --gray-1800: #2e2e2e;
   --gray-1850: #868686;
   --gray-1900: #454545;
+  --gray-1950:#4d4d4d;
 
   /* White  */
   --white-50: #ffffff;
@@ -110,6 +111,8 @@
   --danger: var(--red-100);
   --info: var(--blue-200);
 
+  
+
   /* Shadow */
   --shadow-100: 0 1px 2px rgb(0 0 0 / 0.05); /* Extra Small */
   --shadow-200:
@@ -170,7 +173,9 @@
   --border-inverse: var(--white-400); /* #F0F0F0 */
   --border-surface: var(--gray-1200); /* #303030 */
   --border-black: var(--black-100); /* #000000 */
-  --border-gray: var(--gray-1900); /* #454545 */
+  --border-gray:var( --gray-1850); /*#454545*/
+  --border-button:var(--gray-1900) ; /*#4d4d4d*/
+  
 
   /* Selection */
   --selection-background: var(--navy-200); /* #0b4872 */
@@ -822,6 +827,7 @@
   --color-surface-control: var(--surface-control);
   --color-surface-emphasis: var(--surface-emphasis);
   --color-surface-accent: var(--surface-accent);
+  
 
   /* Foreground / Text / Icon */
   --color-foreground: var(--foreground);
@@ -848,6 +854,8 @@
   --color-border-surface: var(--border-surface);
   --color-border-black: var(--border-black);
   --color-border-gray: var(--border-gray);
+  --color-border-button:var(--border-button);
+  
 
   /* Selection */
   --color-selection-indicator: var(--selection-indicator);
