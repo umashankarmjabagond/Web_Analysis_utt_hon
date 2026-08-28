@@ -4,9 +4,11 @@ import {
   buildCompactSequence,
   buildInDegreeMap,
   computeLongestPathToEnd,
-  type SequenceEdge,
-  type SequenceNode,
 } from "./compactSequenceBuilder";
+import type {
+  SequenceEdge,
+  SequenceNode,
+} from "../../../../types/templateExecution";
 
 describe("buildChildrenMap", () => {
   it("maps each node to its direct child nodes", () => {
