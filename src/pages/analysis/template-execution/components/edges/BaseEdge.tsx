@@ -21,6 +21,7 @@ export default function ExecuctionWorkflowEdge({
     targetY,
     sourcePosition,
     targetPosition,
+    offset: data?.offset,
   });
 
   return (
