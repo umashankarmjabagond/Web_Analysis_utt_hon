@@ -1,14 +1,7 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import dataSourceConfiguration from "../../mock/dataSource.json";
-import {
-  ArrowRight,
-  CylinderIcon,
-  HelpCircle,
-  Plus,
-  Settings,
-  X,
-} from "lucide-react";
+import { HelpCircle, Plus, X } from "lucide-react";
 
 import Button from "../forms/button/Button";
 import Select from "../forms/select/Select";
@@ -78,11 +71,7 @@ const getDefaultTags = (
     }));
 };
 
-export default function DataSource({
-  dataSourceName = "HDS2",
-  onClose,
-  onSave,
-}: DataSourceDialogProps) {
+export default function DataSource({ onClose, onSave }: DataSourceDialogProps) {
   const { t } = useTranslation();
 
   const [helpActive, setHelpActive] = useState(false);
@@ -325,38 +314,6 @@ export default function DataSource({
           : "min-h-[486px] max-h-[776.89px] h-auto",
       )}
     >
-      {/* HEADER */}
-      <div className="flex items-start px-[36px] pt-[32px]">
-        {" "}
-        <div className=" relative flex h-[36px] w-[36px] items-center justify-center rounded-[6px] border border-border-gray bg-accordion-background ">
-          {" "}
-          <CylinderIcon size={16} strokeWidth={1.5} />
-          <ArrowRight
-            size={7}
-            strokeWidth={3}
-            className="absolute left-[14px] top-[15px]"
-          />{" "}
-        </div>
-        <div className="ml-[14px]">
-          {" "}
-          <h2 className="text-[18px] font-bold">Data Source (DS)</h2>
-          <p className="text-[12px] text-table-header-foreground">
-            {" "}
-            Data Source · {dataSourceName}{" "}
-          </p>{" "}
-        </div>
-        <div className="ml-auto flex gap-[12px]">
-          {" "}
-          <button>
-            {" "}
-            <Settings size={14} />{" "}
-          </button>
-          <button onClick={onClose}>
-            {" "}
-            <X size={14} />{" "}
-          </button>{" "}
-        </div>{" "}
-      </div>
       {/* BODY */}
       <div
         className={cn(

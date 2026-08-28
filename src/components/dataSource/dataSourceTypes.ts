@@ -1,5 +1,4 @@
 export interface DataSourceDialogProps {
-  dataSourceName?: string;
   onClose?: () => void;
   onSave?: (data: unknown) => void;
 }

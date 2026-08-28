@@ -6,6 +6,7 @@ import WorkflowBuilder from "../../pages/workflow/WorkflowBuilder";
 import Dashboard from "../../pages/dashboard/Dashboard";
 import DashboardContent from "../../pages/dashboard/DashboardContent";
 import DataSourcePreview from "../../components/dataSource/DataSourcePreview";
+import DataSource from "../../components/dataSource/DataSource";
 
 export default function AppRoutes() {
   return (
@@ -14,7 +15,7 @@ export default function AppRoutes() {
         <Route index element={<Navigate to={ROUTES.DASHBOARD} replace />} />
         <Route path={ROUTES.WORKFLOW} element={<WorkflowBuilder />} />
         <Route path={ROUTES.DASHBOARD} element={<Dashboard />} />
-        <Route path="/dashboard/:plant" element={<DashboardContent />} />
+        <Route path="/dashboard/:plant" element={<DataSource />} />
         <Route
           path="/dashboard/:plant/:template"
           element={<DashboardContent />}
