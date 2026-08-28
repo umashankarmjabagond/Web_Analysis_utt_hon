@@ -469,7 +469,7 @@ export default function DataSource({
 
                 <button
                   type="button"
-                  className="text-[12px] text-surface-accent"
+                  className="text-[12px] text-surface-accent font-bold"
                   onClick={handleAddAllTags}
                 >
                   Add All
@@ -718,6 +718,9 @@ export default function DataSource({
                 variant="primary"
                 fill="outline"
                 size="medium"
+                text-14px
+                font-bold
+                className="w-[173.63px] h-[34px]"
                 onClick={handleAddManualTag}
               >
                 Add Tag Manually

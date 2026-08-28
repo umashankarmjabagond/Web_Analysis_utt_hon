@@ -1,11 +1,8 @@
-export type DataSourceType = "text-file" | "odbc";
 
 export interface DataSourceDialogProps {
-  type: DataSourceType;
   dataSourceName?: string;
   onClose?: () => void;
   onSave?: (data: unknown) => void;
-  onTypeChange?: (type: DataSourceType) => void;
 }
 
 export interface FormData {
@@ -19,43 +16,30 @@ export interface FormData {
   uniqueId: boolean;
   header: boolean;
   timeColumn: string;
-  
-
-  // ODBC
-  sqlDataSource: string;
-  authentication: "trusted" | "username-password";
-  username: string;
-  password: string;
-  transposeOutputData: boolean;
-  directSqlQuery: boolean;
-  sqlQuery: string;
 }
 
-export type FormErrors = Partial<Record<keyof FormData, string>>;
-export interface TextFileSectionProps {
-  formData: FormData;
-  onChange: <K extends keyof FormData>(
-    key: K,
-    value: FormData[K],
-  ) => void;
-  errors: Partial<Record<keyof FormData, string>>;
-  
-}
+ type ControllerType = "regulatory" | "mpc";
 
-export interface OdbcSectionProps {
-  formData: FormData;
-  onChange: <K extends keyof FormData>(
-    key: K,
-    value: FormData[K],
-  ) => void;
-  errors: Partial<Record<keyof FormData, string>>;
-}
+type TemplateType =
+  | "standalone-controller"
+  | "cascade"
+  | "instrument"
+  | "analyzers"
+  | "rmpct"
+  | "dmc"
+  | "generic-apc"
+  | "inferentials";
 
-export interface RadioProps {
+type TagDefinition = {
+  id: string;
+  columnName: string;
+  extension: string;
+};
+
+type TagDefinitions = Record<ControllerType, Record<string, TagDefinition[]>>;
+
+type SelectedTag = {
   name: string;
-  value: string;
-  checked: boolean;
-  label: string;
-  onChange: (value: string) => void;
-}
-
+  extension: string;
+  isManual: boolean;
+};
