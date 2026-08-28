@@ -1,6 +1,13 @@
 import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { MarkerType, ReactFlow, useReactFlow, type Edge } from "@xyflow/react";
+import {
+  ConnectionLineType,
+  ConnectionMode,
+  MarkerType,
+  ReactFlow,
+  useReactFlow,
+  type Edge,
+} from "@xyflow/react";
 import {
   edgeTypes,
   nodeTypes,
@@ -11,12 +18,26 @@ import {
 import { useWorkflowStore } from "../../../store/workflowStore";
 import { backendToFlow } from "../../../utils/utils";
 import Dialog from "../../../components/common/dialogue/Dialog";
-import GroupedSelector from "../../../components/forms/select/GroupedSelector";
 import {
   attributeCatalogSections,
   dummyWorkflows,
 } from "../workflowPanelData ";
 import ZoomControls from "./ZoomControls";
+import AttributeSelector from "../../../components/forms/select/AttributeSelector";
+import NodeContextMenu from "./NodeContextMenu";
+
+type NodeInsertDirection = "top" | "right" | "bottom" | "left";
+
+interface NodeInsertRequest {
+  nodeId: string;
+  direction: NodeInsertDirection;
+}
+
+interface NodeContextMenuState {
+  x: number;
+  y: number;
+  node: WorkflowNode;
+}
 
 const generateUniqueName = (
   baseName: string,
@@ -84,8 +105,6 @@ export default function Canvas() {
     deleteSelectedNodes,
     deleteSelectedEdges,
     setSelectedNode,
-    setSelectedEdge,
-    selectedEdge,
     activeTool,
     saveHistory,
     clearWorkflow,
@@ -96,6 +115,13 @@ export default function Canvas() {
 
   const { screenToFlowPosition } = useReactFlow<WorkflowNode, Edge>();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const [nodeInsertRequest, setNodeInsertRequest] =
+    useState<NodeInsertRequest | null>(null);
+
+  const [contextMenu, setContextMenu] = useState<NodeContextMenuState | null>(
+    null,
+  );
 
   useEffect(() => {
     clearWorkflow();
@@ -231,8 +257,22 @@ export default function Canvas() {
     [setSelectedNode],
   );
 
+  const handleNodeContextMenu = useCallback(
+    (event: React.MouseEvent, node: WorkflowNode) => {
+      event.preventDefault();
+      event.stopPropagation();
+
+      setContextMenu({
+        x: event.clientX,
+        y: event.clientY,
+        node,
+      });
+    },
+    [],
+  );
   const handlePaneClick = useCallback(() => {
     setSelectedNode(null);
+    setContextMenu(null);
   }, [setSelectedNode]);
 
   useEffect(() => {
@@ -240,6 +280,10 @@ export default function Canvas() {
       if (event.key === "Delete") {
         deleteSelectedEdges();
         deleteSelectedNodes();
+      }
+
+      if (event.key === "Escape") {
+        setContextMenu(null);
       }
     };
 
@@ -254,22 +298,103 @@ export default function Canvas() {
     saveHistory();
   }, [saveHistory]);
 
+  const handleNodeInsert = useCallback((request: NodeInsertRequest) => {
+    setNodeInsertRequest(request);
+    setIsDialogOpen(true);
+  }, []);
+
+  const flowNodes = nodes.map((node) => ({
+    ...node,
+    data: {
+      ...node.data,
+      onNodeInsert: handleNodeInsert,
+    },
+  }));
+
   const flowEdges = edges;
 
-  const handleAddNewNode = (item: WorkflowListItem) => {
-    if (!selectedEdge || !item.element) {
+  // const handleAddNewNode = (item: WorkflowListItem) => {
+  //   if (!selectedEdge || !item.element) {
+  //     return;
+  //   }
+
+  //   saveHistory();
+
+  //   const sourceNode = nodes.find((node) => node.id === selectedEdge.source);
+
+  //   const targetNode = nodes.find((node) => node.id === selectedEdge.target);
+
+  //   if (!sourceNode || !targetNode) {
+  //     return;
+  //   }
+
+  //   const element = structuredClone(item.element);
+
+  //   element.Name = generateUniqueName(
+  //     element.elementType,
+  //     nodes as WorkflowNode[],
+  //   );
+
+  //   const newNode: WorkflowNode = {
+  //     id: element.Name,
+  //     type: "baseNode",
+  //     position: {
+  //       x: (sourceNode.position.x + targetNode.position.x) / 2,
+  //       y: (sourceNode.position.y + targetNode.position.y) / 2,
+  //     },
+  //     data: {
+  //       label: item.title,
+  //       element,
+  //       catalogId: item.id,
+  //     },
+  //   };
+
+  //   const newEdges: Edge[] = [
+  //     ...edges.filter((edge) => edge.id !== selectedEdge.id),
+
+  //     {
+  //       id: `${sourceNode.id}-${newNode.id}`,
+  //       source: sourceNode.id,
+  //       target: newNode.id,
+  //       type: "workflow",
+  //       markerEnd: {
+  //         type: MarkerType.ArrowClosed,
+  //       },
+  //     },
+
+  //     {
+  //       id: `${newNode.id}-${targetNode.id}`,
+  //       source: newNode.id,
+  //       target: targetNode.id,
+  //       type: "workflow",
+  //       markerEnd: {
+  //         type: MarkerType.ArrowClosed,
+  //       },
+  //     },
+  //   ];
+
+  //   setNodes([...nodes, newNode]);
+  //   setEdges(newEdges);
+
+  //   setSelectedEdge(null);
+  //   setIsDialogOpen(false);
+  // };
+
+  const NODE_INSERT_OFFSET = 100;
+  const handleNodeInsertSelection = (item: WorkflowListItem) => {
+    if (!nodeInsertRequest || !item.element) {
+      return;
+    }
+
+    const existingNode = nodes.find(
+      (node) => node.id === nodeInsertRequest.nodeId,
+    );
+
+    if (!existingNode) {
       return;
     }
 
     saveHistory();
-
-    const sourceNode = nodes.find((node) => node.id === selectedEdge.source);
-
-    const targetNode = nodes.find((node) => node.id === selectedEdge.target);
-
-    if (!sourceNode || !targetNode) {
-      return;
-    }
 
     const element = structuredClone(item.element);
 
@@ -278,13 +403,29 @@ export default function Canvas() {
       nodes as WorkflowNode[],
     );
 
+    const { x, y } = existingNode.position;
+
+    let newPosition = { x, y };
+
+    switch (nodeInsertRequest.direction) {
+      case "top":
+        newPosition = { x, y: y - NODE_INSERT_OFFSET };
+        break;
+      case "right":
+        newPosition = { x: x + NODE_INSERT_OFFSET, y };
+        break;
+      case "bottom":
+        newPosition = { x, y: y + NODE_INSERT_OFFSET };
+        break;
+      case "left":
+        newPosition = { x: x - NODE_INSERT_OFFSET, y };
+        break;
+    }
+
     const newNode: WorkflowNode = {
       id: element.Name,
       type: "baseNode",
-      position: {
-        x: (sourceNode.position.x + targetNode.position.x) / 2,
-        y: (sourceNode.position.y + targetNode.position.y) / 2,
-      },
+      position: newPosition,
       data: {
         label: item.title,
         element,
@@ -292,42 +433,103 @@ export default function Canvas() {
       },
     };
 
-    const newEdges: Edge[] = [
-      ...edges.filter((edge) => edge.id !== selectedEdge.id),
+    let newEdge: Edge;
+    // nodeInsertRequest.direction === "top" ||
+    // nodeInsertRequest.direction === "left"
+    //   ? {
+    //       id: `${newNode.id}-${existingNode.id}`,
+    //       source: newNode.id,
+    //       target: existingNode.id,
+    //       type: "workflow",
+    //       markerEnd: {
+    //         type: MarkerType.ArrowClosed,
+    //       },
+    //     }
+    //   : {
+    //       id: `${existingNode.id}-${newNode.id}`,
+    //       source: existingNode.id,
+    //       target: newNode.id,
+    //       type: "workflow",
+    //       markerEnd: {
+    //         type: MarkerType.ArrowClosed,
+    //       },
+    //     };
 
-      {
-        id: `${sourceNode.id}-${newNode.id}`,
-        source: sourceNode.id,
-        target: newNode.id,
-        type: "workflow",
-        markerEnd: {
-          type: MarkerType.ArrowClosed,
-        },
-      },
+    switch (nodeInsertRequest.direction) {
+      case "top":
+        newEdge = {
+          id: `${existingNode.id}-${newNode.id}`,
+          source: existingNode.id,
+          sourceHandle: "top-handle",
+          target: newNode.id,
+          targetHandle: "bottom-handle",
+          type: "workflow",
+          markerEnd: {
+            type: MarkerType.ArrowClosed,
+          },
+        };
+        break;
 
-      {
-        id: `${newNode.id}-${targetNode.id}`,
-        source: newNode.id,
-        target: targetNode.id,
-        type: "workflow",
-        markerEnd: {
-          type: MarkerType.ArrowClosed,
-        },
-      },
-    ];
+      case "right":
+        newEdge = {
+          id: `${existingNode.id}-${newNode.id}`,
+          source: existingNode.id,
+          sourceHandle: "right-handle",
+          target: newNode.id,
+          targetHandle: "left-handle",
+          type: "workflow",
+          markerEnd: {
+            type: MarkerType.ArrowClosed,
+          },
+        };
+        break;
 
+      case "bottom":
+        newEdge = {
+          id: `${existingNode.id}-${newNode.id}`,
+          source: existingNode.id,
+          sourceHandle: "bottom-handle",
+          target: newNode.id,
+          targetHandle: "top-handle",
+          type: "workflow",
+          markerEnd: {
+            type: MarkerType.ArrowClosed,
+          },
+        };
+        break;
+
+      case "left":
+        newEdge = {
+          id: `${existingNode.id}-${newNode.id}`,
+          source: existingNode.id,
+          sourceHandle: "left-handle",
+          target: newNode.id,
+          targetHandle: "right-handle",
+          type: "workflow",
+          markerEnd: {
+            type: MarkerType.ArrowClosed,
+          },
+        };
+        break;
+    }
     setNodes([...nodes, newNode]);
-    setEdges(newEdges);
-
-    setSelectedEdge(null);
+    setEdges([...edges, newEdge]);
+    setNodeInsertRequest(null);
     setIsDialogOpen(false);
   };
 
+  const handleAttributeSelect = (item: WorkflowListItem) => {
+    if (!nodeInsertRequest) {
+      return;
+    }
+
+    handleNodeInsertSelection(item);
+  };
   return (
     <div className="relative h-full w-full">
       <ReactFlow<WorkflowNode, Edge>
         className="!bg-[#111111]"
-        nodes={nodes as WorkflowNode[]}
+        nodes={flowNodes}
         edges={flowEdges}
         nodeTypes={nodeTypes}
         edgeTypes={edgeTypes}
@@ -337,6 +539,7 @@ export default function Canvas() {
         onDrop={handleDrop}
         onDragOver={handleDragOver}
         onNodeClick={handleNodeClick}
+        onNodeContextMenu={handleNodeContextMenu}
         onPaneClick={handlePaneClick}
         fitView
         nodesDraggable={activeTool === "pointer"}
@@ -347,6 +550,13 @@ export default function Canvas() {
         onNodeDragStart={handleNodeDragStart}
         proOptions={{
           hideAttribution: true,
+        }}
+        connectionMode={ConnectionMode.Loose}
+        connectionLineType={ConnectionLineType.SmoothStep}
+        connectionLineStyle={{
+          stroke: "#4FB3FF",
+          strokeWidth: 1.5,
+          strokeDasharray: "6 4",
         }}
       >
         {nodes.length === 0 && (
@@ -374,7 +584,15 @@ export default function Canvas() {
           </div>
         </div>
       )}
-
+      {contextMenu && (
+        <NodeContextMenu
+          x={contextMenu.x}
+          y={contextMenu.y}
+          node={contextMenu.node}
+          // onAction={handleContextMenuAction}
+          onClose={() => setContextMenu(null)}
+        />
+      )}
       <Dialog
         isOpen={isDialogOpen}
         title={t("CANVAS_ADD_ATTRIBUTE")}
@@ -383,21 +601,22 @@ export default function Canvas() {
           setIsDialogOpen(false);
           setSelectedEdge(null);
         }}
-        width={620}
+        width={274}
+        showIcon={false}
+        headerClassName="hidden"
+        bodyClassName="p-0"
       >
-        <GroupedSelector
-          placeholder={t("COMMON_SELECT_OPTION")}
-          sections={attributeCatalogSections.map((section) => ({
-            id: section.id ?? section.title,
-            title: section.title,
-            items: section.items.map((item) => ({
+        <AttributeSelector
+          items={attributeCatalogSections.flatMap((section) =>
+            section.items.map((item) => ({
               id: item.id,
               label: item.title,
+              // icon: item.icon,
               value: item,
             })),
-          }))}
+          )}
           onSelect={(item) => {
-            handleAddNewNode(item.value as WorkflowListItem);
+            handleAttributeSelect(item.value as WorkflowListItem);
           }}
         />
       </Dialog>
