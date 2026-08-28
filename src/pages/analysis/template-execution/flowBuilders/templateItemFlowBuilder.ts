@@ -8,11 +8,13 @@ import type {
   PositionedNodeBounds,
   WorkflowData,
 } from "../../../../types/templateExecution";
+
 import {
   getEdgePath,
   getHandleCoordinates,
   measurePathBounds,
 } from "./edgeGeometry";
+
 import {
   CANVAS_LAYOUT,
   HEADERNODE_LAYOUT,
@@ -87,14 +89,23 @@ const mapToLayoutEdges = (edges: WorkflowData["edges"]): LayoutEdge[] => {
   }));
 };
 
-// Single source of truth for "how big is this content" — used for both
-// initial positioning and final row sizing, so they can never drift apart.
+/**
+ * --------------------------------------------------------------------------
+ * Combined node + edge bounds
+ * --------------------------------------------------------------------------
+ */
+
 export const calculateCombinedBounds = (
   nodes: ExecutionFlowNode[],
   edges: WorkflowData["edges"],
 ): Bounds => {
   if (nodes.length === 0) {
-    return { minX: 0, minY: 0, width: 0, height: 0 };
+    return {
+      minX: 0,
+      minY: 0,
+      width: 0,
+      height: 0,
+    };
   }
 
   const nodeBounds = mapToNodeBounds(nodes);
@@ -110,8 +121,12 @@ export const calculateCombinedBounds = (
   };
 };
 
-// Merges node bounds (using visualHeight, so labels are included) with
-// real edge path bounds (using iconHeight, since handles attach there)
+/**
+ * --------------------------------------------------------------------------
+ * DAG bounds
+ * --------------------------------------------------------------------------
+ */
+
 const calculateDagBounds = (
   nodeBounds: PositionedNodeBounds[],
   edges: LayoutEdge[],
@@ -127,7 +142,9 @@ const calculateDagBounds = (
     const sourceNode = nodeMap.get(edge.source);
     const targetNode = nodeMap.get(edge.target);
 
-    if (!sourceNode || !targetNode) return;
+    if (!sourceNode || !targetNode) {
+      return;
+    }
 
     const source = getHandleCoordinates({
       nodeX: sourceNode.x,
@@ -155,21 +172,27 @@ const calculateDagBounds = (
       offset: edge.offset,
     });
 
-    const bounds = measurePathBounds(path);
+    const pathBounds = measurePathBounds(path);
 
-    minX = Math.min(minX, bounds.x);
-    minY = Math.min(minY, bounds.y);
-    maxX = Math.max(maxX, bounds.x + bounds.width);
-    maxY = Math.max(maxY, bounds.y + bounds.height);
+    minX = Math.min(minX, pathBounds.x);
+    minY = Math.min(minY, pathBounds.y);
+    maxX = Math.max(maxX, pathBounds.x + pathBounds.width);
+    maxY = Math.max(maxY, pathBounds.y + pathBounds.height);
   });
 
   return {
     minX,
     minY,
-    width: maxX - minX,
-    height: maxY - minY,
+    width: Math.max(0, maxX - minX),
+    height: Math.max(0, maxY - minY),
   };
 };
+
+/**
+ * --------------------------------------------------------------------------
+ * Position workflow
+ * --------------------------------------------------------------------------
+ */
 
 const positionWorkflow = (
   itemId: string,
@@ -205,14 +228,23 @@ const positionWorkflow = (
   };
 };
 
+/**
+ * --------------------------------------------------------------------------
+ * Header
+ * --------------------------------------------------------------------------
+ *
+ * Header is centered vertically using the FINAL content height.
+ */
 export const positionExecutionHeader = (
   itemId: string,
   dagBounds: Bounds,
 ): ExecutionFlowNode => {
   const contentHeight = Math.max(dagBounds.height, HEADERNODE_LAYOUT.height);
 
+  const rowContentTop = ROW_LAYOUT.topPadding;
+
   const headerY =
-    ROW_LAYOUT.topPadding + (contentHeight - HEADERNODE_LAYOUT.height) / 2;
+    rowContentTop + (contentHeight - HEADERNODE_LAYOUT.height) / 2;
 
   return createTemplateItemHeaderNode({
     itemId,
@@ -220,38 +252,69 @@ export const positionExecutionHeader = (
   });
 };
 
+/**
+ * --------------------------------------------------------------------------
+ * Header node
+ * --------------------------------------------------------------------------
+ */
+
 export const createTemplateItemHeaderNode = ({
   itemId,
   y,
 }: CreateExecutionHeaderNodeProps): ExecutionFlowNode => ({
   id: `execution-header-${itemId}`,
+
   parentId: `execution-row-${itemId}`,
+
   type: "executionHeader",
+
   position: {
     x: ROW_LAYOUT.leftPadding,
     y,
   },
+
   draggable: false,
   selectable: false,
+
   data: {
     itemId,
   },
 });
 
+/**
+ * --------------------------------------------------------------------------
+ * Row boundary
+ * --------------------------------------------------------------------------
+ */
+
 export const calculateExecutionRowBoundary = (
   dagBounds: Bounds,
   hasHeader: boolean,
+  minWidth = 0,
+  minHeight = 0,
 ): ExecutionRowBoundary => {
   const contentHeight = Math.max(
     dagBounds.height,
     hasHeader ? HEADERNODE_LAYOUT.height : 0,
   );
 
+  /**
+   * dagBounds are in the row's coordinate system.
+   *
+   * minX may be negative when an edge bends left.
+   * Therefore calculate the right-most point directly.
+   */
   const absoluteMaxX = dagBounds.minX + dagBounds.width;
 
+  const calculatedWidth = absoluteMaxX + ROW_LAYOUT.rightPadding;
+
+  const calculatedHeight =
+    contentHeight + ROW_LAYOUT.topPadding + ROW_LAYOUT.bottomPadding;
+
   return {
-    width: absoluteMaxX + ROW_LAYOUT.rightPadding,
-    height: contentHeight + ROW_LAYOUT.topPadding + ROW_LAYOUT.bottomPadding,
+    width: Math.max(calculatedWidth, minWidth),
+
+    height: Math.max(calculatedHeight, minHeight),
   };
 };
 

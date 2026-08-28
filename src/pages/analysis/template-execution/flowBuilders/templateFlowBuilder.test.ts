@@ -1,229 +1,219 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import type { Edge } from "@xyflow/react";
 
 import { buildTemplateCanvas } from "./templateFlowBuilder";
+
+import {
+  EXECUTION_VIEW_MODE,
+  type ExecutionFlowNode,
+  type TemplateExecutionWorkflow,
+} from "../../../../types/templateExecution";
+
 import { buildTemplateItemFlow } from "./templateItemFlowBuilder";
 import { buildCompactTemplateItemFlow } from "./compactLayoutBuilder";
-import { EXECUTION_VIEW_MODE } from "../../../../types/templateExecution";
+import { buildComfortableTemplateItemFlow } from "./comfortableLayoutBuilder";
 
-vi.mock("./templateItemFlowBuilder", () => ({
-  buildTemplateItemFlow: vi.fn(),
-}));
+import { CANVAS_LAYOUT, ROW_GAP } from "./layoutConstants";
+
+/**
+ * templateFlowBuilder uses the comfortable/compact builders directly.
+ *
+ * Keep the mock partial so that the other exports from
+ * templateItemFlowBuilder remain available to comfortableLayoutBuilder.
+ */
+vi.mock("./templateItemFlowBuilder", async (importOriginal) => {
+  const actual =
+    await importOriginal<typeof import("./templateItemFlowBuilder")>();
+
+  return {
+    ...actual,
+    buildTemplateItemFlow: vi.fn(),
+  };
+});
 
 vi.mock("./compactLayoutBuilder", () => ({
   buildCompactTemplateItemFlow: vi.fn(),
 }));
 
+vi.mock("./comfortableLayoutBuilder", () => ({
+  buildComfortableTemplateItemFlow: vi.fn(),
+}));
+
 const mockBuildTemplateItemFlow = vi.mocked(buildTemplateItemFlow);
+
 const mockBuildCompactTemplateItemFlow = vi.mocked(
   buildCompactTemplateItemFlow,
 );
 
+const mockBuildComfortableTemplateItemFlow = vi.mocked(
+  buildComfortableTemplateItemFlow,
+);
+
 describe("buildTemplateCanvas", () => {
-  const VIEW_MODE = EXECUTION_VIEW_MODE.COMFORTABLE;
+  const COMFORTABLE_MODE = EXECUTION_VIEW_MODE.COMFORTABLE;
+  const COMPACT_MODE = EXECUTION_VIEW_MODE.COMPACT;
+
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
+  const createRowNode = (
+    id: string,
+    width: number,
+    height: number,
+    x = 0,
+    y = 0,
+  ): ExecutionFlowNode =>
+    ({
+      id,
+      type: "executionRow",
+      position: {
+        x,
+        y,
+      },
+      style: {
+        width,
+        height,
+      },
+      data: {
+        itemId: id,
+      },
+    }) as ExecutionFlowNode;
+
+  const createWorkflow = (itemId: string): TemplateExecutionWorkflow => ({
+    itemId,
+    workflow: {
+      nodes: [],
+      edges: [],
+    },
+  });
+
   it("returns empty canvas when workflows are empty", () => {
-    const result = buildTemplateCanvas([], VIEW_MODE);
+    const result = buildTemplateCanvas([], COMFORTABLE_MODE);
 
     expect(result).toEqual({
       nodes: [],
       edges: [],
-      nextY: 24,
+      nextY: CANVAS_LAYOUT.rowTop,
     });
 
+    expect(mockBuildComfortableTemplateItemFlow).not.toHaveBeenCalled();
+    expect(mockBuildCompactTemplateItemFlow).not.toHaveBeenCalled();
     expect(mockBuildTemplateItemFlow).not.toHaveBeenCalled();
   });
 
-  it("builds canvas for a single workflow", () => {
-    mockBuildTemplateItemFlow.mockReturnValue({
-      nodes: [
-        {
-          id: "row-1",
-          type: "executionRow",
-          position: {
-            x: 100,
-            y: 50,
-          },
-          style: {
-            width: 500,
-            height: 100,
-          },
-        },
-        {
-          id: "node-1",
-          type: "customNode",
-          position: {
-            x: 200,
-            y: 100,
-          },
-          data: {},
-        },
-      ],
-      edges: [
-        {
-          id: "e1",
-        },
-      ],
-    } as never);
+  it("builds canvas for a single workflow in comfortable mode", () => {
+    const rowNode = createRowNode("row-1", 500, 100, 100, 50);
 
-    const workflow = {
-      itemId: "item-1",
-      workflow: {
-        nodes: [],
-        edges: [],
+    const workflowNode = {
+      id: "node-1",
+      type: "customNode",
+      position: {
+        x: 200,
+        y: 100,
       },
-    };
+      data: {},
+    } as never;
 
-    const result = buildTemplateCanvas([workflow], VIEW_MODE);
+    const edge = {
+      id: "e1",
+      source: "node-1",
+      target: "node-2",
+    } as Edge;
 
-    expect(mockBuildTemplateItemFlow).toHaveBeenCalledWith(
+    mockBuildComfortableTemplateItemFlow.mockReturnValue({
+      nodes: [rowNode, workflowNode],
+      edges: [edge],
+    });
+
+    const workflow = createWorkflow("item-1");
+
+    const result = buildTemplateCanvas([workflow], COMFORTABLE_MODE);
+
+    expect(mockBuildComfortableTemplateItemFlow).toHaveBeenCalledTimes(1);
+
+    expect(mockBuildComfortableTemplateItemFlow).toHaveBeenCalledWith(
       "item-1",
       workflow.workflow,
       true,
     );
 
+    expect(mockBuildTemplateItemFlow).not.toHaveBeenCalled();
+    expect(mockBuildCompactTemplateItemFlow).not.toHaveBeenCalled();
+
     expect(result.nodes).toHaveLength(2);
     expect(result.edges).toHaveLength(1);
 
-    // executionRow is positioned by the canvas builder
     expect(result.nodes[0]?.position).toEqual({
-      x: 24,
-      y: 24,
+      x: CANVAS_LAYOUT.rowLeft,
+      y: CANVAS_LAYOUT.rowTop,
     });
 
     expect(result.nodes[0]?.style?.width).toBe(500);
 
-    // Other nodes keep their original position
     expect(result.nodes[1]?.position).toEqual({
       x: 200,
       y: 100,
     });
 
-    expect(result.nextY).toBe(148);
+    expect(result.nextY).toBe(CANVAS_LAYOUT.rowTop + 100 + ROW_GAP);
   });
 
   it("positions rows using their actual heights and row gap", () => {
-    mockBuildTemplateItemFlow
+    mockBuildComfortableTemplateItemFlow
       .mockReturnValueOnce({
-        nodes: [
-          {
-            id: "row-1",
-            type: "executionRow",
-            position: { x: 0, y: 0 },
-            style: {
-              width: 400,
-              height: 100,
-            },
-          },
-        ],
+        nodes: [createRowNode("row-1", 400, 100)],
         edges: [],
-      } as never)
+      })
       .mockReturnValueOnce({
-        nodes: [
-          {
-            id: "row-2",
-            type: "executionRow",
-            position: { x: 0, y: 0 },
-            style: {
-              width: 450,
-              height: 150,
-            },
-          },
-        ],
+        nodes: [createRowNode("row-2", 450, 150)],
         edges: [],
-      } as never);
+      });
 
     const result = buildTemplateCanvas(
-      [
-        {
-          itemId: "item-1",
-          workflow: {
-            nodes: [],
-            edges: [],
-          },
-        },
-        {
-          itemId: "item-2",
-          workflow: {
-            nodes: [],
-            edges: [],
-          },
-        },
-      ],
-      VIEW_MODE,
+      [createWorkflow("item-1"), createWorkflow("item-2")],
+      COMFORTABLE_MODE,
     );
 
-    expect(result.nodes[0]?.position.y).toBe(24);
-    expect(result.nodes[1]?.position.y).toBe(148);
+    expect(result.nodes[0]?.position.y).toBe(CANVAS_LAYOUT.rowTop);
 
-    expect(result.nextY).toBe(322);
+    expect(result.nodes[1]?.position.y).toBe(
+      CANVAS_LAYOUT.rowTop + 100 + ROW_GAP,
+    );
+
+    expect(result.nextY).toBe(
+      CANVAS_LAYOUT.rowTop + 100 + ROW_GAP + 150 + ROW_GAP,
+    );
   });
 
   it("starts from the provided startY", () => {
     const startY = 500;
+
     const firstRowHeight = 100;
     const secondRowHeight = 150;
-    const rowGap = 24;
 
-    mockBuildTemplateItemFlow
+    mockBuildComfortableTemplateItemFlow
       .mockReturnValueOnce({
-        nodes: [
-          {
-            id: "row-1",
-            type: "executionRow",
-            position: { x: 0, y: 0 },
-            style: {
-              width: 400,
-              height: firstRowHeight,
-            },
-          },
-        ],
+        nodes: [createRowNode("row-1", 400, firstRowHeight)],
         edges: [],
-      } as never)
+      })
       .mockReturnValueOnce({
-        nodes: [
-          {
-            id: "row-2",
-            type: "executionRow",
-            position: { x: 0, y: 0 },
-            style: {
-              width: 450,
-              height: secondRowHeight,
-            },
-          },
-        ],
+        nodes: [createRowNode("row-2", 450, secondRowHeight)],
         edges: [],
-      } as never);
+      });
 
     const result = buildTemplateCanvas(
-      [
-        {
-          itemId: "item-1",
-          workflow: {
-            nodes: [],
-            edges: [],
-          },
-        },
-        {
-          itemId: "item-2",
-          workflow: {
-            nodes: [],
-            edges: [],
-          },
-        },
-      ],
-      VIEW_MODE,
+      [createWorkflow("item-1"), createWorkflow("item-2")],
+      COMFORTABLE_MODE,
       startY,
     );
 
     expect(result.nodes[0]?.position.y).toBe(startY);
 
-    expect(result.nodes[1]?.position.y).toBe(startY + firstRowHeight + rowGap);
+    expect(result.nodes[1]?.position.y).toBe(startY + firstRowHeight + ROW_GAP);
 
     expect(result.nextY).toBe(
-      startY + firstRowHeight + rowGap + secondRowHeight + rowGap,
+      startY + firstRowHeight + ROW_GAP + secondRowHeight + ROW_GAP,
     );
   });
 
@@ -231,54 +221,19 @@ describe("buildTemplateCanvas", () => {
     const firstRowWidth = 400;
     const maxRowWidth = 600;
 
-    mockBuildTemplateItemFlow
+    mockBuildComfortableTemplateItemFlow
       .mockReturnValueOnce({
-        nodes: [
-          {
-            id: "row-1",
-            type: "executionRow",
-            position: { x: 0, y: 0 },
-            style: {
-              width: firstRowWidth,
-              height: 100,
-            },
-          },
-        ],
+        nodes: [createRowNode("row-1", firstRowWidth, 100)],
         edges: [],
-      } as never)
+      })
       .mockReturnValueOnce({
-        nodes: [
-          {
-            id: "row-2",
-            type: "executionRow",
-            position: { x: 0, y: 0 },
-            style: {
-              width: maxRowWidth,
-              height: 100,
-            },
-          },
-        ],
+        nodes: [createRowNode("row-2", maxRowWidth, 100)],
         edges: [],
-      } as never);
+      });
 
     const result = buildTemplateCanvas(
-      [
-        {
-          itemId: "item-1",
-          workflow: {
-            nodes: [],
-            edges: [],
-          },
-        },
-        {
-          itemId: "item-2",
-          workflow: {
-            nodes: [],
-            edges: [],
-          },
-        },
-      ],
-      VIEW_MODE,
+      [createWorkflow("item-1"), createWorkflow("item-2")],
+      COMFORTABLE_MODE,
     );
 
     expect(result.nodes[0]?.style?.width).toBe(maxRowWidth);
@@ -286,66 +241,55 @@ describe("buildTemplateCanvas", () => {
   });
 
   it("combines nodes and edges from multiple workflows", () => {
-    mockBuildTemplateItemFlow
+    const row1 = createRowNode("row-1", 400, 100);
+
+    const node1 = {
+      id: "node-1",
+      type: "customNode",
+      position: {
+        x: 50,
+        y: 50,
+      },
+      data: {},
+    } as never;
+
+    const row2 = createRowNode("row-2", 400, 100);
+
+    const node2 = {
+      id: "node-2",
+      type: "customNode",
+      position: {
+        x: 50,
+        y: 50,
+      },
+      data: {},
+    } as never;
+
+    const edge1 = {
+      id: "e1",
+      source: "node-1",
+      target: "node-2",
+    } as Edge;
+
+    const edge2 = {
+      id: "e2",
+      source: "node-2",
+      target: "node-1",
+    } as Edge;
+
+    mockBuildComfortableTemplateItemFlow
       .mockReturnValueOnce({
-        nodes: [
-          {
-            id: "row-1",
-            type: "executionRow",
-            position: { x: 0, y: 0 },
-            style: {
-              width: 400,
-              height: 100,
-            },
-          },
-          {
-            id: "node-1",
-            type: "customNode",
-            position: { x: 50, y: 50 },
-            data: {},
-          },
-        ],
-        edges: [{ id: "e1" }],
-      } as never)
+        nodes: [row1, node1],
+        edges: [edge1],
+      })
       .mockReturnValueOnce({
-        nodes: [
-          {
-            id: "row-2",
-            type: "executionRow",
-            position: { x: 0, y: 0 },
-            style: {
-              width: 400,
-              height: 100,
-            },
-          },
-          {
-            id: "node-2",
-            type: "customNode",
-            position: { x: 50, y: 50 },
-            data: {},
-          },
-        ],
-        edges: [{ id: "e2" }],
-      } as never);
+        nodes: [row2, node2],
+        edges: [edge2],
+      });
 
     const result = buildTemplateCanvas(
-      [
-        {
-          itemId: "item-1",
-          workflow: {
-            nodes: [],
-            edges: [],
-          },
-        },
-        {
-          itemId: "item-2",
-          workflow: {
-            nodes: [],
-            edges: [],
-          },
-        },
-      ],
-      VIEW_MODE,
+      [createWorkflow("item-1"), createWorkflow("item-2")],
+      COMFORTABLE_MODE,
     );
 
     expect(result.nodes).toHaveLength(4);
@@ -358,87 +302,63 @@ describe("buildTemplateCanvas", () => {
       "node-2",
     ]);
 
-    expect(result.edges).toEqual([{ id: "e1" }, { id: "e2" }]);
+    expect(result.edges).toEqual([edge1, edge2]);
   });
 
-  it("calls buildTemplateItemFlow for every workflow in order in comfortable mode", () => {
-    mockBuildTemplateItemFlow.mockReturnValue({
+  it("calls buildComfortableTemplateItemFlow for every workflow in order in comfortable mode", () => {
+    mockBuildComfortableTemplateItemFlow.mockReturnValue({
       nodes: [],
       edges: [],
-    } as never);
+    });
 
     const workflows = [
-      {
-        itemId: "item-1",
-        workflow: {
-          nodes: [],
-          edges: [],
-        },
-      },
-      {
-        itemId: "item-2",
-        workflow: {
-          nodes: [],
-          edges: [],
-        },
-      },
-      {
-        itemId: "item-3",
-        workflow: {
-          nodes: [],
-          edges: [],
-        },
-      },
+      createWorkflow("item-1"),
+      createWorkflow("item-2"),
+      createWorkflow("item-3"),
     ];
 
-    buildTemplateCanvas(workflows, VIEW_MODE);
+    buildTemplateCanvas(workflows, COMFORTABLE_MODE);
 
-    expect(mockBuildTemplateItemFlow).toHaveBeenCalledTimes(3);
+    expect(mockBuildComfortableTemplateItemFlow).toHaveBeenCalledTimes(3);
 
-    expect(mockBuildTemplateItemFlow).toHaveBeenNthCalledWith(
+    expect(mockBuildComfortableTemplateItemFlow).toHaveBeenNthCalledWith(
       1,
       "item-1",
       workflows[0].workflow,
       true,
     );
 
-    expect(mockBuildTemplateItemFlow).toHaveBeenNthCalledWith(
+    expect(mockBuildComfortableTemplateItemFlow).toHaveBeenNthCalledWith(
       2,
       "item-2",
       workflows[1].workflow,
       true,
     );
 
-    expect(mockBuildTemplateItemFlow).toHaveBeenNthCalledWith(
+    expect(mockBuildComfortableTemplateItemFlow).toHaveBeenNthCalledWith(
       3,
       "item-3",
       workflows[2].workflow,
       true,
     );
+
+    expect(mockBuildCompactTemplateItemFlow).not.toHaveBeenCalled();
+    expect(mockBuildTemplateItemFlow).not.toHaveBeenCalled();
   });
 
   it("calls buildCompactTemplateItemFlow for every workflow in order in compact mode", () => {
     mockBuildCompactTemplateItemFlow.mockReturnValue({
       nodes: [],
       edges: [],
-    } as never);
+    });
 
     const workflows = [
-      {
-        itemId: "item-1",
-        workflow: { nodes: [], edges: [] },
-      },
-      {
-        itemId: "item-2",
-        workflow: { nodes: [], edges: [] },
-      },
-      {
-        itemId: "item-3",
-        workflow: { nodes: [], edges: [] },
-      },
+      createWorkflow("item-1"),
+      createWorkflow("item-2"),
+      createWorkflow("item-3"),
     ];
 
-    buildTemplateCanvas(workflows, EXECUTION_VIEW_MODE.COMPACT);
+    buildTemplateCanvas(workflows, COMPACT_MODE);
 
     expect(mockBuildCompactTemplateItemFlow).toHaveBeenCalledTimes(3);
 
@@ -463,6 +383,82 @@ describe("buildTemplateCanvas", () => {
       true,
     );
 
+    expect(mockBuildComfortableTemplateItemFlow).not.toHaveBeenCalled();
     expect(mockBuildTemplateItemFlow).not.toHaveBeenCalled();
+  });
+
+  it("does not change non-row node positions", () => {
+    const rowNode = createRowNode("row-1", 500, 100, 100, 200);
+
+    const workflowNode = {
+      id: "node-1",
+      type: "customNode",
+      position: {
+        x: 250,
+        y: 300,
+      },
+      data: {},
+    } as never;
+
+    mockBuildComfortableTemplateItemFlow.mockReturnValue({
+      nodes: [rowNode, workflowNode],
+      edges: [],
+    });
+
+    const result = buildTemplateCanvas(
+      [createWorkflow("item-1")],
+      COMFORTABLE_MODE,
+    );
+
+    const nonRowNode = result.nodes.find((node) => node.id === "node-1");
+
+    expect(nonRowNode?.position).toEqual({
+      x: 250,
+      y: 300,
+    });
+  });
+
+  it("sets every row container x position to rowLeft", () => {
+    mockBuildComfortableTemplateItemFlow
+      .mockReturnValueOnce({
+        nodes: [createRowNode("row-1", 400, 100, 999, 0)],
+        edges: [],
+      })
+      .mockReturnValueOnce({
+        nodes: [createRowNode("row-2", 600, 120, 888, 0)],
+        edges: [],
+      });
+
+    const result = buildTemplateCanvas(
+      [createWorkflow("item-1"), createWorkflow("item-2")],
+      COMFORTABLE_MODE,
+    );
+
+    expect(result.nodes[0]?.position.x).toBe(CANVAS_LAYOUT.rowLeft);
+
+    expect(result.nodes[1]?.position.x).toBe(CANVAS_LAYOUT.rowLeft);
+  });
+
+  it("keeps row y positions independent of the original row y", () => {
+    mockBuildComfortableTemplateItemFlow
+      .mockReturnValueOnce({
+        nodes: [createRowNode("row-1", 400, 100, 0, 9999)],
+        edges: [],
+      })
+      .mockReturnValueOnce({
+        nodes: [createRowNode("row-2", 400, 100, 0, -9999)],
+        edges: [],
+      });
+
+    const result = buildTemplateCanvas(
+      [createWorkflow("item-1"), createWorkflow("item-2")],
+      COMFORTABLE_MODE,
+    );
+
+    expect(result.nodes[0]?.position.y).toBe(CANVAS_LAYOUT.rowTop);
+
+    expect(result.nodes[1]?.position.y).toBe(
+      CANVAS_LAYOUT.rowTop + 100 + ROW_GAP,
+    );
   });
 });

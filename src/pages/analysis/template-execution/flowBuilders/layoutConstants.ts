@@ -27,6 +27,15 @@ export const COMPACT_LAYOUT = {
   horizontalGap: 42,
 };
 
+export const COMFORTABLE_LAYOUT = {
+  horizontalGap: 42,
+  verticalGap: 24,
+  positionTolerance: 8,
+  minRowWidth: 1516,
+  minRowHeight: 262,
+  maxRowWidth: 1516,
+};
+
 export const SKIP_EDGE_LAYOUT = {
   baseOffset: 20,
   laneSpacing: 20,
