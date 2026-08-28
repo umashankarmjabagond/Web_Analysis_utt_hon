@@ -5,6 +5,7 @@ import { ROUTES } from "../../constants/routes/routesConstant";
 import WorkflowBuilder from "../../pages/workflow/WorkflowBuilder";
 import Dashboard from "../../pages/dashboard/Dashboard";
 import DashboardContent from "../../pages/dashboard/DashboardContent";
+import DataSourcePreview from "../../components/dataSource/DataSourcePreview";
 
 export default function AppRoutes() {
   return (
@@ -23,6 +24,7 @@ export default function AppRoutes() {
           element={<DashboardContent />}
         />
       </Route>
+      <Route path="/data-source-preview" element={<DataSourcePreview />} />
     </Routes>
   );
 }
