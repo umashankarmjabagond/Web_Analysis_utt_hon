@@ -12,6 +12,8 @@ import {
   nodeExists,
   prepareWorkflowForCanvas,
   removeNode,
+  DEFAULT_SELECTED_COLUMNS,
+  getSelectedTree,
 } from "./utils";
 
 import type {
@@ -776,5 +778,52 @@ describe("utils", () => {
         importWorkflow(new File(["test"], "workflow.json")),
       ).rejects.toThrow("Failed to read the file.");
     });
+  });
+
+  it("recursively collects ids from nodes with children", () => {
+    const result = getSelectedTree(
+      [
+        {
+          id: "root",
+          label: "Root",
+          children: [
+            {
+              id: "pv",
+              label: "DPR1.PV",
+            },
+          ],
+        },
+      ],
+      [],
+    );
+
+    expect(result).toBeDefined();
+    expect(result).not.toEqual(DEFAULT_SELECTED_COLUMNS);
+  });
+
+  it("handles nested selected columns", () => {
+    const result = getSelectedTree(
+      [
+        {
+          id: "root",
+          label: "Root",
+          children: [
+            {
+              id: "child",
+              label: "Child",
+              children: [
+                {
+                  id: "pv",
+                  label: "DPR1.PV",
+                },
+              ],
+            },
+          ],
+        },
+      ],
+      [],
+    );
+
+    expect(result.length).toBeGreaterThan(0);
   });
 });

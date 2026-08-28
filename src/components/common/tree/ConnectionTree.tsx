@@ -1,9 +1,8 @@
-import { useState } from "react";
-
 import ConnectionTreeNode from "./ConnectionTreeNode";
 
 import type {
   ConnectionTreeProps,
+  TreeNodeData,
 } from "../../../types/commonTypes";
 
 export default function ConnectionTree({
@@ -11,37 +10,40 @@ export default function ConnectionTree({
   checkedIds,
   onCheck,
   showCheckbox = true,
+  showShared = false,
+  rightPanel = false,
+  onRemove,
 }: ConnectionTreeProps) {
-  const [expandedIds, setExpandedIds] = useState<Set<string>>(
-    new Set(["ds", "sample", "ds2", "sample2"]),
-  );
+  const flattenNodes = (treeNodes: TreeNodeData[]): TreeNodeData[] => {
+    const result: TreeNodeData[] = [];
 
-  const handleToggle = (nodeId: string) => {
-    setExpandedIds((prev) => {
-      const next = new Set(prev);
-
-      if (next.has(nodeId)) {
-        next.delete(nodeId);
+    treeNodes.forEach((node) => {
+      if (!node.children?.length) {
+        if (node.label !== "None") {
+          result.push(node);
+        }
       } else {
-        next.add(nodeId);
+        result.push(...flattenNodes(node.children));
       }
-
-      return next;
     });
+
+    return result;
   };
+
+  const leafNodes = flattenNodes(nodes);
 
   return (
     <div>
-      {nodes.map((node) => (
+      {leafNodes.map((node) => (
         <ConnectionTreeNode
           key={node.id}
           node={node}
-          level={0}
-          expandedIds={expandedIds}
           checkedIds={checkedIds}
-          onToggle={handleToggle}
           onCheck={onCheck}
           showCheckbox={showCheckbox}
+          showShared={showShared}
+          rightPanel={rightPanel}
+          onRemove={onRemove}
         />
       ))}
     </div>

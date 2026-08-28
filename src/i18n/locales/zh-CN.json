@@ -265,9 +265,9 @@
 
   "CONNECTIONS_CONFIGURE_INPUT_COLUMNS": "配置输入列",
   "CONNECTIONS_DATA_PREPROCESSING": "数据预处理",
-  "CONNECTIONS_SELECT_INPUTS_MESSAGE": "请选择要从以下位置传递的输入",
-  "CONNECTIONS_TO": "到",
-  
+  "CONNECTIONS_MESSAGE_PREFIX": "请选择哪些",
+  "CONNECTIONS_MESSAGE_SUFFIX": "输出应作为输入共享到",
+
   "TOOLBAR_SAVED_MPC": "已保存为 MPC 模板",
   "TOOLBAR_FIND_REGULATORY": "您可以在目录中的模板 > 调节模板下找到此模板。",
   "TOOLBAR_FIND_MPC": "您可以在目录中的模板 > MPC 模板下找到此模板。",

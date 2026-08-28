@@ -14,16 +14,20 @@ export interface ConnectionTreeProps {
   checkedIds: string[];
   onCheck: (id: string) => void;
   showCheckbox?: boolean;
+
+  showShared?: boolean;
+  onRemove?: (id: string) => void;
+  rightPanel?: boolean;
 }
 
 export interface ConnectionTreeNodeProps {
   node: TreeNodeData;
-  level: number;
-  expandedIds: Set<string>;
   checkedIds: string[];
-  onToggle: (id: string) => void;
   onCheck: (id: string) => void;
   showCheckbox?: boolean;
+  showShared?: boolean;
+  onRemove?: (id: string) => void;
+  rightPanel?: boolean;
 }
 
 export interface BreadcrumbItem {
