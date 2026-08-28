@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import dataSourceConfiguration from "../../mock/dataSource.json";
 import {
@@ -62,8 +62,20 @@ const initialFormData: FormData = {
   transposeOutputData: false,
   directSqlQuery: false,
   sqlQuery: "",
+};
 
-  errors: {},
+const getDefaultTags = (
+  tags: { name: string; extension: string }[],
+): SelectedTag[] => {
+  const defaultTagNames = ["Mode", "PV", "OP", "SP"];
+
+  return tags
+    .filter((tag) => defaultTagNames.includes(tag.name))
+    .map((tag) => ({
+      name: tag.name,
+      extension: tag.extension,
+      isManual: false,
+    }));
 };
 
 export default function DataSource({
@@ -71,7 +83,6 @@ export default function DataSource({
   onClose,
   onSave,
 }: DataSourceDialogProps) {
-  console.log("dataSourceConfiguration", dataSourceConfiguration);
   const { t } = useTranslation();
 
   const [helpActive, setHelpActive] = useState(false);
@@ -119,20 +130,14 @@ export default function DataSource({
       extension: tag.extension,
     })) ?? [];
 
-  const [selectedTags, setSelectedTags] = useState<SelectedTag[]>([]);
-  useEffect(() => {
-    const defaultTagNames = ["Mode", "PV", "OP", "SP"];
-
-    const defaultTags: SelectedTag[] = availableTags
-      .filter((tag) => defaultTagNames.includes(tag.name))
-      .map((tag) => ({
-        name: tag.name,
+  const [selectedTags, setSelectedTags] = useState<SelectedTag[]>(() =>
+    getDefaultTags(
+      (tagDefinitions[controllerType]?.[templateType] ?? []).map((tag) => ({
+        name: tag.columnName,
         extension: tag.extension,
-        isManual: false,
-      }));
-
-    setSelectedTags(defaultTags);
-  }, [controllerType, templateType]);
+      })),
+    ),
+  );
 
   const unselectedTags = availableTags.filter(
     (availableTag) =>
