@@ -2,20 +2,30 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { buildTemplateCanvas } from "./templateFlowBuilder";
 import { buildTemplateItemFlow } from "./templateItemFlowBuilder";
+import { buildCompactTemplateItemFlow } from "./compactLayoutBuilder";
+import { EXECUTION_VIEW_MODE } from "../../../../types/templateExecution";
 
 vi.mock("./templateItemFlowBuilder", () => ({
   buildTemplateItemFlow: vi.fn(),
 }));
 
+vi.mock("./compactLayoutBuilder", () => ({
+  buildCompactTemplateItemFlow: vi.fn(),
+}));
+
 const mockBuildTemplateItemFlow = vi.mocked(buildTemplateItemFlow);
+const mockBuildCompactTemplateItemFlow = vi.mocked(
+  buildCompactTemplateItemFlow,
+);
 
 describe("buildTemplateCanvas", () => {
+  const VIEW_MODE = EXECUTION_VIEW_MODE.COMFORTABLE;
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
   it("returns empty canvas when workflows are empty", () => {
-    const result = buildTemplateCanvas([]);
+    const result = buildTemplateCanvas([], VIEW_MODE);
 
     expect(result).toEqual({
       nodes: [],
@@ -66,7 +76,7 @@ describe("buildTemplateCanvas", () => {
       },
     };
 
-    const result = buildTemplateCanvas([workflow]);
+    const result = buildTemplateCanvas([workflow], VIEW_MODE);
 
     expect(mockBuildTemplateItemFlow).toHaveBeenCalledWith(
       "item-1",
@@ -125,22 +135,25 @@ describe("buildTemplateCanvas", () => {
         edges: [],
       } as never);
 
-    const result = buildTemplateCanvas([
-      {
-        itemId: "item-1",
-        workflow: {
-          nodes: [],
-          edges: [],
+    const result = buildTemplateCanvas(
+      [
+        {
+          itemId: "item-1",
+          workflow: {
+            nodes: [],
+            edges: [],
+          },
         },
-      },
-      {
-        itemId: "item-2",
-        workflow: {
-          nodes: [],
-          edges: [],
+        {
+          itemId: "item-2",
+          workflow: {
+            nodes: [],
+            edges: [],
+          },
         },
-      },
-    ]);
+      ],
+      VIEW_MODE,
+    );
 
     expect(result.nodes[0]?.position.y).toBe(24);
     expect(result.nodes[1]?.position.y).toBe(148);
@@ -201,6 +214,7 @@ describe("buildTemplateCanvas", () => {
           },
         },
       ],
+      VIEW_MODE,
       startY,
     );
 
@@ -247,22 +261,25 @@ describe("buildTemplateCanvas", () => {
         edges: [],
       } as never);
 
-    const result = buildTemplateCanvas([
-      {
-        itemId: "item-1",
-        workflow: {
-          nodes: [],
-          edges: [],
+    const result = buildTemplateCanvas(
+      [
+        {
+          itemId: "item-1",
+          workflow: {
+            nodes: [],
+            edges: [],
+          },
         },
-      },
-      {
-        itemId: "item-2",
-        workflow: {
-          nodes: [],
-          edges: [],
+        {
+          itemId: "item-2",
+          workflow: {
+            nodes: [],
+            edges: [],
+          },
         },
-      },
-    ]);
+      ],
+      VIEW_MODE,
+    );
 
     expect(result.nodes[0]?.style?.width).toBe(maxRowWidth);
     expect(result.nodes[1]?.style?.width).toBe(maxRowWidth);
@@ -311,22 +328,25 @@ describe("buildTemplateCanvas", () => {
         edges: [{ id: "e2" }],
       } as never);
 
-    const result = buildTemplateCanvas([
-      {
-        itemId: "item-1",
-        workflow: {
-          nodes: [],
-          edges: [],
+    const result = buildTemplateCanvas(
+      [
+        {
+          itemId: "item-1",
+          workflow: {
+            nodes: [],
+            edges: [],
+          },
         },
-      },
-      {
-        itemId: "item-2",
-        workflow: {
-          nodes: [],
-          edges: [],
+        {
+          itemId: "item-2",
+          workflow: {
+            nodes: [],
+            edges: [],
+          },
         },
-      },
-    ]);
+      ],
+      VIEW_MODE,
+    );
 
     expect(result.nodes).toHaveLength(4);
     expect(result.edges).toHaveLength(2);
@@ -341,7 +361,7 @@ describe("buildTemplateCanvas", () => {
     expect(result.edges).toEqual([{ id: "e1" }, { id: "e2" }]);
   });
 
-  it("calls buildTemplateItemFlow for every workflow in order", () => {
+  it("calls buildTemplateItemFlow for every workflow in order in comfortable mode", () => {
     mockBuildTemplateItemFlow.mockReturnValue({
       nodes: [],
       edges: [],
@@ -371,7 +391,7 @@ describe("buildTemplateCanvas", () => {
       },
     ];
 
-    buildTemplateCanvas(workflows);
+    buildTemplateCanvas(workflows, VIEW_MODE);
 
     expect(mockBuildTemplateItemFlow).toHaveBeenCalledTimes(3);
 
@@ -395,5 +415,54 @@ describe("buildTemplateCanvas", () => {
       workflows[2].workflow,
       true,
     );
+  });
+
+  it("calls buildCompactTemplateItemFlow for every workflow in order in compact mode", () => {
+    mockBuildCompactTemplateItemFlow.mockReturnValue({
+      nodes: [],
+      edges: [],
+    } as never);
+
+    const workflows = [
+      {
+        itemId: "item-1",
+        workflow: { nodes: [], edges: [] },
+      },
+      {
+        itemId: "item-2",
+        workflow: { nodes: [], edges: [] },
+      },
+      {
+        itemId: "item-3",
+        workflow: { nodes: [], edges: [] },
+      },
+    ];
+
+    buildTemplateCanvas(workflows, EXECUTION_VIEW_MODE.COMPACT);
+
+    expect(mockBuildCompactTemplateItemFlow).toHaveBeenCalledTimes(3);
+
+    expect(mockBuildCompactTemplateItemFlow).toHaveBeenNthCalledWith(
+      1,
+      "item-1",
+      workflows[0].workflow,
+      true,
+    );
+
+    expect(mockBuildCompactTemplateItemFlow).toHaveBeenNthCalledWith(
+      2,
+      "item-2",
+      workflows[1].workflow,
+      true,
+    );
+
+    expect(mockBuildCompactTemplateItemFlow).toHaveBeenNthCalledWith(
+      3,
+      "item-3",
+      workflows[2].workflow,
+      true,
+    );
+
+    expect(mockBuildTemplateItemFlow).not.toHaveBeenCalled();
   });
 });

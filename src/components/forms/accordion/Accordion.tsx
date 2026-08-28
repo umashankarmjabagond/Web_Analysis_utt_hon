@@ -16,9 +16,7 @@ export default function Accordion({
   const [isOpen, setIsOpen] = useState(defaultOpen);
 
   const enhanced =
-    icon !== undefined ||
-    subtitle !== undefined ||
-    action !== undefined;
+    icon !== undefined || subtitle !== undefined || action !== undefined;
 
   // accordian for template
   if (!enhanced) {
@@ -29,9 +27,7 @@ export default function Accordion({
           onClick={() => setIsOpen((prev) => !prev)}
           className="flex w-full cursor-pointer items-center justify-between transition-colors bg-accordion-header-background text-accordion-header-foreground"
         >
-          <span className="text-[14px] leading-5 font-medium">
-            {title}
-          </span>
+          <span className="text-[14px] leading-5 font-medium">{title}</span>
 
           <div className="flex items-center gap-2">
             {count !== undefined && (
@@ -56,9 +52,7 @@ export default function Accordion({
         </button>
 
         {isOpen && (
-          <div className="mt-3 grid grid-cols-3 gap-2">
-            {children}
-          </div>
+          <div className="mt-3 grid grid-cols-3 gap-2">{children}</div>
         )}
       </div>
     );
@@ -72,7 +66,7 @@ export default function Accordion({
         overflow-hidden
         rounded-[6px]
         border
-        border-[#454545]
+        border-border-gray
         bg-[var(--background-primary-container)]
       "
     >
@@ -85,7 +79,7 @@ export default function Accordion({
           items-center
           justify-between
           gap-3
-          bg-[var(--gray-1200)]
+          bg-surface-emphasis
           px-3
           py-[10px]
         "
@@ -107,9 +101,8 @@ export default function Accordion({
                 justify-center
                 rounded-[6px]
                 border
-                border-[#454545]
-                bg-[var(--gray-1550)]
-                text-[var(--gray-350)]
+                border-border-gray
+                bg-surface-primary
               "
             >
               {icon}
@@ -167,16 +160,12 @@ export default function Accordion({
         </div>
       </div>
 
-      {isOpen && (
-        <div className="h-px w-full bg-[#454545]" />
-      )}
+      {isOpen && <div className="h-px w-full bg-border-gray" />}
 
       {/* Content */}
       {isOpen && (
         <div
-          className={cn(
-            "w-full bg-[var(--gray-1200)] px-3 pb-[10px] pt-[10px]",
-          )}
+          className={cn("w-full bg-surface-emphasis px-3 pb-[10px] pt-[10px]")}
         >
           {children}
         </div>

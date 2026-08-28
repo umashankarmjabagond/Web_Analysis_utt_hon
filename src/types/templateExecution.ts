@@ -55,6 +55,7 @@ export type EdgePathType = "bezier" | "smoothstep" | "straight" | "default";
 export type WorkflowEdgeData = {
   pathType: EdgePathType;
   animated?: boolean;
+  offset?: number;
 };
 
 export type WorkflowEdge = Edge<WorkflowEdgeData, "workflow">;
@@ -73,6 +74,7 @@ export type LayoutEdge = {
   sourceHandle: string | null | undefined;
   targetHandle: string | null | undefined;
   pathType: EdgePathType;
+  offset?: number;
 };
 
 export type EdgePathResult = {
@@ -98,6 +100,7 @@ export type GetEdgePathParams = {
   targetY: number;
   sourcePosition: Position;
   targetPosition: Position;
+  offset?: number;
 };
 
 // layout / bounds
@@ -127,6 +130,24 @@ export type PositionedNodeBounds = {
 export type ExecutionRowBoundary = {
   width: number;
   height: number;
+};
+
+// compact layout
+export type SequenceNode = {
+  id: string;
+  x: number;
+  y: number;
+};
+
+export type SequenceEdge = {
+  source: string;
+  target: string;
+};
+
+export type SkipEdgeSpan = {
+  edgeIndex: number;
+  start: number;
+  end: number;
 };
 
 // execution header node
