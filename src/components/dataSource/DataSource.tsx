@@ -1,38 +1,54 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
+import dataSourceConfiguration from "../../mock/dataSource.json";
 import {
-  ArrowLeft,
   ArrowRight,
   CylinderIcon,
   HelpCircle,
+  Plus,
+  Settings,
   X,
 } from "lucide-react";
 
 import Button from "../forms/button/Button";
-import Checkbox from "../forms/checkbox/CheckBox";
 import Select from "../forms/select/Select";
-import TextArea from "../forms/textarea/TextArea";
-import { dataSourceSchema } from "../../schemas/dataSourceSchema";
 import { cn } from "../../utils/utils";
 
-import type {
-  DataSourceDialogProps,
-  FormData,
-  OdbcSectionProps,
-  RadioProps,
-  TextFileSectionProps,
-} from "./dataSourceTypes";
+import type { DataSourceDialogProps, FormData } from "./dataSourceTypes";
 
-/* -------------------------------------------------------------------------- */
-/*                                Initial Data                                */
-/* -------------------------------------------------------------------------- */
+type ControllerType = "regulatory" | "mpc";
+
+type TemplateType =
+  | "standalone-controller"
+  | "cascade"
+  | "instrument"
+  | "analyzers"
+  | "rmpct"
+  | "dmc"
+  | "generic-apc"
+  | "inferentials";
+
+type TagDefinition = {
+  id: string;
+  columnName: string;
+  extension: string;
+};
+
+type TagDefinitions = Record<ControllerType, Record<string, TagDefinition[]>>;
+
+type SelectedTag = {
+  name: string;
+  extension: string;
+  isManual: boolean;
+};
 
 const initialFormData: FormData = {
   dataSource: "",
-
   file: null,
+
   fieldSeparator: "",
   rowSeparator: "",
+
   treatDataAsNumeric: true,
   uniqueId: false,
   header: true,
@@ -42,1087 +58,759 @@ const initialFormData: FormData = {
   authentication: "trusted",
   username: "",
   password: "",
+
   transposeOutputData: false,
   directSqlQuery: false,
   sqlQuery: "",
+
+  errors: {},
 };
 
-/* -------------------------------------------------------------------------- */
-/*                                  Styles                                    */
-/* -------------------------------------------------------------------------- */
-
-const containerClass = "w-[500px] bg-surface-primary text-foreground";
-
-const contentWidthClass = "w-[420px]";
-
-const labelClass =
-  "block h-5 text-[13px] font-bold leading-[19.5px] text-foreground";
-
-const errorClass =
-  "mt-[2px] block text-[11px] font-medium leading-[16px] text-red-500";
-
-/* -------------------------------------------------------------------------- */
-/*                              Validation Error                              */
-/* -------------------------------------------------------------------------- */
-
-function FieldError({ message }: { message?: string }) {
-  if (!message) {
-    return null;
-  }
-
-  return (
-    <span className={errorClass} role="alert">
-      {message}
-    </span>
-  );
-}
-
-/* -------------------------------------------------------------------------- */
-/*                                Radio Button                                */
-/* -------------------------------------------------------------------------- */
-
-function DataSourceRadio({
-  name,
-  value,
-  checked,
-  label,
-  onChange,
-}: RadioProps) {
-  return (
-    <label className="flex h-[20px] w-[420px] cursor-pointer items-center gap-[8px] text-[13px] font-medium leading-[19.5px]">
-      <span className="relative h-[20px] w-[18px] shrink-0 pt-[2px]">
-        <input
-          type="radio"
-          name={name}
-          value={value}
-          checked={checked}
-          onChange={() => onChange(value)}
-          className="
-            peer
-            absolute
-            inset-0
-            z-10
-            h-[18px]
-            w-[18px]
-            cursor-pointer
-            appearance-none
-            rounded-full
-            border-[2px]
-            border-foreground-tertiary
-            bg-surface-primary
-            checked:border-surface-accent
-          "
-        />
-
-        <span
-          className="
-            pointer-events-none
-            absolute
-            left-[5px]
-            top-[5px]
-            z-20
-            hidden
-            h-[8px]
-            w-[8px]
-            rounded-full
-            bg-surface-accent
-            peer-checked:block
-          "
-        />
-      </span>
-
-      <span>{label}</span>
-    </label>
-  );
-}
-
-/* -------------------------------------------------------------------------- */
-/*                             Text File Section                              */
-/* -------------------------------------------------------------------------- */
-
-function TextFileSection({ formData, onChange, errors }: TextFileSectionProps) {
-  const { t } = useTranslation();
-
-  const separatorOptions = [
-    { value: ",", label: t("DS_COMMA") },
-    { value: ";", label: t("DS_SEMICOLON") },
-    { value: "|", label: t("DS_PIPE") },
-    { value: "\\t", label: t("DS_TAB") },
-  ];
-
-  const rowSeparatorOptions = [
-    { value: "\\n", label: t("DS_NEW_LINE") },
-    { value: "\\r\\n", label: t("DS_CRLF") },
-  ];
-
-  const timeColumnOptions = [
-    { value: "1", label: t("DS_COLUMN_1") },
-    { value: "2", label: t("DS_COLUMN_2") },
-    { value: "3", label: t("DS_COLUMN_3") },
-  ];
-
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0] ?? null;
-    onChange("file", file);
-  };
-
-  const checkboxClassName = `
-    rounded-[4px]
-    bg-surface-primary
-    border-foreground-tertiary
-    checked:border-checkbox-checked-border
-    checked:bg-checkbox-checked-background
-  `;
-
-  const checkboxLabelClassName = `
-    text-[13px]
-    font-medium
-    leading-[19.5px]
-    text-foreground-secondary
-  `;
-
-  return (
-    <div className="flex w-[420px] flex-col gap-[14px]">
-      {/* ------------------------------------------------------------------ */}
-      {/* Choose File                                                        */}
-      {/* ------------------------------------------------------------------ */}
-
-      <div className="flex w-[420px] flex-col gap-[6px]">
-        <label className={labelClass}>{t("DS_CHOOSE_FILE")}</label>
-
-        {/* File control row */}
-        <div className="flex h-[34px] w-[420px] gap-[8px]">
-          {/* File Name */}
-          <div
-            className="
-              box-border
-              flex
-              h-[32px]
-              w-[287px]
-              items-center
-              rounded-[6px]
-              border
-              border-border-gray
-              bg-accordion-background
-              px-[10px]
-            "
-          >
-            <span
-              className="
-                truncate
-                text-[13px]
-                font-medium
-                leading-[32px]
-                text-badge-neutral-solid-background
-              "
-            >
-              {formData.file?.name ?? t("DS_NO_FILE_CHOSEN")}
-            </span>
-          </div>
-
-          {/* Choose File Button */}
-          <Button
-            type="button"
-            variant="primary"
-            fill="outline"
-            size="medium"
-            className="
-              w-auto
-              rounded-[6px]
-              px-[24px]
-              py-[6px]
-              text-[14px]
-              font-bold
-              leading-[20px]
-            "
-            onClick={() => {
-              document.getElementById("text-file-input")?.click();
-            }}
-          >
-            {t("DS_CHOOSE_FILE")}
-          </Button>
-
-          <input
-            id="text-file-input"
-            type="file"
-            className="hidden"
-            onChange={handleFileChange}
-          />
-        </div>
-
-        {/* Error is OUTSIDE the horizontal row */}
-        <FieldError message={errors?.file} />
-      </div>
-
-      {/* ------------------------------------------------------------------ */}
-      {/* Field Separator + Row Separator                                   */}
-      {/* ------------------------------------------------------------------ */}
-
-      <div className="grid w-[420px] grid-cols-2 gap-[12px]">
-        {/* Field Separator */}
-        <div className="flex w-[204px] flex-col gap-[4px]">
-          <Select
-            label={t("DS_FIELD_SEPARATOR")}
-            options={separatorOptions}
-            placeHolder={t("COMMON_SELECT")}
-            value={formData.fieldSeparator}
-            onChange={(event) => onChange("fieldSeparator", event.target.value)}
-            className="
-              h-[32px]
-              w-[204px]
-              border-border-gray
-              bg-accordion-background
-              text-badge-neutral-solid-background
-            "
-          />
-
-          <FieldError message={errors?.fieldSeparator} />
-        </div>
-
-        {/* Row Separator */}
-        <div className="flex w-[204px] flex-col gap-[4px]">
-          <Select
-            label={t("DS_ROW_SEPARATOR")}
-            options={rowSeparatorOptions}
-            placeHolder={t("COMMON_SELECT")}
-            value={formData.rowSeparator}
-            onChange={(event) => onChange("rowSeparator", event.target.value)}
-            className="
-              h-[32px]
-              w-[204px]
-              border-border-gray
-              bg-accordion-background
-              text-badge-neutral-solid-background
-            "
-          />
-
-          <FieldError message={errors?.rowSeparator} />
-        </div>
-      </div>
-
-      {/* ------------------------------------------------------------------ */}
-      {/* Checkboxes                                                         */}
-      {/* ------------------------------------------------------------------ */}
-
-      <div className="flex w-[420px] flex-col gap-[10px]">
-        <Checkbox
-          checked={formData.treatDataAsNumeric}
-          label={t("DS_TREAT_DATA_AS_NUMERIC")}
-          size={18}
-          onChange={(event) =>
-            onChange("treatDataAsNumeric", event.target.checked)
-          }
-          className={checkboxClassName}
-          labelClassName={checkboxLabelClassName}
-        />
-
-        <Checkbox
-          checked={formData.uniqueId}
-          label={t("DS_UNIQUE_ID")}
-          size={18}
-          onChange={(event) => onChange("uniqueId", event.target.checked)}
-          className={checkboxClassName}
-          labelClassName={checkboxLabelClassName}
-        />
-
-        <Checkbox
-          checked={formData.header}
-          label={t("DS_HEADER")}
-          size={18}
-          onChange={(event) => onChange("header", event.target.checked)}
-          className={checkboxClassName}
-          labelClassName={checkboxLabelClassName}
-        />
-
-        <div className="flex w-[420px] flex-col">
-          {/* Time Column field row */}
-          <div
-            className="
-      flex
-      h-[32px]
-      w-[420px]
-      items-center
-      gap-[12px]
-      pl-[24px]
-    "
-          >
-            <label
-              className="
-        h-[20px]
-        w-[80px]
-        shrink-0
-        text-[13px]
-        font-medium
-        leading-[19.5px]
-        text-foreground-secondary
-      "
-            >
-              {t("DS_TIME_COLUMN")}
-            </label>
-
-            {/* Keep Select completely isolated from error */}
-            <div className="relative h-[32px] w-[120.5px] shrink-0">
-              <Select
-                options={timeColumnOptions}
-                value={formData.timeColumn}
-                onChange={(event) => onChange("timeColumn", event.target.value)}
-                className="
-          h-[32px]
-          w-[120.5px]
-          rounded-[6px]
-          border-border-gray
-          bg-accordion-background
-          text-badge-neutral-solid-background
-        "
-              />
-            </div>
-          </div>
-
-          {/* Error gets its own row */}
-          <div className="ml-[116px] min-h-[16px]">
-            <FieldError message={errors?.timeColumn} />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-/* -------------------------------------------------------------------------- */
-/*                              ODBC Section                                  */
-/* -------------------------------------------------------------------------- */
-
-function OdbcSection({ formData, onChange, errors }: OdbcSectionProps) {
-  const { t } = useTranslation();
-
-  const selectOptions = [
-    {
-      value: "option1",
-      label: t("DS_OPTION_1"),
-    },
-    {
-      value: "option2",
-      label: t("DS_OPTION_2"),
-    },
-  ];
-
-  const [activeAction, setActiveAction] = useState<"add" | "edit" | "remove">(
-    "add",
-  );
-
-  return (
-    <div className="flex w-[420px] flex-col gap-[14px]">
-      {/* ------------------------------------------------------------------ */}
-      {/* SQL Data Source                                                    */}
-      {/* ------------------------------------------------------------------ */}
-
-      <div className="flex w-[420px] flex-col gap-[6px]">
-        <label
-          className="
-            h-[20px]
-            text-[13px]
-            font-bold
-            leading-[19.5px]
-            text-foreground
-          "
-        >
-          {t("DS_SQL_DATA_SOURCE")}
-        </label>
-
-        <Select
-          options={selectOptions}
-          placeHolder={t("COMMON_SELECT")}
-          value={formData.sqlDataSource}
-          onChange={(event) => onChange("sqlDataSource", event.target.value)}
-          className="
-            h-[32px]
-            w-[420px]
-            rounded-[6px]
-            border
-            border-border-gray
-            bg-accordion-background
-            text-table-header-foreground
-          "
-        />
-
-        <FieldError message={errors?.sqlDataSource} />
-
-        {/* Add / Edit / Remove */}
-        <div className="flex h-[34px] w-[420px] gap-[6px]">
-          {/* ADD */}
-          <Button
-            type="button"
-            variant="primary"
-            fill="outline"
-            size="medium"
-            className={`
-              h-[34px]
-              w-[77px]
-              rounded-[6px]
-              border
-              px-[24px]
-              py-[6px]
-              text-[14px]
-              leading-[20px]
-              ${
-                activeAction === "add"
-                  ? "border-surface-accent bg-surface-elevated text-surface-accent"
-                  : "border-border-button bg-surface-elevated text-surface-control"
-              }
-            `}
-            onClick={() => setActiveAction("add")}
-          >
-            {t("DS_ADD")}
-          </Button>
-
-          {/* EDIT */}
-          <Button
-            type="button"
-            variant="primary"
-            fill="outline"
-            size="medium"
-            className={`
-              h-[34px]
-              w-[77px]
-              rounded-[6px]
-              border
-              px-[24px]
-              py-[6px]
-              text-[14px]
-              leading-[20px]
-              ${
-                activeAction === "edit"
-                  ? "border-surface-accent bg-surface-elevated text-surface-accent"
-                  : "border-border-button bg-surface-elevated text-surface-control"
-              }
-            `}
-            onClick={() => setActiveAction("edit")}
-          >
-            {t("DS_EDIT")}
-          </Button>
-
-          {/* REMOVE */}
-          <Button
-            type="button"
-            variant="primary"
-            fill="outline"
-            size="medium"
-            className={`
-              h-[34px]
-              w-[104px]
-              rounded-[6px]
-              border
-              px-[24px]
-              py-[6px]
-              text-[14px]
-              leading-[20px]
-              ${
-                activeAction === "remove"
-                  ? "border-surface-accent bg-surface-elevated text-surface-accent"
-                  : "border-border-button bg-surface-elevated text-surface-control"
-              }
-            `}
-            onClick={() => setActiveAction("remove")}
-          >
-            {t("DS_REMOVE")}
-          </Button>
-        </div>
-      </div>
-
-      {/* ------------------------------------------------------------------ */}
-      {/* Authentication                                                     */}
-      {/* ------------------------------------------------------------------ */}
-
-      <div className="flex h-[76px] w-[420px] flex-col gap-[6px]">
-        <p
-          className="
-            h-[20px]
-            text-[13px]
-            font-bold
-            leading-[19.5px]
-            text-foreground
-          "
-        >
-          {t("DS_AUTHENTICATION_MODE")}
-        </p>
-
-        <div className="flex h-[50px] flex-col gap-[10px]">
-          <DataSourceRadio
-            name="authentication"
-            value="trusted"
-            checked={formData.authentication === "trusted"}
-            label={t("DS_TRUSTED_CONNECTION")}
-            onChange={(value) =>
-              onChange("authentication", value as FormData["authentication"])
-            }
-          />
-
-          <DataSourceRadio
-            name="authentication"
-            value="username-password"
-            checked={formData.authentication === "username-password"}
-            label={t("DS_USERNAME_PASSWORD")}
-            onChange={(value) =>
-              onChange("authentication", value as FormData["authentication"])
-            }
-          />
-        </div>
-      </div>
-
-      {/* ------------------------------------------------------------------ */}
-      {/* Username + Password                                                */}
-      {/* ------------------------------------------------------------------ */}
-
-      <div className="grid w-[420px] grid-cols-2 gap-[12px]">
-        {/* Username */}
-        <div className="flex w-[204px] flex-col">
-          <label className={labelClass}>{t("DS_USERNAME")}</label>
-
-          <div className="mt-[6px]">
-            <input
-              type="text"
-              placeholder={t("DS_ADD_USERNAME")}
-              value={formData.username}
-              onChange={(event) => onChange("username", event.target.value)}
-              className="
-          box-border
-          h-[32px]
-          w-[204px]
-          rounded-[6px]
-          border
-          border-border-gray
-          bg-accordion-background
-          px-[10px]
-          text-[13px]
-          font-medium
-          leading-[19.5px]
-          text-foreground
-          outline-none
-          placeholder:text-foreground-tertiary
-        "
-            />
-          </div>
-
-          {/* Dedicated error area */}
-          <div className="min-h-[16px]">
-            <FieldError message={errors?.username} />
-          </div>
-        </div>
-
-        {/* Password */}
-        <div className="flex w-[204px] flex-col">
-          <label className={labelClass}>{t("DS_PASSWORD")}</label>
-
-          <div className="mt-[6px]">
-            <input
-              type="password"
-              placeholder={t("DS_ADD_PASSWORD")}
-              value={formData.password}
-              onChange={(event) => onChange("password", event.target.value)}
-              className="
-          box-border
-          h-[32px]
-          w-[204px]
-          rounded-[6px]
-          border
-          border-border-gray
-          bg-accordion-background
-          px-[10px]
-          text-[13px]
-          font-medium
-          leading-[19.5px]
-          text-foreground-secondary
-          outline-none
-          placeholder:text-foreground-tertiary
-        "
-            />
-          </div>
-
-          {/* Dedicated error area */}
-          <div className="min-h-[16px]">
-            <FieldError message={errors?.password} />
-          </div>
-        </div>
-      </div>
-
-      {/* ------------------------------------------------------------------ */}
-      {/* Options + SQL Query                                                */}
-      {/* ------------------------------------------------------------------ */}
-
-      <div className="flex w-[420px] flex-col gap-[10px]">
-        {/* Transpose */}
-        <div className="w-[420px]">
-          <Checkbox
-            checked={formData.transposeOutputData}
-            label={t("DS_TRANSPOSE_OUTPUT_DATA")}
-            size={18}
-            onChange={(event) =>
-              onChange("transposeOutputData", event.target.checked)
-            }
-            className="
-              rounded-[4px]
-              border-foreground-tertiary
-              bg-surface-primary
-              checked:border-checkbox-checked-border
-              checked:bg-checkbox-checked-background
-            "
-            labelClassName="
-              text-[13px]
-              font-medium
-              leading-[19.5px]
-              text-foreground-secondary
-            "
-          />
-        </div>
-
-        {/* Direct SQL */}
-        <div className="w-[420px]">
-          <Checkbox
-            checked={formData.directSqlQuery}
-            label={t("DS_DIRECT_SQL_QUERY")}
-            size={18}
-            onChange={(event) =>
-              onChange("directSqlQuery", event.target.checked)
-            }
-            className="
-              rounded-[4px]
-              border-foreground-tertiary
-              bg-surface-primary
-              checked:border-checkbox-checked-border
-              checked:bg-checkbox-checked-background
-            "
-            labelClassName="
-              text-[13px]
-              font-medium
-              leading-[19.5px]
-              text-foreground-secondary
-            "
-          />
-        </div>
-
-        {/* SQL Query */}
-        <TextArea
-          value={formData.sqlQuery}
-          onChange={(event) => onChange("sqlQuery", event.target.value)}
-          placeholder={t("DS_SQL_QUERY_PLACEHOLDER")}
-          rows={4}
-          disabled={!formData.directSqlQuery}
-          className="
-            h-[92px]
-            w-[420px]
-            rounded-[6px]
-            border
-            border-border-gray
-            bg-accordion-background
-            px-[10px]
-            py-[6px]
-            text-[13px]
-            font-medium
-            leading-[19.5px]
-            text-foreground-secondary
-            placeholder:text-foreground-tertiary
-          "
-        />
-
-        <FieldError message={errors?.sqlQuery} />
-      </div>
-    </div>
-  );
-}
-
-/* -------------------------------------------------------------------------- */
-/*                              Main Component                                */
-/* -------------------------------------------------------------------------- */
-
 export default function DataSource({
-  type,
   dataSourceName = "HDS2",
   onClose,
   onSave,
-  onTypeChange,
 }: DataSourceDialogProps) {
+  console.log("dataSourceConfiguration", dataSourceConfiguration);
   const { t } = useTranslation();
-
-  const selectOptions = [
-    {
-      value: "option1",
-      label: t("DS_OPTION_1"),
-    },
-    {
-      value: "option2",
-      label: t("DS_OPTION_2"),
-    },
-  ];
-
-  const [formData, setFormData] = useState<FormData>(initialFormData);
-
-  const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>(
-    {},
-  );
 
   const [helpActive, setHelpActive] = useState(false);
 
-  const isTextFile = type === "text-file";
-  const isOdbc = type === "odbc";
+  const [formData, setFormData] = useState<FormData>(initialFormData);
 
-  /* ---------------------------------------------------------------------- */
-  /*                              Field Change                              */
-  /* ---------------------------------------------------------------------- */
+  const [selectedDataSource, setSelectedDataSource] = useState("none");
 
-  const handleChange = <K extends keyof FormData>(
-    key: K,
-    value: FormData[K],
-  ) => {
-    setFormData((previous) => ({
-      ...previous,
-      [key]: value,
-    }));
+  const [controllerType, setControllerType] =
+    useState<ControllerType>("regulatory");
+  const [templateType, setTemplateType] = useState<TemplateType>(
+    "standalone-controller",
+  );
 
-    setErrors((previous) => ({
-      ...previous,
-      [key]: undefined,
-    }));
-  };
+  const controllerOptions =
+    dataSourceConfiguration.dataSourceConfiguration.controllerTypes.map(
+      (controller) => ({
+        value: controller.id,
+        label: controller.name,
+      }),
+    );
 
-  /* ---------------------------------------------------------------------- */
-  /*                              Save / Validate                           */
-  /* ---------------------------------------------------------------------- */
+  const dataSourceOptions =
+    dataSourceConfiguration.dataSourceConfiguration.dataSources.map(
+      (dataSource) => ({
+        value: dataSource.id,
+        label: dataSource.name,
+      }),
+    );
 
-  const handleSave = () => {
-    const result = dataSourceSchema.safeParse({
-      type,
-      ...formData,
-    });
+  const templateOptions =
+    dataSourceConfiguration.dataSourceConfiguration.templateTypes[
+      controllerType as keyof typeof dataSourceConfiguration.dataSourceConfiguration.templateTypes
+    ]?.map((template) => ({
+      value: template.id,
+      label: template.name,
+    })) ?? [];
 
-    if (!result.success) {
-      const validationErrors: Partial<Record<keyof FormData, string>> = {};
+  const tagDefinitions = dataSourceConfiguration.dataSourceConfiguration
+    .tagDefinitions as Partial<TagDefinitions>;
 
-      result.error.issues.forEach((issue) => {
-        const fieldName = issue.path[0];
+  const availableTags =
+    tagDefinitions[controllerType]?.[templateType]?.map((tag) => ({
+      name: tag.columnName,
+      extension: tag.extension,
+    })) ?? [];
 
-        if (typeof fieldName === "string" && fieldName in initialFormData) {
-          const field = fieldName as keyof FormData;
+  const [selectedTags, setSelectedTags] = useState<SelectedTag[]>([]);
 
-          if (!validationErrors[field]) {
-            validationErrors[field] = issue.message;
-          }
-        }
-      });
+  const unselectedTags = availableTags.filter(
+    (availableTag) =>
+      !selectedTags.some(
+        (selectedTag) => selectedTag.name === availableTag.name,
+      ),
+  );
 
-      setErrors(validationErrors);
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0] ?? null;
 
+    if (!file) {
+      setFormData((prev) => ({
+        ...prev,
+        file: null,
+      }));
+
+      setSelectedTags([]);
       return;
     }
 
-    setErrors({});
+    setFormData((prev) => ({
+      ...prev,
+      file,
+    }));
 
-    onSave?.({
-      type,
-      dataSourceName,
-      ...formData,
+    const reader = new FileReader();
+
+    reader.onload = (event) => {
+      const content = event.target?.result;
+
+      if (typeof content !== "string") {
+        setSelectedTags([]);
+        return;
+      }
+
+      // Get the first non-empty line from the text file
+      const firstLine = content
+        .split(/\r?\n/)
+        .find((line) => line.trim().length > 0);
+
+      if (!firstLine) {
+        setSelectedTags([]);
+        return;
+      }
+
+      /*
+       * Your actual file is TAB separated.
+       *
+       * Example:
+       *
+       * Timestamp    BK-3BFC0126.MODE    BK-3BFC0126.OP
+       *              ↑                    ↑
+       *              tab                  tab
+       */
+
+      const fileColumns = firstLine
+        .replace(/^\uFEFF/, "")
+        .split(/\t/)
+        .map((column) =>
+          column
+            .trim()
+            .replace(/^["']|["']$/g, "")
+            .trim(),
+        )
+        .filter(Boolean);
+
+      console.log("File columns:", fileColumns);
+      console.log("Available JSON tags:", availableTags);
+
+      /*
+       * Map the file columns with JSON tag definitions.
+       *
+       * File:
+       * BK-3BFC0126.MODE
+       *
+       * JSON:
+       * Mode -> .MODE
+       *
+       * So we extract:
+       * .MODE
+       *
+       * and compare it with JSON extension.
+       */
+
+      const mappedTags: SelectedTag[] = fileColumns
+        .map((fileColumn) => {
+          // Timestamp is not a tag, so ignore it
+          if (fileColumn.toLowerCase() === "timestamp") {
+            return null;
+          }
+
+          /*
+           * Get everything after the last dot.
+           *
+           * BK-3BFC0126.MODE
+           *              ↓
+           * .MODE
+           *
+           * BK-3BFC0126.OP
+           *              ↓
+           * .OP
+           */
+          const lastDotIndex = fileColumn.lastIndexOf(".");
+
+          if (lastDotIndex === -1) {
+            return null;
+          }
+
+          const extension = fileColumn
+            .substring(lastDotIndex)
+            .trim()
+            .toLowerCase();
+
+          console.log(
+            `File column "${fileColumn}" has extension "${extension}"`,
+          );
+
+          /*
+           * Find matching JSON definition.
+           *
+           * JSON:
+           * {
+           *   columnName: "Mode",
+           *   extension: ".MODE"
+           * }
+           *
+           * extension comparison:
+           * ".mode" === ".mode"
+           */
+          const matchedTag = availableTags.find(
+            (tag) => tag.extension.trim().toLowerCase() === extension,
+          );
+
+          console.log(`Column "${fileColumn}" =>`, matchedTag ?? "NO MATCH");
+
+          if (!matchedTag) {
+            return null;
+          }
+
+          return {
+            name: matchedTag.name,
+            extension: matchedTag.extension,
+            isManual: false,
+          };
+        })
+        .filter((tag): tag is SelectedTag => tag !== null);
+
+      console.log("Final mapped tags:", mappedTags);
+
+      setSelectedTags(mappedTags);
+    };
+
+    reader.onerror = () => {
+      console.error("Failed to read file");
+      setSelectedTags([]);
+    };
+
+    reader.readAsText(file);
+  };
+
+  const handleRemoveTag = (index: number) => {
+    setSelectedTags((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const handleAddTag = (name: string, extension: string) => {
+    setSelectedTags((prev) => {
+      const alreadySelected = prev.some((tag) => tag.name === name);
+
+      if (alreadySelected) {
+        return prev;
+      }
+
+      return [
+        ...prev,
+        {
+          name,
+          extension,
+          isManual: false,
+        },
+      ];
     });
   };
 
-  /* ---------------------------------------------------------------------- */
-  /*                                  UI                                    */
-  /* ---------------------------------------------------------------------- */
+  const handleAddManualTag = () => {
+    setSelectedTags((prev) => [
+      ...prev,
+      {
+        name: "",
+        extension: "",
+        isManual: true,
+      },
+    ]);
+  };
+  const handleManualTagChange = (
+    index: number,
+    field: "name" | "extension",
+    value: string,
+  ) => {
+    setSelectedTags((prev) =>
+      prev.map((tag, i) =>
+        i === index
+          ? {
+              ...tag,
+              [field]: value,
+            }
+          : tag,
+      ),
+    );
+  };
+
+  const handleAddAllTags = () => {
+    setSelectedTags((prev) => {
+      const existingNames = new Set(prev.map((tag) => tag.name));
+
+      const newTags = availableTags
+        .filter((tag) => !existingNames.has(tag.name))
+        .map((tag) => ({
+          name: tag.name,
+          extension: tag.extension,
+          isManual: false,
+        }));
+
+      return [...prev, ...newTags];
+    });
+  };
+  const handleSave = () => {
+    onSave?.({
+      ...formData,
+      selectedDataSource,
+      controllerType,
+      templateType,
+      selectedTags,
+    });
+  };
 
   return (
     <div
       className={cn(
-        containerClass,
+        "w-[1280px] rounded-[8px] bg-surface-primary text-foreground",
         "flex flex-col",
-        isTextFile ? "min-h-[561px]" : "min-h-[719px]",
+        selectedDataSource === "none"
+          ? "h-[776.89px]"
+          : "min-h-[486px] max-h-[776.89px] h-auto",
       )}
     >
-      {/* ================================================================== */}
-      {/* Header                                                             */}
-      {/* ================================================================== */}
-
-      <div
-        className="
-          flex
-          h-[102px]
-          w-[500px]
-          shrink-0
-          items-start
-          gap-[12px]
-          px-[40px]
-          pb-[16px]
-          pt-[40px]
-        "
-      >
-        {/* Icon */}
-        <div
-          className="
-            relative
-            flex
-            h-[36px]
-            w-[36px]
-            shrink-0
-            items-center
-            justify-center
-            rounded-[6px]
-            border-[1.5px]
-            border-border-gray
-            bg-accordion-background
-          "
-        >
-          <CylinderIcon
-            size={16}
-            strokeWidth={1.5}
-            className="text-foreground"
-          />
-
+      {/* HEADER */}
+      <div className="flex items-start px-[36px] pt-[32px]">
+        {" "}
+        <div className=" relative flex h-[36px] w-[36px] items-center justify-center rounded-[6px] border border-border-gray bg-accordion-background ">
+          {" "}
+          <CylinderIcon size={16} strokeWidth={1.5} />
           <ArrowRight
             size={7}
-            strokeWidth={3.5}
-            className="
-              absolute
-              left-[14px]
-              top-[15px]
-              text-foreground
-            "
-          />
+            strokeWidth={3}
+            className="absolute left-[14px] top-[15px]"
+          />{" "}
         </div>
-
-        {/* Title */}
-        <div className="h-[46px] w-auto">
-          <h2
-            className="
-              h-[30px]
-              w-[29px]
-              text-[20px]
-              font-extrabold
-              leading-[30px]
-              text-foreground
-            "
-          >
-            {t("DS_DATA_SOURCE")}
-          </h2>
-
-          <p
-            className="
-              h-[16px]
-              w-[112px]
-              text-[12px]
-              font-medium
-              leading-[16px]
-              text-table-header-foreground
-            "
-          >
-            {t("FILTER_DATA_SOURCE")} · {dataSourceName}
-          </p>
+        <div className="ml-[14px]">
+          {" "}
+          <h2 className="text-[18px] font-bold">Data Source (DS)</h2>
+          <p className="text-[12px] text-table-header-foreground">
+            {" "}
+            Data Source · {dataSourceName}{" "}
+          </p>{" "}
         </div>
-
-        {/* Close */}
-        <Button
-          type="button"
-          variant="secondary"
-          fill="solid"
-          size="small"
-          iconOnly
-          icon={<X size={14} />}
-          aria-label={t("COMMON_CLOSE")}
-          onClick={onClose}
-          className="
-            ml-auto
-            h-[32px]
-            w-[32px]
-            border-0
-            bg-transparent
-            p-0
-            text-[--foreground-tertiary]
-            hover:bg-transparent
-          "
-        />
+        <div className="ml-auto flex gap-[12px]">
+          {" "}
+          <button>
+            {" "}
+            <Settings size={14} />{" "}
+          </button>
+          <button onClick={onClose}>
+            {" "}
+            <X size={14} />{" "}
+          </button>{" "}
+        </div>{" "}
       </div>
-
-      {/* ================================================================== */}
-      {/* Content                                                            */}
-      {/* ================================================================== */}
-
+      {/* BODY */}
       <div
-        className="
-          w-[500px]
-          shrink-0
-          px-[40px]
-          py-[16px]
-        "
+        className={cn(
+          "flex gap-[20px] px-[36px] py-[24px]",
+          selectedDataSource === "none" ? "flex-1 min-h-0" : "h-auto",
+        )}
       >
-        <div className={cn(contentWidthClass, "flex flex-col gap-[14px]")}>
-          {/* Select Data Source */}
-          <div className="flex w-[420px] flex-col gap-[6px]">
-            <label
-              className="
-                h-[20px]
-                text-[13px]
-                font-bold
-                leading-[19.5px]
-                text-foreground
-              "
-            >
-              {t("DS_SELECT_DATA_SOURCE")}
+        {" "}
+        {/* LEFT SECTION */}
+        <div className="flex w-0 flex-1 min-h-0 flex-col gap-[16px]">
+          {" "}
+          <div>
+            {" "}
+            <label className="mb-[6px] block text-[13px] font-bold">
+              {" "}
+              Select Data Source{" "}
+            </label>
+            <Select
+              options={dataSourceOptions}
+              value={selectedDataSource}
+              onChange={(event) => {
+                setSelectedDataSource(event.target.value);
+              }}
+              className="h-[34px] w-full rounded-[6px] border-border-gray"
+            />
+          </div>
+          {selectedDataSource === "testfile" && (
+            <div>
+              {" "}
+              <label className="mb-[6px] block text-[13px] font-bold">
+                {" "}
+                Text File{" "}
+              </label>
+              <div className="flex items-center gap-[10px]">
+                {" "}
+                <Button
+                  type="button"
+                  variant="primary"
+                  fill="outline"
+                  size="small"
+                  onClick={() =>
+                    document.getElementById("browse-file")?.click()
+                  }
+                >
+                  {" "}
+                  Browse File{" "}
+                </Button>
+                <span className="text-[13px]">
+                  {" "}
+                  {formData.file?.name ?? "No file selected"}{" "}
+                </span>
+                <input
+                  id="browse-file"
+                  type="file"
+                  className="hidden"
+                  onChange={handleFileChange}
+                />{" "}
+              </div>{" "}
+            </div>
+          )}
+          <div>
+            {" "}
+            <label className="mb-[6px] block text-[13px] font-bold">
+              {" "}
+              Controller Type{" "}
+            </label>
+            <Select
+              options={controllerOptions}
+              value={controllerType}
+              onChange={(event) => {
+                const newControllerType = event.target.value as ControllerType;
+
+                setControllerType(newControllerType);
+
+                const templates =
+                  dataSourceConfiguration.dataSourceConfiguration.templateTypes[
+                    newControllerType
+                  ];
+
+                setTemplateType(
+                  (templates?.[0]?.id as TemplateType) ??
+                    "standalone-controller",
+                );
+
+                // Clear tags from previous controller
+                setSelectedTags([]);
+              }}
+              className="h-[34px] w-full rounded-[6px] border-border-gray"
+            />
+          </div>
+          {/* TEMPLATE TYPE */}
+          <div>
+            <label className="mb-[6px] block text-[13px] font-bold">
+              Template Type
             </label>
 
             <Select
-              options={selectOptions}
-              placeHolder={t("COMMON_SELECT")}
-              value={formData.dataSource}
-              onChange={(event) =>
-                handleChange("dataSource", event.target.value)
-              }
-              className="
-                h-[32px]
-                w-[420px]
-                rounded-[6px]
-                border
-                border-border-gray
-                bg-accordion-background
-                text-foreground-tertiary
-              "
-            />
+              options={templateOptions}
+              value={templateType}
+              onChange={(event) => {
+                const newTemplateType = event.target.value as TemplateType;
 
-            <FieldError message={errors?.dataSource} />
+                setTemplateType(newTemplateType);
+
+                // Clear tags from previous template
+                setSelectedTags([]);
+              }}
+              className="h-[34px] w-full rounded-[6px] border-border-gray"
+            />
           </div>
+          {/* SELECT TAGS - HIDDEN FOR TEXT FILE */}
+          {selectedDataSource !== "testfile" && (
+            <div className="flex min-h-0 flex-1 flex-col">
+              <div className="mb-[6px] flex items-center justify-between">
+                <label className="text-[13px] font-bold">Select Tags</label>
 
-          {/* Text File */}
-          {isTextFile && (
-            <TextFileSection
-              formData={formData}
-              onChange={handleChange}
-              errors={errors}
-            />
-          )}
+                <button
+                  type="button"
+                  className="text-[12px] text-surface-accent"
+                  onClick={handleAddAllTags}
+                >
+                  Add All
+                </button>
+              </div>
 
-          {/* ODBC */}
-          {isOdbc && (
-            <OdbcSection
-              formData={formData}
-              onChange={handleChange}
-              errors={errors}
-            />
+              <div
+                className="
+    min-h-0
+    flex-1
+    overflow-y-auto
+    rounded-[6px]
+    border
+    border-border-gray
+    p-[10px]
+  "
+              >
+                <div
+                  className="
+          mb-[8px]
+          grid
+          grid-cols-[1fr_110px_40px]
+          gap-[8px]
+          text-[11px]
+          font-bold
+        "
+                >
+                  <div>COLUMN NAME</div>
+                  <div>EXTENSIONS</div>
+                  <div />
+                </div>
+
+                {unselectedTags.map((tag) => (
+                  <div
+                    key={tag.name}
+                    className="
+            mb-[8px]
+            grid
+            grid-cols-[1fr_110px_40px]
+            gap-[8px]
+          "
+                  >
+                    <input
+                      value={tag.name}
+                      readOnly
+                      className="
+              h-[32px]
+              rounded-[4px]
+              border
+              border-border-gray
+              bg-accordion-background
+              px-[8px]
+            "
+                    />
+
+                    <input
+                      value={tag.extension}
+                      readOnly
+                      className="
+              h-[32px]
+              rounded-[4px]
+              border
+              border-border-gray
+              bg-accordion-background
+              px-[8px]
+            "
+                    />
+
+                    <button
+                      type="button"
+                      className="
+    flex
+    h-[32px]
+    w-[32px]
+    items-center
+    justify-center
+    rounded-[4px]
+    border
+    border-border-gray
+    hover:border-surface-accent
+  "
+                      onClick={() => handleAddTag(tag.name, tag.extension)}
+                    >
+                      <Plus
+                        size={14}
+                        strokeWidth={1.5}
+                        className="text-foreground hover:text-surface-accent"
+                      />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
           )}
         </div>
-      </div>
+        {/* RIGHT SECTION */}
+        <div
+          className={cn(
+            "flex w-0 flex-1 flex-col",
+            selectedDataSource === "none" ? "min-h-0" : "h-auto",
+          )}
+        >
+          {/* HEADER - OUTSIDE BORDER */}
+          <div className="mb-[8px] flex items-center justify-between">
+            <h3 className="text-[13px] font-bold">Selected Tags</h3>
 
-      {/* ================================================================== */}
-      {/* Footer                                                             */}
-      {/* ================================================================== */}
+            <button
+              type="button"
+              className="text-[12px] font-semibold text-surface-accent"
+              onClick={() => setSelectedTags([])}
+            >
+              Remove All
+            </button>
+          </div>
 
-      {/* ================================================================== */}
-      {/* Footer                                                             */}
-      {/* ================================================================== */}
+          {/* BORDERED CONTENT */}
+          <div
+            className={cn(
+              "flex flex-col rounded-[6px] border border-border-gray p-[12px] bg-[#2e2e2e4d]",
+              selectedDataSource === "none"
+                ? "h-[562.89px]"
+                : "min-h-[272px] max-h-[562.89px] h-auto",
+            )}
+          >
+            {/* COLUMN HEADERS */}
+            <div
+              className="
+      grid
+      grid-cols-[1fr_140px_40px]
+      gap-[8px]
+      px-[4px]
+      text-[11px]
+      font-bold
+      text-foreground-secondary
+    "
+            >
+              <div>COLUMN NAME</div>
+              <div>EXTENSIONS</div>
+              <div />
+            </div>
 
-      <div
-        className="
+            {/* SELECTED TAGS */}
+            <div className="mt-[8px] min-h-0 flex-1 overflow-y-auto">
+              {selectedTags.length === 0 ? (
+                <div className="flex min-h-[160px] -mt-[58px] items-center justify-center">
+                  <div
+                    className="
+            flex
+            h-[34px]
+            
+            w-full
+            italic
+            items-center
+            justify-start
+            rounded-[6px]
+            border
+            border-dashed
+            border-border-gray
+            px-[20px]
+            text-[13px]
+            text-foreground-secondary
+
+          "
+                  >
+                    No extensions selected.
+                  </div>
+                </div>
+              ) : (
+                selectedTags.map((tag, index) => (
+                  <div
+                    key={`${tag.name}-${index}`}
+                    className="
+            mb-[8px]
+            grid
+            grid-cols-[1fr_140px_40px]
+            gap-[8px]
+          "
+                  >
+                    {/* COLUMN NAME */}
+                    <input
+                      value={tag.name}
+                      placeholder={tag.isManual ? "Column name" : undefined}
+                      readOnly={!tag.isManual}
+                      onChange={(event) =>
+                        handleManualTagChange(index, "name", event.target.value)
+                      }
+                      className={cn(
+                        "h-[32px] rounded-[4px] border border-border-gray px-[10px] text-[13px] outline-none",
+                        tag.isManual
+                          ? "bg-accordion-background placeholder:text-foreground-secondary focus:border-surface-accent"
+                          : "bg-accordion-background",
+                      )}
+                    />
+
+                    {/* EXTENSION */}
+                    <input
+                      value={tag.extension}
+                      placeholder={tag.isManual ? ".PV" : undefined}
+                      readOnly={!tag.isManual}
+                      onChange={(event) =>
+                        handleManualTagChange(
+                          index,
+                          "extension",
+                          event.target.value,
+                        )
+                      }
+                      className={cn(
+                        "h-[32px] rounded-[4px] border border-border-gray px-[10px] text-[13px] outline-none",
+                        tag.isManual
+                          ? "bg-accordion-background placeholder:text-foreground-secondary focus:border-surface-accent"
+                          : "bg-accordion-background",
+                      )}
+                    />
+                    {/* REMOVE */}
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveTag(index)}
+                      className="
     flex
-    min-h-[90px]
-    w-[500px]
-    shrink-0
+    h-[32px]
+    w-[32px]
     items-center
-    justify-between
-    px-[40px]
-    pb-[40px]
-    pt-[16px]
+    justify-center
+    rounded-[4px]
+    border
+    border-border-gray
+    bg-accordion-background
+    hover:border-button-danger-solid-active-border
   "
-      >
-        {/* Help */}
+                    >
+                      <X
+                        size={14}
+                        strokeWidth={1.5}
+                        className="text-foreground hover:text-button-danger-solid-active-border"
+                      />
+                    </button>
+                  </div>
+                ))
+              )}
+            </div>
+
+            {/* ADD MANUALLY */}
+            <div className="mt-[12px] border-t border-border-gray pt-[12px]">
+              <Button
+                type="button"
+                variant="primary"
+                fill="outline"
+                size="medium"
+                onClick={handleAddManualTag}
+              >
+                Add Tag Manually
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+      {/* FOOTER */}
+      <div className=" flex items-center justify-between px-[36px] pb-[28px] pt-[16px] ">
+        {" "}
         <Button
           type="button"
           variant="primary"
           fill={helpActive ? "solid" : "outline"}
           size="medium"
           icon={<HelpCircle size={14} />}
-          onClick={() => setHelpActive((previous) => !previous)}
-          className="
-      h-[34px]
-      w-[94px]
-      rounded-[6px]
-      px-[16px]
-    "
+          onClick={() => setHelpActive((prev) => !prev)}
         >
-          {t("COMMON_HELP")}
+          {" "}
+          {t("COMMON_HELP")}{" "}
         </Button>
-
-        {/* Previous / Next */}
-        <div className="flex items-center gap-[8px]">
-          {/* Previous - ODBC -> Text File */}
-          {isOdbc && (
-            <Button
-              type="button"
-              variant="secondary"
-              fill="outline"
-              size="small"
-              iconOnly
-              icon={<ArrowLeft size={16} />}
-              aria-label="Previous data source"
-              onClick={() => onTypeChange?.("text-file")}
-              className="
-          h-[34px]
-          w-[34px]
-          rounded-[6px]
-          p-0
-        "
-            />
-          )}
-
-          {/* Next - Text File -> ODBC */}
-          {isTextFile && (
-            <Button
-              type="button"
-              variant="secondary"
-              fill="outline"
-              size="small"
-              iconOnly
-              icon={<ArrowRight size={16} />}
-              aria-label="Next data source"
-              onClick={() => onTypeChange?.("odbc")}
-              className="
-          h-[34px]
-          w-[34px]
-          rounded-[6px]
-          p-0
-        "
-            />
-          )}
-        </div>
-
-        {/* Cancel + Save */}
-        <div className="flex h-[34px] gap-[8px]">
+        <div className="flex gap-[8px]">
+          {" "}
           <Button
             type="button"
             variant="primary"
             fill="outline"
             size="medium"
             onClick={onClose}
-            className="
-        h-[34px]
-        w-[97px]
-        rounded-[6px]
-        px-[24px]
-      "
           >
-            {t("COMMON_CANCEL")}
+            {" "}
+            {t("COMMON_CANCEL")}{" "}
           </Button>
-
           <Button
             type="button"
             variant="primary"
             fill="solid"
             size="medium"
             onClick={handleSave}
-            className="
-        h-[32px]
-        w-[81px]
-        rounded-[6px]
-        px-[24px]
-      "
           >
-            {t("COMMON_SAVE")}
+            {" "}
+            {t("COMMON_SAVE")}{" "}
           </Button>
-        </div>
-      </div>
+        </div>{" "}
+      </div>{" "}
     </div>
   );
 }

@@ -19,7 +19,7 @@ export interface FormData {
   uniqueId: boolean;
   header: boolean;
   timeColumn: string;
-  errors: Partial<Record<keyof FormData, string>>;
+  
 
   // ODBC
   sqlDataSource: string;
