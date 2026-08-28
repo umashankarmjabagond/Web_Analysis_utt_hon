@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import dataSourceConfiguration from "../../mock/dataSource.json";
 import {
@@ -120,6 +120,19 @@ export default function DataSource({
     })) ?? [];
 
   const [selectedTags, setSelectedTags] = useState<SelectedTag[]>([]);
+  useEffect(() => {
+    const defaultTagNames = ["Mode", "PV", "OP", "SP"];
+
+    const defaultTags: SelectedTag[] = availableTags
+      .filter((tag) => defaultTagNames.includes(tag.name))
+      .map((tag) => ({
+        name: tag.name,
+        extension: tag.extension,
+        isManual: false,
+      }));
+
+    setSelectedTags(defaultTags);
+  }, [controllerType, templateType]);
 
   const unselectedTags = availableTags.filter(
     (availableTag) =>
@@ -166,16 +179,6 @@ export default function DataSource({
         return;
       }
 
-      /*
-       * Your actual file is TAB separated.
-       *
-       * Example:
-       *
-       * Timestamp    BK-3BFC0126.MODE    BK-3BFC0126.OP
-       *              ↑                    ↑
-       *              tab                  tab
-       */
-
       const fileColumns = firstLine
         .replace(/^\uFEFF/, "")
         .split(/\t/)
@@ -187,24 +190,6 @@ export default function DataSource({
         )
         .filter(Boolean);
 
-      console.log("File columns:", fileColumns);
-      console.log("Available JSON tags:", availableTags);
-
-      /*
-       * Map the file columns with JSON tag definitions.
-       *
-       * File:
-       * BK-3BFC0126.MODE
-       *
-       * JSON:
-       * Mode -> .MODE
-       *
-       * So we extract:
-       * .MODE
-       *
-       * and compare it with JSON extension.
-       */
-
       const mappedTags: SelectedTag[] = fileColumns
         .map((fileColumn) => {
           // Timestamp is not a tag, so ignore it
@@ -212,17 +197,6 @@ export default function DataSource({
             return null;
           }
 
-          /*
-           * Get everything after the last dot.
-           *
-           * BK-3BFC0126.MODE
-           *              ↓
-           * .MODE
-           *
-           * BK-3BFC0126.OP
-           *              ↓
-           * .OP
-           */
           const lastDotIndex = fileColumn.lastIndexOf(".");
 
           if (lastDotIndex === -1) {
@@ -234,27 +208,9 @@ export default function DataSource({
             .trim()
             .toLowerCase();
 
-          console.log(
-            `File column "${fileColumn}" has extension "${extension}"`,
-          );
-
-          /*
-           * Find matching JSON definition.
-           *
-           * JSON:
-           * {
-           *   columnName: "Mode",
-           *   extension: ".MODE"
-           * }
-           *
-           * extension comparison:
-           * ".mode" === ".mode"
-           */
           const matchedTag = availableTags.find(
             (tag) => tag.extension.trim().toLowerCase() === extension,
           );
-
-          console.log(`Column "${fileColumn}" =>`, matchedTag ?? "NO MATCH");
 
           if (!matchedTag) {
             return null;
@@ -267,8 +223,6 @@ export default function DataSource({
           };
         })
         .filter((tag): tag is SelectedTag => tag !== null);
-
-      console.log("Final mapped tags:", mappedTags);
 
       setSelectedTags(mappedTags);
     };
@@ -481,9 +435,6 @@ export default function DataSource({
                   (templates?.[0]?.id as TemplateType) ??
                     "standalone-controller",
                 );
-
-                // Clear tags from previous controller
-                setSelectedTags([]);
               }}
               className="h-[34px] w-full rounded-[6px] border-border-gray"
             />
@@ -501,9 +452,6 @@ export default function DataSource({
                 const newTemplateType = event.target.value as TemplateType;
 
                 setTemplateType(newTemplateType);
-
-                // Clear tags from previous template
-                setSelectedTags([]);
               }}
               className="h-[34px] w-full rounded-[6px] border-border-gray"
             />
