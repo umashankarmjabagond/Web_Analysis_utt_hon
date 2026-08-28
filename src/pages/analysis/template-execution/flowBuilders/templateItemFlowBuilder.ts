@@ -13,31 +13,12 @@ import {
   getHandleCoordinates,
   measurePathBounds,
 } from "./edgeGeometry";
-
-const CANVAS_LAYOUT = {
-  rowLeft: 24,
-  rowTop: 24,
-};
-
-const ROW_LAYOUT = {
-  topPadding: 24,
-  rightPadding: 24,
-  bottomPadding: 24,
-  leftPadding: 50,
-  headerGap: 12,
-};
-
-const HEADERNODE_LAYOUT = {
-  width: 160,
-  height: 24,
-};
-
-const NODE_LAYOUT = {
-  defaultWidth: 30,
-  defaultHeight: 30,
-  labelHeight: 15,
-  labelGap: 2,
-};
+import {
+  CANVAS_LAYOUT,
+  HEADERNODE_LAYOUT,
+  NODE_LAYOUT,
+  ROW_LAYOUT,
+} from "./layoutConstants";
 
 export const buildTemplateItemFlow = (
   itemId: string,
@@ -102,12 +83,13 @@ const mapToLayoutEdges = (edges: WorkflowData["edges"]): LayoutEdge[] => {
     sourceHandle: edge.sourceHandle,
     targetHandle: edge.targetHandle,
     pathType: (edge.data?.pathType ?? "default") as EdgePathType,
+    offset: edge.data?.offset as number | undefined,
   }));
 };
 
 // Single source of truth for "how big is this content" — used for both
 // initial positioning and final row sizing, so they can never drift apart.
-const calculateCombinedBounds = (
+export const calculateCombinedBounds = (
   nodes: ExecutionFlowNode[],
   edges: WorkflowData["edges"],
 ): Bounds => {
@@ -170,6 +152,7 @@ const calculateDagBounds = (
       targetY: target.y,
       sourcePosition: source.position,
       targetPosition: target.position,
+      offset: edge.offset,
     });
 
     const bounds = measurePathBounds(path);
@@ -222,7 +205,7 @@ const positionWorkflow = (
   };
 };
 
-const positionExecutionHeader = (
+export const positionExecutionHeader = (
   itemId: string,
   dagBounds: Bounds,
 ): ExecutionFlowNode => {
@@ -255,7 +238,7 @@ export const createTemplateItemHeaderNode = ({
   },
 });
 
-const calculateExecutionRowBoundary = (
+export const calculateExecutionRowBoundary = (
   dagBounds: Bounds,
   hasHeader: boolean,
 ): ExecutionRowBoundary => {
@@ -272,7 +255,7 @@ const calculateExecutionRowBoundary = (
   };
 };
 
-const createRowBoundaryContainer = (
+export const createRowBoundaryContainer = (
   itemId: string,
   boundary: ExecutionRowBoundary,
 ): ExecutionFlowNode => ({

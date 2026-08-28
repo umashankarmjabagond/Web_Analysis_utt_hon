@@ -523,8 +523,8 @@
             "id": "e94c7a31-6b05-4f28-a813-592de6c740bf",
             "type": "pa",
             "position": {
-              "x": 388,
-              "y": 140
+              "x": 400,
+              "y": 60
             },
             "data": {
               "label": "PA",
@@ -539,7 +539,7 @@
             "id": "f15b8e42-7c36-4a09-b721-963de5c840ab",
             "type": "oscillationIndex",
             "position": {
-              "x": 460,
+              "x": 388,
               "y": 140
             },
             "data": {
@@ -555,7 +555,7 @@
             "id": "a26c9d51-4e73-8f02-b638-175de4a920fc",
             "type": "multiMath",
             "position": {
-              "x": 532,
+              "x": 460,
               "y": 140
             },
             "data": {
@@ -571,8 +571,8 @@
             "id": "b37d4e61-9a25-4f08-c632-718ce5a940db",
             "type": "coherency",
             "position": {
-              "x": 604,
-              "y": 140
+              "x": 470,
+              "y": 220
             },
             "data": {
               "label": "Coherency",
@@ -587,7 +587,7 @@
             "id": "d48e5f72-1a36-4c09-b827-935fae610cd",
             "type": "spectrumAnalysis",
             "position": {
-              "x": 676,
+              "x": 532,
               "y": 140
             },
             "data": {
@@ -603,7 +603,7 @@
             "id": "e59a6c83-2b47-4d10-9f25-718ce5a340db",
             "type": "selectorSwitch",
             "position": {
-              "x": 748,
+              "x": 604,
               "y": 140
             },
             "data": {
@@ -619,7 +619,7 @@
             "id": "f62b7d94-3c58-4e01-a836-925fae710cd2",
             "type": "diagnosis",
             "position": {
-              "x": 820,
+              "x": 676,
               "y": 140
             },
             "data": {
@@ -645,7 +645,7 @@
             "style": {
               "strokeWidth": 2
             },
-            "id": "xy-edge__cc13d575-be36-4be0-938e-ea6cf70e5e49-5196dffa-a820-4159-92ec-a7ae33caa983"
+            "id": "xy-edge__dataSource-dataPreprocessor"
           },
           {
             "source": "b61e94d3-7a28-4f05-8c92-536de1a740bf",
@@ -659,7 +659,7 @@
             "style": {
               "strokeWidth": 2
             },
-            "id": "xy-edge__b61e94d3-7a28-4f05-8c92-536de1a740bf-7f24c9a1-6d53-4e08-b927-815ac6f340de"
+            "id": "xy-edge__dataPreprocessor-expMath"
           },
           {
             "source": "c72a5e19-4d83-6f01-b927-318ec5a640db",
@@ -673,11 +673,11 @@
             "style": {
               "strokeWidth": 2
             },
-            "id": "xy-edge__c72a5e19-4d83-6f01-b927-318ec5a640db-4b91e7c3-2586-4f0a-a732-619dc5e840bd"
+            "id": "xy-edge__expMath-controller"
           },
           {
             "source": "d83b6f20-5a94-4c17-9e62-741ac8f305bd",
-            "target": "e94c7a31-6b05-4f28-a813-592de6c740bf",
+            "target": "f15b8e42-7c36-4a09-b721-963de5c840ab",
             "type": "workflow",
             "sourceHandle": "right",
             "targetHandle": "left",
@@ -687,14 +687,14 @@
             "style": {
               "strokeWidth": 2
             },
-            "id": "xy-edge__d83b6f20-5a94-4c17-9e62-741ac8f305bd-6c42f9a1-8375-4e0b-b926-518da7c340ef"
+            "id": "xy-edge__controller-oi"
           },
           {
             "source": "d83b6f20-5a94-4c17-9e62-741ac8f305bd",
-            "target": "f15b8e42-7c36-4a09-b721-963de5c840ab",
+            "target": "e94c7a31-6b05-4f28-a813-592de6c740bf",
             "type": "workflow",
             "sourceHandle": "top",
-            "targetHandle": "top",
+            "targetHandle": "bottom",
             "data": {
               "pathType": "smoothstep"
             },
@@ -704,21 +704,7 @@
             "style": {
               "strokeWidth": 2
             },
-            "id": "xy-edge__d83b6f20-5a94-4c17-9e62-741ac8f305bd-4a71c9e2-6385-4f07-b126-859de3a740bc"
-          },
-          {
-            "source": "e94c7a31-6b05-4f28-a813-592de6c740bf",
-            "target": "f15b8e42-7c36-4a09-b721-963de5c840ab",
-            "type": "workflow",
-            "sourceHandle": "right",
-            "targetHandle": "left",
-            "markerEnd": {
-              "type": "arrowclosed"
-            },
-            "style": {
-              "strokeWidth": 2
-            },
-            "id": "xy-edge__e94c7a31-6b05-4f28-a813-592de6c740bf-9d53b6e2-4178-4a0c-c829-635fe1d740ab"
+            "id": "xy-edge__controller-pa"
           },
           {
             "source": "e94c7a31-6b05-4f28-a813-592de6c740bf",
@@ -735,7 +721,7 @@
             "style": {
               "strokeWidth": 2
             },
-            "id": "xy-edge__e94c7a31-6b05-4f28-a813-592de6c740bf-8c52f1a7-349d-4e06-b728-615ea9c340fd"
+            "id": "xy-edge__pa-spectrumAnalysis"
           },
           {
             "source": "f15b8e42-7c36-4a09-b721-963de5c840ab",
@@ -749,13 +735,13 @@
             "style": {
               "strokeWidth": 2
             },
-            "id": "xy-edge__f15b8e42-7c36-4a09-b721-963de5c840ab-2e64a8c1-5937-4f0b-d726-918de5a340bc"
+            "id": "xy-edge__oi-multiMath"
           },
           {
             "source": "a26c9d51-4e73-8f02-b638-175de4a920fc",
-            "target": "d48e5f72-1a36-4c09-b827-935fae610cd",
+            "target": "b37d4e61-9a25-4f08-c632-718ce5a940db",
             "type": "workflow",
-            "sourceHandle": "top",
+            "sourceHandle": "bottom",
             "targetHandle": "top",
             "data": {
               "pathType": "smoothstep"
@@ -766,24 +752,27 @@
             "style": {
               "strokeWidth": 2
             },
-            "id": "xy-edge__a26c9d51-4e73-8f02-b638-175de4a920fc-5d71c9e4-8263-4a07-b935-618fa2d740bc"
+            "id": "xy-edge__multiMath-coherency"
           },
           {
-            "source": "a26c9d51-4e73-8f02-b638-175de4a920fc",
-            "target": "b37d4e61-9a25-4f08-c632-718ce5a940db",
+            "source": "b37d4e61-9a25-4f08-c632-718ce5a940db",
+            "target": "d48e5f72-1a36-4c09-b827-935fae610cd",
             "type": "workflow",
-            "sourceHandle": "right",
-            "targetHandle": "left",
+            "sourceHandle": "bottom",
+            "targetHandle": "bottom",
+            "data": {
+              "pathType": "smoothstep"
+            },
             "markerEnd": {
               "type": "arrowclosed"
             },
             "style": {
               "strokeWidth": 2
             },
-            "id": "xy-edge__a26c9d51-4e73-8f02-b638-175de4a920fc-5a83c7e1-2469-4f0b-d935-718ca6e340ab"
+            "id": "xy-edge__coherency-spectrumAnalysis"
           },
           {
-            "source": "b37d4e61-9a25-4f08-c632-718ce5a940db",
+            "source": "a26c9d51-4e73-8f02-b638-175de4a920fc",
             "target": "d48e5f72-1a36-4c09-b827-935fae610cd",
             "type": "workflow",
             "sourceHandle": "right",
@@ -794,7 +783,7 @@
             "style": {
               "strokeWidth": 2
             },
-            "id": "xy-edge__b37d4e61-9a25-4f08-c632-718ce5a940db-8b52d6f3-4179-4c0a-e638-925fa7d340bc"
+            "id": "xy-edge__multiMath-spectrumAnalysis"
           },
           {
             "source": "d48e5f72-1a36-4c09-b827-935fae610cd",
@@ -808,7 +797,7 @@
             "style": {
               "strokeWidth": 2
             },
-            "id": "xy-edge__d48e5f72-1a36-4c09-b827-935fae610cd-3c71a9e5-8264-4f0b-d532-617ce8a340bf"
+            "id": "xy-edge__spectrumAnalysis-selectorSwitch"
           },
           {
             "source": "e59a6c83-2b47-4d10-9f25-718ce5a340db",
@@ -822,7 +811,7 @@
             "style": {
               "strokeWidth": 2
             },
-            "id": "xy-edge__e59a6c83-2b47-4d10-9f25-718ce5a340db-6d94c8f2-3157-4e0a-b726-519da7e340bc"
+            "id": "xy-edge__selectorSwitch-diagnosis"
           }
         ]
       }

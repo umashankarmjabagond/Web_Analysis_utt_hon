@@ -1,28 +1,31 @@
 import type { Edge } from "@xyflow/react";
 import { buildTemplateItemFlow } from "./templateItemFlowBuilder";
-import type {
-  ExecutionFlowNode,
-  TemplateExecutionWorkflow,
-  WorkflowData,
+import {
+  EXECUTION_VIEW_MODE,
+  type ExecutionFlowNode,
+  type ExecutionViewMode,
+  type TemplateExecutionWorkflow,
+  type WorkflowData,
 } from "../../../../types/templateExecution";
-
-const ROW_GAP = 24;
-
-const CANVAS_LAYOUT = {
-  rowLeft: 24,
-  rowTop: 24,
-};
+import { buildCompactTemplateItemFlow } from "./compactLayoutBuilder";
+import { CANVAS_LAYOUT, ROW_GAP } from "./layoutConstants";
 
 type TemplateCanvasResult = WorkflowData & { nextY: number };
 
 export const buildTemplateCanvas = (
   workflows: TemplateExecutionWorkflow[],
+  executionViewMode: ExecutionViewMode,
   startY = CANVAS_LAYOUT.rowTop,
 ): TemplateCanvasResult => {
   const PREPEND_HEADER = true;
 
+  const buildRow =
+    executionViewMode === EXECUTION_VIEW_MODE.COMPACT
+      ? buildCompactTemplateItemFlow
+      : buildTemplateItemFlow;
+
   const rows = workflows.map((workflow) =>
-    buildTemplateItemFlow(workflow.itemId, workflow.workflow, PREPEND_HEADER),
+    buildRow(workflow.itemId, workflow.workflow, PREPEND_HEADER),
   );
 
   const rowNodes = rows
