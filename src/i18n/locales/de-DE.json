@@ -184,7 +184,7 @@
   "PROJECT_ANALYSIS_FINISH": "Fertig",
 
   "CANVAS_CREATE_NEW_TEMPLATE": "Neue Vorlage erstellen",
-  "CANVAS_CREATE_TEMPLATE_DESCRIPTION": "Ziehen Sie Attribute oder Vorlagen aus dem linken Bereich hierher. Bewegen Sie den Mauszeiger über ein Attribut und klicken Sie auf den \"+\"-Anschluss, um ein neues hinzuzufügen, oder ziehen Sie von einem \"+\"-Anschluss auf ein vorhandenes Attribut, um sie miteinander zu verbinden.",
+  "CANVAS_CREATE_TEMPLATE_DESCRIPTION": "Erstellen Sie eine Vorlage von Grund auf mit Attributen oder vordefinierten Vorlagen aus dem linken Bereich, passen Sie sie an Ihre Anforderungen an und speichern Sie sie als benutzerdefinierte Vorlage.",
   "CANVAS_ADD_ATTRIBUTE": "Attribut hinzufügen",
   "CANVAS_WORKFLOW": "Workflow",
 
