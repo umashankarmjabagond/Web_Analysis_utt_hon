@@ -64,6 +64,7 @@ export interface DialogProps {
   onClose: () => void;
   width?: number | string;
   showIcon?: boolean;
+  icon?: ReactNode;
   className?: string;
   titleClassName?: string;
   subtitleClassName?: string;
@@ -248,4 +249,9 @@ export interface DropdownProps {
   className?: string;
   menuClassName?: string;
   itemClassName?: string;
+}
+
+export interface DialogDataPreprocessingProps {
+  isOpen: boolean;
+  onClose: () => void;
 }
