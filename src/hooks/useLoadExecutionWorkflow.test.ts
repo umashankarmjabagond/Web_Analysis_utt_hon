@@ -11,6 +11,7 @@ import {
 
 import { buildTemplateItemFlow } from "../pages/analysis/template-execution/flowBuilders/templateItemFlowBuilder";
 import { buildTemplateCanvas } from "../pages/analysis/template-execution/flowBuilders/templateFlowBuilder";
+import { EXECUTION_VIEW_MODE } from "../types/templateExecution";
 
 vi.mock("../store/templateExecutionStore", () => ({
   useTemplateExecutionStore: vi.fn(),
@@ -46,9 +47,12 @@ describe("useLoadExecutionWorkflow", () => {
   const setHasMore = vi.fn();
   const setIsLoadingMore = vi.fn();
 
+  const VIEW_MODE = EXECUTION_VIEW_MODE.COMFORTABLE;
+
   const mockStore = ({
     hasMoreWorkflows = true,
     isLoadingMoreWorkflows = false,
+    executionViewMode = EXECUTION_VIEW_MODE.COMFORTABLE,
   } = {}) => {
     (
       useTemplateExecutionStore as unknown as {
@@ -65,6 +69,7 @@ describe("useLoadExecutionWorkflow", () => {
         setHasMoreWorkflows: setHasMore,
         isLoadingMoreWorkflows,
         setIsLoadingMoreWorkflows: setIsLoadingMore,
+        executionViewMode,
       }),
     );
   };
@@ -165,6 +170,7 @@ describe("useLoadExecutionWorkflow", () => {
 
     expect(buildTemplateCanvas).toHaveBeenCalledWith(
       response.workflows,
+      VIEW_MODE,
       undefined,
     );
 
@@ -251,6 +257,7 @@ describe("useLoadExecutionWorkflow", () => {
     expect(buildTemplateCanvas).toHaveBeenNthCalledWith(
       2,
       nextWorkflows,
+      EXECUTION_VIEW_MODE.COMFORTABLE,
       initialCanvas.nextY,
     );
 
@@ -364,5 +371,70 @@ describe("useLoadExecutionWorkflow", () => {
 
     expect(getTemplateExecutionWorkflows).not.toHaveBeenCalled();
     expect(appendWorkflow).not.toHaveBeenCalled();
+  });
+
+  it("reloads the initial template page when execution view mode changes", async () => {
+    const workflowResponse = {
+      workflows: [
+        {
+          itemId: "item-1",
+          workflow: {
+            nodes: [],
+            edges: [],
+          },
+        },
+      ],
+      template: {
+        id: "template-1",
+        name: "Template 1",
+        type: "unit",
+      },
+      total: 1,
+    };
+
+    vi.mocked(getTemplateExecutionWorkflows).mockResolvedValue(
+      workflowResponse as never,
+    );
+
+    vi.mocked(buildTemplateCanvas).mockReturnValue({
+      nodes: [],
+      edges: [],
+      nextY: 100,
+    } as never);
+
+    mockStore({
+      executionViewMode: EXECUTION_VIEW_MODE.COMFORTABLE,
+    });
+
+    const { rerender } = renderHook(() =>
+      useLoadExecutionWorkflow("template-1"),
+    );
+
+    await waitFor(() => {
+      expect(getTemplateExecutionWorkflows).toHaveBeenCalledTimes(1);
+    });
+
+    expect(buildTemplateCanvas).toHaveBeenCalledWith(
+      workflowResponse.workflows,
+      EXECUTION_VIEW_MODE.COMFORTABLE,
+      undefined,
+    );
+
+    mockStore({
+      executionViewMode: EXECUTION_VIEW_MODE.COMPACT,
+    });
+
+    rerender();
+
+    await waitFor(() => {
+      expect(getTemplateExecutionWorkflows).toHaveBeenCalledTimes(2);
+    });
+
+    expect(buildTemplateCanvas).toHaveBeenNthCalledWith(
+      2,
+      workflowResponse.workflows,
+      EXECUTION_VIEW_MODE.COMPACT,
+      undefined,
+    );
   });
 });

@@ -3,23 +3,12 @@ import {
   buildTemplateItemFlow,
   createTemplateItemHeaderNode,
 } from "./templateItemFlowBuilder";
-
-const CANVAS_LEFT = 24;
-const CANVAS_TOP = 24;
-
-const ROW_TOP_PADDING = 24;
-const ROW_RIGHT_PADDING = 24;
-const ROW_BOTTOM_PADDING = 24;
-const ROW_LEFT_PADDING = 50;
-const HEADER_GAP = 12;
-
-const HEADER_WIDTH = 160;
-const HEADER_HEIGHT = 24;
-
-const DEFAULT_NODE_WIDTH = 30;
-const DEFAULT_NODE_HEIGHT = 30;
-const LABEL_HEIGHT = 15;
-const LABEL_GAP = 2;
+import {
+  CANVAS_LAYOUT,
+  HEADERNODE_LAYOUT,
+  NODE_LAYOUT,
+  ROW_LAYOUT,
+} from "./layoutConstants";
 
 const createWorkflow = (options?: {
   x?: number;
@@ -105,7 +94,7 @@ describe("createTemplateItemHeaderNode", () => {
       parentId: `execution-row-${itemId}`,
       type: "executionHeader",
       position: {
-        x: ROW_LEFT_PADDING,
+        x: ROW_LAYOUT.leftPadding,
         y,
       },
       draggable: false,
@@ -138,8 +127,8 @@ describe("buildTemplateItemFlow", () => {
     const node = result.nodes.find((node) => node.id === "node-1");
     const row = result.nodes.find((node) => node.type === "executionRow");
 
-    expect(node?.position.x).toBe(ROW_LEFT_PADDING);
-    expect(node?.position.y).toBe(ROW_TOP_PADDING);
+    expect(node?.position.x).toBe(ROW_LAYOUT.leftPadding);
+    expect(node?.position.y).toBe(ROW_LAYOUT.topPadding);
 
     expect(row).toBeDefined();
     expect(row?.id).toBe(`execution-row-${itemId}`);
@@ -170,10 +159,11 @@ describe("buildTemplateItemFlow", () => {
 
     const node = result.nodes.find((node) => node.id === "node-1");
 
-    const expectedX = ROW_LEFT_PADDING + HEADER_WIDTH + HEADER_GAP;
+    const expectedX =
+      ROW_LAYOUT.leftPadding + HEADERNODE_LAYOUT.width + ROW_LAYOUT.headerGap;
 
     expect(node?.position.x).toBe(expectedX);
-    expect(node?.position.y).toBe(ROW_TOP_PADDING);
+    expect(node?.position.y).toBe(ROW_LAYOUT.topPadding);
   });
 
   it("uses the measured node height when calculating visual bounds", () => {
@@ -186,10 +176,11 @@ describe("buildTemplateItemFlow", () => {
 
     const row = result.nodes.find((node) => node.type === "executionRow");
 
-    const visualHeight = measuredHeight + LABEL_GAP + LABEL_HEIGHT;
+    const visualHeight =
+      measuredHeight + NODE_LAYOUT.labelGap + NODE_LAYOUT.labelHeight;
 
     const expectedRowHeight =
-      visualHeight + ROW_TOP_PADDING + ROW_BOTTOM_PADDING;
+      visualHeight + ROW_LAYOUT.topPadding + ROW_LAYOUT.bottomPadding;
 
     expect(row?.style?.height).toBe(expectedRowHeight);
   });
@@ -201,10 +192,13 @@ describe("buildTemplateItemFlow", () => {
 
     const row = result.nodes.find((node) => node.type === "executionRow");
 
-    const visualHeight = DEFAULT_NODE_HEIGHT + LABEL_GAP + LABEL_HEIGHT;
+    const visualHeight =
+      NODE_LAYOUT.defaultHeight +
+      NODE_LAYOUT.labelGap +
+      NODE_LAYOUT.labelHeight;
 
     const expectedRowHeight =
-      visualHeight + ROW_TOP_PADDING + ROW_BOTTOM_PADDING;
+      visualHeight + ROW_LAYOUT.topPadding + ROW_LAYOUT.bottomPadding;
 
     expect(row?.style?.height).toBe(expectedRowHeight);
   });
@@ -220,7 +214,7 @@ describe("buildTemplateItemFlow", () => {
     const row = result.nodes.find((node) => node.type === "executionRow");
 
     const expectedRowWidth =
-      ROW_LEFT_PADDING + measuredWidth + ROW_RIGHT_PADDING;
+      ROW_LAYOUT.leftPadding + measuredWidth + ROW_LAYOUT.rightPadding;
 
     expect(row?.style?.width).toBe(expectedRowWidth);
   });
@@ -233,7 +227,9 @@ describe("buildTemplateItemFlow", () => {
     const row = result.nodes.find((node) => node.type === "executionRow");
 
     const expectedRowWidth =
-      ROW_LEFT_PADDING + DEFAULT_NODE_WIDTH + ROW_RIGHT_PADDING;
+      ROW_LAYOUT.leftPadding +
+      NODE_LAYOUT.defaultWidth +
+      ROW_LAYOUT.rightPadding;
 
     expect(row?.style?.width).toBe(expectedRowWidth);
   });
@@ -249,12 +245,13 @@ describe("buildTemplateItemFlow", () => {
 
     const header = result.nodes.find((node) => node.type === "executionHeader");
 
-    const visualHeight = measuredHeight + LABEL_GAP + LABEL_HEIGHT;
+    const visualHeight =
+      measuredHeight + NODE_LAYOUT.labelGap + NODE_LAYOUT.labelHeight;
 
-    const contentHeight = Math.max(visualHeight, HEADER_HEIGHT);
+    const contentHeight = Math.max(visualHeight, HEADERNODE_LAYOUT.height);
 
     const expectedHeaderY =
-      ROW_TOP_PADDING + (contentHeight - HEADER_HEIGHT) / 2;
+      ROW_LAYOUT.topPadding + (contentHeight - HEADERNODE_LAYOUT.height) / 2;
 
     expect(header?.position.y).toBe(expectedHeaderY);
   });
@@ -266,12 +263,15 @@ describe("buildTemplateItemFlow", () => {
 
     const header = result.nodes.find((node) => node.type === "executionHeader");
 
-    const visualHeight = DEFAULT_NODE_HEIGHT + LABEL_GAP + LABEL_HEIGHT;
+    const visualHeight =
+      NODE_LAYOUT.defaultHeight +
+      NODE_LAYOUT.labelGap +
+      NODE_LAYOUT.labelHeight;
 
-    const contentHeight = Math.max(visualHeight, HEADER_HEIGHT);
+    const contentHeight = Math.max(visualHeight, HEADERNODE_LAYOUT.height);
 
     const expectedHeaderY =
-      ROW_TOP_PADDING + (contentHeight - HEADER_HEIGHT) / 2;
+      ROW_LAYOUT.topPadding + (contentHeight - HEADERNODE_LAYOUT.height) / 2;
 
     expect(header?.position.y).toBe(expectedHeaderY);
   });
@@ -300,8 +300,8 @@ describe("buildTemplateItemFlow", () => {
         id: `execution-row-${itemId}`,
         type: "executionRow",
         position: {
-          x: CANVAS_LEFT,
-          y: CANVAS_TOP,
+          x: CANVAS_LAYOUT.rowLeft,
+          y: CANVAS_LAYOUT.rowTop,
         },
         zIndex: -1,
         draggable: false,

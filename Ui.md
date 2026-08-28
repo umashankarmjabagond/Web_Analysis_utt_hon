@@ -72,6 +72,40 @@
 3. Select Template Type:
  
 - Read selected tags from the file header and map them under **Select Tags**.
+
+dataSource.json
+                          │
+                          │ import
+                          ▼
+                dataSourceConfiguration
+                          │
+          ┌───────────────┼────────────────┐
+          │               │                │
+          ▼               ▼                ▼
+     dataSources    controllerTypes   templateTypes
+                                           │
+                                           ▼
+                                    selected controller
+                                           │
+                                           ▼
+                                    selected template
+                                           │
+                                           ▼
+                                    tagDefinitions
+                                           │
+                                           ▼
+                                     availableTags
+                                           │
+                         ┌─────────────────┴──────────────┐
+                         │                                │
+                         ▼                                ▼
+                    Select Tags                    selectedTags
+                      LEFT SIDE                     RIGHT SIDE
+                         │                                ▲
+                         │          user clicks +         │
+                         └────────────────────────────────┘
+                         
+                         ![alt text](image.png)
  
 ## Actions
  

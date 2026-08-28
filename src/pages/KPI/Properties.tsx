@@ -9,6 +9,7 @@ import {
   Calculator,
   Check,
   CircleHelp,
+  CornerDownRight,
   RefreshCw,
 } from "lucide-react";
 import { useForm } from "react-hook-form";
@@ -50,12 +51,20 @@ const CONNECTIONS = [
     title: "HDSC1_INFRL",
     subtitle: "Multi Math",
     icon: <Calculator size={16} />,
+    columns: [
+      "Mode (.MODE)",
+      "PV (.PV)",
+      "Required Flag (.REQ)",
+      "Disposability (.DISP)",
+      "Disturbance Variable (.DV)",
+    ],
   },
   {
     id: "coherency",
     title: "HDSC1_INFRL",
     subtitle: "Coherency",
     icon: <BarChart3 size={16} />,
+    columns: [],
   },
 ];
 const Properties: React.FC<PropertiesProps> = ({ onCancel }) => {
@@ -323,53 +332,72 @@ const Properties: React.FC<PropertiesProps> = ({ onCancel }) => {
         isOpen={isHelpOpen}
         title="Connections"
         subtitle="Inputs feeding SPA"
-        width={424}
+        width={440}
         showIcon={false}
         onClose={() => setIsHelpOpen(false)}
         titleClassName="text-[20px] font-extrabold leading-[30px] tracking-normal text-dialog-title"
-        subtitleClassName="mt-0 text-[12px] font-medium leading-4 tracking-normal normal-case text-[var(--gray-350)]"
-        headerClassName="px-8 pb-5 pt-7"
+        subtitleClassName="mt-1 text-[12px] font-medium leading-4 tracking-normal normal-case text-foreground-tertiary"
+        headerClassName="px-8 pb-4 pt-7"
       >
-        <div className="flex flex-col gap-3">
-          {CONNECTIONS.map((connection) => (
-            <Accordion
-              key={connection.id}
-              title={connection.title}
-              subtitle={connection.subtitle}
-              icon={connection.icon}
-              defaultOpen
-              action={
-                <Button
-                  variant="secondary"
-                  fill="outline"
-                  size="medium"
-                  className="h-[34px] min-w-[78px] rounded-[6px] px-[24px]"
-                  onClick={() => {
-                    console.log("Edit connection:", connection.id);
-                  }}
+        <div className="flex flex-col mt-4">
+          {/* Scrollable accordion area */}
+          <div className="max-h-[500px] overflow-y-auto">
+            <div className="flex flex-col gap-3">
+              {CONNECTIONS.map((connection) => (
+                <Accordion
+                  key={connection.id}
+                  title={connection.title}
+                  icon={connection.icon}
+                  defaultOpen
+                  action={
+                    <Button
+                      variant="secondary"
+                      fill="outline"
+                      size="medium"
+                      className="h-[34px] min-w-[78px] rounded-[6px] px-[24px]"
+                      onClick={() => {
+                        console.log("Edit connection:", connection.id);
+                      }}
+                    >
+                      Edit
+                    </Button>
+                  }
                 >
-                  Edit
-                </Button>
-              }
-            >
-              <div className="flex flex-col gap-2">
-                <span className="text-[12px] font-bold uppercase leading-4 tracking-[0.3px]  text-[var(--gray-350)]">
-                  COLUMNS PASSED TO SPA
-                </span>
+                  <div className="flex flex-col gap-2">
+                    <span className="text-[12px] font-bold uppercase leading-4 tracking-[0.3px] text-foreground-tertiary">
+                      COLUMNS PASSED TO CLS1
+                    </span>
 
-                <span className="text-[13px] font-medium italic leading-[19.5px] tracking-normal  text-[var(--gray-350)]">
-                  No columns selected.
-                </span>
-              </div>
-            </Accordion>
-          ))}
+                    {connection.columns.length > 0 ? (
+                      <div className="flex flex-col gap-1">
+                        {connection.columns.map((column) => (
+                          <div
+                            key={column}
+                            className="flex items-center gap-2 text-[13px] font-medium leading-[19.5px] text-foreground"
+                          >
+                            <CornerDownRight className="h-3 w-3" />
+                            <span>{column}</span>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <span className="text-[13px] font-medium italic leading-[19.5px] text-foreground-tertiary">
+                        No columns selected.
+                      </span>
+                    )}
+                  </div>
+                </Accordion>
+              ))}
+            </div>
+          </div>
 
-          <div className="flex justify-end pt-2">
+          {/* Fixed Close button */}
+          <div className="pt-3">
             <Button
               variant="secondary"
               fill="outline"
               size="medium"
-              className="h-[34px] min-w-[88px] rounded-[6px] px-[24px]"
+              className="h-[34px] w-full min-w-[88px] rounded-[6px] px-[24px]"
               onClick={() => setIsHelpOpen(false)}
             >
               Close
